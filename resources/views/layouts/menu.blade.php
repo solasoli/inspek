@@ -37,6 +37,14 @@
   </div>
 </a>
 
+<a href="/upload_rka" class="br-menu-link">
+  <div class="br-menu-item">
+    <i class="menu-item-icon icon ion-ios-cloud-upload tx-22"></i>
+    <span class="menu-item-label">Upload RKA</span>
+  </div>
+</a>
+
+
 <a href="{{ route('logout') }}" class="br-menu-link" onclick="event.preventDefault(); document.getElementById('logout-form2').submit();">
   <div class="br-menu-item">
     <i class="menu-item-icon icon ion-power tx-20"></i>

@@ -76,12 +76,28 @@ Route::middleware(['auth'])->group(function () {
     });
   });
 
+
+  Route::prefix('rka')->group(function () {
+      Route::get('/', 'RKA\RKAController@index');
+      Route::get('/detail/{id}', 'RKA\RKAController@detail');
+
+      Route::get('/datatables', 'RKA\RKAController@list_datatables_api');
+  });
+
   Route::prefix('upload_kode_rekening')->group(function () {
     Route::get('/', 'Mst\KodeRekeningController@add_temp');
     Route::get('/verify_temp/{id}', 'Mst\KodeRekeningController@verify_temp_form');
     /* Post section */
     Route::post('/', 'Mst\KodeRekeningController@store_temp');
     Route::post('/verify_temp/{id}', 'Mst\KodeRekeningController@verify_temp');
+  });
+
+  Route::prefix('upload_rka')->group(function () {
+    Route::get('/', 'Mst\RkaUploadController@add_temp');
+    Route::get('/verify_temp/{id}', 'Mst\RkaUploadController@verify_temp_form');
+    /* Post section */
+    Route::post('/', 'Mst\RkaUploadController@store_temp');
+    Route::post('/verify_temp/{id}', 'Mst\RkaUploadController@verify_temp');
   });
 
 });
