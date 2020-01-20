@@ -37,12 +37,18 @@
   </div>
 </a>
 
-<a href="/upload_rka" class="br-menu-link">
+
+<a href="#" class="br-menu-link">
   <div class="br-menu-item">
-    <i class="menu-item-icon icon ion-ios-cloud-upload tx-22"></i>
-    <span class="menu-item-label">Upload RKA</span>
+    <i class="menu-item-icon icon ion-ios-gear-outline tx-24"></i>
+    <span class="menu-item-label">RKA</span>
+    <i class="menu-item-arrow fa fa-angle-down"></i>
   </div>
 </a>
+<ul class="br-menu-sub nav flex-column">
+  <li class="nav-item"><a href="/upload_rka" class="nav-link">Upload RKA</a></li>
+  <li class="nav-item"><a href="/rka" class="nav-link">RKA</a></li>
+</ul>
 
 
 <a href="{{ route('logout') }}" class="br-menu-link" onclick="event.preventDefault(); document.getElementById('logout-form2').submit();">
