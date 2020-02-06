@@ -22,6 +22,74 @@ Route::post('/login', 'Auth\CustomLoginController@login_proses');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['auth'])->group(function () {
+
+  Route::prefix('mst')->group(function () {
+
+    Route::prefix('skpd')->group(function () {
+      Route::get('/', 'Mst\SkpdController@index');
+      Route::get('/add', 'Mst\SkpdController@create');
+      Route::get('/edit/{id}', 'Mst\SkpdController@edit');
+      Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
+      Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
+      /* Post section */
+      Route::post('/add', 'Mst\SkpdController@store');
+      Route::post('/edit/{id}', 'Mst\SkpdController@update');
+    });
+
+
+    Route::prefix('wilayah')->group(function () {
+      Route::get('/', 'Mst\WilayahController@index');
+      Route::get('/add', 'Mst\WilayahController@create');
+      Route::get('/edit/{id}', 'Mst\WilayahController@edit');
+      Route::get('/delete/{id}', 'Mst\WilayahController@destroy');
+      Route::get('/datatables', 'Mst\WilayahController@list_datatables_api');
+      /* Post section */
+      Route::post('/add', 'Mst\WilayahController@store');
+      Route::post('/edit/{id}', 'Mst\WilayahController@update');
+    });
+
+
+
+    Route::prefix('sasaran')->group(function () {
+      Route::get('/', 'Mst\SasaranController@index');
+      Route::get('/add', 'Mst\SasaranController@create');
+      Route::get('/edit/{id}', 'Mst\SasaranController@edit');
+      Route::get('/delete/{id}', 'Mst\SasaranController@destroy');
+      Route::get('/datatables', 'Mst\SasaranController@list_datatables_api');
+      /* Post section */
+      Route::post('/add', 'Mst\SasaranController@store');
+      Route::post('/edit/{id}', 'Mst\SasaranController@update');
+    });
+
+
+    Route::prefix('inspektur_pembantu')->group(function () {
+      Route::get('/form/{id_wilayah?}', 'Mst\InspekturPembantuController@create');
+      Route::post('/form/{id_wilayah?}', 'Mst\InspekturPembantuController@store');
+      Route::post("/get_inspektur_pembantu_by_wilayah", "Mst\InspekturPembantuController@get_inspektur_pembantu_by_wilayah");
+    });
+
+    Route::prefix('dasar_surat')->group(function () {
+      Route::get('/', 'Mst\DasarSuratController@create');
+      Route::post('/', 'Mst\DasarSuratController@store');
+    });
+
+  });
+
+
+  Route::prefix('pkpt')->group(function () {
+
+    Route::prefix('surat_perintah')->group(function () {
+      Route::get('/', 'Pkpt\SuratPerintahController@index');
+      Route::get('/add', 'Pkpt\SuratPerintahController@create');
+      Route::get('/edit/{id}', 'Pkpt\SuratPerintahController@edit');
+      Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
+      Route::get('/datatables', 'Pkpt\SuratPerintahController@list_datatables_api');
+      /* Post section */
+      Route::post('/add', 'Pkpt\SuratPerintahController@store');
+      Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
+    });
+  });
+
   Route::prefix('acl')->group(function () {
 
     Route::prefix('role')->group(function () {

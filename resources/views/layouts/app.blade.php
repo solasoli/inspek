@@ -72,7 +72,6 @@
     </div>
     <!-- ########## END: MAIN PANEL ########## -->
 
-    <script src="{{ asset('admin_template/lib/jquery/jquery.js') }}"></script>
     <script src="{{ asset('admin_template/lib/popper.js/popper.js') }}"></script>
     <script src="{{ asset('admin_template/lib/bootstrap/bootstrap.js') }}"></script>
     <script src="{{ asset('admin_template/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js') }}"></script>

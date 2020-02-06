@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableRkaIndikatorBelanja extends Migration
+class AddTableSasaran extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateTableRkaIndikatorBelanja extends Migration
      */
     public function up()
     {
-        Schema::create('rka_indikator_kinerja', function (Blueprint $table) {
+        Schema::create('mst_sasaran', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string("indikator");
+            $table->string("nama");
+            $table->integer("id_parent")->default(0);
             $table->dateTime('created_at')->nullable();
             $table->integer('created_by')->default(0);
             $table->dateTime('updated_at')->nullable();
@@ -33,6 +34,6 @@ class CreateTableRkaIndikatorBelanja extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rka_indikator_kinerja');
+        Schema::dropIfExists('mst_sasaran');
     }
 }
