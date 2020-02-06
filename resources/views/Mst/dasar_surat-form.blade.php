@@ -51,7 +51,7 @@
                 Dasar Surat
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <textarea name='dasar_surat' class="form-control">{{$data->dasar_surat}}</textarea>
+                <textarea name='dasar_surat' class="form-control">{{isset($data->dasar_surat) ? $data->dasar_surat : ""}}</textarea>
               </div>
             </div>
           </div>
