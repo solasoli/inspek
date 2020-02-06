@@ -130,7 +130,16 @@
             <h6 class="card-title float-left py-2">FORM DASAR SURAT</h6>
           </div>
           <div class="card-body">
-            {{ csrf_field() }}
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                No. Surat
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                  <input type="text" class="form-control" name='no_surat'>
+              </div>
+            </div>
+
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Dasar Surat
@@ -175,7 +184,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-                  <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
+                  <input type="text" name='dari' class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
                 </div>
               </div>
             </div>
@@ -188,7 +197,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-                  <input type="text" class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
+                  <input type="text" name='sampai' class="form-control fc-datepicker" placeholder="MM/DD/YYYY">
                 </div>
               </div>
             </div>
