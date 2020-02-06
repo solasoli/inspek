@@ -14,6 +14,7 @@ use App\SuratPerintah;
 use App\Skpd;
 use App\Wilayah;
 use App\Sasaran;
+use App\DasarSurat;
 use App\Model\Pegawai\Pegawai;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -42,11 +43,13 @@ class SuratPerintahController extends Controller
       $pegawai = Pegawai::where("is_deleted",0)->whereNotIn("id", $inspektur_wilayah)->get();
       $skpd = Skpd::where("is_deleted",0)->get();
       $sasaran = Sasaran::where("is_deleted", 0)->get();
+      $dasar_surat = DasarSurat::first();
       return view('pkpt.surat_perintah-form',[
         'pegawai' => $pegawai,
         'skpd' => $skpd,
         'wilayah' => $wilayah,
-        'sasaran' => $sasaran
+        'sasaran' => $sasaran,
+        'dasar_surat' => $dasar_surat
       ]);
     }
 
