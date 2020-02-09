@@ -84,6 +84,8 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Pkpt\SuratPerintahController@edit');
       Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
       Route::get('/datatables', 'Pkpt\SuratPerintahController@list_datatables_api');
+
+      Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       /* Post section */
       Route::post('/add', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');

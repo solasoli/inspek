@@ -43,9 +43,12 @@
           <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
             <thead>
               <tr>
-                <th>Nama Wilayah</th>
+                <th>No. Surat</th>
+                <th>Wilayah</th>
                 <th>Inspektor</th>
-                <th style='width:150px'>Aksi</th>
+                <th>Dari</th>
+                <th>Sampai</th>
+                <th style='width:195px'>Aksi</th>
               </tr>
             </thead>
           </table>
@@ -61,6 +64,7 @@
 <script src="{{ asset('admin_template/lib/datatables/jquery.dataTables.js') }}"></script>
 <script>
 $(function() {
+  const months = [ "JAN", "FEB", "MAR","APR", "MEI", "JUN", "JUL", "AUG", "SEP", "OKT", "NOV", "DES"];
   $('#oTable').DataTable({
     language: {
         searchPlaceholder: 'Search...',
@@ -72,16 +76,27 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
       columns: [
-        { data: 'nama', name: 'w.nama'},
-        { data: 'nama_inspektur', name: 'p.nama'},
+        { data: 'no_surat', name: 'sp.no_surat'},
+        { data: 'nama_wilayah', name: 'w.nama'},
+        { data: 'nama_inspektur', name: 'pi.nama'},
+        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
+          var date = new Date(Date.parse(data));
+          return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+        }},
+        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
+          var date = new Date(Date.parse(data));
+          return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+        }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          @if(can_access("mst_skpd", "edit"))
+          @if(can_access("pkpt_surat_perintah", "edit"))
           return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
-          @if(can_access("mst_skpd", "delete"))
+          @if(can_access("pkpt_surat_perintah", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
           @endif
+
+          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
