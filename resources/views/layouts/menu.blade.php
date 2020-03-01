@@ -14,6 +14,7 @@
   </div>
 </a>
 <ul class="br-menu-sub nav flex-column">
+  <li class="nav-item"><a href="/mst/periode" class="nav-link">Periode</a></li>
   <li class="nav-item"><a href="/mst/skpd" class="nav-link">OPD</a></li>
   <li class="nav-item"><a href="/mst/wilayah" class="nav-link">Wilayah Kerja</a></li>
   <li class="nav-item"><a href="/mst/inspektur_pembantu/form" class="nav-link">Inspektur Pembantu</a></li>
@@ -30,6 +31,7 @@
   <li class="nav-item"><a href="/mst/sasaran" class="nav-link">Sasaran</a></li>
   <li class="nav-item"><a href="/mst/dasar_surat" class="nav-link">Dasar Surat Perintah</a></li>
   <li class="nav-item"><a href="/pkpt/surat_perintah" class="nav-link">Surat Perintah</a></li>
+  <li class="nav-item"><a href="/pkpt/surat_perintah/kalendar" class="nav-link">Kalendar</a></li>
 </ul>
 
 

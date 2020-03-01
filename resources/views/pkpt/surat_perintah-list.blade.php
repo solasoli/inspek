@@ -14,14 +14,14 @@
 </div>
 
 <div class="br-pagebody">
-  @if(Session::has('success'))
+  @if(Session::has('message'))
   <div class="row">
     <div class="alert alert-success col-lg-12">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
       <div class="d-flex align-items-center justify-content-start">
-        <span>{!! Session::get('success') !!}</span>
+        <span>{!! Session::get('message') !!}</span>
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
           <h6 class="card-title float-left">List Surat Perintah</h6>
           <div class="float-right">
 
-            @if(can_access("mst_skpd", "add"))
+            @if(can_access("pkpt_surat_perintah", "add"))
             <a class='btn btn-sm btn-success' href='{{url()->current()}}/add'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
             @endif
           </div>
@@ -95,6 +95,10 @@ $(function() {
           @if(can_access("pkpt_surat_perintah", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
           @endif
+
+          if(data.is_approve == 0){
+            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
+          }
 
           return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
           return return_button == "" ? "-" : return_button;

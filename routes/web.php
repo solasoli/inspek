@@ -37,6 +37,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    Route::prefix('periode')->group(function () {
+      Route::get('/', 'Mst\PeriodeController@index');
+      Route::get('/add', 'Mst\PeriodeController@create');
+      Route::get('/edit/{id}', 'Mst\PeriodeController@edit');
+      Route::get('/delete/{id}', 'Mst\PeriodeController@destroy');
+      Route::get('/datatables', 'Mst\PeriodeController@list_datatables_api');
+      /* Post section */
+      Route::post('/add', 'Mst\PeriodeController@store');
+      Route::post('/edit/{id}', 'Mst\PeriodeController@update');
+    });
+
+
     Route::prefix('wilayah')->group(function () {
       Route::get('/', 'Mst\WilayahController@index');
       Route::get('/add', 'Mst\WilayahController@create');
@@ -83,9 +95,11 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/add', 'Pkpt\SuratPerintahController@create');
       Route::get('/edit/{id}', 'Pkpt\SuratPerintahController@edit');
       Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
+      Route::get('/approve/{id}', 'Pkpt\SuratPerintahController@approve');
       Route::get('/datatables', 'Pkpt\SuratPerintahController@list_datatables_api');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
+      Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       /* Post section */
       Route::post('/add', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');

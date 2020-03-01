@@ -16,6 +16,7 @@ use App\Skpd;
 use App\Wilayah;
 use App\Sasaran;
 use App\DasarSurat;
+use App\Periode;
 use App\Model\Pegawai\Pegawai;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -43,12 +44,14 @@ class SuratPerintahController extends Controller
 
       $pegawai = Pegawai::where("is_deleted",0)->whereNotIn("id", $inspektur_wilayah)->get();
       $sasaran = Sasaran::where("is_deleted", 0)->get();
+      $periode = Periode::where("is_deleted", 0)->get();
       $dasar_surat = DasarSurat::first();
       return view('pkpt.surat_perintah-form',[
         'pegawai' => $pegawai,
         'wilayah' => $wilayah,
         'sasaran' => $sasaran,
-        'dasar_surat' => $dasar_surat
+        'dasar_surat' => $dasar_surat,
+        'periode' => $periode
       ]);
     }
 
@@ -57,6 +60,9 @@ class SuratPerintahController extends Controller
       $logged_user = Auth::user();
 
       request()->validate([
+        'periode' => [
+          'required'
+        ],
         'wilayah' => [
         	'required'
 	      ],
@@ -93,6 +99,7 @@ class SuratPerintahController extends Controller
       $wilayah = Wilayah::findOrFail($request->input("wilayah"));
 
       $t = new SuratPerintah;
+      $t->id_periode = $request->input("periode");
       $t->id_wilayah = $request->input("wilayah");
       $t->id_inspektur = $wilayah->id_inspektur;
       $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
@@ -147,6 +154,7 @@ class SuratPerintahController extends Controller
       $sasaran = Sasaran::where("is_deleted", 0)->get();
       $dasar_surat = DasarSurat::first();
       $anggota = SuratPerintahAnggota::where("is_deleted", 0)->where("id_surat_perintah", $id)->get();
+      $periode = Periode::where("is_deleted", 0)->get();
 
       return view('pkpt.surat_perintah-form', [
         'data' => $data,
@@ -155,7 +163,8 @@ class SuratPerintahController extends Controller
         'wilayah' => $wilayah,
         'sasaran' => $sasaran,
         'inspektur' => Pegawai::where("id", $data->id_inspektur)->first(),
-        'dasar_surat' => $dasar_surat
+        'dasar_surat' => $dasar_surat,
+        'periode' => $periode
       ]);
     }
 
@@ -164,6 +173,9 @@ class SuratPerintahController extends Controller
       $logged_user = Auth::user();
 
       request()->validate([
+        'periode' => [
+          'required'
+        ],
         'wilayah' => [
           'required'
         ],
@@ -200,6 +212,7 @@ class SuratPerintahController extends Controller
       $wilayah = Wilayah::findOrFail($request->input("wilayah"));
 
       $t = SuratPerintah::findOrFail($id);
+      $t->id_periode = $request->input("periode");
       $t->id_wilayah = $request->input("wilayah");
       $t->id_inspektur = $wilayah->id_inspektur;
       $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
@@ -247,6 +260,16 @@ class SuratPerintahController extends Controller
       return redirect('/mst/wilayah');
     }
 
+    public function approve(Request $request, $id)
+    {
+      $logged_user = Auth::user();
+      $t = SuratPerintah::findOrFail($id);
+      $t->is_approve = 1;
+      $t->save();
+
+      $request->session()->flash('message', "<strong>".$t->nama."</strong> berhasil diapprove!");
+      return redirect('/pkpt/surat_perintah');
+    }
 
     public function info($id)
     {
@@ -286,6 +309,14 @@ class SuratPerintahController extends Controller
       ]);
     }
 
+
+    public function kalendar()
+    {
+      $data = SuratPerintah::where("is_deleted", 0)->get();
+      return view('pkpt.surat_perintah-kalendar', [
+        'data' => $data
+      ]);
+    }
 
     public function list_datatables_api()
     {

@@ -46,6 +46,24 @@
           </div>
           <div class="card-body">
             {{ csrf_field() }}
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Periode
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='periode' class="form-control select2" required="required">
+                  <option value="" data-nama="-">- Pilih Disini -</option> 
+                  @foreach($periode as $idx => $row)
+                  @php
+                  $selected = !is_null(old('periode')) && old('periode') == $row->id ? "selected" : (isset($data->id_periode) && $row->id == $data->id_periode ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id}}' {{$selected}}>{{$row->label}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Wilayah
@@ -178,6 +196,14 @@
                   </optgroup>
                   @endforeach
                 </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Waktu
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
               </div>
             </div>
 
