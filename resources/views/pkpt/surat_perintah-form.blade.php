@@ -4,12 +4,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">Surat Perintah</a>
+    <a class="breadcrumb-item Active" href="#">Surat Perintah {{ $type == 0 ? "Non-PKPT" : ""}}</a>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Surat Perintah</h4>
+  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Surat Perintah {{ $type == 0 ? "Non-PKPT" : ""}}</h4>
 </div>
 
 <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">
@@ -85,8 +85,15 @@
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Inspektur
               </label>
-              <div class="col-md-6 col-sm-6 col-xs-12" id="inspektur-ds">
-                -
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='inspektur' class="form-control select2">
+                  @foreach($list_inspektur as $idx => $row)
+                  @php
+                  $selected = !is_null(old('inspektur')) && old('inspektur') == $row->id_inspektur ? "selected" : (isset($data->id_inspektur) && $row->id_inspektur == $data->id_inspektur ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id_inspektur}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
+                  @endforeach
+                </select>
               </div>
             </div>
 
@@ -136,14 +143,7 @@
             </div>
 
           </div>
-        </div>
-      </div>
-    </div>
 
-
-    <div class="row mg-y-10">
-      <div class="col-lg-12 widget-2 px-0">
-        <div class="card shadow-base">
           <div class="card-header">
             <h6 class="card-title float-left py-2">FORM DASAR SURAT</h6>
           </div>
@@ -214,7 +214,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-                  <input type="text" name='dari' value="{{ !is_null(old('dari')) ? old('dari') : (isset($data->dari) ? date("d-m-Y", strtotime($data->dari)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
+                  <input type="text" name='dari' id="dari_kalendar" value="{{ !is_null(old('dari')) ? old('dari') : (isset($data->dari) ? date("d-m-Y", strtotime($data->dari)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
                 </div>
               </div>
             </div>
@@ -227,20 +227,23 @@
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-                  <input type="text" name='sampai' value="{{ !is_null(old('sampai')) ? old('sampai') : (isset($data->sampai) ? date("d-m-Y", strtotime($data->sampai)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
+                  <input type="text" name='sampai' id="sampai_kalendar" value="{{ !is_null(old('sampai')) ? old('sampai') : (isset($data->sampai) ? date("d-m-Y", strtotime($data->sampai)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
                 </div>
               </div>
             </div>
 
+
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+
+                <div class="alert alert-danger" id='jadwal_warning' style="display: none">Terdapat surat perintah lain dengan tanggal tersebut!</div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="row mg-y-10">
-      <div class="col-lg-12 widget-2 px-0">
-        <div class="card shadow-base">
 
           <div class="card-header">
             <h6 class="card-title float-left py-2">LIST ANGGOTA</h6>
@@ -326,17 +329,8 @@
                 </table>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="row mg-y-10">
-      <div class="col-lg-12 widget-2 px-0">
-        <div class="card shadow-base">
-          <div class="card-body">
-
-            <div class="form-group row mt-4 d-flex justify-content-center">
+            <div class="form-group row d-flex justify-content-center">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                 <a href='{{url('')}}/pkpt/surat_perintah' class="btn btn-danger" type="button">Cancel</a>
                 <button type="submit" class="btn btn-primary" >Submit</button>
@@ -385,6 +379,8 @@
       var nama = $(el).find("option:selected").data("nama");
       $("#inspektur-ds").html(nama);
       get_inspektur_pembantu($(el));
+
+      check_jadwal_surat_perintah();
     }
 
     function get_inspektur_pembantu(el){
@@ -400,6 +396,21 @@
           });
         }
       });
+    }
+
+    $(".wilayah, #dari_kalendar, #sampai_kalendar").on("change", function(){
+      check_jadwal_surat_perintah();
+    });
+
+    function check_jadwal_surat_perintah(){
+      $("#jadwal_warning").hide();
+      if($(".wilayah").val() != "" && $("#dari_kalendar").val() != "" && $("#sampai_kalendar").val() != ""){
+        $.post("/pkpt/surat_perintah/check_jadwal", {"id_wilayah": $(".wilayah").val(), "dari" : $("#dari_kalendar").val(), "sampai": $("#sampai_kalendar").val(), "sp_id" : "{{ isset($data->id) ? $data->id : 0}}" }, function(res){
+            if(res.data != null && res.data.length > 0){
+              $("#jadwal_warning").show();
+            }
+        });
+      }
     }
 
     $(document).on('click', ".delete-anggota", function(){

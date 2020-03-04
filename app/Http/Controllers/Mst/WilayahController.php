@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
 use App\Wilayah;
 use App\WilayahSkpd;
+use App\WilayahAnggota;
 use App\Skpd;
 use App\Model\Pegawai\Pegawai;
 
@@ -41,9 +42,9 @@ class WilayahController extends Controller
         'nama' => [
         	'required'
 	      ],
-        'inspektur' => [
-          'required'
-        ]
+        // 'inspektur' => [
+        //   'required'
+        // ]
       ],[
         'nama.required' => 'Nama Wilayah harus diisi!',
         'nama.unique' => 'Nama Wilayah sudah ada!'
@@ -51,7 +52,7 @@ class WilayahController extends Controller
 
       $t = new Wilayah;
       $t->nama = $request->input('nama');
-      $t->id_inspektur = $request->input('inspektur');
+      $t->id_inspektur_pembantu = $request->input('inspektur');
       $t->created_at = date('Y-m-d H:i:s');
       $t->created_by = Auth::id();
       $t->updated_at = NULL;
@@ -73,6 +74,19 @@ class WilayahController extends Controller
         }
       }
 
+
+      if(count($request->input("anggota")) > 0){
+        foreach($request->input("anggota") as $idx => $row){
+          if($row > 0){
+            //insert into  wilayah opd
+            $wilayah_skpd = new WilayahAnggota;
+            $wilayah_skpd->id_wilayah = $t->id;
+            $wilayah_skpd->id_anggota = $row;
+            $wilayah_skpd->save();
+          }
+        }
+      }
+
       $request->session()->flash('message', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/wilayah');
     }
@@ -84,12 +98,14 @@ class WilayahController extends Controller
       $pegawai = Pegawai::where("is_deleted",0)->get();
       $skpd = Skpd::where("is_deleted",0)->get();
       $opd_wilayah = WilayahSkpd::where("is_deleted", 0)->where("id_wilayah", $id)->get();
+      $anggota = WilayahAnggota::where("is_deleted", 0)->where("id_wilayah", $id)->get();
 
       return view('mst.wilayah-form', [
         'data' => $data,
         'pegawai' => $pegawai,
         'skpd' => $skpd,
-        'list_opd' => $opd_wilayah
+        'list_opd' => $opd_wilayah,
+        'anggota' => $anggota
       ]);
     }
 
@@ -101,9 +117,9 @@ class WilayahController extends Controller
         'nama' => [
         	'required'
 	      ],
-        'inspektur' => [
-          'required'
-        ]
+        // 'inspektur' => [
+        //   'required'
+        // ]
       ],[
         'nama.required' => 'Nama Wilayah harus diisi!',
         'nama.unique' => 'Nama Wilayah sudah ada!'
@@ -111,13 +127,14 @@ class WilayahController extends Controller
 
       $t = Wilayah::findOrFail($id);
       $t->nama = $request->input('nama');
-      $t->id_inspektur = $request->input('inspektur');
+      $t->id_inspektur_pembantu = $request->input('inspektur');
       $t->updated_at = date('Y-m-d H:i:s');
       $t->updated_by = Auth::id();
       $t->save();
 
       //remove the last wilayah opd first
       DB::update("UPDATE mst_wilayah_skpd SET is_deleted = 1 WHERE id_wilayah = {$t->id}");
+      DB::update("UPDATE mst_wilayah_anggota SET is_deleted = 1 WHERE id_wilayah = {$t->id}");
 
       if(count($request->input("opd")) > 0){
         foreach($request->input("opd") as $idx => $row){
@@ -126,6 +143,18 @@ class WilayahController extends Controller
             $wilayah_skpd = new WilayahSkpd;
             $wilayah_skpd->id_wilayah = $t->id;
             $wilayah_skpd->id_skpd = $row;
+            $wilayah_skpd->save();
+          }
+        }
+      }
+
+      if(count($request->input("anggota")) > 0){
+        foreach($request->input("anggota") as $idx => $row){
+          if($row > 0){
+            //insert into  wilayah opd
+            $wilayah_skpd = new WilayahAnggota;
+            $wilayah_skpd->id_wilayah = $t->id;
+            $wilayah_skpd->id_anggota = $row;
             $wilayah_skpd->save();
           }
         }
@@ -151,9 +180,11 @@ class WilayahController extends Controller
     public function list_datatables_api()
     {
       $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur")
-      ->where('p.is_deleted', 0)
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur_pembantu"))
+      ->leftJoin("pgw_pegawai AS p", function($join){
+        return $join->on("p.id", "=", "w.id_inspektur_pembantu")
+        ->where("p.is_deleted", 0);
+      })
       ->where("w.is_deleted", 0)
       ->orderBy('w.nama', 'ASC');
       return Datatables::of($data)->make(true);

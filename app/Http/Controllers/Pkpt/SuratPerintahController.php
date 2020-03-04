@@ -28,11 +28,11 @@ class SuratPerintahController extends Controller
       return view('pkpt.surat_perintah-list');
     }
 
-    public function create()
+    public function create($type = 1)
     {
       $wilayah = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur")
+      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
       ->where('p.is_deleted', 0)
       ->where("w.is_deleted", 0)
       ->orderBy('w.nama', 'ASC')
@@ -45,17 +45,21 @@ class SuratPerintahController extends Controller
       $pegawai = Pegawai::where("is_deleted",0)->whereNotIn("id", $inspektur_wilayah)->get();
       $sasaran = Sasaran::where("is_deleted", 0)->get();
       $periode = Periode::where("is_deleted", 0)->get();
+      $list_inspektur = $this->get_current_inspektur(0);
+
       $dasar_surat = DasarSurat::first();
       return view('pkpt.surat_perintah-form',[
         'pegawai' => $pegawai,
         'wilayah' => $wilayah,
         'sasaran' => $sasaran,
         'dasar_surat' => $dasar_surat,
-        'periode' => $periode
+        'periode' => $periode,
+        'list_inspektur' => $list_inspektur,
+        'type' => $type
       ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $type = 1)
     {
       $logged_user = Auth::user();
 
@@ -101,7 +105,7 @@ class SuratPerintahController extends Controller
       $t = new SuratPerintah;
       $t->id_periode = $request->input("periode");
       $t->id_wilayah = $request->input("wilayah");
-      $t->id_inspektur = $wilayah->id_inspektur;
+      $t->id_inspektur = $request->input("inspektur");
       $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
       $t->id_pengendali_teknis = $request->input("pengendali_teknis");
       $t->id_ketua_tim = $request->input("ketua_tim");
@@ -118,6 +122,7 @@ class SuratPerintahController extends Controller
       $t->deleted_at = NULL;
       $t->deleted_by = 0;
       $t->is_deleted = 0;
+      $t->is_pkpt = $type;
       $t->save();
 
       // insert anggota
@@ -140,7 +145,7 @@ class SuratPerintahController extends Controller
 
       $wilayah = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur")
+      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
       ->where('p.is_deleted', 0)
       ->where("w.is_deleted", 0)
       ->orderBy('w.nama', 'ASC')
@@ -155,6 +160,7 @@ class SuratPerintahController extends Controller
       $dasar_surat = DasarSurat::first();
       $anggota = SuratPerintahAnggota::where("is_deleted", 0)->where("id_surat_perintah", $id)->get();
       $periode = Periode::where("is_deleted", 0)->get();
+      $list_inspektur = $this->get_current_inspektur($id);
 
       return view('pkpt.surat_perintah-form', [
         'data' => $data,
@@ -164,7 +170,9 @@ class SuratPerintahController extends Controller
         'sasaran' => $sasaran,
         'inspektur' => Pegawai::where("id", $data->id_inspektur)->first(),
         'dasar_surat' => $dasar_surat,
-        'periode' => $periode
+        'periode' => $periode,
+        'list_inspektur' => $list_inspektur,
+        'type' => $data->is_pkpt
       ]);
     }
 
@@ -214,7 +222,7 @@ class SuratPerintahController extends Controller
       $t = SuratPerintah::findOrFail($id);
       $t->id_periode = $request->input("periode");
       $t->id_wilayah = $request->input("wilayah");
-      $t->id_inspektur = $wilayah->id_inspektur;
+      $t->id_inspektur = $request->input("inspektur");
       $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
       $t->id_pengendali_teknis = $request->input("pengendali_teknis");
       $t->id_ketua_tim = $request->input("ketua_tim");
@@ -318,7 +326,7 @@ class SuratPerintahController extends Controller
       ]);
     }
 
-    public function list_datatables_api()
+    public function list_datatables_api($type = 1)
     {
       $data = DB::table("pkpt_surat_perintah AS sp")
         ->select(DB::raw("sp.*, 
@@ -339,7 +347,36 @@ class SuratPerintahController extends Controller
       ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
       ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
       ->where('sp.is_deleted', 0)
+      ->where("sp.is_pkpt", $type)
       ->orderBy('sp.id', 'ASC');
       return Datatables::of($data)->make(true);
+    }
+
+    public function check_jadwal(Request $request){
+      $dari = date("Y-m-d", strtotime($request->dari));
+      $sampai = date("Y-m-d", strtotime($request->sampai));
+
+      $data = DB::table("pkpt_surat_perintah as sp")
+      ->where("sp.is_deleted", 0)
+      ->whereRaw(DB::raw("((sp.dari BETWEEN \"{$dari}\" AND \"{$sampai}\") OR (sp.sampai BETWEEN \"{$dari}\" AND \"{$sampai}\"))"))
+      ->where("sp.id_wilayah", $request->id_wilayah)
+      ->where("sp.id","!=", $request->sp_id)
+      ->get();
+
+      return response()->json(["data" => $data]);
+    }
+
+    public function get_current_inspektur($id_sp) {
+      $get_inspektur_from_sp = SuratPerintah::find($id_sp);
+
+      $list_inspektur = DB::table("mst_inspektur AS i")
+      ->select(DB::raw("i.*, p.nama"))
+      ->join("pgw_pegawai as p", "p.id", "=","i.id_inspektur")
+      ->where("i.is_current_inspektur", 1)
+      ->orWhere("i.id_inspektur", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
+      ->get();
+
+      return $list_inspektur;
+
     }
 }

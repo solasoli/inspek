@@ -3,9 +3,6 @@
 
 <style>
 
-  .fc-title {
-    color: #fff;
-  }
 
   .fc-header-toolbar {
     /*
@@ -93,7 +90,11 @@
       $list_arr[] = [
         "title" => $row->no_surat,
         "start" => $row->dari,
-        "end" => $row->sampai
+        "end" => $row->sampai,
+        "url" => "/pkpt/surat_perintah/info/". $row->id,
+        "backgroundColor" => !$row->is_pkpt ? "#f8d7da" : "",
+        "borderColor" => !$row->is_pkpt ? "#f5c6cb" : "",
+        "textColor" => !$row->is_pkpt ? "#721c24" : ""
       ];
       @endphp
     @endforeach
@@ -108,7 +109,8 @@
       defaultView: 'dayGridMonth',
       defaultDate: '{{ date("Y-m-d") }}',
       navLinks: true, // can click day/week names to navigate views
-      editable: true,
+      editable: false,
+      displayEventTime: false,
       eventLimit: true, // allow "more" link when too many events
       events: {!! json_encode($list_arr) !!}
     });

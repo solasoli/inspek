@@ -4,12 +4,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">OPD</a>
+    <a class="breadcrumb-item Active" href="#">Wilayah</a>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">Inspektur Pembantu</h4>
+  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Wilayah</h4>
 </div>
 
 <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">
@@ -42,21 +42,30 @@
       <div class="col-lg-12 widget-2 px-0">
         <div class="card shadow-base">
           <div class="card-header">
-            <h6 class="card-title float-left py-2">FORM WILAYAH</h6>
+            <h6 class="card-title float-left py-2">FORM Inspektur</h6>
           </div>
           <div class="card-body">
             {{ csrf_field() }}
+
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Dasar Surat
+                Inspektur
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <textarea name='dasar_surat' class="form-control">{{isset($data->dasar_surat) ? $data->dasar_surat : ""}}</textarea>
+                <select name='inspektur' class="form-control select2">
+                  @foreach($pegawai as $idx => $row)
+                  @php
+                  $selected = !is_null(old('inspektur')) && old('inspektur') == $row->id ? "selected" : (isset($inspektur->id_inspektur) && $row->id == $inspektur->id_inspektur ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                  @endforeach
+                </select>
               </div>
             </div>
-            
+
             <div class="form-group row mt-4 d-flex justify-content-center">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                <a href='{{url('')}}/mst/wilayah' class="btn btn-danger" type="button">Cancel</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </div>
@@ -68,9 +77,5 @@
   </div>
 
 </form>
-<script>
-
-  $(function(){
-  });
-</script>
+<script></script>
 @endsection

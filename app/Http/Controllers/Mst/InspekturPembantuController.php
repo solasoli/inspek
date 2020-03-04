@@ -35,7 +35,7 @@ class InspekturPembantuController extends Controller
       $data = InspekturPembantu::where("is_deleted", 0)->where("id_wilayah", $id_wilayah)->get();
       $wilayah_selected = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur")
+      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
       ->where('p.is_deleted', 0)
       ->where("w.is_deleted", 0)
       ->where("w.id", $id_wilayah)
@@ -86,11 +86,9 @@ class InspekturPembantuController extends Controller
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
       $data = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("mst_inspektur_pembantu AS ip", "ip.id_wilayah", "=", "w.id")
-      ->join("pgw_pegawai AS p", "p.id", "=", "ip.id_inspektur_pembantu")
+      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
       ->where('p.is_deleted', 0)
       ->where("w.is_deleted", 0)
-      ->where("ip.is_deleted", 0)
       ->where("w.id", $id_wilayah)
       ->orderBy('w.nama', 'ASC')
       ->get();

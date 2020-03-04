@@ -54,15 +54,16 @@
                 <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
+
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Inspektur
+                Inspektur Pembantu
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name='inspektur' class="form-control select2">
                   @foreach($pegawai as $idx => $row)
                   @php
-                  $selected = !is_null(old('inspektur')) && old('inspektur') == $row->id ? "selected" : (isset($data->id_inspektur) && $row->id == $data->id_inspektur ? 'selected' : '');
+                  $selected = !is_null(old('inspektur')) && old('inspektur') == $row->id ? "selected" : (isset($data->id_inspektur_pembantu) && $row->id == $data->id_inspektur_pembantu ? 'selected' : '');
                   @endphp
                   <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
                   @endforeach
@@ -70,17 +71,9 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="row mg-y-10">
-      <div class="col-lg-12 widget-2 px-0">
-        <div class="card shadow-base">
 
           <div class="card-header">
-            <h6 class="card-title float-left py-2">LIST OPD</h6>
+            <h6 class="card-title float-left py-2">LIST Perangkat daerah</h6>
           </div>
           <div class="card-body">
 
@@ -97,17 +90,46 @@
                     </tr>
                   </thead>
                   <tbody id='cover-opd'>
-                    @if((isset($list_opd) && $list_opd->count() == 0) || !isset($list_opd))
-                    <tr>
-                      <td>
-                        <select name='opd[]' class="form-control select2">
-                          @foreach($skpd as $idx => $row)
-                            <option value='{{$row->id}}'>{{$row->name}}</option>
-                          @endforeach
-                        </select>
-                      </td>
-                      <td></td>
-                    </tr>
+                    @if(old("opd") != null)
+                      @php 
+                        $x = 1;
+                      @endphp
+                      @foreach(old("opd") as $i => $r)
+                        <tr>
+                          <td>
+                            <select name='opd[]' class="form-control select2">
+                              @foreach($skpd as $idx => $row)
+                                @php
+                                $selected = $row->id == $r ? "selected" : "";
+                                @endphp
+                                <option value='{{$row->id}}' {{$selected}}>{{$row->name}}</option>
+                              @endforeach
+                            </select>
+                          </td>
+                          <td>
+                            @if($x > 1)
+                            <button type='button' class='btn btn-danger btn-xs delete-opd'>
+                              <i class='fa fa-close'></i>
+                            </button>
+                            @endif
+                          </td>
+                        </tr>
+                        @php
+                        $x++;
+                        @endphp
+                      @endforeach
+
+                    @elseif((isset($list_opd) && $list_opd->count() == 0) || !isset($list_opd))
+                      <tr>
+                        <td>
+                          <select name='opd[]' class="form-control select2">
+                            @foreach($skpd as $idx => $row)
+                              <option value='{{$row->id}}'>{{$row->name}}</option>
+                            @endforeach
+                          </select>
+                        </td>
+                        <td></td>
+                      </tr>
                     @else
                       @php 
                         $x = 1;
@@ -149,13 +171,103 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row mg-y-10">
-      <div class="col-lg-12 widget-2 px-0">
         <div class="card shadow-base">
+
+            <div class="card-header">
+              <h6 class="card-title float-left py-2">LIST Anggota</h6>
+            </div>
           <div class="card-body">
+
+
+              <div class="col-md-6 col-sm-6 col-xs-12" style="margin: 0 auto">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Anggota</th>
+                      <th style="width:60px"></th>
+                    </tr>
+                  </thead>
+                  <tbody id='cover-anggota'>
+
+                    @if(old("anggota") != null)
+                      @php 
+                        $x = 1;
+                      @endphp
+                      @foreach(old("anggota") as $i => $r)
+                        <tr>
+                          <td>
+                            <select name='anggota[]' class="form-control select2">
+                              @foreach($pegawai as $idx => $row)
+                                @php
+                                $selected = $row->id == $r ? "selected" : "";
+                                @endphp
+                                <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                              @endforeach
+                            </select>
+                          </td>
+                          <td>
+                            @if($x > 1)
+                            <button type='button' class='btn btn-danger btn-xs delete-opd'>
+                              <i class='fa fa-close'></i>
+                            </button>
+                            @endif
+                          </td>
+                        </tr>
+                        @php
+                        $x++;
+                        @endphp
+                      @endforeach
+
+                    @elseif((isset($anggota) && $anggota->count() == 0) || !isset($anggota))
+                      <tr>
+                        <td>
+                          <select name='anggota[]' class="form-control select2">
+                            @foreach($pegawai as $idx => $row)
+                              <option value='{{$row->id}}'>{{$row->nama}}</option>
+                            @endforeach
+                          </select>
+                        </td>
+                        <td></td>
+                      </tr>
+                    @else
+                      @php 
+                        $x = 1;
+                      @endphp
+
+                      @foreach($anggota as $i => $r)
+                        <tr>
+                          <td>
+                            <select name='anggota[]' class="form-control select2">
+                              @foreach($pegawai as $idx => $row)
+                                @php
+                                $selected = $row->id == $r->id_anggota? "selected" : "";
+                                @endphp
+                                <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                              @endforeach
+                            </select>
+                          </td>
+                          <td>
+                            @if($x > 1)
+                            <button type='button' class='btn btn-danger btn-xs delete-opd'>
+                              <i class='fa fa-close'></i>
+                            </button>
+                            @endif
+                          </td>
+                        </tr>
+                        @php
+                        $x++;
+                        @endphp
+                      @endforeach
+                    @endif
+                  </tbody>
+                  <tr>
+                    <td colspan="2">
+                      <button type="button" class="btn btn-info add-anggota"> Tambah Anggota</button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
 
             <div class="form-group row mt-4 d-flex justify-content-center">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -186,11 +298,32 @@
   addMoreOpd += "</td>";
   addMoreOpd += "</tr>";
 
+  /* Anggota */
+  var addMoreAnggota = "<tr>";
+  addMoreAnggota += "<td>";
+  addMoreAnggota += "<select name='anggota[]' class='form-control select2'>";
+  addMoreAnggota += "<option value=''>- Pilih Disini -</option>";
+  @foreach($pegawai as $idx => $row)
+    addMoreAnggota += "<option value='{{$row->id}}'>{{$row->nama}}</option>";
+  @endforeach
+  addMoreAnggota += "</select>";
+  addMoreAnggota += "</td>";
+  addMoreAnggota += "<td>";
+  addMoreAnggota += "<button type='button' class='btn btn-danger btn-xs delete-opd'><i class='fa fa-close'></i></button>";
+  addMoreAnggota += "</td>";
+  addMoreAnggota += "</tr>";
+
   $(function(){
     $(".add-opd").on('click', function(){
         $("#cover-opd").append(addMoreOpd);
 
         $("#cover-opd tr:last .select2").select2();
+    });
+
+    $(".add-anggota").on('click', function(){
+        $("#cover-anggota").append(addMoreAnggota);
+
+        $("#cover-anggota tr:last .select2").select2();
     });
 
     $(document).on('click', ".delete-opd", function(){

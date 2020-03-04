@@ -49,6 +49,22 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    Route::prefix('pegawai')->group(function () {
+      Route::get('/', 'Mst\PegawaiController@index');
+      Route::get('/add', 'Mst\PegawaiController@create');
+      Route::get('/edit/{id}', 'Mst\PegawaiController@edit');
+      Route::get('/delete/{id}', 'Mst\PegawaiController@destroy');
+      Route::get('/datatables', 'Mst\PegawaiController@list_datatables_api');
+
+      Route::get('/inspektur', 'Mst\PegawaiController@inspektur');
+      /* Post section */
+      Route::post('/add', 'Mst\PegawaiController@store');
+      Route::post('/edit/{id}', 'Mst\PegawaiController@update');
+
+      Route::post('/inspektur', 'Mst\PegawaiController@update_inspektur');
+    });
+
+
     Route::prefix('wilayah')->group(function () {
       Route::get('/', 'Mst\WilayahController@index');
       Route::get('/add', 'Mst\WilayahController@create');
@@ -92,17 +108,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('surat_perintah')->group(function () {
       Route::get('/', 'Pkpt\SuratPerintahController@index');
-      Route::get('/add', 'Pkpt\SuratPerintahController@create');
+      Route::get('/add/{type?}', 'Pkpt\SuratPerintahController@create');
       Route::get('/edit/{id}', 'Pkpt\SuratPerintahController@edit');
       Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
       Route::get('/approve/{id}', 'Pkpt\SuratPerintahController@approve');
-      Route::get('/datatables', 'Pkpt\SuratPerintahController@list_datatables_api');
+      Route::get('/datatables/{type?}', 'Pkpt\SuratPerintahController@list_datatables_api');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       /* Post section */
-      Route::post('/add', 'Pkpt\SuratPerintahController@store');
+      Route::post('/add/{type?}', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
+      Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
     });
   });
 
