@@ -31,7 +31,7 @@
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
         <div class="card-header">
-          <h6 class="card-title float-left">List Surat Perintah pkpt</h6>
+          <h6 class="card-title float-left">Daftar Surat Perintah pkpt</h6>
           <div class="float-right">
 
             @if(can_access("pkpt_surat_perintah", "add"))
@@ -44,7 +44,7 @@
             <thead>
               <tr>
                 <th>No. Surat</th>
-                <th>Wilayah</th>
+                <th>Irban</th>
                 <th>Inspektor</th>
                 <th>Dari</th>
                 <th>Sampai</th>
@@ -61,7 +61,7 @@
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
         <div class="card-header">
-          <h6 class="card-title float-left">List Surat Perintah non-pkpt</h6>
+          <h6 class="card-title float-left">Daftar Surat Perintah non-pkpt</h6>
           <div class="float-right">
 
             @if(can_access("pkpt_surat_perintah", "add"))

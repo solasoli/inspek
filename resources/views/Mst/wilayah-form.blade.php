@@ -4,7 +4,7 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">Wilayah</a>
+    <a class="breadcrumb-item Active" href="#">Wilayah Test</a>
   </nav>
 </div>
 
