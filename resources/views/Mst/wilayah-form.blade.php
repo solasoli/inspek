@@ -4,12 +4,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">Wilayah</a>
+    <a class="breadcrumb-item Active" href="#">Kelola Irban</a>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Wilayah</h4>
+  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Irban</h4>
 </div>
 
 <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">
@@ -48,7 +48,7 @@
             {{ csrf_field() }}
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Nama Wilayah <span class="required">*</span> :
+                Nama Irban <span class="required">*</span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text" >
@@ -71,6 +71,41 @@
               </div>
             </div>
           </div>
+          
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Pengendali Teknis
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='pengendali_teknis' class="form-control select2">
+                  <option value="" data-nama="-">- Pilih Disini -</option> 
+                  @foreach($pegawai as $idx => $row)
+                  @php
+                  $selected = !is_null(old('pengendali_teknis')) && old('pengendali_teknis') == $row->id ? "selected" : (isset($data->id_pengendali_teknis) && $row->id == $data->id_pengendali_teknis ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Ketua Tim
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='ketua_tim' class="form-control select2">
+                  <option value="" data-nama="-">- Pilih Disini -</option> 
+                  @foreach($pegawai as $idx => $row)
+                  @php
+                  $selected = !is_null(old('ketua_tim')) && old('ketua_tim') == $row->id ? "selected" : (isset($data->id_ketua_tim) && $row->id == $data->id_ketua_tim ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
 
           <div class="card-header">
             <h6 class="card-title float-left py-2">LIST Perangkat daerah</h6>
