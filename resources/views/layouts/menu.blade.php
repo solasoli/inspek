@@ -16,6 +16,8 @@
 <ul class="br-menu-sub nav flex-column">
   <!-- <li class="nav-item"><a href="/mst/periode" class="nav-link">Periode</a></li> -->
   <li class="nav-item"><a href="/mst/skpd" class="nav-link">OPD</a></li>
+  <li class="nav-item"><a href="/mst/jabatan" class="nav-link">Jabatan</a></li>
+  <li class="nav-item"><a href="/mst/peran" class="nav-link">Peran Irban</a></li>
   <li class="nav-item"><a href="/mst/wilayah" class="nav-link">Kelola Irban</a></li>
   <li class="nav-item"><a href="/mst/pegawai" class="nav-link">Pegawai</a></li>
   <!-- <li class="nav-item"><a href="/mst/pegawai/inspektur" class="nav-link">Inspektur</a></li> -->

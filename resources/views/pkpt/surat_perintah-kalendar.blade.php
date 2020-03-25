@@ -87,14 +87,32 @@
 
     @foreach($data as $idx => $row)
       @php
+      $listcolor = [
+        0 => [
+          'bgColor' => '',
+          'borderColor' => '',
+          'textColor' => '',
+        ],
+        1 => [
+          'bgColor' => '#f8d7da',
+          'borderColor' => '#f5c6cb',
+          'textColor' => '#721c24',
+        ],
+        2 => [
+          'bgColor' => '#4b476d',
+          'borderColor' => '#4b476d',
+          'textColor' => '',
+        ]
+      ];
+
       $list_arr[] = [
         "title" => $row->no_surat,
         "start" => $row->dari,
         "end" => $row->sampai,
         "url" => "/pkpt/surat_perintah/info/". $row->id,
-        "backgroundColor" => !$row->is_pkpt ? "#f8d7da" : "",
-        "borderColor" => !$row->is_pkpt ? "#f5c6cb" : "",
-        "textColor" => !$row->is_pkpt ? "#721c24" : ""
+        "backgroundColor" => $listcolor[$row->is_pkpt]['bgColor'],
+        "borderColor" => $listcolor[$row->is_pkpt]['borderColor'],
+        "textColor" => $listcolor[$row->is_pkpt]['textColor']
       ];
       @endphp
     @endforeach

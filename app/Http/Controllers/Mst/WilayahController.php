@@ -52,7 +52,7 @@ class WilayahController extends Controller
 
       $t = new Wilayah;
       $t->nama = $request->input('nama');
-      $t->id_inspektur_pembantu = $request->input('inspektur');
+      $t->id_inspektur_pembantu = 0;
       $t->created_at = date('Y-m-d H:i:s');
       $t->created_by = Auth::id();
       $t->updated_at = NULL;
@@ -69,19 +69,6 @@ class WilayahController extends Controller
             $wilayah_skpd = new WilayahSkpd;
             $wilayah_skpd->id_wilayah = $t->id;
             $wilayah_skpd->id_skpd = $row;
-            $wilayah_skpd->save();
-          }
-        }
-      }
-
-
-      if(count($request->input("anggota")) > 0){
-        foreach($request->input("anggota") as $idx => $row){
-          if($row > 0){
-            //insert into  wilayah opd
-            $wilayah_skpd = new WilayahAnggota;
-            $wilayah_skpd->id_wilayah = $t->id;
-            $wilayah_skpd->id_anggota = $row;
             $wilayah_skpd->save();
           }
         }
@@ -127,14 +114,13 @@ class WilayahController extends Controller
 
       $t = Wilayah::findOrFail($id);
       $t->nama = $request->input('nama');
-      $t->id_inspektur_pembantu = $request->input('inspektur');
+      $t->id_inspektur_pembantu = 0;
       $t->updated_at = date('Y-m-d H:i:s');
       $t->updated_by = Auth::id();
       $t->save();
 
       //remove the last wilayah opd first
       DB::update("UPDATE mst_wilayah_skpd SET is_deleted = 1 WHERE id_wilayah = {$t->id}");
-      DB::update("UPDATE mst_wilayah_anggota SET is_deleted = 1 WHERE id_wilayah = {$t->id}");
 
       if(count($request->input("opd")) > 0){
         foreach($request->input("opd") as $idx => $row){
@@ -143,18 +129,6 @@ class WilayahController extends Controller
             $wilayah_skpd = new WilayahSkpd;
             $wilayah_skpd->id_wilayah = $t->id;
             $wilayah_skpd->id_skpd = $row;
-            $wilayah_skpd->save();
-          }
-        }
-      }
-
-      if(count($request->input("anggota")) > 0){
-        foreach($request->input("anggota") as $idx => $row){
-          if($row > 0){
-            //insert into  wilayah opd
-            $wilayah_skpd = new WilayahAnggota;
-            $wilayah_skpd->id_wilayah = $t->id;
-            $wilayah_skpd->id_anggota = $row;
             $wilayah_skpd->save();
           }
         }

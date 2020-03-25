@@ -62,8 +62,10 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/edit/{id}', 'Mst\PegawaiController@update');
 
       Route::post('/inspektur', 'Mst\PegawaiController@update_inspektur');
-    });
 
+      Route::post("/get_pengendali_teknis_by_wilayah", "Mst\PegawaiController@get_pengendali_teknis_by_wilayah");
+      Route::post("/get_ketua_tim_by_wilayah", "Mst\PegawaiController@get_ketua_tim_by_wilayah");
+    });
 
     Route::prefix('wilayah')->group(function () {
       Route::get('/', 'Mst\WilayahController@index');
@@ -76,7 +78,28 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/edit/{id}', 'Mst\WilayahController@update');
     });
 
+    Route::prefix('jabatan')->group(function () {
+      Route::get('/', 'Mst\JabatanController@index');
+      Route::get('/add', 'Mst\JabatanController@create');
+      Route::get('/edit/{id}', 'Mst\JabatanController@edit');
+      Route::get('/delete/{id}', 'Mst\JabatanController@destroy');
+      Route::get('/datatables', 'Mst\JabatanController@list_datatables_api');
+      /* Post section */
+      Route::post('/add', 'Mst\JabatanController@store');
+      Route::post('/edit/{id}', 'Mst\JabatanController@update');
+    });
 
+    Route::prefix('peran')->group(function () {
+      Route::get('/', 'Mst\PeranController@index');
+      Route::get('/add', 'Mst\PeranController@create');
+      Route::get('/edit/{id}', 'Mst\PeranController@edit');
+      Route::get('/delete/{id}', 'Mst\PeranController@destroy');
+      Route::get('/datatables', 'Mst\PeranController@list_datatables_api');
+      Route::get('/get_peran_by_jabatan/{id}', 'Mst\PeranController@get_peran_by_jabatan');
+      /* Post section */
+      Route::post('/add', 'Mst\PeranController@store');
+      Route::post('/edit/{id}', 'Mst\PeranController@update');
+    });
 
     Route::prefix('sasaran')->group(function () {
       Route::get('/', 'Mst\SasaranController@index');

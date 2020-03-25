@@ -84,13 +84,20 @@ class InspekturPembantuController extends Controller
     public function get_inspektur_pembantu_by_wilayah(Request $request)
     {
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
+
       $data = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
+      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
+      ->join('pgw_peran AS pp', 'pp.id', '=', 'p.id_peran')
       ->where('p.is_deleted', 0)
-      ->where("w.is_deleted", 0)
-      ->where("w.id", $id_wilayah)
-      ->orderBy('w.nama', 'ASC')
+      ->whereIn("pp.kode", ['inspektur_pembantu', 'wakil_inspektur_pembantu'])
+      ->where("w.is_deleted", 0);
+
+      if($request->input('id_wilayah') != 'all') {
+        $data = $data->where("w.id", $id_wilayah);
+      }
+      
+      $data = $data->orderBy('w.nama', 'ASC')
       ->get();
       return response()->json(["data" => $data]);
     }

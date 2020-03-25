@@ -6,12 +6,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">Periode</a>
+    <a class="breadcrumb-item Active" href="#">Pegawai</a>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Periode</h4>
+  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Pegawai</h4>
 </div>
 
 <div class="br-pagebody">
@@ -43,7 +43,7 @@
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
         <div class="card-header">
-          <h6 class="card-title float-left py-2">FORM Periode</h6>
+          <h6 class="card-title float-left py-2">FORM Pegawai</h6>
         </div>
         <div class="card-body">
           <form class="form-layout form-layout-5" method="post" enctype="multipart/form-data">
@@ -135,7 +135,7 @@
                 Jabatan <span class="required">*</span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='jabatan' class="form-control select2">
+                <select name='jabatan' class="form-control select2" id='jabatan'>
                   @foreach($jabatan as $idx => $row)
                   @php
                   $selected = !is_null(old('jabatan')) && old('jabatan') == $row->id ? "selected" : (isset($data->id_jabatan) && $row->id == $data->id_jabatan ? 'selected' : '');
@@ -148,16 +148,11 @@
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Jabatan Irban<span class="required">*</span> :
+                Peran Irban<span class="required">*</span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='jabatan' class="form-control select2">
-                  @foreach($jabatan as $idx => $row)
-                  @php
-                  $selected = !is_null(old('jabatan')) && old('jabatan') == $row->id ? "selected" : (isset($data->id_jabatan) && $row->id == $data->id_jabatan ? 'selected' : '');
-                  @endphp
-                  <option value='{{$row->id}}' {{$selected}}>{{$row->name}}</option>
-                  @endforeach
+                <select name='peran' class="form-control select2" id='peran_irban'>
+                  
                 </select>
               </div>
             </div>
@@ -225,7 +220,33 @@
 </div>
 <script>
   $(function(){
+    var id_peran_irban = '{{ isset($data) && $data->id_peran > 0 ? $data->id_peran : 0 }}';
+    
+    get_peran_irban($('#jabatan').val());
 
+    $("#jabatan").on('change', function(){
+
+      get_peran_irban($('#jabatan').val());
+    })
+
+    function get_peran_irban(idJabatan){
+      $.get('{{url("")}}/mst/peran/get_peran_by_jabatan/' + idJabatan, function(res){
+        console.log(res);
+        if(res != null){
+          // var option = '<option value="' + '">- Pilih Peran -</option>';
+          var option = '';
+
+          $.each(res.data, function(idx, val){
+            var selected = id_peran_irban == val.id ? "selected" : "";
+            option += "<option value='"+ val.id +"' ";
+            option += selected +" ";
+            option += ">" + val.nama +"</option>";
+          });
+
+          $("#peran_irban").html(option);
+        }
+      });
+    }
   });
 </script>
   @endsection

@@ -49,23 +49,6 @@
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Periode
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='periode' class="form-control select2" required="required">
-                  <option value="" data-nama="-">- Pilih Disini -</option> 
-                  @foreach($periode as $idx => $row)
-                  @php
-                  $selected = !is_null(old('periode')) && old('periode') == $row->id ? "selected" : (isset($data->id_periode) && $row->id == $data->id_periode ? 'selected' : '');
-                  @endphp
-                  <option value='{{$row->id}}' {{$selected}}>{{$row->label}}</option>
-                  @endforeach
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Wilayah
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
@@ -89,9 +72,9 @@
                 <select name='inspektur' class="form-control select2">
                   @foreach($list_inspektur as $idx => $row)
                   @php
-                  $selected = !is_null(old('inspektur')) && old('inspektur') == $row->id_inspektur ? "selected" : (isset($data->id_inspektur) && $row->id_inspektur == $data->id_inspektur ? 'selected' : '');
+                  $selected = !is_null(old('inspektur')) && old('inspektur') == $row->id ? "selected" : (isset($data->id_inspektur) && $row->id == $data->id_inspektur ? 'selected' : '');
                   @endphp
-                  <option value='{{$row->id_inspektur}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
+                  <option value='{{$row->id}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
                   @endforeach
                 </select>
               </div>
@@ -113,14 +96,7 @@
                 Pengendali Teknis
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='pengendali_teknis' class="form-control select2">
-                  <option value="" data-nama="-">- Pilih Disini -</option> 
-                  @foreach($pegawai as $idx => $row)
-                  @php
-                  $selected = !is_null(old('pengendali_teknis')) && old('pengendali_teknis') == $row->id ? "selected" : (isset($data->id_pengendali_teknis) && $row->id == $data->id_pengendali_teknis ? 'selected' : '');
-                  @endphp
-                  <option value='{{$row->id}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
-                  @endforeach
+                <select name='pengendali_teknis' class="form-control select2 pengendali_teknis">
                 </select>
               </div>
             </div>
@@ -130,7 +106,7 @@
                 Ketua Tim
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='ketua_tim' class="form-control select2">
+                <select name='ketua_tim' class="form-control select2 ketua_tim">
                   <option value="" data-nama="-">- Pilih Disini -</option> 
                   @foreach($pegawai as $idx => $row)
                   @php
@@ -379,6 +355,8 @@
       var nama = $(el).find("option:selected").data("nama");
       $("#inspektur-ds").html(nama);
       get_inspektur_pembantu($(el));
+      get_pengendali_teknis($(el));
+      get_ketua_tim($(el));
 
       check_jadwal_surat_perintah();
     }
@@ -393,6 +371,36 @@
           $.each(res.data, function(idx, val){
             var selected = data_edit == val.id ? "selected" : "";
             $(".inspektur_pembantu").append("<option value='" + val.id +"' " +selected+ ">" + val.nama_inspektur + "</option>");
+          });
+        }
+      });
+    }
+
+    function get_pengendali_teknis(el){
+      $.post("/mst/pegawai/get_pengendali_teknis_by_wilayah", {"id_wilayah": $(el).val()}, function(res){
+        if(res.data != null){
+          $(".pengendali_teknis").html('');
+
+          var data_edit = {{isset($data->id_pengendali_teknis) ? $data->id_pengendali_teknis : 0 }};
+
+          $.each(res.data, function(idx, val){
+            var selected = data_edit == val.id ? "selected" : "";
+            $(".pengendali_teknis").append("<option value='" + val.id +"' " +selected+ ">" + val.nama_inspektur + "</option>");
+          });
+        }
+      });
+    }
+
+    function get_ketua_tim(el){
+      $.post("/mst/pegawai/get_ketua_tim_by_wilayah", {"id_wilayah": $(el).val()}, function(res){
+        if(res.data != null){
+          $(".ketua_tim").html('');
+
+          var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
+
+          $.each(res.data, function(idx, val){
+            var selected = data_edit == val.id ? "selected" : "";
+            $(".ketua_tim").append("<option value='" + val.id +"' " +selected+ ">" + val.nama_inspektur + "</option>");
           });
         }
       });

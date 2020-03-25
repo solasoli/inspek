@@ -44,7 +44,7 @@
             <thead>
               <tr>
                 <th>Nama Irban</th>
-                <th>Inspektur Pembantu</th>
+                <!-- <th>Inspektur Pembantu</th> -->
                 <th style='width:150px'>Aksi</th>
               </tr>
             </thead>
@@ -73,7 +73,7 @@ $(function() {
       ajax: '{{url()->current()}}/datatables/',
       columns: [
         { data: 'nama', name: 'w.nama'},
-        { data: 'nama_inspektur', name: 'p.nama'},
+        // { data: 'nama_inspektur', name: 'p.nama'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("mst_skpd", "edit"))
@@ -87,7 +87,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 2,
+        targets: 1,
         className: "text-center",
      }],
   });

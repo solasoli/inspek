@@ -18,6 +18,7 @@ use App\Sasaran;
 use App\DasarSurat;
 use App\Periode;
 use App\Model\Pegawai\Pegawai;
+use App\Model\Pegawai\Peran;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -30,25 +31,19 @@ class SuratPerintahController extends Controller
 
     public function create($type = 1)
     {
-      $wilayah = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
-      ->where('p.is_deleted', 0)
-      ->where("w.is_deleted", 0)
-      ->orderBy('w.nama', 'ASC')
-      ->get();
+      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
 
-      $inspektur_wilayah = $wilayah->map(function($val, $itm){
-        return $val->id_inspektur;
-      });
+      // get peran anggota 
+      $peran_anggota = Peran::where("is_anggota", 1)->where("is_deleted", 0)->first();
 
-      $pegawai = Pegawai::where("is_deleted",0)->whereNotIn("id", $inspektur_wilayah)->get();
+      $pegawai = Pegawai::where("is_deleted",0)->where("id_peran", $peran_anggota->id)->get();
       $sasaran = Sasaran::where("is_deleted", 0)->get();
       $periode = Periode::where("is_deleted", 0)->get();
       $list_inspektur = $this->get_current_inspektur(0);
 
       $dasar_surat = DasarSurat::first();
-      return view('pkpt.surat_perintah-form',[
+      $surat_perintah_file = $type != 2 ? 'surat_perintah-form' : 'surat_perintah_khusus-form';
+      return view('pkpt.'. $surat_perintah_file,[
         'pegawai' => $pegawai,
         'wilayah' => $wilayah,
         'sasaran' => $sasaran,
@@ -63,13 +58,14 @@ class SuratPerintahController extends Controller
     {
       $logged_user = Auth::user();
 
-      request()->validate([
-        'periode' => [
-          'required'
-        ],
+      $arr_validation = [
+        // 'periode' => [
+        //   'required'
+        // ],
+        
         'wilayah' => [
-        	'required'
-	      ],
+          $type != 2 ? 'required' : ''
+        ],
         'inspektur_pembantu' => [
           'required'
         ],
@@ -94,17 +90,21 @@ class SuratPerintahController extends Controller
         'sampai' => [
           'required'
         ]
-      ],[
+      ];
+
+      request()->validate($arr_validation,[
         'nama.required' => 'Nama SuratPerintah harus diisi!',
         'nama.unique' => 'Nama SuratPerintah sudah ada!'
       ]);
 
       // get wilayah
-      $wilayah = Wilayah::findOrFail($request->input("wilayah"));
+      if($type != 2){
+        $wilayah = Wilayah::findOrFail($request->input("wilayah"));
+      }
 
       $t = new SuratPerintah;
-      $t->id_periode = $request->input("periode");
-      $t->id_wilayah = $request->input("wilayah");
+      $t->id_periode = 0;
+      $t->id_wilayah = $request->input("wilayah") == null ? 0 : $request->input('wilayah');
       $t->id_inspektur = $request->input("inspektur");
       $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
       $t->id_pengendali_teknis = $request->input("pengendali_teknis");
@@ -155,14 +155,18 @@ class SuratPerintahController extends Controller
         return $val->id_inspektur;
       });
 
-      $pegawai = Pegawai::where("is_deleted",0)->whereNotIn("id", $inspektur_wilayah)->get();
+      $peran_anggota = Peran::where("is_anggota", 1)->where("is_deleted", 0)->first();
+
+      $pegawai = Pegawai::where("is_deleted",0)->where("id_peran", $peran_anggota->id)->get();
+
       $sasaran = Sasaran::where("is_deleted", 0)->get();
       $dasar_surat = DasarSurat::first();
       $anggota = SuratPerintahAnggota::where("is_deleted", 0)->where("id_surat_perintah", $id)->get();
       $periode = Periode::where("is_deleted", 0)->get();
       $list_inspektur = $this->get_current_inspektur($id);
 
-      return view('pkpt.surat_perintah-form', [
+      $surat_perintah_file = $data->is_pkpt != 2 ? 'surat_perintah-form' : 'surat_perintah_khusus-form';
+      return view('pkpt.'. $surat_perintah_file, [
         'data' => $data,
         'anggota' => $anggota,
         'pegawai' => $pegawai,
@@ -178,14 +182,16 @@ class SuratPerintahController extends Controller
 
     public function update(Request $request, $id)
     {
+      $t = SuratPerintah::findOrFail($id);
       $logged_user = Auth::user();
 
-      request()->validate([
-        'periode' => [
-          'required'
-        ],
+      $arr_validation = [
+        // 'periode' => [
+        //   'required'
+        // ],
+        
         'wilayah' => [
-          'required'
+          $t->is_pkpt != 2 ? 'required' : ''
         ],
         'inspektur_pembantu' => [
           'required'
@@ -211,17 +217,20 @@ class SuratPerintahController extends Controller
         'sampai' => [
           'required'
         ]
-      ],[
+      ];
+
+      request()->validate($arr_validation,[
         'nama.required' => 'Nama SuratPerintah harus diisi!',
         'nama.unique' => 'Nama SuratPerintah sudah ada!'
       ]);
 
       // get wilayah
-      $wilayah = Wilayah::findOrFail($request->input("wilayah"));
+      if($t->is_pkpt != 2){
+        $wilayah = Wilayah::findOrFail($request->input("wilayah"));
+      }
 
-      $t = SuratPerintah::findOrFail($id);
-      $t->id_periode = $request->input("periode");
-      $t->id_wilayah = $request->input("wilayah");
+      $t->id_periode = 0;
+      $t->id_wilayah = $request->input("wilayah") == null ? 0 : $request->input('wilayah');
       $t->id_inspektur = $request->input("inspektur");
       $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
       $t->id_pengendali_teknis = $request->input("pengendali_teknis");
@@ -336,7 +345,7 @@ class SuratPerintahController extends Controller
           ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
           pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
           s.nama AS sasaran"))
-      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
+      ->leftJoin("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
       ->join("mst_sasaran As s", "s.id", "=", "sp.id_sasaran")
       ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
       ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
@@ -369,11 +378,11 @@ class SuratPerintahController extends Controller
     public function get_current_inspektur($id_sp) {
       $get_inspektur_from_sp = SuratPerintah::find($id_sp);
 
-      $list_inspektur = DB::table("mst_inspektur AS i")
-      ->select(DB::raw("i.*, p.nama"))
-      ->join("pgw_pegawai as p", "p.id", "=","i.id_inspektur")
-      ->where("i.is_current_inspektur", 1)
-      ->orWhere("i.id_inspektur", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
+      $list_inspektur = DB::table("pgw_pegawai AS p")
+      ->select(DB::raw("p.id, p.nama"))
+      ->join("pgw_peran AS pp", "pp.id", "=","p.id_peran")
+      ->where("pp.kode", 'inspektur')
+      ->orWhere("p.id", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
       ->get();
 
       return $list_inspektur;

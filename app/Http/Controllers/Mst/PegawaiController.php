@@ -34,7 +34,7 @@ class PegawaiController extends Controller
       $pangkat = Pangkat::where("is_deleted", 0)->get();
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
-      $wilayah = Wilayah::where("is_deleted", 0)->get();
+      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
       return view('mst.pegawai-form',[
         'opd' => $opd,
         'eselon' => $eselon,
@@ -78,6 +78,18 @@ class PegawaiController extends Controller
       ]);
 
       $t = new Pegawai;
+      $t->id_skpd = $request->input('opd');
+      $t->id_eselon = $request->input('eselon');
+      $t->id_pangkat = $request->input('pangkat');
+      $t->id_pangkat_golongan = $request->input('pangkat_golongan');
+      $t->id_jabatan = $request->input('jabatan');
+      $t->id_peran = $request->input('peran');
+      $t->id_wilayah = $request->input('wilayah');
+      $t->nip = $request->input('nip');
+      $t->nama = $request->input('nama');
+      $t->nama_asli = $request->input('nama_asli');
+      $t->jenjab = $request->input('jenjab');
+      $t->score_angka_credit = $request->input('score_angka_credit');
       $t->is_deleted = 0;
       $t->save();
 
@@ -95,7 +107,7 @@ class PegawaiController extends Controller
       $pangkat = Pangkat::where("is_deleted", 0)->get();
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
-      $wilayah = Wilayah::where("is_deleted", 0)->get();
+      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
       return view('mst.pegawai-form', ['data' => $data,
 
         'opd' => $opd,
@@ -146,6 +158,8 @@ class PegawaiController extends Controller
       $t->id_pangkat = $request->input('pangkat');
       $t->id_pangkat_golongan = $request->input('pangkat_golongan');
       $t->id_jabatan = $request->input('jabatan');
+      $t->id_peran = $request->input('peran');
+      $t->id_wilayah = $request->input('wilayah');
       $t->nip = $request->input('nip');
       $t->nama = $request->input('nama');
       $t->nama_asli = $request->input('nama_asli');
@@ -178,7 +192,7 @@ class PegawaiController extends Controller
       ->join("pgw_eselon AS e", "p.id_eselon", "=", "e.id")
       ->join("pgw_pangkat AS pk", "p.id_pangkat", "=", "pk.id")
       ->join("pgw_pangkat_golongan AS pg", "p.id_pangkat_golongan", "=", "pg.id")
-      ->join("pgw_jabatan AS j", "p.id_eselon", "=", "j.id")
+      ->join("pgw_jabatan AS j", "p.id_jabatan", "=", "j.id")
       ->where('p.is_deleted', 0);
       return Datatables::of($data)->make(true);
     }
@@ -222,5 +236,46 @@ class PegawaiController extends Controller
         return response()->json(['data' => $inspektur]);
       }
 
+    }
+
+
+    public function get_pengendali_teknis_by_wilayah(Request $request)
+    {
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
+      $data = DB::table("mst_wilayah AS w")
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
+      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
+      ->join('pgw_peran AS pp', 'pp.id', '=', 'p.id_peran')
+      ->where('p.is_deleted', 0)
+      ->whereIn("pp.kode", ['pengendali_mutu', 'pengendali_teknis'])
+      ->where("w.is_deleted", 0);
+
+      if($request->input('id_wilayah') != 'all') {
+        $data = $data->where("w.id", $id_wilayah);
+      }
+      
+      $data = $data->orderBy('w.nama', 'ASC')
+      ->get();
+      return response()->json(["data" => $data]);
+    }
+
+    public function get_ketua_tim_by_wilayah(Request $request)
+    {
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
+      $data = DB::table("mst_wilayah AS w")
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
+      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
+      ->join('pgw_peran AS pp', 'pp.id', '=', 'p.id_peran')
+      ->where('p.is_deleted', 0)
+      ->where("pp.kode", 'ketua_tim')
+      ->where("w.is_deleted", 0);
+
+      if($request->input('id_wilayah') != 'all') {
+        $data = $data->where("w.id", $id_wilayah);
+      }
+      
+      $data = $data->orderBy('w.nama', 'ASC')
+      ->get();
+      return response()->json(["data" => $data]);
     }
 }
