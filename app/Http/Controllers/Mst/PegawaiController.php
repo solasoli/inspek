@@ -16,6 +16,7 @@ use App\Model\Pegawai\Pangkat;
 use App\Model\Pegawai\PangkatGolongan;
 use App\Model\Pegawai\Jabatan;
 use App\Inspektur;
+use App\Wilayah;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -33,12 +34,14 @@ class PegawaiController extends Controller
       $pangkat = Pangkat::where("is_deleted", 0)->get();
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
+      $wilayah = Wilayah::where("is_deleted", 0)->get();
       return view('mst.pegawai-form',[
         'opd' => $opd,
         'eselon' => $eselon,
         'pangkat' => $pangkat,
         'pangkat_golongan' => $pangkat_golongan,
-        'jabatan' => $jabatan
+        'jabatan' => $jabatan,
+        'wilayah' => $wilayah,
       ]);
     }
 
@@ -92,13 +95,15 @@ class PegawaiController extends Controller
       $pangkat = Pangkat::where("is_deleted", 0)->get();
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
+      $wilayah = Wilayah::where("is_deleted", 0)->get();
       return view('mst.pegawai-form', ['data' => $data,
 
         'opd' => $opd,
         'eselon' => $eselon,
         'pangkat' => $pangkat,
         'pangkat_golongan' => $pangkat_golongan,
-        'jabatan' => $jabatan
+        'jabatan' => $jabatan,
+        'wilayah' => $wilayah
       ]);
     }
 

@@ -116,6 +116,22 @@
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Irban <span class="required">*</span> :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='wilayah' class="form-control select2">
+                  @foreach($wilayah as $idx => $row)
+                  @php
+                  $selected = !is_null(old('wilayah')) && old('wilayah') == $row->id ? "selected" : (isset($data->id_wilayah) && $row->id == $data->id_wilayah ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Jabatan <span class="required">*</span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
@@ -130,6 +146,21 @@
               </div>
             </div>
 
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Jabatan Irban<span class="required">*</span> :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='jabatan' class="form-control select2">
+                  @foreach($jabatan as $idx => $row)
+                  @php
+                  $selected = !is_null(old('jabatan')) && old('jabatan') == $row->id ? "selected" : (isset($data->id_jabatan) && $row->id == $data->id_jabatan ? 'selected' : '');
+                  @endphp
+                  <option value='{{$row->id}}' {{$selected}}>{{$row->name}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
