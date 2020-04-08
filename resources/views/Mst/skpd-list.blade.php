@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
-
+<style media="screen">
+  .modal-lg{
+    width: 750px !important;
+  }
+</style>
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
@@ -35,7 +39,7 @@
           <div class="float-right">
 
             @if(can_access("mst_skpd", "add"))
-            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah</button>
             @endif
           </div>
         </div>
@@ -45,7 +49,8 @@
               <tr>
                 <th>Nama SKPD</th>
                 <th>Singkatan PD</th>
-                <th>Singkatan Pimpinan</th>
+                <th>Pimpinan</th>
+                <th>Wilayah Kerja</th>
                 <th style='width:150px'>Aksi</th>
               </tr>
             </thead>
@@ -55,6 +60,12 @@
     </div>
   </div>
 </div>
+
+<!-- modal add -->
+@include('Mst.skpd-form_add')
+
+<!-- modal edit -->
+@include('Mst.skpd-form_edit')
 @endsection
 
 @section('scripts')
@@ -64,41 +75,46 @@
 $(function() {
   $('#oTable').DataTable({
     language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-      },
-      responsive: true,
-      processing: true,
-      serverSide: true,
-      ajax: '{{url()->current()}}/datatables/',
-      columns: [
-        { data: 'name', name: 'name'},
-        { data: 'singkatan_pd', name: 'singkatan_pd'},
-        { data: 'singkatan_pimpinan', name: 'singkatan_pimpinan'},
-        { data: null, orderable: false, render: function ( data, type, row ) {
-          var return_button = "";
-          @if(can_access("mst_skpd", "edit"))
-          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
-          @endif
-          @if(can_access("mst_skpd", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
-          @endif
-          return return_button == "" ? "-" : return_button;
-        }},
-      ],
-      columnDefs: [
+      searchPlaceholder: 'Search...',
+      sSearch: '',
+      lengthMenu: '_MENU_ items/page',
+    },
+    responsive: true,
+    processing: true,
+    serverSide: true,
+    ajax: '{{url()->current()}}/datatables/',
+    columns: [
+      { data: 'name', name: 'name'},
+      { data: 'singkatan_pd', name: 'singkatan_pd'},
+      { data: 'pimpinan', name: 'pimpinan'},
+      { data: 'wilayah', name: 'wilayah'},
+      { data: null, orderable: false, render: function ( data, type, row ) {
+        var return_button = "";
+        @if(can_access("mst_skpd", "edit"))
+        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-idskpd='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
+        @endif
+        @if(can_access("mst_skpd", "delete"))
+        return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
+        @endif
+        return return_button == "" ? "-" : return_button;
+      }},
+    ],
+    columnDefs: [
       {
         targets: 3,
         className: "text-center",
-     }],
+      }],
+    });
+    $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+    setTimeout(function() {
+      $(".alert-success").hide(1000);
+    }, 3000);
+
+    $('#addModal, #editModal').on('show.bs.modal', function () {
+      $(this).find('form').trigger('reset');
+    });
+
   });
-  $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
-
-  setTimeout(function() {
-    $(".alert-success").hide(1000);
-  }, 3000);
-
-});
 </script>
 @endsection

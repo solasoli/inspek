@@ -24,7 +24,20 @@ class PegawaiController extends Controller
 {
     public function index()
     {
-      return view('mst.pegawai-list');
+      $opd = Skpd::where("is_deleted", 0)->get();
+      $eselon = Eselon::where("is_deleted", 0)->get();
+      $pangkat = Pangkat::where("is_deleted", 0)->get();
+      $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
+      $jabatan = Jabatan::where("is_deleted", 0)->get();
+      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
+      return view('mst.pegawai-list',[
+        'opd' => $opd,
+        'eselon' => $eselon,
+        'pangkat' => $pangkat,
+        'pangkat_golongan' => $pangkat_golongan,
+        'jabatan' => $jabatan,
+        'wilayah' => $wilayah,
+      ]);
     }
 
     public function create()
@@ -83,8 +96,8 @@ class PegawaiController extends Controller
       $t->id_pangkat = $request->input('pangkat');
       $t->id_pangkat_golongan = $request->input('pangkat_golongan');
       $t->id_jabatan = $request->input('jabatan');
-      $t->id_peran = $request->input('peran');
-      $t->id_wilayah = $request->input('wilayah');
+      $t->id_peran = 0; // ini diisi di menu struktur
+      $t->id_wilayah = 0; // ini diisi di menu struktur
       $t->nip = $request->input('nip');
       $t->nama = $request->input('nama');
       $t->nama_asli = $request->input('nama_asli');
@@ -93,7 +106,7 @@ class PegawaiController extends Controller
       $t->is_deleted = 0;
       $t->save();
 
-      $request->session()->flash('message', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
+      $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/pegawai');
     }
 
@@ -158,8 +171,8 @@ class PegawaiController extends Controller
       $t->id_pangkat = $request->input('pangkat');
       $t->id_pangkat_golongan = $request->input('pangkat_golongan');
       $t->id_jabatan = $request->input('jabatan');
-      $t->id_peran = $request->input('peran');
-      $t->id_wilayah = $request->input('wilayah');
+      // $t->id_peran = $request->input('peran');
+      // $t->id_wilayah = $request->input('wilayah');
       $t->nip = $request->input('nip');
       $t->nama = $request->input('nama');
       $t->nama_asli = $request->input('nama_asli');
@@ -167,7 +180,7 @@ class PegawaiController extends Controller
       $t->score_angka_credit = $request->input('score_angka_credit');
       $t->save();
 
-      $request->session()->flash('message', "Data berhasil diubah!");
+      $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/pegawai');
     }
 
@@ -180,7 +193,7 @@ class PegawaiController extends Controller
       $t->is_deleted = 1;
       $t->save();
 
-      $request->session()->flash('message', "<strong>".$t->name."</strong> berhasil Dihapus!");
+      $request->session()->flash('success', "<strong>".$t->name."</strong> berhasil Dihapus!");
       return redirect('/mst/pegawai');
     }
 
@@ -221,7 +234,7 @@ class PegawaiController extends Controller
         $new_ins->save();
       }
 
-      $request->session()->flash('message', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
+      $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/pegawai/inspektur');
 
     }
@@ -241,7 +254,7 @@ class PegawaiController extends Controller
 
     public function get_pengendali_teknis_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
       $data = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
       ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
@@ -253,7 +266,7 @@ class PegawaiController extends Controller
       if($request->input('id_wilayah') != 'all') {
         $data = $data->where("w.id", $id_wilayah);
       }
-      
+
       $data = $data->orderBy('w.nama', 'ASC')
       ->get();
       return response()->json(["data" => $data]);
@@ -261,7 +274,7 @@ class PegawaiController extends Controller
 
     public function get_ketua_tim_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
       $data = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
       ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
@@ -273,9 +286,16 @@ class PegawaiController extends Controller
       if($request->input('id_wilayah') != 'all') {
         $data = $data->where("w.id", $id_wilayah);
       }
-      
+
       $data = $data->orderBy('w.nama', 'ASC')
       ->get();
       return response()->json(["data" => $data]);
+    }
+
+    public function get_pegawai_by_id(Request $request)
+    {
+      $data = Pegawai::find($request->input('id'));
+
+      return response()->json($data);
     }
 }

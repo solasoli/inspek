@@ -18,7 +18,22 @@ class SkpdController extends Controller
 {
     public function index()
     {
-      return view('mst.skpd-list');
+      $pegawai = DB::table('pgw_pegawai')
+      ->select('id', 'nama')
+      ->where('is_deleted', 0)
+      ->orderBy('nama_asli', 'ASC')
+      ->get();
+
+      $wilayah_kerja = DB::table('mst_wilayah')
+      ->select('id', 'nama')
+      ->where('is_deleted', 0)
+      ->orderBy('nama', 'ASC')
+      ->get();
+
+      return view('mst.skpd-list', [
+        'pegawai' => $pegawai,
+        'wilayah_kerja' => $wilayah_kerja
+      ]);
     }
 
     public function create()
@@ -44,7 +59,8 @@ class SkpdController extends Controller
       $t = new Skpd;
       $t->name = $request->input('name');
       $t->singkatan_pd = $request->input('singkatan_pd');
-      $t->singkatan_pimpinan = $request->input('singkatan_pimpinan');
+      $t->pimpinan = $request->input('pimpinan');
+      $t->id_wilayah = $request->input('wilayah');
       $t->created_at = date('Y-m-d H:i:s');
       $t->created_by = Auth::id();
       $t->updated_at = NULL;
@@ -55,8 +71,8 @@ class SkpdController extends Controller
       $t->save();
 
 
-      $request->session()->flash('message', "<strong>".$request->input('name')."</strong> Berhasil disimpan!");
-      return redirect('/master/skpd');
+      $request->session()->flash('success', "<strong>".$request->input('name')."</strong> Berhasil disimpan!");
+      return redirect('/mst/skpd');
     }
 
     public function edit($id)
@@ -68,8 +84,6 @@ class SkpdController extends Controller
 
     public function update(Request $request, $id)
     {
-      $logged_user = Auth::user();
-
       $request->validate([
         'name' => [
         	'required',
@@ -85,12 +99,13 @@ class SkpdController extends Controller
       $t = Skpd::findOrFail($id);
       $t->name = $request->input('name');
       $t->singkatan_pd = $request->input('singkatan_pd');
-      $t->singkatan_pimpinan = $request->input('singkatan_pimpinan');
+      $t->pimpinan = $request->input('pimpinan');
+      $t->id_wilayah = $request->input('wilayah');
       $t->updated_at = date('Y-m-d H:i:s');
       $t->updated_by = Auth::id();
       $t->save();
 
-      $request->session()->flash('message', "Data berhasil diubah!");
+      $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/skpd');
     }
 
@@ -103,13 +118,34 @@ class SkpdController extends Controller
       $t->is_deleted = 1;
       $t->save();
 
-      $request->session()->flash('message', "<strong>".$t->name."</strong> berhasil Dihapus!");
+      $request->session()->flash('success', "<strong>".$t->name."</strong> berhasil Dihapus!");
       return redirect('/mst/skpd');
     }
 
     public function list_datatables_api()
     {
-      $data = Skpd::where('is_deleted', 0)->orderBy('name', 'ASC')->get();
+      // $data = Skpd::where('is_deleted', 0)->orderBy('name', 'ASC')->get();
+      $data = DB::table('mst_skpd AS skpd')
+      ->select(DB::raw('skpd.*, w.nama AS wilayah'))
+      ->leftjoin('mst_wilayah AS w', function($join) {
+        $join->on('w.id', '=', 'skpd.id_wilayah');
+        $join->where('w.is_deleted', 0);
+      })
+      ->where('skpd.is_deleted', 0)
+      ->orderBy('skpd.name', 'ASC')
+      ->get();
+
       return Datatables::of($data)->make(true);
+    }
+
+    public function get_skpd_by_id(Request $request)
+    {
+      $id = $request->input('id');
+      $data = DB::table('mst_skpd AS skpd')
+      ->where('id', $id)
+      ->where('is_deleted', 0)
+      ->get()->first();
+
+      return response()->json($data);
     }
 }

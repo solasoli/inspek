@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Mst\SkpdController@edit');
       Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
       Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
+      Route::get('/get_skpd_by_id', 'Mst\SkpdController@get_skpd_by_id');
       /* Post section */
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
@@ -55,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Mst\PegawaiController@edit');
       Route::get('/delete/{id}', 'Mst\PegawaiController@destroy');
       Route::get('/datatables', 'Mst\PegawaiController@list_datatables_api');
+      Route::get('/get_pegawai_by_id', 'Mst\PegawaiController@get_pegawai_by_id');
 
       Route::get('/inspektur', 'Mst\PegawaiController@inspektur');
       /* Post section */
@@ -67,12 +69,25 @@ Route::middleware(['auth'])->group(function () {
       Route::post("/get_ketua_tim_by_wilayah", "Mst\PegawaiController@get_ketua_tim_by_wilayah");
     });
 
+    Route::prefix('struktur')->group(function () {
+      Route::get('/', 'Mst\StrukturController@index');
+      Route::get('/add', 'Mst\StrukturController@create');
+      Route::get('/edit/{id}', 'Mst\StrukturController@edit');
+      Route::get('/delete/{id}', 'Mst\StrukturController@destroy');
+      Route::get('/datatables', 'Mst\StrukturController@list_datatables_api');
+
+      /* Post section */
+      Route::post('/add', 'Mst\StrukturController@store');
+      Route::post('/edit/{id}', 'Mst\StrukturController@update');
+    });
+
     Route::prefix('wilayah')->group(function () {
       Route::get('/', 'Mst\WilayahController@index');
       Route::get('/add', 'Mst\WilayahController@create');
       Route::get('/edit/{id}', 'Mst\WilayahController@edit');
       Route::get('/delete/{id}', 'Mst\WilayahController@destroy');
       Route::get('/datatables', 'Mst\WilayahController@list_datatables_api');
+      Route::get('/get_wilayah_by_id', 'Mst\WilayahController@get_wilayah_by_id');
       /* Post section */
       Route::post('/add', 'Mst\WilayahController@store');
       Route::post('/edit/{id}', 'Mst\WilayahController@update');

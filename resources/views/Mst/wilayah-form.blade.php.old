@@ -55,14 +55,14 @@
               </div>
             </div>
 
-          <div class="card-header">
+          <!-- <div class="card-header">
             <h6 class="card-title float-left py-2">LIST Perangkat daerah</h6>
           </div>
           <div class="card-body">
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                
+
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <table class="table">
@@ -74,7 +74,7 @@
                   </thead>
                   <tbody id='cover-opd'>
                     @if(old("opd") != null)
-                      @php 
+                      @php
                         $x = 1;
                       @endphp
                       @foreach(old("opd") as $i => $r)
@@ -114,7 +114,7 @@
                         <td></td>
                       </tr>
                     @else
-                      @php 
+                      @php
                         $x = 1;
                       @endphp
 
@@ -151,7 +151,7 @@
                   </tr>
                 </table>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
 

@@ -62,19 +62,19 @@ class WilayahController extends Controller
       $t->is_deleted = 0;
       $t->save();
 
-      if(count($request->input("opd")) > 0){
-        foreach($request->input("opd") as $idx => $row){
-          if($row > 0){
-            //insert into  wilayah opd
-            $wilayah_skpd = new WilayahSkpd;
-            $wilayah_skpd->id_wilayah = $t->id;
-            $wilayah_skpd->id_skpd = $row;
-            $wilayah_skpd->save();
-          }
-        }
-      }
+      // if(count($request->input("opd")) > 0){
+      //   foreach($request->input("opd") as $idx => $row){
+      //     if($row > 0){
+      //       //insert into  wilayah opd
+      //       $wilayah_skpd = new WilayahSkpd;
+      //       $wilayah_skpd->id_wilayah = $t->id;
+      //       $wilayah_skpd->id_skpd = $row;
+      //       $wilayah_skpd->save();
+      //     }
+      //   }
+      // }
 
-      $request->session()->flash('message', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
+      $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/wilayah');
     }
 
@@ -120,21 +120,21 @@ class WilayahController extends Controller
       $t->save();
 
       //remove the last wilayah opd first
-      DB::update("UPDATE mst_wilayah_skpd SET is_deleted = 1 WHERE id_wilayah = {$t->id}");
+      // DB::update("UPDATE mst_wilayah_skpd SET is_deleted = 1 WHERE id_wilayah = {$t->id}");
+      //
+      // if(count($request->input("opd")) > 0){
+      //   foreach($request->input("opd") as $idx => $row){
+      //     if($row > 0){
+      //       //insert into  wilayah opd
+      //       $wilayah_skpd = new WilayahSkpd;
+      //       $wilayah_skpd->id_wilayah = $t->id;
+      //       $wilayah_skpd->id_skpd = $row;
+      //       $wilayah_skpd->save();
+      //     }
+      //   }
+      // }
 
-      if(count($request->input("opd")) > 0){
-        foreach($request->input("opd") as $idx => $row){
-          if($row > 0){
-            //insert into  wilayah opd
-            $wilayah_skpd = new WilayahSkpd;
-            $wilayah_skpd->id_wilayah = $t->id;
-            $wilayah_skpd->id_skpd = $row;
-            $wilayah_skpd->save();
-          }
-        }
-      }
-
-      $request->session()->flash('message', "Data berhasil diubah!");
+      $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/wilayah');
     }
 
@@ -147,7 +147,7 @@ class WilayahController extends Controller
       $t->is_deleted = 1;
       $t->save();
 
-      $request->session()->flash('message', "<strong>".$t->nama."</strong> berhasil Dihapus!");
+      $request->session()->flash('success', "<strong>".$t->nama."</strong> berhasil Dihapus!");
       return redirect('/mst/wilayah');
     }
 
@@ -162,5 +162,12 @@ class WilayahController extends Controller
       ->where("w.is_deleted", 0)
       ->orderBy('w.nama', 'ASC');
       return Datatables::of($data)->make(true);
+    }
+
+    public function get_wilayah_by_id(Request $request)
+    {
+      $data = Wilayah::find($request->input('id'));
+
+      return response()->json($data);
     }
 }

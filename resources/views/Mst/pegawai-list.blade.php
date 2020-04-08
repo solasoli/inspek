@@ -2,7 +2,11 @@
 @extends('layouts.app')
 
 @section('content')
-
+<style media="screen">
+  .modal-lg{
+    width: 750px !important;
+  }
+</style>
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
@@ -37,7 +41,7 @@
           <div class="float-right">
 
             @if(can_access("mst_skpd", "add"))
-            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah</button>
             @endif
           </div>
         </div>
@@ -61,6 +65,11 @@
     </div>
   </div>
 </div>
+<!-- modal add -->
+@include('Mst.pegawai-form_add')
+
+<!-- modal edit -->
+@include('Mst.pegawai-form_edit')
 @endsection
 
 @section('scripts')
@@ -83,10 +92,10 @@ $(function() {
         { data: null, orderable: false, searchable: false,  render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("master_periode", "edit"))
-          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
+          return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
           @endif
           @if(can_access("master_periode", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
           @endif
           return return_button == "" ? "-" : return_button;
         }},
@@ -96,6 +105,10 @@ $(function() {
   setTimeout(function() {
     $(".alert-success").hide(1000);
   }, 3000);
+
+  $('#addModal, #editModal').on('show.bs.modal', function () {
+    $(this).find('form').trigger('reset');
+  });
 
 });
 </script>
