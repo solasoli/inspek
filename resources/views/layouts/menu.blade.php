@@ -15,16 +15,16 @@
 </a>
 <ul class="br-menu-sub nav flex-column">
   <!-- <li class="nav-item"><a href="/mst/periode" class="nav-link">Periode</a></li> -->
-  <li class="nav-item"><a href="/mst/skpd" class="nav-link">OPD</a></li>
-  <li class="nav-item"><a href="/mst/jabatan" class="nav-link">Jabatan</a></li>
-  <li class="nav-item"><a href="/mst/peran" class="nav-link">Peran Irban</a></li>
-  <li class="nav-item"><a href="/mst/wilayah" class="nav-link">Kelola Irban</a></li>
-  <li class="nav-item"><a href="/mst/pegawai" class="nav-link">Pegawai</a></li>
+  <li class="nav-item"><a href="/mst/skpd" class="nav-link">Perangkat Daerah</a></li>
+  <li class="nav-item"><a href="/mst/pegawai" class="nav-link">Data Pegawai</a></li>
   <li class="nav-item"><a href="/mst/struktur" class="nav-link">Struktur</a></li>
+  <li class="nav-item"><a href="/mst/sasaran" class="nav-link">Sasaran</a></li>
+  <!-- <li class="nav-item"><a href="/mst/jabatan" class="nav-link">Jabatan</a></li> -->
+  <!-- <li class="nav-item"><a href="/mst/peran" class="nav-link">Peran Irban</a></li> -->
+  <!-- <li class="nav-item"><a href="/mst/wilayah" class="nav-link">Kelola Irban</a></li> -->
   <!-- <li class="nav-item"><a href="/mst/pegawai/inspektur" class="nav-link">Inspektur</a></li> -->
   <!-- <li class="nav-item"><a href="/mst/inspektur_pembantu/form" class="nav-link">Inspektur Pembantu</a></li> -->
-  <li class="nav-item"><a href="/mst/sasaran" class="nav-link">Sasaran</a></li>
-  <li class="nav-item"><a href="/mst/dasar_surat" class="nav-link">Dasar Surat Perintah</a></li>
+  <!-- <li class="nav-item"><a href="/mst/dasar_surat" class="nav-link">Dasar Surat Perintah</a></li> -->
 </ul>
 
 <a href="#" class="br-menu-link">
