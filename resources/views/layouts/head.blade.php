@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('/css/custom_css.css') }}">
 
     <script src="{{ asset('admin_template/lib/jquery/jquery.js') }}"></script>
-    
+
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
