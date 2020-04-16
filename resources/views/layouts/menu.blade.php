@@ -18,7 +18,7 @@
   <li class="nav-item"><a href="/mst/skpd" class="nav-link">Perangkat Daerah</a></li>
   <li class="nav-item"><a href="/mst/pegawai" class="nav-link">Data Pegawai</a></li>
   <li class="nav-item"><a href="/mst/struktur" class="nav-link">Struktur</a></li>
-  <li class="nav-item"><a href="/mst/sasaran" class="nav-link">Sasaran</a></li>
+  <li class="nav-item"><a href="/mst/sasaran" class="nav-link">Program Kerja</a></li>
   <!-- <li class="nav-item"><a href="/mst/jabatan" class="nav-link">Jabatan</a></li> -->
   <!-- <li class="nav-item"><a href="/mst/peran" class="nav-link">Peran Irban</a></li> -->
   <!-- <li class="nav-item"><a href="/mst/wilayah" class="nav-link">Kelola Irban</a></li> -->

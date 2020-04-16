@@ -64,7 +64,7 @@
               <table class="table" width="100%">
                 <thead>
                   <tr>
-                    <th>Sasaran</th>
+                    <th>Program Kerja</th>
                     <th style="width:60px"></th>
                   </tr>
                 </thead>
@@ -78,7 +78,7 @@
                 </tbody>
                 <tr>
                   <td colspan="2">
-                    <button type="button" class="btn btn-info add-sasaran"> Tambah Sasaran</button>
+                    <button type="button" class="btn btn-info add-sasaran"> Tambah Program Kerja</button>
                   </td>
                 </tr>
               </table>

@@ -8,12 +8,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="#">Master</a>
-    <span class="breadcrumb-item active">Sasaran</span>
+    <span class="breadcrumb-item active">Program Kerja</span>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">Sasaran</h4>
+  <h4 class="tx-gray-800 mg-b-5">Program Kerja</h4>
 </div>
 
 <div class="br-pagebody">
@@ -33,38 +33,53 @@
   <div class="row">
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
-        <div class="card-header">
-          <h6 class="card-title float-left">List Sasaran</h6>
-          <div class="float-right">
-
-            @if(can_access("mst_skpd", "add"))
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah</button>
-            @endif
-          </div>
-        </div>
         <div class="card-body">
-          <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
-            <thead>
-              <tr>
-                <th>Kegiatan</th>
-                <th>Sasaran</th>
-                <th>Perangkat Daerah</th>
-                <th>Dari</th>
-                <th>Sampai</th>
-                <th style='width:150px'>Aksi</th>
-              </tr>
-            </thead>
-          </table>
+
+          <ul class="nav nav-tabs nav-justified mb-4">
+						<li class="nav-item"><a href="#list" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">List Program Kerja</a></li>
+						<li class="nav-item"><a href="#kalendar" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Kalendar</a></li>
+					</ul>
+
+					<div class="tab-content">
+            <div class="text-right mb-4">
+              @if(can_access("mst_skpd", "add"))
+              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah Program Kerja</button>
+              @endif
+            </div>
+						<div class="tab-pane fade active show" id="list">
+              <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>Kegiatan</th>
+                    <th>Perangkat Daerah</th>
+                    <th>Dari</th>
+                    <th>Sampai</th>
+                    <th style='width:150px'>Aksi</th>
+                  </tr>
+                </thead>
+              </table>
+						</div>
+
+						<div class="tab-pane fade" id="kalendar">
+              @include('Mst.sasaran-kalendar')
+						</div>
+					</div>
+
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
 <!-- modal add -->
 @include('Mst.sasaran-form_add')
 
 <!-- modal edit -->
 @include('Mst.sasaran-form_edit')
+
+<!-- modal detail -->
+@include('Mst.sasaran-detail')
 
 @endsection
 
@@ -88,7 +103,6 @@ $(function() {
       ajax: '{{url()->current()}}/datatables/',
       columns: [
         { data: 'kegiatan', name: 'kegiatan'},
-        { data: 'skpd', name: 'skpd'}, // sasaran
         { data: 'skpd', name: 'skpd'},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
@@ -106,12 +120,13 @@ $(function() {
           @if(can_access("mst_skpd", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
           @endif
+          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + data.kegiatan + "' data-skpd='" + data.skpd + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
           return return_button == "" ? "-" : return_button;
         }},
       ],
       columnDefs: [
       {
-        targets: 5,
+        targets: 4,
         className: "text-center",
      }],
   });
@@ -121,10 +136,11 @@ $(function() {
     $(".alert-success").hide(1000);
   }, 3000);
 
-  $('#addModal, #editModal').on('show.bs.modal', function () {
+  $('#addModal, #editModal, #detailModal').on('show.bs.modal', function () {
     $(this).find('form').trigger('reset');
     $("#cover-sasaran").html('');
     $("#cover-sasaran_edit").html('');
+    $("#cover-sasaran_detail").html('');
   });
 
 });

@@ -21,8 +21,10 @@ class SasaranController extends Controller
     public function index()
     {
       $opd = Skpd::where("is_deleted", 0)->get();
+      $kegiatan = Kegiatan::where("is_deleted", 0)->get(); 
       return view('mst.sasaran-list', [
         'opd' => $opd,
+        'kegiatan' => $kegiatan,
       ]);
     }
 

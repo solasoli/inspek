@@ -48,7 +48,7 @@ $(function() {
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Edit Perangkat Daerah</h4>
+        <h4 class="modal-title">Edit Kegiatan</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -107,7 +107,7 @@ $(function() {
               <table class="table" width="100%">
                 <thead>
                   <tr>
-                    <th>Sasaran</th>
+                    <th>Program Kerja</th>
                     <th style="width:60px"></th>
                   </tr>
                 </thead>
@@ -115,7 +115,7 @@ $(function() {
                 </tbody>
                 <tr>
                   <td colspan="2">
-                    <button type="button" class="btn btn-info add-sasaran"> Tambah Sasaran</button>
+                    <button type="button" class="btn btn-info add-sasaran"> Tambah Program Kerja</button>
                   </td>
                 </tr>
               </table>

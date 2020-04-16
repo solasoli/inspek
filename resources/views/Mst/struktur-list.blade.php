@@ -46,8 +46,8 @@
                 <th>Nama</th>
                 <th>Jabatan</th>
                 <th>Atasan Langsung</th>
-                <th>Irban</th>
-                <th>Peran Irban</th>
+                <!-- <th>Irban</th>
+                <th>Peran Irban</th> -->
                 <th style='width:150px'>Aksi</th>
               </tr>
             </thead>
@@ -82,30 +82,8 @@ $(function() {
       { data: null, orderable: false, render: function ( data, type, row ) { // atasan langsung
         var a = "";
         a += "<select class='atasan_langsung'>";
-        @foreach($pegawai AS $row)
-          var selected = '{{$row->id}}' == row.atasan_langsung ? 'selected' : '';
-          a += "<option value='{{$row->id}}' "+ selected +">{{$row->nama}}</option>";
-        @endforeach
-        a += "</select>";
-        return a;
-      }},
-
-      { data: null, orderable: false, render: function ( data, type, row ) { // irban
-        var a = "";
-        a += "<select class='id_wilayah'>";
         @foreach($wilayah AS $row)
-          var selected = '{{$row->id}}' == row.id_wilayah ? 'selected' : '';
-          a += "<option value='{{$row->id}}' "+ selected +">{{$row->nama}}</option>";
-        @endforeach
-        a += "</select>";
-        return a;
-      }},
-
-      { data: null, orderable: false, render: function ( data, type, row ) { // peran irban
-        var a = "";
-        a += "<select class='id_peran'>";
-        @foreach($peran AS $row)
-          var selected = '{{$row->id}}' == row.id_wilayah ? 'selected' : '';
+          var selected = '{{$row->id}}' == row.atasan_langsung ? 'selected' : '';
           a += "<option value='{{$row->id}}' "+ selected +">{{$row->nama}}</option>";
         @endforeach
         a += "</select>";
@@ -117,8 +95,6 @@ $(function() {
         f += "<form method='post' action='{{url()->current()}}/edit/"+ row.id +"' class='form-update'>";
         f += '{{ csrf_field() }}';
         f += "<input type='hidden' name='atasan_langsung' class='hidden_atasan_langsung'>";
-        f += "<input type='hidden' name='id_wilayah' class='hidden_id_wilayah'>";
-        f += "<input type='hidden' name='id_peran' class='hidden_id_peran'>";
         f += "<input type='submit' class='btn btn-primary' value='simpan'>";
         f += "</form>";
         return f;
@@ -126,7 +102,7 @@ $(function() {
     ],
     columnDefs: [
       {
-        targets: 5,
+        targets: 3,
         className: "text-center",
       }],
     });
@@ -138,12 +114,6 @@ $(function() {
 
       var atasan_langsung = tr.find($(".atasan_langsung")).val();
       tr.find($(".hidden_atasan_langsung")).val(atasan_langsung);
-
-      var id_wilayah = tr.find($(".id_wilayah")).val();
-      tr.find($(".hidden_id_wilayah")).val(id_wilayah);
-
-      var id_peran = tr.find($(".id_peran")).val();
-      tr.find($(".hidden_id_peran")).val(id_peran);
 
        e.currentTarget.submit();
     });
