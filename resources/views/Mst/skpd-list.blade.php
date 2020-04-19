@@ -48,7 +48,7 @@
             <thead>
               <tr>
                 <th>Nama SKPD</th>
-                <th>Singkatan PD</th>
+                <!-- <th>Singkatan PD</th> -->
                 <th>Pimpinan</th>
                 <th>Wilayah Kerja</th>
                 <th style='width:150px'>Aksi</th>
@@ -85,7 +85,7 @@ $(function() {
     ajax: '{{url()->current()}}/datatables/',
     columns: [
       { data: 'name', name: 'name'},
-      { data: 'singkatan_pd', name: 'singkatan_pd'},
+      // { data: 'singkatan_pd', name: 'singkatan_pd'},
       { data: 'pimpinan', name: 'pimpinan'},
       { data: 'wilayah', name: 'wilayah'},
       { data: null, orderable: false, render: function ( data, type, row ) {
@@ -101,7 +101,7 @@ $(function() {
     ],
     columnDefs: [
       {
-        targets: 3,
+        targets: 2,
         className: "text-center",
       }],
     });

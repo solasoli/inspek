@@ -88,7 +88,8 @@ class InspekturPembantuController extends Controller
       $data = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
       ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join('pgw_peran AS pp', 'pp.id', '=', 'p.id_peran')
+      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
+      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
       ->where('p.is_deleted', 0)
       ->whereIn("pp.kode", ['inspektur_pembantu', 'wakil_inspektur_pembantu'])
       ->where("w.is_deleted", 0);
@@ -98,6 +99,7 @@ class InspekturPembantuController extends Controller
       }
       
       $data = $data->orderBy('w.nama', 'ASC')
+      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
       ->get();
       return response()->json(["data" => $data]);
     }

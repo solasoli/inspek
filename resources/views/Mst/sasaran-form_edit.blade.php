@@ -107,7 +107,7 @@ $(function() {
               <table class="table" width="100%">
                 <thead>
                   <tr>
-                    <th>Program Kerja</th>
+                    <th>Sasaran</th>
                     <th style="width:60px"></th>
                   </tr>
                 </thead>
@@ -115,7 +115,7 @@ $(function() {
                 </tbody>
                 <tr>
                   <td colspan="2">
-                    <button type="button" class="btn btn-info add-sasaran"> Tambah Program Kerja</button>
+                    <button type="button" class="btn btn-info add-sasaran"> Tambah Sasaran</button>
                   </td>
                 </tr>
               </table>

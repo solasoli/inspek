@@ -380,9 +380,11 @@ class SuratPerintahController extends Controller
 
       $list_inspektur = DB::table("pgw_pegawai AS p")
       ->select(DB::raw("p.id, p.nama"))
-      ->join("pgw_peran AS pp", "pp.id", "=","p.id_peran")
+      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
+      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
       ->where("pp.kode", 'inspektur')
       ->orWhere("p.id", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
+      ->groupBy("p.id", "p.nama")
       ->get();
 
       return $list_inspektur;

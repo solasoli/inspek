@@ -76,10 +76,10 @@ $(function() {
     serverSide: true,
     ajax: '{{url()->current()}}/datatables/',
     columns: [
-      { data: 'nama', name: 'nama'},
-      { data: 'jabatan', name: 'jabatan'},
+      { data: 'nama', name: 'p.nama'},
+      { data: 'jabatan', name: 'j.name'},
 
-      { data: null, orderable: false, render: function ( data, type, row ) { // atasan langsung
+      { data: null, searchable: false, orderable: false, render: function ( data, type, row ) { // atasan langsung
         var a = "";
         a += "<select class='atasan_langsung'>";
         @foreach($wilayah AS $row)
@@ -90,7 +90,7 @@ $(function() {
         return a;
       }},
 
-      { data: null, orderable: false, render: function ( data, type, row ) {
+      { data: null, searchable: false, orderable: false, render: function ( data, type, row ) {
         var f = "";
         f += "<form method='post' action='{{url()->current()}}/edit/"+ row.id +"' class='form-update'>";
         f += '{{ csrf_field() }}';

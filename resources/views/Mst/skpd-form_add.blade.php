@@ -21,14 +21,14 @@
               <input name='name' autocomplete="off" value='{{ !is_null(old('name')) ? old('name') : (isset($data->name) ? $data->name : '') }}' required="required" class="form-control" type="text" >
             </div>
           </div>
-          <div class="form-group row">
+          <!-- <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Singkatan PD :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <input name='singkatan_pd' autocomplete="off" value='{{ !is_null(old('singkatan_pd')) ? old('singkatan_pd') : (isset($data->singkatan_pd) ? $data->singkatan_pd : '') }}' class="form-control" type="text" >
             </div>
-          </div>
+          </div> -->
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Pimpinan :

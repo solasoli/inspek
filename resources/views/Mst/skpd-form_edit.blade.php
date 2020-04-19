@@ -37,14 +37,14 @@ $(function() {
               <input name='name' autocomplete="off" required="required" class="form-control" type="text" >
             </div>
           </div>
-          <div class="form-group row">
+          <!-- <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Singkatan PD :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <input name='singkatan_pd' autocomplete="off" class="form-control" type="text" >
             </div>
-          </div>
+          </div> -->
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Pimpinan :
