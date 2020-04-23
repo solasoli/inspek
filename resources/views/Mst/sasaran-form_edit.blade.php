@@ -1,12 +1,16 @@
 <script>
 $(function() {
   $('#editModal').on('show.bs.modal', function(e) {
+
+    $("select[name='opd']").html(''); // api na benang , kakara di clir
     var id = $(e.relatedTarget).data('id');
 
     $.get("{{url('')}}/mst/sasaran/get_kegiatan_by_id?id=" + id, function(data) {
       // console.log(data);
       $('input[name="nama"]').val(data.nama);
-      $('select[name="opd"]').val(data.id_skpd).trigger("change");
+      $('select[name="wilayah"]').val(data.id_wilayah).trigger("change");
+      // $('select[name="opd"]').val(data.id_skpd).trigger("change");
+      get_pd(data.id_skpd);
       $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
       $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
     });
@@ -66,13 +70,23 @@ $(function() {
           </div>
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              Irban :
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select class="form-control select2" name="wilayah">
+                <option value="" >- Pilih -</option>
+                @foreach ($wilayah AS $row)
+                  <option value="{{$row->id}}">{{$row->nama}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Perangkat Daerah :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <select class="form-control select2" name="opd">
-                @foreach ($opd AS $row)
-                  <option value="{{$row->id}}">{{$row->name}}</option>
-                @endforeach
               </select>
             </div>
           </div>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Input;
 use App\Sasaran;
 use App\Kegiatan;
 use App\Skpd;
+use App\Wilayah;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -21,10 +22,12 @@ class SasaranController extends Controller
     public function index()
     {
       $opd = Skpd::where("is_deleted", 0)->get();
-      $kegiatan = Kegiatan::where("is_deleted", 0)->get(); 
+      $wilayah = Wilayah::where("is_deleted", 0)->get();
+      $kegiatan = Kegiatan::where("is_deleted", 0)->get();
       return view('mst.sasaran-list', [
         'opd' => $opd,
         'kegiatan' => $kegiatan,
+        'wilayah' => $wilayah,
       ]);
     }
 
@@ -41,12 +44,14 @@ class SasaranController extends Controller
       $logged_user = Auth::user();
       request()->validate([
         'nama' => 'required',
+        'wilayah' => 'required',
         'opd' => 'required',
         'dari' => 'required',
         'sampai' => 'required'
       ],[
         'nama.required' => 'Nama Sasaran harus diisi!',
         'nama.unique' => 'Nama Sasaran sudah ada!',
+        'wilayah.required' => 'Irban harus diisi!',
         'opd.required' => 'Perangkat Daerah harus diisi!',
         'dari.required' => 'Dari harus diisi!',
         'sampai.required' => 'Sampai harus diisi!',
@@ -66,6 +71,7 @@ class SasaranController extends Controller
       DB::transaction(function() use ($use) {
         $t = new Kegiatan;
         $t->nama = $use['input']['nama'];
+        $t->id_wilayah = $use['input']['wilayah'];
         $t->id_skpd = $use['input']['opd'];
         $t->dari = $use['dari'].' 00:00:00';
         $t->sampai = $use['sampai'].' 00:00:00';
@@ -103,12 +109,14 @@ class SasaranController extends Controller
       $logged_user = Auth::user();
       request()->validate([
         'nama' => 'required',
+        'wilayah' => 'required',
         'opd' => 'required',
         'dari' => 'required',
         'sampai' => 'required'
       ],[
         'nama.required' => 'Nama Sasaran harus diisi!',
         'nama.unique' => 'Nama Sasaran sudah ada!',
+        'wilayah.required' => 'Irban harus diisi!',
         'opd.required' => 'Perangkat Daerah harus diisi!',
         'dari.required' => 'Dari harus diisi!',
         'sampai.required' => 'Sampai harus diisi!',
@@ -130,6 +138,7 @@ class SasaranController extends Controller
 
         $t = Kegiatan::findOrFail($use['id']);
         $t->nama = $use['input']['nama'];
+        $t->id_wilayah = $use['input']['wilayah'];
         $t->id_skpd = $use['input']['opd'];
         $t->dari = $use['dari'].' 00:00:00';
         $t->sampai = $use['sampai'].' 00:00:00';
@@ -176,8 +185,9 @@ class SasaranController extends Controller
     public function list_datatables_api()
     {
       $data = DB::table("mst_kegiatan AS k")
-      ->select(DB::raw("k.id, k.nama AS kegiatan, skpd.name AS skpd, k.dari, k.sampai"))
+      ->select(DB::raw("k.id, k.nama AS kegiatan, w.nama AS wilayah, skpd.name AS skpd, k.dari, k.sampai"))
       ->join("mst_skpd AS skpd", "skpd.id", "=", "k.id_skpd")
+      ->join("mst_wilayah AS w", "w.id", "=", "k.id_wilayah")
       ->where("k.is_deleted", 0)
       ->orderBy('k.id', 'ASC');
       return Datatables::of($data)->make(true);
@@ -186,6 +196,7 @@ class SasaranController extends Controller
     public function get_kegiatan_by_id(Request $request)
     {
       $data = Kegiatan::find($request->input('id'));
+
       return response()->json($data);
     }
 

@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
       Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
       Route::get('/get_skpd_by_id', 'Mst\SkpdController@get_skpd_by_id');
+      Route::get('/get_skpd_by_id_wilayah', 'Mst\SkpdController@get_skpd_by_id_wilayah');
       /* Post section */
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');

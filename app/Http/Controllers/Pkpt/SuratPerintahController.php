@@ -19,6 +19,7 @@ use App\DasarSurat;
 use App\Periode;
 use App\Model\Pegawai\Pegawai;
 use App\Model\Pegawai\Peran;
+use App\Kegiatan;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -33,17 +34,19 @@ class SuratPerintahController extends Controller
     {
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
 
-      // get peran anggota 
+      // get peran anggota
       $peran_anggota = Peran::where("is_anggota", 1)->where("is_deleted", 0)->first();
 
       $pegawai = Pegawai::where("is_deleted",0)->where("id_peran", $peran_anggota->id)->get();
       $sasaran = Sasaran::where("is_deleted", 0)->get();
       $periode = Periode::where("is_deleted", 0)->get();
+      $kegiatan = Kegiatan::where("is_deleted", 0)->get();
       $list_inspektur = $this->get_current_inspektur(0);
 
       $dasar_surat = DasarSurat::first();
-      $surat_perintah_file = $type != 2 ? 'surat_perintah-form' : 'surat_perintah_khusus-form';
+      $surat_perintah_file = $type == 1 || $type == 2 ? 'surat_perintah-form' : 'surat_perintah_khusus-form';
       return view('pkpt.'. $surat_perintah_file,[
+        'kegiatan' => $kegiatan,
         'pegawai' => $pegawai,
         'wilayah' => $wilayah,
         'sasaran' => $sasaran,
@@ -62,7 +65,7 @@ class SuratPerintahController extends Controller
         // 'periode' => [
         //   'required'
         // ],
-        
+
         'wilayah' => [
           $type != 2 ? 'required' : ''
         ],
@@ -189,7 +192,7 @@ class SuratPerintahController extends Controller
         // 'periode' => [
         //   'required'
         // ],
-        
+
         'wilayah' => [
           $t->is_pkpt != 2 ? 'required' : ''
         ],
@@ -293,7 +296,7 @@ class SuratPerintahController extends Controller
       $data = SuratPerintah::find($id);
 
       $data_sp = DB::table("pkpt_surat_perintah AS sp")
-        ->select(DB::raw("sp.*, 
+        ->select(DB::raw("sp.*,
           w.nama AS nama_wilayah,
           pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
           pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
@@ -338,7 +341,7 @@ class SuratPerintahController extends Controller
     public function list_datatables_api($type = 1)
     {
       $data = DB::table("pkpt_surat_perintah AS sp")
-        ->select(DB::raw("sp.*, 
+        ->select(DB::raw("sp.*,
           w.nama AS nama_wilayah,
           pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
           pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,

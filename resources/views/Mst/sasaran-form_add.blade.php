@@ -23,13 +23,23 @@
           </div>
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              Irban :
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select class="form-control select2" name="wilayah">
+                <option value="">- Pilih -</option>
+                @foreach ($wilayah AS $row)
+                  <option value="{{$row->id}}">{{$row->nama}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Perangkat Daerah :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <select class="form-control select2" name="opd">
-                @foreach ($opd AS $row)
-                  <option value="{{$row->id}}">{{$row->name}}</option>
-                @endforeach
               </select>
             </div>
           </div>
@@ -116,5 +126,11 @@
     $(document).on('click', ".remove-sasaran", function(){
       $(this).parent().closest("tr").remove();
     });
+
+
+    $("select[name='wilayah']").on('change', function(){
+      get_pd();
+    });
+
   });
 </script>

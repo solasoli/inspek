@@ -51,6 +51,7 @@
                 <thead>
                   <tr>
                     <th>Kegiatan</th>
+                    <th>Irban</th>
                     <th>Perangkat Daerah</th>
                     <th>Dari</th>
                     <th>Sampai</th>
@@ -71,6 +72,20 @@
   </div>
 </div>
 
+<script>
+
+  function get_pd(selected_skpd) {
+    var id_wilayah = $("select[name='wilayah']").val();
+    $.get("{{url('')}}/mst/skpd/get_skpd_by_id_wilayah?id=" + id_wilayah, function(data) {
+      $("select[name='opd']").html(''); //
+      $.each(data, function(idx, val){
+        var selected = selected_skpd > 0 && selected_skpd == val.id ? 'selected' : '';
+        var option = "<option value='"+val.id+"' " + selected + ">"+val.name+"</option>";
+        $("select[name='opd']").append(option);
+      });
+    });
+  }
+</script>
 
 <!-- modal add -->
 @include('Mst.sasaran-form_add')
@@ -103,6 +118,7 @@ $(function() {
       ajax: '{{url()->current()}}/datatables/',
       columns: [
         { data: 'kegiatan', name: 'kegiatan'},
+        { data: 'wilayah', name: 'wilayah'},
         { data: 'skpd', name: 'skpd'},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
@@ -120,13 +136,13 @@ $(function() {
           @if(can_access("mst_skpd", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
           @endif
-          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + data.kegiatan + "' data-skpd='" + data.skpd + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
+          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + data.kegiatan + "' data-wilayah='" + data.wilayah + "' data-skpd='" + data.skpd + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
           return return_button == "" ? "-" : return_button;
         }},
       ],
       columnDefs: [
       {
-        targets: 4,
+        targets: 5,
         className: "text-center",
      }],
   });

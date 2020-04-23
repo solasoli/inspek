@@ -35,7 +35,7 @@
           <div class="float-right">
 
             @if(can_access("pkpt_surat_perintah", "add"))
-            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add/1'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
             @endif
           </div>
         </div>
@@ -45,7 +45,8 @@
               <tr>
                 <th>No. Surat</th>
                 <th>Irban</th>
-                <th>Inspektor</th>
+                <th>Kegiatan</th>
+                <th>Sasaran</th>
                 <th>Dari</th>
                 <th>Sampai</th>
                 <th style='width:195px'>Aksi</th>
@@ -65,7 +66,7 @@
           <div class="float-right">
 
             @if(can_access("pkpt_surat_perintah", "add"))
-            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add/0'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add/2'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
             @endif
           </div>
         </div>
@@ -74,8 +75,9 @@
             <thead>
               <tr>
                 <th>No. Surat</th>
-                <th>Wilayah</th>
-                <th>Inspektor</th>
+                <th>Irban</th>
+                <th>Kegiatan</th>
+                <th>Sasaran</th>
                 <th>Dari</th>
                 <th>Sampai</th>
                 <th style='width:195px'>Aksi</th>
@@ -95,7 +97,7 @@
           <div class="float-right">
 
             @if(can_access("pkpt_surat_perintah", "add"))
-            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add/2'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add/3'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
             @endif
           </div>
         </div>
@@ -137,51 +139,6 @@ $(function() {
       ajax: '{{url()->current()}}/datatables/',
       columns: [
         { data: 'no_surat', name: 'sp.no_surat'},
-        { data: 'nama_wilayah', name: 'w.nama'},
-        { data: 'nama_inspektur', name: 'pi.nama'},
-        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
-          var date = new Date(Date.parse(data));
-          return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-        }},
-        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
-          var date = new Date(Date.parse(data));
-          return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-        }},
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
-          var return_button = "";
-          @if(can_access("pkpt_surat_perintah", "edit"))
-          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
-          @endif
-          @if(can_access("pkpt_surat_perintah", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
-          @endif
-
-          if(data.is_approve == 0){
-            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
-          }
-
-          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
-          return return_button == "" ? "-" : return_button;
-        }},
-      ],
-      columnDefs: [
-      {
-        targets: 2,
-        className: "text-center",
-     }],
-  });
-
-  $('#oTableNon').DataTable({
-    language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-      },
-      responsive: true,
-      processing: true,
-      serverSide: true,
-      ajax: '{{url()->current()}}/datatables/0',
-      columns: [
         { data: 'no_surat', name: 'sp.no_surat'},
         { data: 'nama_wilayah', name: 'w.nama'},
         { data: 'nama_inspektur', name: 'pi.nama'},
@@ -212,7 +169,54 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 2,
+        targets: 6,
+        className: "text-center",
+     }],
+  });
+
+  $('#oTableNon').DataTable({
+    language: {
+        searchPlaceholder: 'Search...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+      },
+      responsive: true,
+      processing: true,
+      serverSide: true,
+      ajax: '{{url()->current()}}/datatables/0',
+      columns: [
+        { data: 'no_surat', name: 'sp.no_surat'},
+        { data: 'no_surat', name: 'sp.no_surat'},
+        { data: 'nama_wilayah', name: 'w.nama'},
+        { data: 'nama_inspektur', name: 'pi.nama'},
+        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
+          var date = new Date(Date.parse(data));
+          return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+        }},
+        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
+          var date = new Date(Date.parse(data));
+          return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+        }},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          var return_button = "";
+          @if(can_access("pkpt_surat_perintah", "edit"))
+          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
+          @endif
+          @if(can_access("pkpt_surat_perintah", "delete"))
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
+          @endif
+
+          if(data.is_approve == 0){
+            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
+          }
+
+          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
+          return return_button == "" ? "-" : return_button;
+        }},
+      ],
+      columnDefs: [
+      {
+        targets: 6,
         className: "text-center",
      }],
   });
