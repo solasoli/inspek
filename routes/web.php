@@ -66,8 +66,10 @@ Route::middleware(['auth'])->group(function () {
 
       Route::post('/inspektur', 'Mst\PegawaiController@update_inspektur');
 
+      Route::post("/get_inspektur_pembantu_by_wilayah", "Mst\PegawaiController@get_inspektur_pembantu_by_wilayah");
       Route::post("/get_pengendali_teknis_by_wilayah", "Mst\PegawaiController@get_pengendali_teknis_by_wilayah");
       Route::post("/get_ketua_tim_by_wilayah", "Mst\PegawaiController@get_ketua_tim_by_wilayah");
+      Route::post("/get_anggota_by_wilayah", "Mst\PegawaiController@get_anggota_by_wilayah");
     });
 
     Route::prefix('struktur')->group(function () {
@@ -149,8 +151,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('surat_perintah')->group(function () {
       Route::get('/', 'Pkpt\SuratPerintahController@index');
-      Route::get('/add/{type?}', 'Pkpt\SuratPerintahController@create');
-      Route::get('/edit/{id}', 'Pkpt\SuratPerintahController@edit');
+      Route::get('/add/{type}', 'Pkpt\SuratPerintahController@create');
+      Route::get('/edit/{type}/{id}', 'Pkpt\SuratPerintahController@edit');
       Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
       Route::get('/approve/{id}', 'Pkpt\SuratPerintahController@approve');
       Route::get('/datatables/{type?}', 'Pkpt\SuratPerintahController@list_datatables_api');
@@ -158,7 +160,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       /* Post section */
-      Route::post('/add/{type?}', 'Pkpt\SuratPerintahController@store');
+      Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
       Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
     });

@@ -240,7 +240,7 @@ class PegawaiController extends Controller
     }
 
     public function get_current_inspektur($return_object = false){
-      
+
       $list_inspektur = DB::table("pgw_pegawai AS p")
       ->select(DB::raw("p.id, p.nama"))
       ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
@@ -259,14 +259,38 @@ class PegawaiController extends Controller
 
     }
 
+    public function get_inspektur_pembantu_by_wilayah(Request $request)
+    {
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
+
+      $data = DB::table("mst_wilayah AS w")
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur_pembantu, p.id AS id_inspektur_pembantu"))
+      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
+      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
+      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
+      ->where('p.is_deleted', 0)
+      ->whereIn("pp.kode", ['inspektur_pembantu', 'wakil_inspektur_pembantu'])
+      ->where("w.is_deleted", 0);
+
+      if($request->input('id_wilayah') != 'all') {
+        $data = $data->where("w.id", $id_wilayah);
+      }
+
+      $data = $data->orderBy('w.nama', 'ASC')
+      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
+      ->get();
+      return response()->json(["data" => $data]);
+    }
+
 
     public function get_pengendali_teknis_by_wilayah(Request $request)
     {
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
       $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_pengendali_teknis, p.id AS id_pengendali_teknis"))
       ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join('pgw_peran AS pp', 'pp.id', '=', 'p.id_peran')
+      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
+      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
       ->where('p.is_deleted', 0)
       ->whereIn("pp.kode", ['pengendali_mutu', 'pengendali_teknis'])
       ->where("w.is_deleted", 0);
@@ -276,6 +300,7 @@ class PegawaiController extends Controller
       }
 
       $data = $data->orderBy('w.nama', 'ASC')
+      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
       ->get();
       return response()->json(["data" => $data]);
     }
@@ -284,9 +309,10 @@ class PegawaiController extends Controller
     {
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
       $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_ketua_tim, p.id AS id_ketua_tim"))
       ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join('pgw_peran AS pp', 'pp.id', '=', 'p.id_peran')
+      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
+      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
       ->where('p.is_deleted', 0)
       ->where("pp.kode", 'ketua_tim')
       ->where("w.is_deleted", 0);
@@ -296,6 +322,32 @@ class PegawaiController extends Controller
       }
 
       $data = $data->orderBy('w.nama', 'ASC')
+      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
+      ->get();
+      return response()->json(["data" => $data]);
+    }
+
+
+    public function get_anggota_by_wilayah(Request $request)
+    {
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
+      $data = DB::table("mst_wilayah AS w")
+      ->select(DB::raw("w.id, w.nama, p.nama AS nama_anggota, p.id AS id_anggota"))
+      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
+      ->leftJoin("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
+      ->leftJoin("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
+      ->join('pgw_eselon AS e', 'e.id', '=', 'p.id_eselon')
+      ->where('p.is_deleted', 0)
+      // ->whereRaw("ppj.id IS NULL")
+      ->whereRaw('e.level >= 3')
+      ->where("w.is_deleted", 0);
+
+      if($request->input('id_wilayah') != 'all') {
+        $data = $data->where("w.id", $id_wilayah);
+      }
+
+      $data = $data->orderBy('w.nama', 'ASC')
+      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
       ->get();
       return response()->json(["data" => $data]);
     }

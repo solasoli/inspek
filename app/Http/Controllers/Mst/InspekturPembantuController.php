@@ -83,7 +83,7 @@ class InspekturPembantuController extends Controller
 
     public function get_inspektur_pembantu_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0; 
+      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
 
       $data = DB::table("mst_wilayah AS w")
       ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
@@ -97,7 +97,7 @@ class InspekturPembantuController extends Controller
       if($request->input('id_wilayah') != 'all') {
         $data = $data->where("w.id", $id_wilayah);
       }
-      
+
       $data = $data->orderBy('w.nama', 'ASC')
       ->groupBy("w.id", "w.nama", "p.nama", "p.id")
       ->get();

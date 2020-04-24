@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
 use App\SuratPerintah;
 use App\SuratPerintahAnggota;
+use App\SuratPerintahSasaran;
 use App\Skpd;
 use App\Wilayah;
 use App\Sasaran;
@@ -30,7 +31,7 @@ class SuratPerintahController extends Controller
       return view('pkpt.surat_perintah-list');
     }
 
-    public function create($type = 1)
+    public function create($type)
     {
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
 
@@ -44,7 +45,8 @@ class SuratPerintahController extends Controller
       $list_inspektur = $this->get_current_inspektur(0);
 
       $dasar_surat = DasarSurat::first();
-      $surat_perintah_file = $type == 1 || $type == 2 ? 'surat_perintah-form' : 'surat_perintah_khusus-form';
+      $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
+
       return view('pkpt.'. $surat_perintah_file,[
         'kegiatan' => $kegiatan,
         'pegawai' => $pegawai,
@@ -57,130 +59,76 @@ class SuratPerintahController extends Controller
       ]);
     }
 
-    public function store(Request $request, $type = 1)
+    public function store(Request $request, $type)
     {
       $logged_user = Auth::user();
 
-      $arr_validation = [
-        // 'periode' => [
-        //   'required'
-        // ],
+      if ($type == 1) { // Surat Perintah PKPT
 
-        'wilayah' => [
-          $type != 2 ? 'required' : ''
-        ],
-        'inspektur_pembantu' => [
-          'required'
-        ],
-        'pengendali_teknis' => [
-          'required'
-        ],
-        'ketua_tim' => [
-          'required'
-        ],
-        'no_surat' => [
-          'required'
-        ],
-        'dasar_surat' => [
-          'required'
-        ],
-        'untuk' => [
-          'required'
-        ],
-        'dari' => [
-          'required'
-        ],
-        'sampai' => [
-          'required'
-        ]
-      ];
+        $kegiatan = Kegiatan::findOrFail($request->input('kegiatan'));
 
-      request()->validate($arr_validation,[
-        'nama.required' => 'Nama SuratPerintah harus diisi!',
-        'nama.unique' => 'Nama SuratPerintah sudah ada!'
-      ]);
+        $data = [
+          'input' => $request->input(),
+          'dari' => $kegiatan->dari,
+          'sampai' => $kegiatan->sampai
+        ];
 
-      // get wilayah
-      if($type != 2){
-        $wilayah = Wilayah::findOrFail($request->input("wilayah"));
+        DB::transaction(function () use($data) {
+          $t = new SuratPerintah;
+          $t->id_wilayah = $data['input']['wilayah'];
+          $t->id_inspektur = $data['input']['inspektur'];
+          $t->id_inspektur_pembantu = $data['input']['inspektur_pembantu'];
+          $t->id_pengendali_teknis = $data['input']['pengendali_teknis'];
+          $t->id_ketua_tim = $data['input']['ketua_tim'];
+          $t->id_kegiatan = $data['input']['kegiatan'];
+          $t->no_surat = '';
+          $t->dasar_surat = $data['input']['dasar_surat'];
+          $t->untuk = '';
+          $t->dari = $data['dari'];
+          $t->sampai = $data['sampai'];
+          $t->created_at = date('Y-m-d H:i:s');
+          $t->created_by = Auth::id();
+          $t->updated_at = NULL;
+          $t->updated_by = 0;
+          $t->deleted_at = NULL;
+          $t->deleted_by = 0;
+          $t->is_deleted = 0;
+          $t->is_pkpt = 1;
+          $t->save();
+
+          // insert anggota
+          foreach($data['input']['anggota'] as $idx => $row){
+            $na = new SuratPerintahAnggota;
+            $na->id_surat_perintah = $t->id;
+            $na->id_anggota = $row;
+            $na->save();
+          }
+
+          // insert sasaran
+          foreach($data['input']['sasaran'] as $idx => $row){
+            $sa = new SuratPerintahSasaran;
+            $sa->id_surat_perintah = $t->id;
+            $sa->id_sasaran = $row;
+            $sa->save();
+          }
+        });
       }
 
-      $t = new SuratPerintah;
-      $t->id_periode = 0;
-      $t->id_wilayah = $request->input("wilayah") == null ? 0 : $request->input('wilayah');
-      $t->id_inspektur = $request->input("inspektur");
-      $t->id_inspektur_pembantu = $request->input("inspektur_pembantu");
-      $t->id_pengendali_teknis = $request->input("pengendali_teknis");
-      $t->id_ketua_tim = $request->input("ketua_tim");
-      $t->id_sasaran = $request->input("sasaran");
-      $t->no_surat = $request->input("no_surat");
-      $t->dasar_surat = $request->input("dasar_surat");
-      $t->untuk = $request->input("untuk");
-      $t->dari = date("Y-m-d", strtotime($request->input("dari")));
-      $t->sampai = date("Y-m-d", strtotime($request->input("sampai")));
-      $t->created_at = date('Y-m-d H:i:s');
-      $t->created_by = Auth::id();
-      $t->updated_at = NULL;
-      $t->updated_by = 0;
-      $t->deleted_at = NULL;
-      $t->deleted_by = 0;
-      $t->is_deleted = 0;
-      $t->is_pkpt = $type;
-      $t->save();
-
-      // insert anggota
-      if(count($request->input("anggota")) > 0){
-        foreach($request->input("anggota") as $idx => $row){
-          $na = new SuratPerintahAnggota;
-          $na->id_surat_perintah = $t->id;
-          $na->id_anggota = $row;
-          $na->save();
-        }
-      }
-
-      $request->session()->flash('message', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
+      $request->session()->flash('message', "Data Berhasil disimpan!");
       return redirect('/pkpt/surat_perintah');
     }
 
-    public function edit($id)
+    public function edit($type, $id)
     {
-      $data = SuratPerintah::find($id);
+      $surat_perintah = SuratPerintah::find($id);
+      $kegiatan = Kegiatan::where("is_deleted", 0)->get();
 
-      $wilayah = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur, p.id AS id_inspektur"))
-      ->join("pgw_pegawai AS p", "p.id", "=", "w.id_inspektur_pembantu")
-      ->where('p.is_deleted', 0)
-      ->where("w.is_deleted", 0)
-      ->orderBy('w.nama', 'ASC')
-      ->get();
-
-      $inspektur_wilayah = $wilayah->map(function($val, $itm){
-        return $val->id_inspektur;
-      });
-
-      $peran_anggota = Peran::where("is_anggota", 1)->where("is_deleted", 0)->first();
-
-      $pegawai = Pegawai::where("is_deleted",0)->where("id_peran", $peran_anggota->id)->get();
-
-      $sasaran = Sasaran::where("is_deleted", 0)->get();
-      $dasar_surat = DasarSurat::first();
-      $anggota = SuratPerintahAnggota::where("is_deleted", 0)->where("id_surat_perintah", $id)->get();
-      $periode = Periode::where("is_deleted", 0)->get();
-      $list_inspektur = $this->get_current_inspektur($id);
-
-      $surat_perintah_file = $data->is_pkpt != 2 ? 'surat_perintah-form' : 'surat_perintah_khusus-form';
-      return view('pkpt.'. $surat_perintah_file, [
-        'data' => $data,
-        'anggota' => $anggota,
-        'pegawai' => $pegawai,
-        'wilayah' => $wilayah,
-        'sasaran' => $sasaran,
-        'inspektur' => Pegawai::where("id", $data->id_inspektur)->first(),
-        'dasar_surat' => $dasar_surat,
-        'periode' => $periode,
-        'list_inspektur' => $list_inspektur,
-        'type' => $data->is_pkpt
-      ]);
+      if ($type == 1) { // Surat Perintah PKPT
+        return view('surat_perintah_pkpt-form',[
+          'data' => $surat_perintah,
+          'kegiatan' => $kegiatan,
+        ]);
+      }
     }
 
     public function update(Request $request, $id)
@@ -340,27 +288,42 @@ class SuratPerintahController extends Controller
 
     public function list_datatables_api($type = 1)
     {
+      // $data = DB::table("pkpt_surat_perintah AS sp")
+      //   ->select(DB::raw("sp.*,
+      //     w.nama AS nama_wilayah,
+      //     pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
+      //     pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
+      //     ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
+      //     pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
+      //     s.nama AS sasaran"))
+      // ->leftJoin("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
+      // ->join("mst_sasaran As s", "s.id", "=", "sp.id_sasaran")
+      // ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
+      // ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
+      // ->join("pgw_pegawai AS pib", "pib.id", "=", "sp.id_inspektur_pembantu")
+      // ->join("pgw_jabatan AS pibj", "pibj.id", "=", "pib.id_jabatan")
+      // ->join("pgw_pegawai AS ppt", "ppt.id", "=", "sp.id_pengendali_teknis")
+      // ->join("pgw_jabatan AS pptj", "pptj.id", "=", "ppt.id_jabatan")
+      // ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
+      // ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
+      // ->where('sp.is_deleted', 0)
+      // ->where("sp.is_pkpt", $type)
+      // ->orderBy('sp.id', 'ASC');
+
       $data = DB::table("pkpt_surat_perintah AS sp")
-        ->select(DB::raw("sp.*,
-          w.nama AS nama_wilayah,
-          pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
-          pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
-          ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
-          pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
-          s.nama AS sasaran"))
-      ->leftJoin("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("mst_sasaran As s", "s.id", "=", "sp.id_sasaran")
-      ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
-      ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
-      ->join("pgw_pegawai AS pib", "pib.id", "=", "sp.id_inspektur_pembantu")
-      ->join("pgw_jabatan AS pibj", "pibj.id", "=", "pib.id_jabatan")
-      ->join("pgw_pegawai AS ppt", "ppt.id", "=", "sp.id_pengendali_teknis")
-      ->join("pgw_jabatan AS pptj", "pptj.id", "=", "ppt.id_jabatan")
-      ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
-      ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
+      ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
+      w.nama AS wilayah, k.nama AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
+      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
+      ->join("mst_kegiatan As k", "k.id", "=", "sp.id_kegiatan")
+      ->join("mst_sasaran As s", "k.id", "=", "s.id_kegiatan")
+      ->join("pkpt_surat_perintah_sasaran As sps", "s.id", "=", "sps.id_sasaran")
       ->where('sp.is_deleted', 0)
-      ->where("sp.is_pkpt", $type)
+      ->where('w.is_deleted', 0)
+      ->where('k.is_deleted', 0)
+      ->where("sp.is_pkpt", 1)
+      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'k.nama'])
       ->orderBy('sp.id', 'ASC');
+
       return Datatables::of($data)->make(true);
     }
 
