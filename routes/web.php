@@ -161,7 +161,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       /* Post section */
       Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
-      Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
+      Route::post('/edit/{type}/{id}', 'Pkpt\SuratPerintahController@update');
       Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
     });
   });

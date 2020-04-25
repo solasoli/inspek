@@ -126,7 +126,7 @@ $(function() {
           return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.is_pkpt + "/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
           @if(can_access("pkpt_surat_perintah", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.is_pkpt + "/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
           @endif
 
           if(data.is_approve == 0){
