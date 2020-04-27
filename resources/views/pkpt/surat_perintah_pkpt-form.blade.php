@@ -199,10 +199,7 @@
                         <td>
                           <select name='anggota[]' class="form-control select2 anggota">
                             @foreach($pegawai as $idx => $row)
-                              @php
-                              $selected = $row->id == $r->id ? "selected" : "";
-                              @endphp
-                              <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                              <option value='{{$row->id}}'>{{$row->nama}}</option>
                             @endforeach
                           </select>
                         </td>
