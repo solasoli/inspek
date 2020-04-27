@@ -62,10 +62,10 @@
 </div>
 
 <!-- modal add -->
-@include('Mst.skpd-form_add')
+@include('mst.skpd-form_add')
 
 <!-- modal edit -->
-@include('Mst.skpd-form_edit')
+@include('mst.skpd-form_edit')
 @endsection
 
 @section('scripts')
