@@ -59,10 +59,10 @@
   </div>
 </div>
 <!-- modal add -->
-@include('mst.wilayah-form_add')
+@include('Mst.wilayah-form_add')
 
 <!-- modal edit -->
-@include('mst.wilayah-form_edit')
+@include('Mst.wilayah-form_edit')
 @endsection
 
 @section('scripts')

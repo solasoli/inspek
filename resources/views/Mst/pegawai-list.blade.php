@@ -66,10 +66,10 @@
   </div>
 </div>
 <!-- modal add -->
-@include('mst.pegawai-form_add')
+@include('Mst.pegawai-form_add')
 
 <!-- modal edit -->
-@include('mst.pegawai-form_edit')
+@include('Mst.pegawai-form_edit')
 @endsection
 
 @section('scripts')

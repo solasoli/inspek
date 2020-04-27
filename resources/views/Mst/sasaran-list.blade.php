@@ -62,7 +62,7 @@
 						</div>
 
 						<div class="tab-pane fade" id="kalendar">
-              @include('mst.sasaran-kalendar')
+              @include('Mst.sasaran-kalendar')
 						</div>
 					</div>
 
@@ -88,13 +88,13 @@
 </script>
 
 <!-- modal add -->
-@include('mst.sasaran-form_add')
+@include('Mst.sasaran-form_add')
 
 <!-- modal edit -->
-@include('mst.sasaran-form_edit')
+@include('Mst.sasaran-form_edit')
 
 <!-- modal detail -->
-@include('mst.sasaran-detail')
+@include('Mst.sasaran-detail')
 
 @endsection
 
