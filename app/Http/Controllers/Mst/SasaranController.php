@@ -24,7 +24,7 @@ class SasaranController extends Controller
       $opd = Skpd::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->get();
       $kegiatan = Kegiatan::where("is_deleted", 0)->get();
-      return view('mst.sasaran-list', [
+      return view('Mst.sasaran-list', [
         'opd' => $opd,
         'kegiatan' => $kegiatan,
         'wilayah' => $wilayah,
@@ -34,7 +34,7 @@ class SasaranController extends Controller
     public function create()
     {
       $parent = Sasaran::where("is_deleted",0)->where("id_parent",0)->get();
-      return view('mst.sasaran-form',[
+      return view('Mst.sasaran-form',[
         'parent' => $parent
       ]);
     }
@@ -98,7 +98,7 @@ class SasaranController extends Controller
 
       $parent = Sasaran::where("is_deleted",0)->where("id_parent",0)->get();
 
-      return view('mst.sasaran-form', [
+      return view('Mst.sasaran-form', [
         'data' => $data,
         'parent' => $parent
       ]);
