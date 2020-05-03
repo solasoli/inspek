@@ -43,7 +43,6 @@
           <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
             <thead>
               <tr>
-                <th>No. Surat</th>
                 <th>Irban</th>
                 <th>Kegiatan</th>
                 <th>Sasaran</th>
@@ -74,7 +73,6 @@
           <table class="table table-bordered table-striped responsive" id="oTableNon" style="width:100%">
             <thead>
               <tr>
-                <th>No. Surat</th>
                 <th>Irban</th>
                 <th>Kegiatan</th>
                 <th>Sasaran</th>
@@ -108,7 +106,6 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
       columns: [
-        { data: 'no_surat', name: 'no_surat'},
         { data: 'wilayah', name: 'wilayah'},
         { data: 'kegiatan', name: 'kegiatan'},
         { data: 'sasaran', name: 'sasaran'},
@@ -123,7 +120,7 @@ $(function() {
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("pkpt_surat_perintah", "edit"))
-          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.is_pkpt + "/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
+          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
           @if(can_access("pkpt_surat_perintah", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
@@ -133,13 +130,60 @@ $(function() {
             return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.is_pkpt + "/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
           }
 
-          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.is_pkpt + "/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
+          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
       columnDefs: [
       {
-        targets: 6,
+        targets: 5,
+        className: "text-center",
+     }],
+  });
+
+  // non PKPT 
+   $('#oTableNon').DataTable({
+    language: {
+        searchPlaceholder: 'Search...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+      },
+      responsive: true,
+      processing: true,
+      serverSide: true,
+      ajax: '{{url()->current()}}/datatables/2',
+      columns: [
+        { data: 'wilayah', name: 'wilayah'},
+        { data: 'kegiatan', name: 'kegiatan'},
+        { data: 'sasaran', name: 'sasaran'},
+        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
+          var x = new Date(data);
+          return moment(x).format("DD-MM-YYYY");
+        }},
+        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
+          var x = new Date(data);
+          return moment(x).format("DD-MM-YYYY");
+        }},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          var return_button = "";
+          @if(can_access("pkpt_surat_perintah", "edit"))
+          return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
+          @endif
+          @if(can_access("pkpt_surat_perintah", "delete"))
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
+          @endif
+
+          if(data.is_approve == 0){
+            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
+          }
+
+          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
+          return return_button == "" ? "-" : return_button;
+        }},
+      ],
+      columnDefs: [
+      {
+        targets: 5,
         className: "text-center",
      }],
   });

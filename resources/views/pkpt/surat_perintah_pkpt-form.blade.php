@@ -82,12 +82,6 @@
                   <!-- Jika Form Edit -->
                   @if(isset($data))
                     <select name='sasaran[]' class="form-control select2 sasaran" multiple>
-                      @foreach($sasaran AS $idx => $row)
-                        @php
-                        $selected = array_search($row->id, array_column($sp_sasaran->toArray(), 'id_sasaran')) !== false ? 'selected' : '';
-                        @endphp
-                        <option value="{{$row->id}}" {{$selected}}>{{$row->nama}}</option>
-                      @endforeach
                     </select>
                   <!-- Jika Form Add -->
                   @else
@@ -178,29 +172,30 @@
                           <td></td>
                         </tr>
                       @endforeach
-                    @elseif(isset($anggota))
+                    @elseif(isset($sp_anggota))
                       @foreach($sp_anggota AS $idx => $row)
                         <tr>
                           <td>
                             <select name='anggota[]' class="form-control select2">
                               @foreach($anggota AS $i => $r)
                                 @php
-                                $selected = $row->id_anggota == $r->id_anggota ? 'selected' : '';
+                                $selected = $row->id == $r->id ? 'selected' : '';
                                 @endphp
-                                <option value="{{$r->id_anggota}}" {{$selected}}>{{$r->nama_anggota}}</option>
+                                <option value="{{$r->id}}" {{$selected}}>{{$r->nama}}</option>
                               @endforeach
                             </select>
                           </td>
-                          <td><button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button></td>
+                          <td>
+                            @if($idx > 0)
+                            <button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>
+                            @endif
+                          </td>
                         </tr>
                       @endforeach
                     @else
                       <tr>
                         <td>
                           <select name='anggota[]' class="form-control select2 anggota">
-                            @foreach($pegawai as $idx => $row)
-                              <option value='{{$row->id}}'>{{$row->nama}}</option>
-                            @endforeach
                           </select>
                         </td>
                         <td>
@@ -236,15 +231,15 @@
 
 </form>
 <script>
-  var addMoreOpd = "<tr>";
-  addMoreOpd += "<td>";
-  addMoreOpd += "<select name='anggota[]' class='form-control select2 anggota'>";
-  addMoreOpd += "</select>";
-  addMoreOpd += "</td>";
-  addMoreOpd += "<td>";
-  addMoreOpd += "<button type='button' class='btn btn-danger btn-xs delete-anggota'><i class='fa fa-close'></i></button>";
-  addMoreOpd += "</td>";
-  addMoreOpd += "</tr>";
+  var addMoreAnggota = "<tr>";
+  addMoreAnggota += "<td>";
+  addMoreAnggota += "<select name='anggota[]' class='form-control select2 anggota'>";
+  addMoreAnggota += "</select>";
+  addMoreAnggota += "</td>";
+  addMoreAnggota += "<td>";
+  addMoreAnggota += "<button type='button' class='btn btn-danger btn-xs delete-anggota'><i class='fa fa-close'></i></button>";
+  addMoreAnggota += "</td>";
+  addMoreAnggota += "</tr>";
 
   var optionAnggota = '';
 
@@ -254,7 +249,7 @@
     });
 
     $(".add-anggota").on('click', function(){
-        $("#cover-anggota").append(addMoreOpd);
+        $("#cover-anggota").append(addMoreAnggota);
 
         $("#cover-anggota tr:last .select2").html(optionAnggota);
         $("#cover-anggota tr:last .select2").select2();
@@ -274,6 +269,7 @@
       get_pengendali_teknis(val);
       get_ketua_tim(val);
       get_anggota(val);
+      get_sasaran()
 
       check_jadwal_surat_perintah();
     }
@@ -331,8 +327,8 @@
           var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
           var option = '';
           $.when($.each(res.data, function(idx, val){
-            $(".anggota").append("<option value='" + val.id_anggota +"'>" + val.nama_anggota + "</option>");
-            option += "<option value='" + val.id_anggota +"'>" + val.nama_anggota + "</option>";
+            $(".anggota").append("<option value='" + val.id +"'>" + val.nama + "</option>");
+            option += "<option value='" + val.id +"'>" + val.nama + "</option>";
           })).then(function(){
             optionAnggota = option;
           });
@@ -363,10 +359,25 @@
       var id = $("select[name='kegiatan']").val();
       $(".sasaran").html('');
 
+      @php
+      $arr = [];
+      if(isset($sp_sasaran)){
+
+        $arr = $sp_sasaran->map(function($val) use($arr) {
+          return $val->id;
+        });
+        $arr = $arr->toArray();
+      }
+
+      @endphp
+      var data_edit = [{{ implode(',',$arr) }}];
+      console.log(data_edit);
       $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
+        $(".sasaran").html('');
         // console.log(data);
         $.each(data, function(idx, val){
-          var option = "<option value='"+val.id+"'>"+val.nama+"</option>";
+          var selected = data_edit.indexOf(val.id) != -1 ? 'selected' : '';
+          var option = "<option value='"+val.id+"' "+ selected+">"+val.nama+"</option>";
           $(".sasaran").append(option);
         });
       });
@@ -376,26 +387,6 @@
     @if (!isset($data))
       get_sasaran();
     @endif
-
-    $("select[name='kegiatan']").on('change', function() {
-      get_sasaran();
-    });
-
-    $(".add-sasaran").on('click', function(){
-      var am = "<tr>";
-      am += "<td>";
-      am += "<input name='sasaran[]' autocomplete='off' required='required' class='form-control' type='text'>";
-      am += "</td>";
-      am += "<td>";
-      am += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-      am += "</td>";
-      am += "</tr>";
-      $("#cover-sasaran").append(am);
-    });
-
-    $(document).on('click', ".remove-sasaran", function(){
-      $(this).parent().closest("tr").remove();
-    });
 
   });
 </script>

@@ -41,6 +41,45 @@
   </div>
   @endif
 
+  @php 
+    $list_arr = [];
+  @endphp
+
+  @foreach($data as $idx => $row)
+    @php
+    $listcolor = [
+      1 => [
+        'bgColor' => '#3788d8',
+        'borderColor' => '#3788d8',
+        'textColor' => '#fff',
+        'label' => 'PKPT'
+      ],
+      2 => [
+        'bgColor' => '#f8d7da',
+        'borderColor' => '#f5c6cb',
+        'textColor' => '#721c24',
+        'label' => 'NON-PKPT'
+      ],
+      3 => [
+        'bgColor' => '#4b476d',
+        'borderColor' => '#4b476d',
+        'textColor' => '',
+        'label' => 'KHUSUS'
+      ]
+    ];
+
+    $list_arr[] = [
+      "title" => $row->nama_kegiatan,
+      "start" => $row->dari,
+      "end" => date("Y-m-d 23:59:59", strtotime($row->sampai)),
+      "url" => "/pkpt/surat_perintah/info/". $row->id,
+      "backgroundColor" => $listcolor[$row->is_pkpt]['bgColor'],
+      "borderColor" => $listcolor[$row->is_pkpt]['borderColor'],
+      "textColor" => $listcolor[$row->is_pkpt]['textColor']
+    ];
+    @endphp
+  @endforeach
+
   <div class="row">
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
@@ -49,12 +88,18 @@
           <div class="float-right">
 
             @if(can_access("pkpt_surat_perintah", "add"))
-            <a class='btn btn-sm btn-success' href='/pkpt/surat_perintah/add'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+            <a class='btn btn-sm btn-success' href='/pkpt/surat_perintah/add/1'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
             @endif
           </div>
         </div>
         <div class="card-body" style="position: relative;">
                   
+          @foreach($listcolor as $idx => $row)
+          <div>
+            <div style="width:10px;height: 10px; background: {{ $row['bgColor'] }}; border: 1px solid {{ $row['borderColor'] }}; color: {{ $row['textColor'] }}; display: inline-block;"></div> {{ $row['label'] }}
+          </div>
+          @endforeach
+
           <div id='calendar-container'>
             <div id='calendar'></div>
           </div>
@@ -81,41 +126,6 @@
     document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
-    @php 
-      $list_arr = [];
-    @endphp
-
-    @foreach($data as $idx => $row)
-      @php
-      $listcolor = [
-        0 => [
-          'bgColor' => '',
-          'borderColor' => '',
-          'textColor' => '',
-        ],
-        1 => [
-          'bgColor' => '#f8d7da',
-          'borderColor' => '#f5c6cb',
-          'textColor' => '#721c24',
-        ],
-        2 => [
-          'bgColor' => '#4b476d',
-          'borderColor' => '#4b476d',
-          'textColor' => '',
-        ]
-      ];
-
-      $list_arr[] = [
-        "title" => $row->no_surat,
-        "start" => $row->dari,
-        "end" => $row->sampai,
-        "url" => "/pkpt/surat_perintah/info/". $row->id,
-        "backgroundColor" => $listcolor[$row->is_pkpt]['bgColor'],
-        "borderColor" => $listcolor[$row->is_pkpt]['borderColor'],
-        "textColor" => $listcolor[$row->is_pkpt]['textColor']
-      ];
-      @endphp
-    @endforeach
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
       height: 'parent',

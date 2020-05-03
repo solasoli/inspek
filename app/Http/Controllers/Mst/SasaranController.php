@@ -14,6 +14,7 @@ use App\Sasaran;
 use App\Kegiatan;
 use App\Skpd;
 use App\Wilayah;
+use App\Service\KegiatanService;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -57,36 +58,8 @@ class SasaranController extends Controller
         'sampai.required' => 'Sampai harus diisi!',
       ]);
 
-      $dari = explode('-', $request->input('dari'));
-      $dari = $dari[2].'-'.$dari[1].'-'.$dari[0];
-      $sampai = explode('-', $request->input('sampai'));
-      $sampai = $sampai[2].'-'.$sampai[1].'-'.$sampai[0];
 
-      $use = [
-        'input' => $request->input(),
-        'dari' => $dari,
-        'sampai' => $sampai
-      ];
-
-      DB::transaction(function() use ($use) {
-        $t = new Kegiatan;
-        $t->nama = $use['input']['nama'];
-        $t->id_wilayah = $use['input']['wilayah'];
-        $t->id_skpd = $use['input']['opd'];
-        $t->dari = $use['dari'].' 00:00:00';
-        $t->sampai = $use['sampai'].' 00:00:00';
-        $t->created_at = date('Y-m-d H:i:s');
-        $t->created_by = Auth::id();
-        $t->save();
-
-        foreach($use['input']['sasaran'] AS $i => $v){
-          $t2 = new Sasaran;
-          $t2->nama = $v;
-          $t2->id_kegiatan = $t->id;
-          $t2->save();
-        }
-      });
-
+      KegiatanService::create($request->input());
 
       $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/sasaran');
@@ -185,7 +158,7 @@ class SasaranController extends Controller
     public function list_datatables_api()
     {
       $data = DB::table("mst_kegiatan AS k")
-      ->select(DB::raw("k.id, k.nama AS kegiatan, w.nama AS wilayah, skpd.name AS skpd, k.dari, k.sampai"))
+      ->select(DB::raw("k.id, k.nama AS kegiatan, w.nama AS wilayah, skpd.name AS skpd, k.dari, k.sampai, k.type_pkpt"))
       ->join("mst_skpd AS skpd", "skpd.id", "=", "k.id_skpd")
       ->join("mst_wilayah AS w", "w.id", "=", "k.id_wilayah")
       ->where("k.is_deleted", 0)

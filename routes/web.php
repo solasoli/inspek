@@ -152,7 +152,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('surat_perintah')->group(function () {
       Route::get('/', 'Pkpt\SuratPerintahController@index');
       Route::get('/add/{type}', 'Pkpt\SuratPerintahController@create');
-      Route::get('/edit/{type}/{id}', 'Pkpt\SuratPerintahController@edit');
+      Route::get('/edit/{id}', 'Pkpt\SuratPerintahController@edit');
       Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
       Route::get('/approve/{id}', 'Pkpt\SuratPerintahController@approve');
       Route::get('/datatables/{type?}', 'Pkpt\SuratPerintahController@list_datatables_api');
@@ -161,7 +161,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       /* Post section */
       Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
-      Route::post('/edit/{type}/{id}', 'Pkpt\SuratPerintahController@update');
+      Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
       Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
     });
   });

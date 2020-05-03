@@ -17,6 +17,7 @@ use App\Model\Pegawai\PangkatGolongan;
 use App\Model\Pegawai\Jabatan;
 use App\Inspektur;
 use App\Wilayah;
+use App\Service\PegawaiService;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -331,25 +332,13 @@ class PegawaiController extends Controller
     public function get_anggota_by_wilayah(Request $request)
     {
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_anggota, p.id AS id_anggota"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->leftJoin("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->leftJoin("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->join('pgw_eselon AS e', 'e.id', '=', 'p.id_eselon')
-      ->where('p.is_deleted', 0)
-      // ->whereRaw("ppj.id IS NULL")
-      ->whereRaw('e.level >= 3')
-      ->where("w.is_deleted", 0);
 
       if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
+        $data = PegawaiService::get_anggota(true, $id_wilayah);
+      } else {
+        $data = PegawaiService::get_anggota(true);
       }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
-      return response()->json(["data" => $data]);
+      return response()->json(["data" => $data->get()]);
     }
 
     public function get_pegawai_by_id(Request $request)

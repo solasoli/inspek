@@ -178,7 +178,20 @@
             <div class="row">
               <div class="col-2">Sasaran</div>
               <div class="col-1">:</div>
-              <div class="col-8">{{$data->sasaran}}</div>
+              <div class="col-8">
+
+                @if($sasaran->count() > 1)
+                  <ol style="padding-left: 15px">
+                  @foreach($sasaran as $idx => $row)
+                    <li>{{ $row->nama }}</li>
+                  @endforeach
+                @else
+
+                  @foreach($sasaran as $idx => $row)
+                    {{ $row->nama }}
+                  @endforeach
+                @endif
+              </ol></div>
             </div>
             <br>
             <div class="row">

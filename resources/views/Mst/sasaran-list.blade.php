@@ -50,6 +50,7 @@
               <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
                 <thead>
                   <tr>
+                    <th>Status</th>
                     <th>Kegiatan</th>
                     <th>Irban</th>
                     <th>Perangkat Daerah</th>
@@ -117,6 +118,11 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
       columns: [
+
+        { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
+          console.log(data);
+          return data == 1 ? 'PKPT' : 'NON-PKPT'
+        }},
         { data: 'kegiatan', name: 'kegiatan'},
         { data: 'wilayah', name: 'wilayah'},
         { data: 'skpd', name: 'skpd'},
@@ -142,7 +148,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 5,
+        targets: 6,
         className: "text-center",
      }],
   });

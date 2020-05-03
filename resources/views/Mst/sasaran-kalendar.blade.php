@@ -10,7 +10,45 @@
   }
 </style>
 
+@php
+  $list_arr = [];
+@endphp
+
+@foreach($kegiatan as $idx => $row)
+  @php
+  $listcolor = [
+    1 => [
+      'bgColor' => '#3788d8',
+      'borderColor' => '#3788d8',
+      'textColor' => '#fff',
+      'label' => 'PKPT'
+    ],
+    2 => [
+      'bgColor' => '#f8d7da',
+      'borderColor' => '#f5c6cb',
+      'textColor' => '#721c24',
+      'label' => 'NON-PKPT'
+    ]
+  ];
+
+  $list_arr[] = [
+    "title" => $row->nama,
+    "start" => $row->dari,
+    "end" => date("Y-m-d 23:59:59", strtotime($row->sampai)),
+    "url" => "#". $row->id,
+    "backgroundColor" => $listcolor[$row->type_pkpt]['bgColor'],
+    "borderColor" => $listcolor[$row->type_pkpt]['borderColor'],
+    "textColor" => $listcolor[$row->type_pkpt]['textColor']
+  ];
+  @endphp
+@endforeach
+
 <div class="card-body" style="position: relative;">
+  @foreach($listcolor as $idx => $row)
+  <div>
+    <div style="width:10px;height: 10px; background: {{ $row['bgColor'] }}; border: 1px solid {{ $row['borderColor'] }}; color: {{ $row['textColor'] }}; display: inline-block;"></div> {{ $row['label'] }}
+  </div>
+  @endforeach
   <div id='calendar-container'>
     <div id='calendar'></div>
   </div>
@@ -30,20 +68,6 @@
     document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
-    @php
-      $list_arr = [];
-    @endphp
-
-    @foreach($kegiatan as $idx => $row)
-      @php
-      $list_arr[] = [
-        "title" => $row->nama,
-        "start" => $row->dari,
-        "end" => date("Y-m-d 23:59:59", strtotime($row->sampai)),
-        "url" => "#". $row->id,
-      ];
-      @endphp
-    @endforeach
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
       height: 'parent',

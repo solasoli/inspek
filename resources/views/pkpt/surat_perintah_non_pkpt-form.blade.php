@@ -60,7 +60,7 @@
                 Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text" >
+                <input name='make_kegiatan' autocomplete="off" value='{{ !is_null(old('make_kegiatan')) ? old('make_kegiatan') : (isset($current_kegiatan->nama) ? $current_kegiatan->nama : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
             <div class="form-group row">
@@ -75,12 +75,27 @@
                     </tr>
                   </thead>
                   <tbody id='cover-sasaran'>
-                    <tr>
-                      <td>
-                        <input name="sasaran[]" autocomplete="off" required="required" class="form-control" type="text" >
-                      </td>
-                      <td></td>
-                    </tr>
+                    @if(isset($sp_sasaran))
+                      @foreach($sp_sasaran as $idx => $row)
+                        <tr>
+                          <td>
+                            <input name="sasaran_kegiatan[]" autocomplete="off" required="required" class="form-control" type="text" value='{{ $row->nama }}'>
+                          </td>
+                          <td>
+                            @if($idx > 0)
+                              <button type="button" class="btn btn-danger btn-xs remove-sasaran"><i class="fa fa-close"></i></button>
+                            @endif
+                          </td>
+                        </tr>
+                      @endforeach
+                    @else
+                      <tr>
+                        <td>
+                          <input name="sasaran_kegiatan[]" autocomplete="off" required="required" class="form-control" type="text" >
+                        </td>
+                        <td></td>
+                      </tr>
+                    @endif
                   </tbody>
                   <tr>
                     <td colspan="2">
@@ -117,10 +132,13 @@
                 Wilayah :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select class="form-control select2" name="wilayah">
+                <select class="form-control select2" name="wilayah" id='wilayah'>
                   <option value="">- Pilih -</option>
                   @foreach ($wilayah AS $row)
-                    <option value="{{$row->id}}">{{$row->nama}}</option>
+                    @php
+                    $selected = !is_null(old('wilayah')) && old('wilayah') == $row->id ? "selected" : (isset($data->id_wilayah) && $row->id == $data->id_wilayah ? 'selected' : '');
+                    @endphp
+                    <option value="{{$row->id}}" {{$selected}}>{{$row->nama}}</option>
                   @endforeach
                 </select>
               </div>
@@ -142,23 +160,6 @@
           </div>
           <div class="card-body">
             {{ csrf_field() }}
-
-            <!-- <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Wilayah
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='wilayah' class="form-control select2 wilayah">
-                  <option value="" data-nama="-">- Pilih Disini -</option>
-                  @foreach($wilayah as $idx => $row)
-                  @php
-                  $selected = !is_null(old('wilayah')) && old('wilayah') == $row->id ? "selected" : (isset($data->id_wilayah) && $row->id == $data->id_wilayah ? 'selected' : '');
-                  @endphp
-                  <option value='{{$row->id}}' {{$selected}} data-nama="{{$row->nama_inspektur}}">{{$row->nama}}</option>
-                  @endforeach
-                </select>
-              </div>
-            </div> -->
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
@@ -203,13 +204,6 @@
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name='ketua_tim' class="form-control select2 ketua_tim">
-                  <option value="" data-nama="-">- Pilih Disini -</option>
-                  @foreach($pegawai as $idx => $row)
-                  @php
-                  $selected = !is_null(old('ketua_tim')) && old('ketua_tim') == $row->id ? "selected" : (isset($data->id_ketua_tim) && $row->id == $data->id_ketua_tim ? 'selected' : '');
-                  @endphp
-                  <option value='{{$row->id}}' {{$selected}} data-nama="{{$row->nama}}">{{$row->nama}}</option>
-                  @endforeach
                 </select>
               </div>
             </div>
@@ -231,7 +225,7 @@
                       @foreach(old('anggota') as $i => $r)
                         <tr>
                           <td>
-                            <select name='anggota[]' class="form-control select2">
+                            <select name='anggota[]' class="form-control select2 anggota">
                               @foreach($pegawai as $idx => $row)
                                 @php
                                 $selected = $row->id == $r ? "selected" : "";
@@ -243,46 +237,35 @@
                           <td></td>
                         </tr>
                       @endforeach
-                    @elseif((isset($anggota) && $anggota->count() == 0) || !isset($anggota))
-                      <tr>
-                        <td>
-                          <select name='anggota[]' class="form-control select2">
-                            @foreach($pegawai as $idx => $row)
-                              <option value='{{$row->id}}'>{{$row->nama}}</option>
-                            @endforeach
-                          </select>
-                        </td>
-                        <td></td>
-                      </tr>
-                    @else
-                      @php
-                        $x = 1;
-                      @endphp
-
-                      @foreach($anggota as $i => $r)
+                    @elseif(isset($sp_anggota))
+                      @foreach($sp_anggota AS $idx => $row)
                         <tr>
                           <td>
                             <select name='anggota[]' class="form-control select2">
-                              @foreach($pegawai as $idx => $row)
+                              @foreach($anggota AS $i => $r)
                                 @php
-                                $selected = $row->id == $r->id ? "selected" : "";
+                                $selected = $row->id == $r->id ? 'selected' : '';
                                 @endphp
-                                <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                                <option value="{{$r->id}}" {{$selected}}>{{$r->nama}}</option>
                               @endforeach
                             </select>
                           </td>
                           <td>
-                            @if($x > 1)
-                            <button type='button' class='btn btn-danger btn-xs delete-anggota'>
-                              <i class='fa fa-close'></i>
-                            </button>
+                            @if($idx > 0)
+                            <button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>
                             @endif
                           </td>
                         </tr>
-                        @php
-                        $x++;
-                        @endphp
                       @endforeach
+                    @else
+                      <tr>
+                        <td>
+                          <select name='anggota[]' class="form-control select2 anggota">
+                          </select>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
                     @endif
                   </tbody>
                   <tr>
@@ -295,40 +278,6 @@
             </div>
 
           </div>
-
-          <!-- <div class="card-header">
-            <h6 class="card-title float-left py-2"></h6>
-          </div>
-          <div class="card-body">
-
-            <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                No. Surat
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                  <input type="text" class="form-control" name='no_surat' value="{{ !is_null(old('no_surat')) ? old('no_surat') : (isset($data->no_surat) ? $data->no_surat : '') }}">
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Untuk
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <textarea name='untuk' class="form-control">{{ !is_null(old('untuk')) ? old('untuk') : (isset($data->untuk) ? $data->untuk : '') }}</textarea>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-
-              </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-
-                <div class="alert alert-danger" id='jadwal_warning' style="display: none">Terdapat surat perintah lain dengan tanggal tersebut!</div>
-              </div>
-            </div>
-          </div> -->
 
           <div class="card-header"></div>
           <div class="card-body">
@@ -350,42 +299,41 @@
 
 </form>
 <script>
-  var addMoreOpd = "<tr>";
-  addMoreOpd += "<td>";
-  addMoreOpd += "<select name='anggota[]' class='form-control select2'>";
-  addMoreOpd += "<option value=''>- Pilih Disini -</option>";
-  @foreach($pegawai as $idx => $row)
-    addMoreOpd += "<option value='{{$row->id}}'>{{$row->nama}}</option>";
-  @endforeach
-  addMoreOpd += "</select>";
-  addMoreOpd += "</td>";
-  addMoreOpd += "<td>";
-  addMoreOpd += "<button type='button' class='btn btn-danger btn-xs delete-anggota'><i class='fa fa-close'></i></button>";
-  addMoreOpd += "</td>";
-  addMoreOpd += "</tr>";
+  var addMoreAnggota = "<tr>";
+  addMoreAnggota += "<td>";
+  addMoreAnggota += "<select name='anggota[]' class='form-control select2 anggota'>";
+  addMoreAnggota += "</select>";
+  addMoreAnggota += "</td>";
+  addMoreAnggota += "<td>";
+  addMoreAnggota += "<button type='button' class='btn btn-danger btn-xs delete-anggota'><i class='fa fa-close'></i></button>";
+  addMoreAnggota += "</td>";
+  addMoreAnggota += "</tr>";
+
 
   $(function(){
     $('.fc-datepicker').datepicker({
       dateFormat: "dd-mm-yy"
     });
     $(".add-anggota").on('click', function(){
-        $("#cover-anggota").append(addMoreOpd);
+        $("#cover-anggota").append(addMoreAnggota);
 
         $("#cover-anggota tr:last .select2").select2();
     });
 
-    change_wilayah($(".kegiatan"));
+    change_wilayah($("#wilayah").val());
 
-    $(".kegiatan").on("change", function(){
-      change_wilayah($(this));
+    $("#wilayah").on("change", function(){
+      var val = $(this).val();
+      change_wilayah(val);
     });
 
-    function change_wilayah(el){
-      var val = $(el).find("option:selected").data("wilayah");
+    function change_wilayah(val){
       $("#inspektur-ds").html(val);
       get_inspektur_pembantu(val);
       get_pengendali_teknis(val);
       get_ketua_tim(val);
+      get_anggota(val);
+      get_pd({{ isset($current_kegiatan) ? $current_kegiatan->id_skpd : 0 }});
 
       check_jadwal_surat_perintah();
     }
@@ -398,8 +346,8 @@
           var data_edit = {{isset($data->id_inspektur_pembantu) ? $data->id_inspektur_pembantu : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id ? "selected" : "";
-            $(".inspektur_pembantu").append("<option value='" + val.id +"' " +selected+ ">" + val.nama_inspektur + "</option>");
+            var selected = data_edit == val.id_inspektur ? "selected" : "";
+            $(".inspektur_pembantu").append("<option value='" + val.id_inspektur +"' " +selected+ ">" + val.nama_inspektur + "</option>");
           });
         }
       });
@@ -413,8 +361,8 @@
           var data_edit = {{isset($data->id_pengendali_teknis) ? $data->id_pengendali_teknis : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id ? "selected" : "";
-            $(".pengendali_teknis").append("<option value='" + val.id +"' " +selected+ ">" + val.nama_inspektur + "</option>");
+            var selected = data_edit == val.id_pengendali_teknis ? "selected" : "";
+            $(".pengendali_teknis").append("<option value='" + val.id_pengendali_teknis +"' " +selected+ ">" + val.nama_pengendali_teknis + "</option>");
           });
         }
       });
@@ -428,14 +376,14 @@
           var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id ? "selected" : "";
-            $(".ketua_tim").append("<option value='" + val.id +"' " +selected+ ">" + val.nama_inspektur + "</option>");
+            var selected = data_edit == val.id_ketua_tim ? "selected" : "";
+            $(".ketua_tim").append("<option value='" + val.id_ketua_tim +"' " +selected+ ">" + val.nama_ketua_tim + "</option>");
           });
         }
       });
     }
 
-    $(".wilayah, #dari_kalendar, #sampai_kalendar").on("change", function(){
+    $("#wilayah, #dari_kalendar, #sampai_kalendar").on("change", function(){
       check_jadwal_surat_perintah();
     });
 
@@ -454,24 +402,22 @@
       $(this).parent().closest("tr").remove();
     });
 
-    function get_sasaran(){
-      var id = $("select[name='kegiatan']").val();
-      $("select[name='sasaran']").html('');
+    function get_anggota(val){
+      $.post("/mst/pegawai/get_anggota_by_wilayah", {"id_wilayah": val}, function(res){
+        if(res.data != null){
+          $(".anggota").html('');
 
-      $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
-        // console.log(data);
-        $.each(data, function(idx, val){
-          var option = "<option value='"+val.id+"'>"+val.nama+"</option>";
-          $("select[name='sasaran']").append(option);
-        });
+          var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
+          var option = '';
+          $.when($.each(res.data, function(idx, val){
+            $(".anggota").append("<option value='" + val.id +"'>" + val.nama + "</option>");
+            option += "<option value='" + val.id +"'>" + val.nama + "</option>";
+          })).then(function(){
+            optionAnggota = option;
+          });
+        }
       });
     }
-
-    get_sasaran();
-
-    $("select[name='kegiatan']").on('change', function() {
-      get_sasaran();
-    });
 
     function get_pd(selected_skpd) {
       var id_wilayah = $("select[name='wilayah']").val();
@@ -485,14 +431,10 @@
       });
     }
 
-    $("select[name='wilayah']").on('change', function(){
-      get_pd();
-    });
-
     $(".add-sasaran").on('click', function(){
       var am = "<tr>";
       am += "<td>";
-      am += "<input name='sasaran[]' autocomplete='off' required='required' class='form-control' type='text'>";
+      am += "<input name='sasaran_kegiatan[]' autocomplete='off' required='required' class='form-control' type='text'>";
       am += "</td>";
       am += "<td>";
       am += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";

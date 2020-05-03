@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 use App\Model\Pegawai\Pegawai;
 use App\Wilayah;
 use App\Model\Pegawai\PeranJabatan;
+use App\Service\PegawaiService;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -60,16 +61,7 @@ class StrukturController extends Controller
 
     public function list_datatables_api()
     {
-      $data = DB::table("pgw_pegawai AS p")
-      ->select(DB::raw("p.id, p.nama, p.id_jabatan, j.name AS jabatan, p.atasan_langsung"))
-      ->join("pgw_jabatan AS j", "p.id_jabatan", "=", "j.id")
-      ->join("pgw_eselon AS e", "p.id_eselon", "=", "e.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->whereRaw(DB::raw("e.level >= 3"))
-      ->where('p.is_deleted', 0)
-      ->whereRaw(DB::raw("pp.kode NOT IN ('sekretaris','wakil_sekretaris')"))
-      ->where('j.is_deleted', 0);
+      $data = PegawaiService::get_anggota(true);
       return Datatables::of($data)->make(true);
     }
 
