@@ -30,7 +30,7 @@ class SkpdController extends Controller
       ->orderBy('nama', 'ASC')
       ->get();
 
-      return view('mst.skpd-list', [
+      return view('Mst.skpd-list', [
         'pegawai' => $pegawai,
         'wilayah_kerja' => $wilayah_kerja
       ]);
@@ -38,7 +38,7 @@ class SkpdController extends Controller
 
     public function create()
     {
-      return view('mst.skpd-form');
+      return view('Mst.skpd-form');
     }
 
     public function store(Request $request)
@@ -79,7 +79,7 @@ class SkpdController extends Controller
     {
       $data = Skpd::find($id);
 
-      return view('mst.skpd-form', ['data' => $data]);
+      return view('Mst.skpd-form', ['data' => $data]);
     }
 
     public function update(Request $request, $id)
