@@ -95,41 +95,8 @@ class SasaranController extends Controller
         'sampai.required' => 'Sampai harus diisi!',
       ]);
 
-      $dari = explode('-', $request->input('dari'));
-      $dari = $dari[2].'-'.$dari[1].'-'.$dari[0];
-      $sampai = explode('-', $request->input('sampai'));
-      $sampai = $sampai[2].'-'.$sampai[1].'-'.$sampai[0];
-
-      $use = [
-        'input' => $request->input(),
-        'id' => $id, // id_kegiatan
-        'dari' => $dari,
-        'sampai' => $sampai
-      ];
-
-      DB::transaction(function() use ($use) {
-
-        $t = Kegiatan::findOrFail($use['id']);
-        $t->nama = $use['input']['nama'];
-        $t->id_wilayah = $use['input']['wilayah'];
-        $t->id_skpd = $use['input']['opd'];
-        $t->dari = $use['dari'].' 00:00:00';
-        $t->sampai = $use['sampai'].' 00:00:00';
-        $t->updated_at = date('Y-m-d H:i:s');
-        $t->updated_by = Auth::id();
-        $t->save();
-
-        DB::table('mst_sasaran')
-        ->where('id_kegiatan', $use['id'])
-        ->update(['is_deleted' => 1]);
-
-        foreach($use['input']['sasaran'] AS $i => $v){
-          $t2 = new Sasaran;
-          $t2->nama = $v;
-          $t2->id_kegiatan = $t->id;
-          $t2->save();
-        }
-      });
+      KegiatanService::update($id, $request->input());
+      dd();
 
       $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/sasaran');

@@ -63,6 +63,11 @@ class KegiatanService
         $t2->save();
       }
 
+      // update dari & sampai surat perintah
+      DB::table('pkpt_surat_perintah')
+      ->where('id_kegiatan', $t->id)
+      ->update(['dari' => $t->dari, 'sampai' => $t->sampai]);
+      
       DB::commit();
     });
 
