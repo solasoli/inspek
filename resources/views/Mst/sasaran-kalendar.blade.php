@@ -84,10 +84,11 @@
       eventLimit: true, // allow "more" link when too many events
       events: {!! json_encode($list_arr) !!},
       eventRender: function (info) {
-        console.log(info);
-        $(info.el).attr("data-id", $(info.el).attr('href').replace('#',''));
-        $(info.el).attr("data-toggle", 'modal');
-        $(info.el).attr("data-target", '#detailModal');
+        if($(info.el).hasClass('fc-event')) {
+          $(info.el).attr("data-id", $(info.el).attr('href').replace('#',''));
+          $(info.el).attr("data-toggle", 'modal');
+          $(info.el).attr("data-target", '#detailModal');
+        }
       }
     });
 

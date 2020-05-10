@@ -48,7 +48,8 @@ class SasaranController extends Controller
         'wilayah' => 'required',
         'opd' => 'required',
         'dari' => 'required',
-        'sampai' => 'required'
+        'sampai' => 'required',
+        'sasaran' => 'required',
       ],[
         'nama.required' => 'Nama Sasaran harus diisi!',
         'nama.unique' => 'Nama Sasaran sudah ada!',
@@ -85,7 +86,8 @@ class SasaranController extends Controller
         'wilayah' => 'required',
         'opd' => 'required',
         'dari' => 'required',
-        'sampai' => 'required'
+        'sampai' => 'required',
+        'sasaran' => 'required',
       ],[
         'nama.required' => 'Nama Sasaran harus diisi!',
         'nama.unique' => 'Nama Sasaran sudah ada!',
@@ -96,7 +98,6 @@ class SasaranController extends Controller
       ]);
 
       KegiatanService::update($id, $request->input());
-      dd();
 
       $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/sasaran');

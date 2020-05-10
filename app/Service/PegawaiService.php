@@ -23,7 +23,7 @@ class PegawaiService
     });
   }
 
-  public static function get_anggota($return_chain = false, $wilayah = 0) {
+  public static function get_anggota($return_chain = false, $wilayah = null) {
       $data = DB::table("pgw_pegawai AS p")
       ->select(DB::raw("p.id, p.nama, p.id_jabatan, j.name AS jabatan, p.atasan_langsung"))
       ->join("pgw_jabatan AS j", "p.id_jabatan", "=", "j.id")
@@ -36,7 +36,7 @@ class PegawaiService
       ->whereRaw(DB::raw("pp.kode NOT IN ('sekretaris','wakil_sekretaris')"))
       ->groupBy("p.id", "p.nama", "p.id_jabatan", "j.name", "p.atasan_langsung");
 
-      if($wilayah > 0) {
+      if($wilayah >= 0) {
         $data = $data->where("w.id", $wilayah);
       } 
 
