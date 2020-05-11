@@ -22,7 +22,7 @@ class StrukturController extends Controller
     {
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('id')->get();
 
-      return view('mst.struktur-list', [
+      return view('Mst.struktur-list', [
         'wilayah' => $wilayah,
       ]);
     }

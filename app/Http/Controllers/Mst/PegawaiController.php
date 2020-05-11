@@ -31,7 +31,7 @@ class PegawaiController extends Controller
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      return view('mst.pegawai-list',[
+      return view('Mst.pegawai-list',[
         'opd' => $opd,
         'eselon' => $eselon,
         'pangkat' => $pangkat,
@@ -49,7 +49,7 @@ class PegawaiController extends Controller
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      return view('mst.pegawai-form',[
+      return view('Mst.pegawai-form',[
         'opd' => $opd,
         'eselon' => $eselon,
         'pangkat' => $pangkat,
@@ -122,7 +122,7 @@ class PegawaiController extends Controller
       $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
       $jabatan = Jabatan::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      return view('mst.pegawai-form', ['data' => $data,
+      return view('Mst.pegawai-form', ['data' => $data,
 
         'opd' => $opd,
         'eselon' => $eselon,
@@ -215,7 +215,7 @@ class PegawaiController extends Controller
 
       $pegawai = Pegawai::where("is_deleted",0)->get();
       $current_inspektur = $this->get_current_inspektur(true);
-      return view('mst.inspektur-form', [
+      return view('Mst.inspektur-form', [
         'pegawai' => $pegawai,
         'inspektur' => $current_inspektur
       ]);

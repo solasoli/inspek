@@ -22,14 +22,14 @@ class WilayahController extends Controller
 {
     public function index()
     {
-      return view('mst.wilayah-list');
+      return view('Mst.wilayah-list');
     }
 
     public function create()
     {
       $pegawai = Pegawai::where("is_deleted",0)->get();
       $skpd = Skpd::where("is_deleted",0)->get();
-      return view('mst.wilayah-form',[
+      return view('Mst.wilayah-form',[
         'pegawai' => $pegawai,
         'skpd' => $skpd
       ]);
@@ -87,7 +87,7 @@ class WilayahController extends Controller
       $opd_wilayah = WilayahSkpd::where("is_deleted", 0)->where("id_wilayah", $id)->get();
       $anggota = WilayahAnggota::where("is_deleted", 0)->where("id_wilayah", $id)->get();
 
-      return view('mst.wilayah-form', [
+      return view('Mst.wilayah-form', [
         'data' => $data,
         'pegawai' => $pegawai,
         'skpd' => $skpd,

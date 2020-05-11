@@ -24,7 +24,7 @@ class RkaUploadController extends Controller
 {
     public function add_temp()
     {
-      return view('mst.rka_add_temp-form');
+      return view('Mst.rka_add_temp-form');
     }
 
     public function store_temp(Request $request)
@@ -63,7 +63,7 @@ class RkaUploadController extends Controller
       $tempkrd = TempKodeRekeningDetail::where("id_kode_rekening", $id)->orderBy('row', 'ASC')->get();
       $config = getConfig("config_rekening_code_excel");
 
-      return view('mst.rekening_verify_temp-form', [
+      return view('Mst.rekening_verify_temp-form', [
         'range_column' => range($tempkr->start_column, $tempkr->end_column),
         'data_temp' => $tempkrd,
         'config' => $config

@@ -17,12 +17,12 @@ class PeriodeController extends Controller
 {
     public function index()
     {
-      return view('mst.periode-list');
+      return view('Mst.periode-list');
     }
 
     public function create()
     {
-      return view('mst.periode-form');
+      return view('Mst.periode-form');
     }
 
     public function store(Request $request)
@@ -58,7 +58,7 @@ class PeriodeController extends Controller
     {
       $data = Periode::find($id);
 
-      return view('mst.periode-form', ['data' => $data]);
+      return view('Mst.periode-form', ['data' => $data]);
     }
 
     public function update(Request $request, $id)

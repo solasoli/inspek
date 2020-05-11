@@ -21,7 +21,7 @@ class InspekturPembantuController extends Controller
 {
     public function index()
     {
-      return view('mst.inspektur_pembantu-list');
+      return view('Mst.inspektur_pembantu-list');
     }
 
     public function create($id_wilayah = null)
@@ -40,7 +40,7 @@ class InspekturPembantuController extends Controller
       ->where("w.is_deleted", 0)
       ->where("w.id", $id_wilayah)
       ->first();
-      return view('mst.inspektur_pembantu-form',[
+      return view('Mst.inspektur_pembantu-form',[
         'pegawai' => $pegawai,
         'wilayah' => $wilayah,
         'data' => $data,

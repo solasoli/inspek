@@ -19,7 +19,7 @@ class DasarSuratController extends Controller
     public function create()
     {
       $data = DasarSurat::first();
-      return view('mst.dasar_surat-form',[
+      return view('Mst.dasar_surat-form',[
         'data' => $data
       ]);
     }

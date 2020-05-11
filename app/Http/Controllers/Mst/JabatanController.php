@@ -18,12 +18,12 @@ class JabatanController extends Controller
 {
     public function index()
     {
-      return view('mst.jabatan-list');
+      return view('Mst.jabatan-list');
     }
 
     public function create()
     {
-      return view('mst.jabatan-form');
+      return view('Mst.jabatan-form');
     }
 
     public function store(Request $request)
@@ -55,7 +55,7 @@ class JabatanController extends Controller
       $data = Jabatan::find($id);
 
 
-      return view('mst.jabatan-form', [
+      return view('Mst.jabatan-form', [
         'data' => $data,
       ]);
     }

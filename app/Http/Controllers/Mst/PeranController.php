@@ -20,13 +20,13 @@ class PeranController extends Controller
 {
     public function index()
     {
-      return view('mst.peran-list');
+      return view('Mst.peran-list');
     }
 
     public function create()
     {
       $jabatan = Jabatan::where("is_deleted", 0)->orderBy('name')->get();
-      return view('mst.peran-form',[
+      return view('Mst.peran-form',[
         'jabatan' => $jabatan,
       ]);
     }
@@ -77,7 +77,7 @@ class PeranController extends Controller
 
       $jabatan = Jabatan::where("is_deleted", 0)->orderBy('name')->get();
 
-      return view('mst.peran-form', [
+      return view('Mst.peran-form', [
         'data' => $data,
         'jabatan' => $jabatan,
         'peran_jabatan' => $peran_jabatan,
