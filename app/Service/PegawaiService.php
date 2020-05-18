@@ -36,9 +36,9 @@ class PegawaiService
       ->whereRaw(DB::raw("pp.kode NOT IN ('sekretaris','wakil_sekretaris')"))
       ->groupBy("p.id", "p.nama", "p.id_jabatan", "j.name", "p.atasan_langsung");
 
-      if($wilayah >= 0 && $wilayah != null) {
+      if($wilayah >= 0 && $wilayah !== null) {
         $data = $data->where("w.id", $wilayah);
-      } 
+      }
 
       return $return_chain ? $data : $data->get();   
   }

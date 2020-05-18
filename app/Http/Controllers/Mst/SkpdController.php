@@ -150,8 +150,9 @@ class SkpdController extends Controller
     }
 
     public function get_skpd_by_id_wilayah(Request $request)
-    {
-      $data = Skpd::where('id_wilayah', $request->input('id'))
+    {  
+      $id_wilayah = $request->input('id') > 0 ? $request->input('id') : 0;
+      $data = Skpd::where('id_wilayah', $id_wilayah)
       ->where('is_deleted', 0)
       ->orderBy('id', 'ASC')
       ->get();

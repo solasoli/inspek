@@ -133,7 +133,8 @@ class SuratPerintahController extends Controller
           pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
           pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
           ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
-          pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan"))
+          pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
+          k.nama AS nama_kegiatan, skpd.name AS nama_skpd"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
       ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
       ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
@@ -143,6 +144,8 @@ class SuratPerintahController extends Controller
       ->join("pgw_jabatan AS pptj", "pptj.id", "=", "ppt.id_jabatan")
       ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
       ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
+      ->join("mst_kegiatan AS k", "k.id", "=", "sp.id_kegiatan")
+      ->join("mst_skpd AS skpd", "skpd.id", "=","k.id_skpd")
       ->where('sp.is_deleted', 0)
       ->where("sp.id", $id)
       ->first();

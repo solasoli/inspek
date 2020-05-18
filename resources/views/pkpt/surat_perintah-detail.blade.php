@@ -172,7 +172,7 @@
             <div class="row">
               <div class="col-2">Untuk</div>
               <div class="col-1">:</div>
-              <div class="col-8">{{$data->untuk}}</div>
+              <div class="col-8">{{$data->nama_kegiatan}}</div>
             </div>
             <br>
             <div class="row">
@@ -209,6 +209,12 @@
                 {{date("Y", strtotime($data->sampai)) }} 
                 @endif
               </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-2" style="padding-right: 0">Perangkat Daerah</div>
+              <div class="col-1">:</div>
+              <div class="col-8">{{$data->nama_skpd}}</div>
             </div>
             <br>
             <br>
