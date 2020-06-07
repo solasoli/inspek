@@ -204,8 +204,26 @@ class SuratPerintahController extends Controller
       ->where("sp.id","!=", $request->sp_id)
       ->get();
 
-      return response()->json(["data" => $data]);
+      $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_KEGIATAN_MSG') : ''; 
+
+      return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0 ]);
     }
+
+    public function check_jadwal_by_id_kegiatan(Request $request){
+      $id_kegiatan = $request->kegiatan > 0 ? $request->kegiatan : 0;
+      $sp_id = $request->sp_id > 0 ? $request->sp_id : 0;
+
+      $data = DB::table("pkpt_surat_perintah as sp")
+      ->where("sp.is_deleted", 0)
+      ->where("sp.id_kegiatan", $id_kegiatan)
+      ->where("sp.id","!=", $sp_id)
+      ->get();
+
+      $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_KEGIATAN_MSG') : ''; 
+
+      return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0 ]);
+    }
+   
 
     public function get_current_inspektur($id_sp) {
       $get_inspektur_from_sp = SuratPerintah::find($id_sp);

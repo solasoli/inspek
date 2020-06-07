@@ -35,8 +35,9 @@
   </div>
 </a>
 <ul class="br-menu-sub nav flex-column">
-  <li class="nav-item"><a href="/pkpt/surat_perintah" class="nav-link">Kelola Surat Perintah</a></li>
+  <li class="nav-item"><a href="/pkpt/surat_perintah" class="nav-link">Buat Surat Perintah</a></li>
   <li class="nav-item"><a href="/pkpt/surat_perintah/kalendar" class="nav-link">Kalender Kerja</a></li>
+  <!-- <li class="nav-item"><a href="/laporan/lhp" class="nav-link">LHP</a></li> -->
 </ul>
 
 

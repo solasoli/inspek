@@ -163,6 +163,26 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
       Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
+      Route::post('/check_jadwal_by_id_kegiatan', 'Pkpt\SuratPerintahController@check_jadwal_by_id_kegiatan');
+    });
+  });
+
+  Route::prefix('laporan')->group(function () {
+
+    Route::prefix('lhp')->group(function () {
+      Route::get('/', 'Laporan\LhpController@index');
+      Route::get('/add/{type}', 'Laporan\LhpController@create');
+      Route::get('/edit/{id}', 'Laporan\LhpController@edit');
+      Route::get('/delete/{id}', 'Laporan\LhpController@destroy');
+      Route::get('/approve/{id}', 'Laporan\LhpController@approve');
+      Route::get('/datatables/{type?}', 'Laporan\LhpController@list_datatables_api');
+
+      Route::get('/info/{id}', 'Laporan\LhpController@info');
+      Route::get('/kalendar', 'Laporan\LhpController@kalendar');
+      /* Post section */
+      Route::post('/add/{type}', 'Laporan\LhpController@store');
+      Route::post('/edit/{id}', 'Laporan\LhpController@update');
+      Route::post('/check_jadwal', 'Laporan\LhpController@check_jadwal');
     });
   });
 

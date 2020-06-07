@@ -143,6 +143,16 @@
                 </select>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-md-3">
+              </div>
+              <div class="col-md-6">
+                <div id="jadwal_warning" class="alert alert-warning" style="margin-bottom:10px; display: none;">
+                </div>
+              </div>
+            </div>
+
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Perangkat Daerah :
@@ -163,7 +173,7 @@
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Inspektur
+                Penanggung Jawab
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name='inspektur' class="form-control select2">
@@ -180,7 +190,7 @@
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Inspektur Pembantu
+                Wakil Penanggung Jawab
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name='inspektur_pembantu' class="form-control select2 inspektur_pembantu">
@@ -309,6 +319,7 @@
   addMoreAnggota += "</td>";
   addMoreAnggota += "</tr>";
 
+  var optionAnggota = '';
 
   $(function(){
     $('.fc-datepicker').datepicker({
@@ -317,7 +328,9 @@
     $(".add-anggota").on('click', function(){
         $("#cover-anggota").append(addMoreAnggota);
 
+        $("#cover-anggota tr:last .select2").html(optionAnggota);
         $("#cover-anggota tr:last .select2").select2();
+
     });
 
     change_wilayah($("#wilayah").val());
@@ -390,9 +403,9 @@
     function check_jadwal_surat_perintah(){
       $("#jadwal_warning").hide();
       if($(".wilayah").val() != "" && $("#dari_kalendar").val() != "" && $("#sampai_kalendar").val() != ""){
-        $.post("/pkpt/surat_perintah/check_jadwal", {"id_wilayah": $(".wilayah").val(), "dari" : $("#dari_kalendar").val(), "sampai": $("#sampai_kalendar").val(), "sp_id" : "{{ isset($data->id) ? $data->id : 0}}" }, function(res){
-            if(res.data != null && res.data.length > 0){
-              $("#jadwal_warning").show();
+        $.post("/pkpt/surat_perintah/check_jadwal", {"id_wilayah": $("#wilayah").val(), "dari" : $("#dari_kalendar").val(), "sampai": $("#sampai_kalendar").val(), "sp_id" : "{{ isset($data->id) ? $data->id : 0}}" }, function(res){
+            if(res.show_warning == 1){
+              $("#jadwal_warning").html(res.msg).show();
             }
         });
       }

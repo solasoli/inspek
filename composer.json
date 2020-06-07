@@ -41,7 +41,10 @@
             "database/seeds",
             "database/factories"
         ],
-        "files": ["app/library/helper.php"]
+        "files": [
+            "app/library/constant.php",
+            "app/library/helper.php",
+        ]
     },
     "autoload-dev": {
         "psr-4": {

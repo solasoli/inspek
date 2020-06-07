@@ -1,10 +1,20 @@
 @extends('layouts.app')
 @section('content')
 
+<style type="text/css">
+  .table th, .table td {
+    white-space: nowrap;
+  }
+
+  .table-responsive {
+    overflow-y: auto;
+  }
+</style>
+
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
-    <a class="breadcrumb-item" href="#">Master</a>
+    <a class="breadcrumb-item" href="#">Surat Perintah</a>
     <span class="breadcrumb-item active">Surat Perintah</span>
   </nav>
 </div>
@@ -40,18 +50,22 @@
           </div>
         </div>
         <div class="card-body">
-          <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
-            <thead>
-              <tr>
-                <th>Irban</th>
-                <th>Kegiatan</th>
-                <th>Sasaran</th>
-                <th>Dari</th>
-                <th>Sampai</th>
-                <th style='width:195px'>Aksi</th>
-              </tr>
-            </thead>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Irban</th>
+                  <th>Kegiatan</th>
+                  <th>Sasaran</th>
+                  <th>Dari</th>
+                  <th>Sampai</th>
+                  <th>Status</th>
+                  <th>Hasil</th>
+                  <th style='width:195px'>Aksi</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -70,18 +84,22 @@
           </div>
         </div>
         <div class="card-body">
-          <table class="table table-bordered table-striped responsive" id="oTableNon" style="width:100%">
-            <thead>
-              <tr>
-                <th>Irban</th>
-                <th>Kegiatan</th>
-                <th>Sasaran</th>
-                <th>Dari</th>
-                <th>Sampai</th>
-                <th style='width:195px'>Aksi</th>
-              </tr>
-            </thead>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped responsive" id="oTableNon" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Irban</th>
+                  <th>Kegiatan</th>
+                  <th>Sasaran</th>
+                  <th>Dari</th>
+                  <th>Sampai</th>
+                  <th>Status</th>
+                  <th>Hasil</th>
+                  <th style='width:195px'>Aksi</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -117,17 +135,24 @@ $(function() {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
+
+        { data: null, name: 'sp.is_approve', render: function(data, type, row){
+          return data.is_approve == 1 ? "<span class='text-success'>Approved</span>" : "<span class='text-danger'>Waiting Approve</span>";
+        }},
+        { data: null, name: 'sp.is_approve', render: function(data, type, row){
+          return data.is_approve == 1 ? "<span class='text-success'>Selesai</span>" : "<span class='text-danger'>Belum Selesai</span>";
+        }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("pkpt_surat_perintah", "edit"))
           return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
           @if(can_access("pkpt_surat_perintah", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
 
           if(data.is_approve == 0){
-            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.is_pkpt + "/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
+            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a> ";
           }
 
           return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
@@ -136,7 +161,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 5,
+        targets: 7,
         className: "text-center",
      }],
   });
@@ -164,17 +189,26 @@ $(function() {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
+
+        { data: 'is_approve', name: 'sp.is_approve', render: function(data, type, row){
+          return data.is_approve == 1 ? "<span class='text-success'>Approved</span>" : "<span class='text-danger'>Waiting Approve</span>";
+        }},
+
+        { data: null, name: 'sp.is_approve', render: function(data, type, row){
+          return data.is_approve == 1 ? "<span class='text-success'>Selesai</span>" : "<span class='text-danger'>Belum Selesai</span>";
+        }},
+
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("pkpt_surat_perintah", "edit"))
           return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
           @if(can_access("pkpt_surat_perintah", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a>";
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
 
           if(data.is_approve == 0){
-            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a>";
+            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a> ";
           }
 
           return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
@@ -183,7 +217,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 5,
+        targets: 7,
         className: "text-center",
      }],
   });

@@ -87,7 +87,14 @@
       $(function(){
         /* aktif menu otomatis */
         var activeMenu = $(".nav-link[href='/{{ Request::segment(1) }}/{{ Request::segment(2) }}']");
-        if(typeof activeMenu != 'undefined'){
+
+        var activeMenuFull = $(".nav-link[href='/{{ Request::segment(1) }}/{{ Request::segment(2) }}/{{ Request::segment(3) }}']");
+        if(activeMenuFull.html() != null){
+          activeMenuFull.addClass('active');
+          activeMenuFull.parent().parent().prev().addClass('active');
+          activeMenuFull.parent().parent().prev().addClass('show-sub');
+          activeMenuFull.parent().parent().slideDown();
+        } else if(activeMenu.html() != null){
           activeMenu.addClass('active');
           activeMenu.parent().parent().prev().addClass('active');
           activeMenu.parent().parent().prev().addClass('show-sub');

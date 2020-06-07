@@ -185,13 +185,14 @@
                   @foreach($sasaran as $idx => $row)
                     <li>{{ $row->nama }}</li>
                   @endforeach
+                  </ol>
                 @else
 
                   @foreach($sasaran as $idx => $row)
                     {{ $row->nama }}
                   @endforeach
                 @endif
-              </ol></div>
+              </div>
             </div>
             <br>
             <div class="row">

@@ -372,3 +372,12 @@ if(!function_exists("generateChildPermission")){
     return $menu_child_html;
   }
 }
+
+
+if(!function_exists("get_constant")){
+  function get_constant($constant) {
+    // loading constant variable
+    include 'constant.php';
+    return $$constant;
+  }
+}
