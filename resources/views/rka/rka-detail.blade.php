@@ -81,7 +81,7 @@
             <div class="col-6">{{$data->lokasi_kegiatan}}</div>
           </div>
 
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-4 text-right font-weight-bold">Waktu Pelaksanaan</div>
             <div class="col-6">{{$data->waktu_pelaksanaan}}</div>
           </div>
@@ -89,7 +89,7 @@
           <div class="row">
             <div class="col-4 text-right font-weight-bold">Sumber Dana</div>
             <div class="col-6">{{$data->sumber_dana}}</div>
-          </div>
+          </div> -->
 
 
           <div class="row mg-y-10">
@@ -98,17 +98,17 @@
           </div>
 
           <div class="row">
-            <div class="col-4 text-right font-weight-bold">N - 1</div>
+            <div class="col-4 text-right font-weight-bold">{{ $data->n_min_year }}</div>
             <div class="col-6">Rp. {{number_format($data->n_min,0,',','.')}},-</div>
           </div>
 
           <div class="row">
-            <div class="col-4 text-right font-weight-bold">N</div>
+            <div class="col-4 text-right font-weight-bold">{{ $data->n_min_year+1 }}</div>
             <div class="col-6">Rp. {{number_format($data->n,0,',','.')}},-</div>
           </div>
 
           <div class="row">
-            <div class="col-4 text-right font-weight-bold">N + 1</div>
+            <div class="col-4 text-right font-weight-bold">{{ $data->n_min_year+2 }}</div>
             <div class="col-6">Rp. {{number_format($data->n_max,0,',','.')}},-</div>
           </div>
 
@@ -185,6 +185,7 @@
           <tbody>
             @php
               $rincian_anggaran_detail = $data->rincian_anggaran_detail()->get();
+              $total_anggaran = 0;
             @endphp
             @foreach($data->rincian_anggaran as $idx => $row)
               <tr  class="font-weight-bold">
@@ -200,6 +201,10 @@
                 <tr>
                   <td></td>
                   @if($r->satuan != null)
+
+                    @php
+                      $total_anggaran += $r->jumlah;
+                    @endphp
 
                     <td>{{$r->uraian}}</td>
                     <td class="text-right">{{number_format($r->volume,0,',','.')}}</td>
@@ -218,6 +223,10 @@
                 </tr>
               @endforeach
             @endforeach
+            <tr>
+              <th colspan="5" class="text-right">Jumlah</th>
+              <th class="text-right">{{ number_format($total_anggaran,0,',','.') }}</th>
+            </tr>
           </tbody>
          </table>
         </div>

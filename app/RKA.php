@@ -19,11 +19,11 @@ class RKA extends Model
   }
 
   public function program(){
-  	return $this->belongsTo("App\Program", "id_program");
+  	return $this->belongsTo("App\RKAProgram", "id_program");
   }
 
   public function kegiatan(){
-  	return $this->belongsTo("App\Kegiatan", "id_kegiatan");
+  	return $this->belongsTo("App\RKAKegiatan", "id_kegiatan");
   }
 
   public function indikator_kinerja(){

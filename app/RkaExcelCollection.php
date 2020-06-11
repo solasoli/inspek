@@ -9,6 +9,8 @@ use App\TempKodeRekening;
 use App\TempKodeRekeningDetail;
 use App\UrusanPemerintahan;
 use App\Organisasi;
+use App\RKAProgram;
+use App\RKAKegiatan;
 
 class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
 {
@@ -20,14 +22,28 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
       return $data;
     }
 
-    public function check_body_loop($row){
+    public function get_full_string($rows) {
       $data = [];
-      foreach($row as $idx => $row){
+      foreach($rows as $idx => $row){
         if($row != null)
           $data[] = $row;
       }
 
-      return implode(",", $data) == "Indikator,Tolak Ukur Kinerja,Target Kinerja";
+      $string = implode(",", $data);
+      return $string;
+    }
+
+    public function check_body_loop($row){
+      $string = $this->get_full_string($row);
+      $string = strtolower($string);
+      return  strpos($string,'indikator') !== false && strpos($string, 'tolok ukur') !== false;
+    }
+
+    public function check_rincian_anggaran_loop($row) {
+      $string = $this->get_full_string($row);
+      $string = strtolower($string);
+      return  strpos($string,'rincian') !== false && strpos($string, 'anggaran') !== false;
+
     }
 
     public function collection(Collection $rows)
@@ -41,28 +57,38 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
       $loop_rincian_anggaran = false;
       $loop_rincian_anggaran_uraian = false;
       $last_kode = "";
+      $n = -1;
       foreach($rows as $idx => $row){
 
         //ini bagian header
         if(!$header_already_loop){
-          switch (strtolower($row[0])) {
+          switch (strtolower($row[1])) {
             case 'urusan pemerintahan':
             case 'organisasi':
             case 'program':
             case 'kegiatan':
-              $label_row = strtolower(str_replace(" ", "_", $row[0]));
-              $data_rows = $this->get_multiple_column($row, 8, 14);
+              $label_row = strtolower(str_replace(" ", "_", $row[1]));
+              $data_rows = $this->get_multiple_column($row, 15, 21);
               $data[$label_row] = $data_rows;
-              $data[$label_row]['additional'] = $row[15];
+              $data[$label_row]['additional'] = $row[22];
               break;
             case 'lokasi kegiatan':
             case 'waktu pelaksanaan':
             case 'sumber dana':
-            case 'n - 1':
-            case 'n':
-            case 'n + 1':
-              $label_row = strtolower(str_replace(" ", "_", $row[0]));
-              $data[$label_row] = $row[8];
+              $label_row = strtolower(str_replace(" ", "_", $row[1]));
+              $data[$label_row] = $row[15];
+              break;
+            case 'jumlah tahun':
+              $label_n = 'n_-_1';
+              if($n == 0) {
+                $label_n = 'n';
+              } else if($n == 1) {
+                $label_n = 'n_+_1';
+              } else {
+                $data['n_min_year'] = $row[9];
+              }
+              $data[$label_n] = $row[20];
+              $n++;
               break;
           }
         }
@@ -72,9 +98,9 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
           if(!$header_already_loop)
             $header_already_loop = true;
 
-          $current_indikator = strtolower(str_replace(" ", "_" , trim($row[0])));
+          $current_indikator = strtolower(str_replace(" ", "_" , trim($row[1])));
           //if tolak ukur kinerja and target kinerja is not available anymore
-          if($row[9] != '' && $row[27] != ''){
+          if($row[1] != '' && $row[18] != ''){
             if($last_indikator != $current_indikator && $current_indikator != ''){
               $last_indikator = $current_indikator;
             }
@@ -84,8 +110,8 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
             }
 
             $data['indikator_kinerja'][$last_indikator][] = [
-              "tolak_ukur_kinerja" => $row[9],
-              "target_kinerja" => $row[27]
+              "tolak_ukur_kinerja" => $row[18],
+              "target_kinerja" => $row[30]
             ];
           }
         }
@@ -97,23 +123,31 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
         }
 
         //Rincian anggaran
-        if(strtolower($row[0]) == "kode rekening"){
+        if($this->check_rincian_anggaran_loop($row)){
           $loop_rincian_anggaran = true;
           $loop_already_on_body = false;
         }
 
         if($loop_rincian_anggaran && $loop_rincian_anggaran_uraian){
-          if(strtolower($row[25]) == 'jumlah'){
+
+          if(strtolower($row[1]) == 'jumlah'){
             $loop_rincian_anggaran = false;
           } else {
-            $string = $this->get_multiple_column($row, 5, 24);
+            $string = $this->get_multiple_column($row, 10, 24);
             $string = trim(implode(" ", $string));
-            $kode = $this->get_multiple_column($row, 0, 4);
+            $kode = $this->get_multiple_column($row, 1, 9);
             $kode = trim(implode("", $kode));
+            $kode = str_replace('-', '', $kode); 
             $volume = $row[25];
-            $satuan = $row[26];
-            $harga = $row[27];
-            $total_harga = $row[28];
+            $satuan = $row[27];
+            $harga = $row[29];
+            $total_harga = $row[30];
+
+            if(strtolower($kode) == 'simralbogor' && $total_harga == null) { 
+              $loop_rincian_anggaran_uraian = false;
+              continue;
+            }
+
             if($string != ""){
               if($kode != ""){
                 $last_kode = $kode;
@@ -133,7 +167,7 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
           }
         }
 
-        if($loop_rincian_anggaran && !$loop_rincian_anggaran_uraian && $row[0] == "1"){
+        if($loop_rincian_anggaran && !$loop_rincian_anggaran_uraian && $row[1] == "1"){
           $loop_rincian_anggaran_uraian = true;
         }
 
@@ -153,7 +187,6 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
     }
 
     public function saveToDB($data =[]){
-      // dd($data);
       //save to urusan pemerintahan first
       $up = $this->saveUrusanPemerintah($data);
       $o = $this->saveOrganisasi($data, $up);
@@ -223,7 +256,7 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
 
         if($kode != ""){
           //find it first in db
-          $t = Program::firstOrCreate(['kode' => $kode],
+          $t = RKAProgram::firstOrCreate(['kode' => $kode],
           ['label' => $label, 'id_organisasi' => $o->id]);
           return $t;
         }
@@ -242,7 +275,7 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
 
         if($kode != ""){
           //find it first in db
-          $t = Kegiatan::firstOrCreate(['kode' => $kode],
+          $t = RKAKegiatan::firstOrCreate(['kode' => $kode],
           ['label' => $label, 'id_program' => $pr->id]);
           return $t;
         }
@@ -265,6 +298,7 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
         $rka->n_min = isset($arr_data['n_-_1']) ? $this->return_int_from_idr($arr_data['n_-_1']) : "";
         $rka->n = isset($arr_data['n']) ? $this->return_int_from_idr($arr_data['n']) : "";
         $rka->n_max = isset($arr_data['n_+_1']) ? $this->return_int_from_idr($arr_data['n_+_1']) : "";
+        $rka->n_min_year = isset($arr_data['n_min_year']) ? $arr_data['n_min_year'] : "";
         $rka->save();
 
         //save to RKA indikator kinerja
