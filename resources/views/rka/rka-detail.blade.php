@@ -99,17 +99,17 @@
 
           <div class="row">
             <div class="col-4 text-right font-weight-bold">{{ $data->n_min_year }}</div>
-            <div class="col-6">Rp. {{number_format($data->n_min,0,',','.')}},-</div>
+            <div class="col-8">Rp. {{number_format($data->n_min,0,',','.')}},- ({{terbilang_translate($data->n_min)}})</div>
           </div>
 
           <div class="row">
             <div class="col-4 text-right font-weight-bold">{{ $data->n_min_year+1 }}</div>
-            <div class="col-6">Rp. {{number_format($data->n,0,',','.')}},-</div>
+            <div class="col-8">Rp. {{number_format($data->n,0,',','.')}},- ({{terbilang_translate($data->n)}})</div>
           </div>
 
           <div class="row">
             <div class="col-4 text-right font-weight-bold">{{ $data->n_min_year+2 }}</div>
-            <div class="col-6">Rp. {{number_format($data->n_max,0,',','.')}},-</div>
+            <div class="col-8">Rp. {{number_format($data->n_max,0,',','.')}},- ({{terbilang_translate($data->n_max)}})</div>
           </div>
 
         </div>

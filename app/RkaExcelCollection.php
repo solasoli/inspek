@@ -100,7 +100,7 @@ class RkaExcelCollection implements ToCollection,WithCalculatedFormulas
 
           $current_indikator = strtolower(str_replace(" ", "_" , trim($row[1])));
           //if tolak ukur kinerja and target kinerja is not available anymore
-          if($row[1] != '' && $row[18] != ''){
+          if($row[18] != ''){
             if($last_indikator != $current_indikator && $current_indikator != ''){
               $last_indikator = $current_indikator;
             }

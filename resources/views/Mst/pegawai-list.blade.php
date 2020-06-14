@@ -50,9 +50,9 @@
              <thead>
                  <tr>
                      <th>Nama</th>
-                     <th>OPD</th>
-                     <th>Eselon</th>
-                     <th>Pangkat</th>
+                     <!-- <th>OPD</th> -->
+                     <!-- <th>Eselon</th> -->
+                     <!-- <th>Pangkat</th> -->
                      <th>Pangkat Golongan</th>
                      <th>Jabatan</th>
                      <th style='width:150px'>Aksi</th>
@@ -84,9 +84,9 @@ $(function() {
       ajax: '{{url()->current()}}/datatables/',
       columns: [
         { data: 'nama', name: 'p.nama' },
-        { data: 'opd', name: 'skpd.name' },
-        { data: 'eselon', name: 'e.name' },
-        { data: 'pangkat', name: 'pk.name' },
+        // { data: 'opd', name: 'skpd.name' },
+        // { data: 'eselon', name: 'e.name' },
+        // { data: 'pangkat', name: 'pk.name' },
         { data: 'pangkat_golongan', name: 'pg.name' },
         { data: 'jabatan', name: 'j.name' },
         { data: null, orderable: false, searchable: false,  render: function ( data, type, row ) {

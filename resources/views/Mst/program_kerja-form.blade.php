@@ -1,49 +1,82 @@
 <script>
 $(function() {
   $('#editModal').on('show.bs.modal', function(e) {
-
+    $("select[name='wilayah']").val('').trigger('change');
     $("select[name='opd']").html(''); // api na benang , kakara di clir
     var id = $(e.relatedTarget).data('id');
 
-    $.get("{{url('')}}/mst/sasaran/get_kegiatan_by_id?id=" + id, function(data) {
-      // console.log(data);
-      $('input[name="nama"]').val(data.nama);
-      $('select[name="wilayah"]').val(data.id_wilayah).trigger("change");
-      // $('select[name="opd"]').val(data.id_skpd).trigger("change");
-      get_pd(data.id_skpd);
-      $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
-      $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
-    });
-
-    $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
-      // console.log(data);
-      $.each(data, function(idx, val){
-        var r = "<tr>";
-        r += "<td>";
-        r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
-        r += "</td>";
-        r += "<td>";
-        r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-        r += "</td>";
-        r += "</tr>";
-        $("#cover-sasaran_edit").append(r);
+    if(id > 0) {
+      $.get("{{url('')}}/mst/program_kerja/get_kegiatan_by_id?id=" + id, function(data) {
+        // console.log(data);
+        $('input[name="nama"]').val(data.nama);
+        $('select[name="wilayah"]').val(data.id_wilayah).trigger("change");
+        // $('select[name="opd"]').val(data.id_skpd).trigger("change");
+        get_pd(data.id_skpd);
+        $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
+        $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
       });
-    });
 
-    $(".add-sasaran").on('click', function(){
-      var am = "<tr>";
-      am += "<td>";
-      am += "<input name='sasaran[]' autocomplete='off' required='required' class='form-control' type='text'>";
-      am += "</td>";
-      am += "<td>";
-      am += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-      am += "</td>";
-      am += "</tr>";
-      $("#cover-sasaran_edit").append(am);
-    });
+      $.get("{{url('')}}/mst/program_kerja/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
+        // console.log(data);
+        $.each(data, function(idx, val){
+          var r = "<tr>";
+          r += "<td>";
+          r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
+          r += "</td>";
+          r += "<td>";
+          r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+          r += "</td>";
+          r += "</tr>";
+          $("#cover-sasaran_edit").append(r);
+        });
+      });
 
-    $("#form_edit").attr('action', '{{url()->current()}}/edit/'+ id +'');
+      $("#form_edit").attr('action', '{{url()->current()}}/edit/'+ id +'');
+    } else {
+
+      $("#form_edit").attr('action', '{{url()->current()}}/add');
+    }
+
   });
+
+
+  $(".add-sasaran").on('click', function(){
+    var am = "<tr>";
+    am += "<td>";
+    am += "<input name='sasaran[]' autocomplete='off' required='required' class='form-control' type='text'>";
+    am += "</td>";
+    am += "<td>";
+    am += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+    am += "</td>";
+    am += "</tr>";
+    $("#cover-sasaran_edit").append(am);
+  });
+
+  $('.fc-datepicker').datepicker({
+    dateFormat: "dd-mm-yy"
+  });
+
+  $(".add-sasaran").on('click', function(){
+    var am = "<tr>";
+    am += "<td>";
+    am += "<input name='sasaran[]' autocomplete='off' required='required' class='form-control' type='text'>";
+    am += "</td>";
+    am += "<td>";
+    am += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+    am += "</td>";
+    am += "</tr>";
+    $("#cover-sasaran").append(am);
+  });
+
+  $(document).on('click', ".remove-sasaran", function(){
+    $(this).parent().closest("tr").remove();
+  });
+
+
+  $("select[name='wilayah']").on('change', function(){
+    get_pd();
+  });
+
 });
 </script>
 <div class="modal" id="editModal">
@@ -60,14 +93,6 @@ $(function() {
       <div class="modal-body">
         <form class="form-layout form-layout-5" method="post" enctype="multipart/form-data" id="form_edit">
           {{ csrf_field() }}
-          <div class="form-group row">
-            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              Kegiatan <span class="required"></span> :
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text" >
-            </div>
-          </div>
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Irban :
@@ -118,6 +143,19 @@ $(function() {
 
             </label>
             <div class="col-md-12">
+              <table class="table" width="100%">
+                <thead>
+                  <tr>
+                    <th>Kegiatan *</th>
+                    <th style="width:60px"></th>
+                  </tr>
+                </thead>
+                <tr>
+                  <td colspan="2">
+                    <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text" >
+                  </td>
+                </tr>
+              </table>
               <table class="table" width="100%">
                 <thead>
                   <tr>

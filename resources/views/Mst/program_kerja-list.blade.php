@@ -3,6 +3,14 @@
 <style media="screen">
   .modal-lg{ width: 100% !important; }
   .ui-datepicker{ z-index:99999 !important; }
+
+  .table th, .table td {
+    white-space: nowrap;
+  }
+
+  .table-responsive {
+    overflow-y: auto;
+  }
 </style>
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
@@ -43,27 +51,29 @@
 					<div class="tab-content">
             <div class="text-right mb-4">
               @if(can_access("mst_skpd", "add"))
-              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah Program Kerja</button>
+              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editModal">Tambah Program Kerja</button>
               @endif
             </div>
 						<div class="tab-pane fade active show" id="list">
-              <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
-                <thead>
-                  <tr>
-                    <th>Status</th>
-                    <th>Kegiatan</th>
-                    <th>Irban</th>
-                    <th>Perangkat Daerah</th>
-                    <th>Dari</th>
-                    <th>Sampai</th>
-                    <th style='width:150px'>Aksi</th>
-                  </tr>
-                </thead>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Kegiatan</th>
+                      <th>Irban</th>
+                      <th>Perangkat Daerah</th>
+                      <th>Dari</th>
+                      <th>Sampai</th>
+                      <th style='width:150px'>Aksi</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
 						</div>
 
 						<div class="tab-pane fade" id="kalendar">
-              @include('Mst.sasaran-kalendar')
+              @include('Mst.program_kerja-kalendar')
 						</div>
 					</div>
 
@@ -87,15 +97,11 @@
     });
   }
 </script>
-
-<!-- modal add -->
-@include('Mst.sasaran-form_add')
-
 <!-- modal edit -->
-@include('Mst.sasaran-form_edit')
+@include('Mst.program_kerja-form')
 
 <!-- modal detail -->
-@include('Mst.sasaran-detail')
+@include('Mst.program_kerja-detail')
 
 @endsection
 

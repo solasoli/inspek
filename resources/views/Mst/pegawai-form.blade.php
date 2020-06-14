@@ -48,7 +48,7 @@
         <div class="card-body">
           <form class="form-layout form-layout-5" method="post" enctype="multipart/form-data">
             {{ csrf_field() }}
-            <div class="form-group row">
+            <div class="form-group row" style="display: none">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 OPD <span class="required">*</span> :
               </label>
@@ -64,7 +64,7 @@
               </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row" style="display: none">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Eselon <span class="required">*</span> :
               </label>
@@ -82,7 +82,7 @@
 
 
 
-            <div class="form-group row">
+            <div class="form-group row" style="display: none">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Pangkat <span class="required">*</span> :
               </label>

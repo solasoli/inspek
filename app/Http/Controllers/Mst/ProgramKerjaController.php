@@ -18,14 +18,14 @@ use App\Service\KegiatanService;
 
 date_default_timezone_set('Asia/Jakarta');
 
-class SasaranController extends Controller
+class ProgramKerjaController extends Controller
 {
     public function index()
     {
       $opd = Skpd::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->get();
       $kegiatan = Kegiatan::where("is_deleted", 0)->get();
-      return view('Mst.sasaran-list', [
+      return view('Mst.program_kerja-list', [
         'opd' => $opd,
         'kegiatan' => $kegiatan,
         'wilayah' => $wilayah,
@@ -35,7 +35,7 @@ class SasaranController extends Controller
     public function create()
     {
       $parent = Sasaran::where("is_deleted",0)->where("id_parent",0)->get();
-      return view('Mst.sasaran-form',[
+      return view('Mst.program_kerja-form',[
         'parent' => $parent
       ]);
     }
@@ -63,7 +63,7 @@ class SasaranController extends Controller
       KegiatanService::create($request->input());
 
       $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
-      return redirect('/mst/sasaran');
+      return redirect('/mst/program_kerja');
     }
 
     public function edit($id)
@@ -72,7 +72,7 @@ class SasaranController extends Controller
 
       $parent = Sasaran::where("is_deleted",0)->where("id_parent",0)->get();
 
-      return view('Mst.sasaran-form', [
+      return view('Mst.program_kerja-form', [
         'data' => $data,
         'parent' => $parent
       ]);
@@ -100,7 +100,7 @@ class SasaranController extends Controller
       KegiatanService::update($id, $request->input());
 
       $request->session()->flash('success', "Data berhasil diubah!");
-      return redirect('/mst/sasaran');
+      return redirect('/mst/program_kerja');
     }
 
     public function destroy(Request $request, $id)
@@ -120,7 +120,7 @@ class SasaranController extends Controller
       });
 
       $request->session()->flash('success', "Data berhasil Dihapus!");
-      return redirect('/mst/sasaran');
+      return redirect('/mst/program_kerja');
     }
 
     public function list_datatables_api()

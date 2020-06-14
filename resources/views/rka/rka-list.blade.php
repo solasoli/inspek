@@ -1,5 +1,13 @@
 @extends('layouts.app')
 @section('content')
+<style type="text/css">
+  .table th, .table td{
+    white-space: nowrap;
+  }
+  .table-responsive {
+    overflow-y: auto;
+  }
+</style>
 
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
@@ -37,17 +45,26 @@
           </div>
         </div>
         <div class="card-body">
-          <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
-           <thead>
-             <tr>
-               <th>Urusan Pemerintah</th>
-               <th>Organisasi</th>
-               <th>Program</th>
-               <th>Kegiatan</th>
-               <th style='width:150px'>Aksi</th>
-             </tr>
-           </thead>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
+             <thead>
+               <tr>
+                 <th>Urusan Pemerintah</th>
+                 <th>Organisasi</th>
+                 <th>Program</th>
+                 <th>Kegiatan</th>
+                 <th style='width:150px'>Aksi</th>
+               </tr>
+             </thead>
+             <tfoot>
+                 <th>Urusan Pemerintah</th>
+                 <th>Organisasi</th>
+                 <th>Program</th>
+                 <th>Kegiatan</th>
+                 <th></th>
+               </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -69,7 +86,7 @@ $(function() {
         sSearch: '',
         lengthMenu: '_MENU_ items/page',
       },
-      responsive: true,
+      responsive: false,
       processing: true,
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
@@ -78,7 +95,7 @@ $(function() {
         { data: 'o_label', name: 'o.label'},
         { data: 'p_label', name: 'p.label'},
         { data: 'k_label', name: 'k.label'},
-        { data: null, orderable: false, render: function ( data, type, row ) {
+        { data: null, orderable: false, searchable: false, render: function ( data, type, row ) {
           var return_button = "<a class='btn btn-info btn-xs' href='{{url()->to("/")}}/rka/detail/" + data.id + "'><i class='fa fa-eye'></i> Detail</a> ";
           return return_button;
         }},
@@ -88,7 +105,26 @@ $(function() {
         targets: 2,
         className: "text-center",
      }],
+     initComplete: function () {
+      console.log('wadadaw');
+          this.api().columns().every( function (idx) {
+              var column = this;
+              console.log('index');
+              console.log(console.log(idx));
+              var list_select = [0,1];
+              var list_text = [2,3];
+              if(list_select.indexOf(idx) != -1) {
+                generate_select_filter_datatables(column);
+              }
+
+              if(list_text.indexOf(idx) != -1) {
+                generate_text_filter_datatables(column);
+              }
+          } );
+      }
   });
+
+
   $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
 
   setTimeout(function() {

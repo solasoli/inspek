@@ -62,10 +62,14 @@ class SuratPerintahService
         $kegiatan = $kegiatan['kegiatan'];
       }
 
+      $dari = explode('-', $input['dari']);
+      $dari = $dari[2].'-'.$dari[1].'-'.$dari[0];
+      $sampai = explode('-', $input['sampai']);
+      $sampai = $sampai[2].'-'.$sampai[1].'-'.$sampai[0];
 
       $data = [
-        'dari' => $kegiatan->dari,
-        'sampai' => $kegiatan->sampai
+        'dari' => $dari,
+        'sampai' => $sampai
       ];
 
       $t = $sp;

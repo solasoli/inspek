@@ -68,21 +68,12 @@
                       @php
                       $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id_kegiatan) && $data->id_kegiatan == $row->id ? 'selected' : '';
                       @endphp
-                      <option value='{{$row->id}}' data-wilayah='{{$row->id_wilayah}}' {{$selected}}>{{$row->nama}}</option>
+                      <option value='{{$row->id}}' data-wilayah='{{$row->id_wilayah}}' data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}' data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->nama}}</option>
                     @endforeach
                   </select>
 
                 </div>
 
-              </div>
-
-              <div class="row">
-                <div class="col-md-3">
-                </div>
-                <div class="col-md-6">
-                  <div id="jadwal_warning" class="alert alert-warning" style="margin-bottom:10px; display: none;">
-                  </div>
-                </div>
               </div>
 
               <input type="hidden" name="wilayah">
@@ -102,6 +93,39 @@
 
                 </div>
               </div>
+
+              <div class="form-group row">
+                <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                  Dari
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+                    <input type="text" name='dari' id="dari_kalendar" value="{{ !is_null(old('dari')) ? old('dari') : (isset($data->dari) ? date("d-m-Y", strtotime($data->dari)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                  Sampai
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
+                    <input type="text" name='sampai' id="sampai_kalendar" value="{{ !is_null(old('sampai')) ? old('sampai') : (isset($data->sampai) ? date("d-m-Y", strtotime($data->sampai)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
+                  <div id="jadwal_warning" class="alert alert-warning" style="margin-bottom:10px; display: none;">
+                  </div>
+                </div>
+              </div>
+
             </div>
 
           <div class="card-header">
@@ -269,6 +293,8 @@
     });
 
     change_wilayah($(".kegiatan"));
+    kegiatan_filled_date();
+    check_jadwal_surat_perintah();
 
     $(".kegiatan").on("change", function(){
       change_wilayah($(this));
@@ -349,19 +375,28 @@
       });
     }
 
-    $(".kegiatan").on("change", function(){
+    $("#wilayah, #dari_kalendar, #sampai_kalendar").on("change", function(){
       check_jadwal_surat_perintah();
     });
+    $(".kegiatan").on('change', function() {
+      kegiatan_filled_date();
+    })
 
     function check_jadwal_surat_perintah(){
       $("#jadwal_warning").hide();
-      if($(".kegiatan").val() != ""){
-        $.post("/pkpt/surat_perintah/check_jadwal_by_id_kegiatan", {"kegiatan": $(".kegiatan").val(), "sp_id" : "{{ isset($data->id) ? $data->id : 0}}" }, function(res){
+      if($(".wilayah").val() != "" && $("#dari_kalendar").val() != "" && $("#sampai_kalendar").val() != ""){
+        $.post("/pkpt/surat_perintah/check_jadwal", {"id_wilayah": $(".kegiatan").find($("option:selected")).data('wilayah'), "dari" : $("#dari_kalendar").val(), "sampai": $("#sampai_kalendar").val(), "sp_id" : "{{ isset($data->id) ? $data->id : 0}}" }, function(res){
             if(res.show_warning == 1){
               $("#jadwal_warning").html(res.msg).show();
             }
         });
       }
+    }
+
+    function kegiatan_filled_date() {
+      var option_selected = $(".kegiatan").find($("option:selected"));
+      $("#dari_kalendar").val(option_selected.data('dari'));
+      $("#sampai_kalendar").val(option_selected.data('sampai'));
     }
 
     $(document).on('click', ".delete-anggota", function(){

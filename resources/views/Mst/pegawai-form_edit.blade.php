@@ -33,7 +33,37 @@ $(function() {
       <div class="modal-body">
         <form class="form-layout form-layout-5" method="post" enctype="multipart/form-data" id="form_edit">
           {{ csrf_field() }}
+
+
           <div class="form-group row">
+            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              NIP <span class="required">*</span> :
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" name="nip" value='{{ !is_null(old('nip')) ? old('nip') : (isset($data->nip) ? $data->nip : '') }}' required="required" class="form-control" type="text">
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              Nama & Gelar<span class="required">*</span> :
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" name="nama" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              Nama Asli <span class="required">*</span> :
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <input type="text" name="nama_asli" value='{{ !is_null(old('nama_asli')) ? old('nama_asli') : (isset($data->nama_asli) ? $data->nama_asli : '') }}' required="required" class="form-control" type="text">
+            </div>
+          </div>
+
+          <div class="form-group row" style="display: none">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               OPD <span class="required">*</span> :
             </label>
@@ -49,7 +79,7 @@ $(function() {
             </div>
           </div>
 
-          <div class="form-group row">
+          <div class="form-group row" style="display: none">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Eselon <span class="required">*</span> :
             </label>
@@ -67,7 +97,7 @@ $(function() {
 
 
 
-          <div class="form-group row">
+          <div class="form-group row" style="display: none">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Pangkat <span class="required">*</span> :
             </label>
@@ -112,34 +142,6 @@ $(function() {
                 <option value='{{$row->id}}' {{$selected}}>{{$row->name}}</option>
                 @endforeach
               </select>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              NIP <span class="required">*</span> :
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input type="text" name="nip" value='{{ !is_null(old('nip')) ? old('nip') : (isset($data->nip) ? $data->nip : '') }}' required="required" class="form-control" type="text">
-            </div>
-          </div>
-
-
-          <div class="form-group row">
-            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              Nama & Gelar<span class="required">*</span> :
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input type="text" name="nama" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              Nama Asli <span class="required">*</span> :
-            </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <input type="text" name="nama_asli" value='{{ !is_null(old('nama_asli')) ? old('nama_asli') : (isset($data->nama_asli) ? $data->nama_asli : '') }}' required="required" class="form-control" type="text">
             </div>
           </div>
 

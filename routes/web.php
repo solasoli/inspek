@@ -119,17 +119,17 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/edit/{id}', 'Mst\PeranController@update');
     });
 
-    Route::prefix('sasaran')->group(function () {
-      Route::get('/', 'Mst\SasaranController@index');
-      Route::get('/add', 'Mst\SasaranController@create');
-      Route::get('/edit/{id}', 'Mst\SasaranController@edit');
-      Route::get('/delete/{id}', 'Mst\SasaranController@destroy');
-      Route::get('/datatables', 'Mst\SasaranController@list_datatables_api');
-      Route::get('/get_kegiatan_by_id', 'Mst\SasaranController@get_kegiatan_by_id');
-      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\SasaranController@get_sasaran_by_id_kegiatan');
+    Route::prefix('program_kerja')->group(function () {
+      Route::get('/', 'Mst\ProgramKerjaController@index');
+      Route::get('/add', 'Mst\ProgramKerjaController@create');
+      Route::get('/edit/{id}', 'Mst\ProgramKerjaController@edit');
+      Route::get('/delete/{id}', 'Mst\ProgramKerjaController@destroy');
+      Route::get('/datatables', 'Mst\ProgramKerjaController@list_datatables_api');
+      Route::get('/get_kegiatan_by_id', 'Mst\ProgramKerjaController@get_kegiatan_by_id');
+      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\ProgramKerjaController@get_sasaran_by_id_kegiatan');
       /* Post section */
-      Route::post('/add', 'Mst\SasaranController@store');
-      Route::post('/edit/{id}', 'Mst\SasaranController@update');
+      Route::post('/add', 'Mst\ProgramKerjaController@store');
+      Route::post('/edit/{id}', 'Mst\ProgramKerjaController@update');
     });
 
 
@@ -156,6 +156,11 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Pkpt\SuratPerintahController@destroy');
       Route::get('/approve/{id}', 'Pkpt\SuratPerintahController@approve');
       Route::get('/datatables/{type?}', 'Pkpt\SuratPerintahController@list_datatables_api');
+      Route::get('/datatables_approve/{type?}', 'Pkpt\SuratPerintahController@list_datatables_approve_api');
+      Route::get('/datatables_penomeran_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_api');
+
+
+      Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
@@ -164,6 +169,8 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
       Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
       Route::post('/check_jadwal_by_id_kegiatan', 'Pkpt\SuratPerintahController@check_jadwal_by_id_kegiatan');
+
+      Route::post('/rubah_nomer', 'Pkpt\SuratPerintahController@rubah_nomer');
     });
   });
 

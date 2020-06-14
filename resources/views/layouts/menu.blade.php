@@ -17,8 +17,8 @@
   <!-- <li class="nav-item"><a href="/mst/periode" class="nav-link">Periode</a></li> -->
   <li class="nav-item"><a href="/mst/skpd" class="nav-link">Perangkat Daerah</a></li>
   <li class="nav-item"><a href="/mst/pegawai" class="nav-link">Data Pegawai</a></li>
-  <li class="nav-item"><a href="/mst/struktur" class="nav-link">Struktur</a></li>
-  <li class="nav-item"><a href="/mst/sasaran" class="nav-link">Program Kerja</a></li>
+  <li class="nav-item"><a href="/mst/struktur" class="nav-link">Struktur Organigram</a></li>
+  <li class="nav-item"><a href="/mst/program_kerja" class="nav-link">Program Kerja</a></li>
   <!-- <li class="nav-item"><a href="/mst/jabatan" class="nav-link">Jabatan</a></li> -->
   <!-- <li class="nav-item"><a href="/mst/peran" class="nav-link">Peran Irban</a></li> -->
   <!-- <li class="nav-item"><a href="/mst/wilayah" class="nav-link">Kelola Irban</a></li> -->
@@ -36,6 +36,7 @@
 </a>
 <ul class="br-menu-sub nav flex-column">
   <li class="nav-item"><a href="/pkpt/surat_perintah" class="nav-link">Buat Surat Perintah</a></li>
+  <li class="nav-item"><a href="/pkpt/surat_perintah/nomer" class="nav-link">Penomeran Surat</a></li>
   <li class="nav-item"><a href="/pkpt/surat_perintah/kalendar" class="nav-link">Kalender Kerja</a></li>
   <!-- <li class="nav-item"><a href="/laporan/lhp" class="nav-link">LHP</a></li> -->
 </ul>
