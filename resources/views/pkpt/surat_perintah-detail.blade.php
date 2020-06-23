@@ -172,7 +172,45 @@
             <div class="row">
               <div class="col-2">Untuk</div>
               <div class="col-1">:</div>
-              <div class="col-8">{{$data->nama_kegiatan}}</div>
+              <div class="col-8">
+            <ol style="padding-left: 15px;">
+              <li>{{$data->nama_kegiatan}}, @foreach($sasaran as $idx => $row)
+                {{ $row->nama }} pada {{$data->nama_skpd}}
+              @endforeach pada tanggal {{date("d", strtotime($data->dari)) }} 
+              {{bulan_indonesia(date("m", strtotime($data->dari)))}}
+              {{date("Y", strtotime($data->dari)) }} 
+
+              @if($data->dari != $data->sampai)
+              sampai dengan
+              {{date("d", strtotime($data->sampai)) }} 
+              {{bulan_indonesia(date("m", strtotime($data->sampai)))}}
+              {{date("Y", strtotime($data->sampai)) }} 
+              @endif </li>
+              <li>Melaporkan hasilnya pada Inspektur daerah Kota Bogor</li>
+              <li>Melaksanakan surat perintah tugas ini dengan penuh tanggung jawab</li>
+
+            </ol>
+          </div>
+              {{-- <div class="col-8">1.{{$data->nama_kegiatan}} , @foreach($sasaran as $idx => $row)
+                {{ $row->nama }}
+              @endforeach pada tanggal {{date("d", strtotime($data->dari)) }} 
+              {{bulan_indonesia(date("m", strtotime($data->dari)))}}
+              {{date("Y", strtotime($data->dari)) }} 
+
+              @if($data->dari != $data->sampai)
+              sampai dengan
+              {{date("d", strtotime($data->sampai)) }} 
+              {{bulan_indonesia(date("m", strtotime($data->sampai)))}}
+              {{date("Y", strtotime($data->sampai)) }} 
+              @endif pada {{$data->nama_skpd}} 
+              
+              <br/>
+              2. Menjalankan tugas dengan sebaik-baiknya.
+              <br/>
+              3. Melaporkan hasil pekerjaan kepada inspektur
+              
+              </div> --}}
+
             </div>
             <br>
             <div class="row">
