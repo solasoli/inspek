@@ -69,8 +69,8 @@
                   <div style="margin-left: 0px">
                     <h5>PEMERINTAH DAERAH KOTA BOGOR</h5>
                     <h3>INSPEKTORAT DAERAH</h3>
-                    <p>Jalan Pahlawan Belakang Nomor 144 Kota Bogor 16132\n
-                      Telp. (0251) 8313274/Faks. (0251) 8373229\n
+                    <p>Jalan Pahlawan Belakang Nomor 144 Kota Bogor 16132<br>
+                      Telp. (0251) 8313274/Faks. (0251) 8373229<br>
                       Website: inspektorat.kotabogor.go.id
                     </p>
                   </div>
@@ -212,7 +212,7 @@
               </div> --}}
 
             </div>
-            <br>
+            {{-- <br>
             <div class="row">
               <div class="col-2">Sasaran</div>
               <div class="col-1">:</div>
@@ -256,7 +256,7 @@
               <div class="col-8">{{$data->nama_skpd}}</div>
             </div>
             <br>
-            <br>
+            <br> --}}
 
             <div class="row">
               <div class="col-6"></div>
