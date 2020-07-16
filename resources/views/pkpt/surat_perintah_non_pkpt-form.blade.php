@@ -60,7 +60,7 @@
                 Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='make_kegiatan' autocomplete="off" value='{{ !is_null(old('make_kegiatan')) ? old('make_kegiatan') : (isset($current_kegiatan->nama) ? $current_kegiatan->nama : '') }}' required="required" class="form-control" type="text" >
+                <input name='make_kegiatan' autocomplete="off" value='{{ !is_null(old('make_kegiatan')) ? old('make_kegiatan') : (isset($current_progker->nama) ? $current_progker->nama : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
             <div class="form-group row">
@@ -346,7 +346,7 @@
       get_pengendali_teknis(val);
       get_ketua_tim(val);
       get_anggota(val);
-      get_pd({{ isset($current_kegiatan) ? $current_kegiatan->id_skpd : 0 }});
+      get_pd({{ isset($current_progker) ? $current_progker->id_skpd : 0 }});
 
       check_jadwal_surat_perintah();
     }

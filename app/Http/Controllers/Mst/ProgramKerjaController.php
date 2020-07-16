@@ -15,6 +15,7 @@ use App\Kegiatan;
 use App\Skpd;
 use App\Wilayah;
 use App\Service\KegiatanService;
+use App\ProgramKerja;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -24,10 +25,10 @@ class ProgramKerjaController extends Controller
     {
       $opd = Skpd::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->get();
-      $kegiatan = Kegiatan::where("is_deleted", 0)->get();
+      $program_kerja = ProgramKerja::where("is_deleted", 0)->get();
       return view('Mst.program_kerja-list', [
         'opd' => $opd,
-        'kegiatan' => $kegiatan,
+        'program_kerja' => $program_kerja,
         'wilayah' => $wilayah,
       ]);
     }
@@ -125,12 +126,11 @@ class ProgramKerjaController extends Controller
 
     public function list_datatables_api()
     {
-      $data = DB::table("mst_kegiatan AS k")
-      ->select(DB::raw("k.id, k.nama AS kegiatan, w.nama AS wilayah, skpd.name AS skpd, k.dari, k.sampai, k.type_pkpt"))
-      ->join("mst_skpd AS skpd", "skpd.id", "=", "k.id_skpd")
-      ->join("mst_wilayah AS w", "w.id", "=", "k.id_wilayah")
-      ->where("k.is_deleted", 0)
-      ->orderBy('k.id', 'ASC');
+      $data = DB::table("mst_program_kerja AS pk")
+      ->select(DB::raw("pk.id, pk.nama AS kegiatan, pk.nama AS wilayah, skpd.name AS skpd, pk.dari, pk.sampai, pk.type_pkpt"))
+      ->join("mst_skpd AS skpd", "skpd.id", "=", "pk.id_skpd")
+      ->join("mst_wilayah AS w", "w.id", "=", "pk.id_wilayah")
+      ->where("pk.is_deleted", 0);
       return Datatables::of($data)->make(true);
     }
 
