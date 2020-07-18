@@ -14,7 +14,9 @@ use App\Sasaran;
 use App\Kegiatan;
 use App\Skpd;
 use App\Wilayah;
+use App\Service\ProgramKerjaService;
 use App\Service\KegiatanService;
+use App\ProgramKerja;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -24,10 +26,10 @@ class ProgramKerjaController extends Controller
     {
       $opd = Skpd::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->get();
-      $kegiatan = Kegiatan::where("is_deleted", 0)->get();
+      $program_kerja = ProgramKerja::where("is_deleted", 0)->get();
       return view('Mst.program_kerja-list', [
         'opd' => $opd,
-        'kegiatan' => $kegiatan,
+        'program_kerja' => $program_kerja,
         'wilayah' => $wilayah,
       ]);
     }
@@ -59,8 +61,8 @@ class ProgramKerjaController extends Controller
         'sampai.required' => 'Sampai harus diisi!',
       ]);
 
-
-      KegiatanService::create($request->input());
+      // dd($request->input());
+      ProgramKerjaService::create($request->input());
 
       $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/program_kerja');
@@ -97,7 +99,7 @@ class ProgramKerjaController extends Controller
         'sampai.required' => 'Sampai harus diisi!',
       ]);
 
-      KegiatanService::update($id, $request->input());
+      ProgramKerjaService::update($id, $request->input());
 
       $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/program_kerja');
@@ -108,15 +110,13 @@ class ProgramKerjaController extends Controller
       $logged_user = Auth::user();
 
       DB::transaction(function() use ($id) {
-        $t = Kegiatan::findOrFail($id);
+        $t = ProgramKerja::findOrFail($id);
         $t->deleted_at = date('Y-m-d H:i:s');
         $t->deleted_by = Auth::id();
         $t->is_deleted = 1;
         $t->save();
 
-        DB::table('mst_sasaran')
-        ->where('id_kegiatan', $id)
-        ->update(['is_deleted' => 1]);
+        KegiatanService::delete_by_program_kerja($id);
       });
 
       $request->session()->flash('success', "Data berhasil Dihapus!");
@@ -125,18 +125,17 @@ class ProgramKerjaController extends Controller
 
     public function list_datatables_api()
     {
-      $data = DB::table("mst_kegiatan AS k")
-      ->select(DB::raw("k.id, k.nama AS kegiatan, w.nama AS wilayah, skpd.name AS skpd, k.dari, k.sampai, k.type_pkpt"))
-      ->join("mst_skpd AS skpd", "skpd.id", "=", "k.id_skpd")
-      ->join("mst_wilayah AS w", "w.id", "=", "k.id_wilayah")
-      ->where("k.is_deleted", 0)
-      ->orderBy('k.id', 'ASC');
+      $data = DB::table("mst_program_kerja AS pk")
+      ->select(DB::raw("pk.id, pk.nama AS kegiatan, pk.nama AS wilayah, skpd.name AS skpd, pk.dari, pk.sampai, pk.type_pkpt"))
+      ->join("mst_skpd AS skpd", "skpd.id", "=", "pk.id_skpd")
+      ->join("mst_wilayah AS w", "w.id", "=", "pk.id_wilayah")
+      ->where("pk.is_deleted", 0);
       return Datatables::of($data)->make(true);
     }
 
-    public function get_kegiatan_by_id(Request $request)
+    public function get_program_kerja_by_id(Request $request)
     {
-      $data = Kegiatan::find($request->input('id'));
+      $data = ProgramKerja::find($request->input('id'));
 
       return response()->json($data);
     }

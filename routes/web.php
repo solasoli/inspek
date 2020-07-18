@@ -37,7 +37,33 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
     });
+    
+    Route::prefix('kegiatan')->group(function () {
+      Route::get('/', 'Mst\KegiatanController@index');
+      Route::get('/add', 'Mst\KegiatanController@create');
+      Route::get('/edit/{id}', 'Mst\KegiatanController@edit');
+      Route::get('/delete/{id}', 'Mst\KegiatanController@destroy');
+      Route::get('/datatables', 'Mst\KegiatanController@list_datatables_api');
+      Route::get('/get_kegiatan_by_id', 'Mst\KegiatanController@get_kegiatan_by_id');
+      Route::get('/get_kegiatan_by_id_skpd', 'Mst\KegiatanController@get_kegiatan_by_id_skpd');
+      /* Post section */
+      Route::post('/add', 'Mst\KegiatanController@store');
+      Route::post('/edit/{id}', 'Mst\KegiatanController@update');
+    });
 
+    Route::prefix('sasaran')->group(function () {
+      Route::get('/', 'Mst\SasaranController@index');
+      Route::get('/add', 'Mst\SasaranController@create');
+      Route::get('/edit/{id}', 'Mst\SasaranController@edit');
+      Route::get('/delete/{id}', 'Mst\SasaranController@destroy');
+      Route::get('/datatables', 'Mst\SasaranController@list_datatables_api');
+      Route::get('/get_sasaran_by_id', 'Mst\SasaranController@get_kegiatan_by_id');
+      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\SasaranController@get_sasaran_by_id_kegiatan');
+      Route::get('/get_sasaran_by_id_skpd', 'Mst\SasaranController@get_kegiatan_by_id_skpd');
+      /* Post section */
+      Route::post('/add', 'Mst\SasaranController@store');
+      Route::post('/edit/{id}', 'Mst\SasaranController@update');
+    });
 
     Route::prefix('periode')->group(function () {
       Route::get('/', 'Mst\PeriodeController@index');
@@ -125,8 +151,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Mst\ProgramKerjaController@edit');
       Route::get('/delete/{id}', 'Mst\ProgramKerjaController@destroy');
       Route::get('/datatables', 'Mst\ProgramKerjaController@list_datatables_api');
-      Route::get('/get_kegiatan_by_id', 'Mst\ProgramKerjaController@get_kegiatan_by_id');
-      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\ProgramKerjaController@get_sasaran_by_id_kegiatan');
+      Route::get('/get_program_kerja_by_id', 'Mst\ProgramKerjaController@get_program_kerja_by_id');
       /* Post section */
       Route::post('/add', 'Mst\ProgramKerjaController@store');
       Route::post('/edit/{id}', 'Mst\ProgramKerjaController@update');

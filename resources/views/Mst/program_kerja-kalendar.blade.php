@@ -14,7 +14,7 @@
   $list_arr = [];
 @endphp
 
-@foreach($kegiatan as $idx => $row)
+@foreach($program_kerja as $idx => $row)
   @php
   $listcolor = [
     1 => [

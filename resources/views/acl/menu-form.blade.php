@@ -62,6 +62,27 @@
                 <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
               </div>
             </div>
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Url : <span class="tx-danger">*</span></label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Parent : <span class="tx-danger">*</span></label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Slug : <span class="tx-danger">*</span></label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
+              </div>
+            </div>
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">URL : <span class="tx-danger">*</span></label>
               <div class="col-md-6 col-sm-6 col-xs-12">

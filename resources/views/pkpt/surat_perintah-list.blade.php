@@ -9,6 +9,10 @@
   .table-responsive {
     overflow-y: auto;
   }
+
+  .form-inline.dt-bootstrap {
+    display: block !important;
+  } 
 </style>
 
 <div class="modal" id="type_pkpt_modal">
