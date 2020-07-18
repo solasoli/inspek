@@ -10,6 +10,7 @@ use App\SuratPerintah;
 use App\SuratPerintahAnggota;
 use App\SuratPerintahSasaran;
 use App\Service\KegiatanService;
+use App\Service\ProgramKerjaService;
 
 class SuratPerintahService
 {
@@ -48,18 +49,18 @@ class SuratPerintahService
           'sasaran' => $input['sasaran_kegiatan'],
         ];
 
-        if(isset($sp->id_kegiatan)) {
-          $kegiatan = KegiatanService::update($sp->id_kegiatan, $data_kegiatan);
+        if(isset($sp->id_program_kerja)) {
+          $program_kerja = ProgramKerjaService::update($sp->id_program_kerja, $data_kegiatan);
         } else {
-          $kegiatan = KegiatanService::create($data_kegiatan, $type);
+          $program_kerja = ProgramKerjaService::create($data_kegiatan, $type);
         }
-        
-        // insert sasaran kegiatan
-        foreach($kegiatan['sasaran'] as $idx => $row){
-          $new_sasaran[] = $row->id;
-        } 
 
-        $kegiatan = $kegiatan['kegiatan'];
+        $kegiatan = $program_kerja['kegiatan'];
+
+        // insert to pkpt sasaran surat perintah
+        foreach($program_kerja['sasaran'] as $idx => $row){
+          $new_sasaran[] = $row->id;
+        }
       }
 
       $dari = explode('-', $input['dari']);
@@ -82,6 +83,7 @@ class SuratPerintahService
       $t->id_program_kerja = $kegiatan->id_program_kerja;
       $t->no_surat = '';
       $t->dasar_surat = $input['dasar_surat'];
+      $t->tembusan = $input['tembusan'];
       $t->untuk = '';
       $t->dari = $data['dari'];
       $t->sampai = $data['sampai'];
@@ -121,6 +123,9 @@ class SuratPerintahService
         $sa->id_sasaran = $row;
         $sa->save();
       }
+
+
+      DB::commit();
     });
   }
 

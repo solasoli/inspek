@@ -277,8 +277,13 @@
               </div>
             </div>
             <br>
-            
-            
+            {{-- Tembusan --}}
+            @if(strlen(trim($data->tembusan)) > 0)
+            <div class="tembusan">
+              Tembusan : <br>
+              {!! nl2br($data->tembusan) !!}
+            </div>
+            @endif
 
           </div>
         </div>

@@ -60,12 +60,12 @@
         'textColor' => '#721c24',
         'label' => 'NON-PKPT'
       ],
-      3 => [
-        'bgColor' => '#4b476d',
-        'borderColor' => '#4b476d',
-        'textColor' => '',
-        'label' => 'KHUSUS'
-      ]
+      // 3 => [
+      //   'bgColor' => '#4b476d',
+      //   'borderColor' => '#4b476d',
+      //   'textColor' => '',
+      //   'label' => 'KHUSUS'
+      // ]
     ];
 
     $list_arr[] = [

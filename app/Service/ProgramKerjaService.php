@@ -27,8 +27,7 @@ class ProgramKerjaService
 
   private static function proccess_data(ProgramKerja $program_kerja, $data) {
 
-    $kegiatan = null;
-    DB::transaction(function() use ($program_kerja, $data, $kegiatan) {
+    $result = DB::transaction(function() use ($program_kerja, $data) {
 
       $dari = explode('-', $data['dari']);
       $dari = $dari[2].'-'.$dari[1].'-'.$dari[0];
@@ -74,15 +73,16 @@ class ProgramKerjaService
       // buat kegiatan
       $data['program_kerja'] = $t->id;
       $kegiatan = KegiatanService::createOrUpdate($t->id, $data);
-
       DB::commit();
+
+      return [
+        'program_kerja' => $program_kerja,
+        'kegiatan' => $kegiatan['kegiatan'],
+        'sasaran' => $kegiatan['sasaran']
+      ];
     });
 
-    return [
-      'program_kerja' => $program_kerja,
-      'kegiatan' => $kegiatan['kegiatan'],
-      'sasaran' => $kegiatan['sasaran']
-    ];
+    return $result;
   }
 
   // mengambil kegiatan yang di sort berdasarkan

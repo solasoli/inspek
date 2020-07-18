@@ -163,6 +163,15 @@
               </div>
             </div>
 
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Tembusan
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <textarea name='tembusan' class="form-control">{{ !is_null(old('tembusan')) ? old('tembusan') : (isset($data->tembusan) ? $data->tembusan : '') }}</textarea>
+              </div>
+            </div>
+
           </div>
 
           <div class="card-header">
