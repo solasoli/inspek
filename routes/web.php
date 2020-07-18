@@ -58,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Mst\SasaranController@destroy');
       Route::get('/datatables', 'Mst\SasaranController@list_datatables_api');
       Route::get('/get_sasaran_by_id', 'Mst\SasaranController@get_kegiatan_by_id');
+      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\SasaranController@get_sasaran_by_id_kegiatan');
       Route::get('/get_sasaran_by_id_skpd', 'Mst\SasaranController@get_kegiatan_by_id_skpd');
       /* Post section */
       Route::post('/add', 'Mst\SasaranController@store');
@@ -150,8 +151,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Mst\ProgramKerjaController@edit');
       Route::get('/delete/{id}', 'Mst\ProgramKerjaController@destroy');
       Route::get('/datatables', 'Mst\ProgramKerjaController@list_datatables_api');
-      Route::get('/get_kegiatan_by_id', 'Mst\ProgramKerjaController@get_kegiatan_by_id');
-      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\ProgramKerjaController@get_sasaran_by_id_kegiatan');
+      Route::get('/get_program_kerja_by_id', 'Mst\ProgramKerjaController@get_program_kerja_by_id');
       /* Post section */
       Route::post('/add', 'Mst\ProgramKerjaController@store');
       Route::post('/edit/{id}', 'Mst\ProgramKerjaController@update');

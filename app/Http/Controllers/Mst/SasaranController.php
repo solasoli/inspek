@@ -123,10 +123,10 @@ class SasaranController extends Controller
       return Datatables::of($data)->make(true);
     }
 
-    public function get_kegiatan_by_id(Request $request)
+    public function get_sasaran_by_id_kegiatan(Request $request)
     {
       $id = $request->input('id');
-      $data = Sasaran::where("is_deleted", 0)->where("id", $id)->first();
+      $data = Sasaran::where("is_deleted", 0)->where("id_kegiatan", $id)->get();
 
       return response()->json($data);
     }

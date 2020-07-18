@@ -6,7 +6,7 @@ $(function() {
     var id = $(e.relatedTarget).data('id');
 
     if(id > 0) {
-      $.get("{{url('')}}/mst/program_kerja/get_kegiatan_by_id?id=" + id, function(data) {
+      $.get("{{url('')}}/mst/program_kerja/get_program_kerja_by_id?id=" + id, function(data) {
         // console.log(data);
         $('input[name="nama"]').val(data.nama);
         $('select[name="wilayah"]').val(data.id_wilayah).trigger("change");
@@ -14,22 +14,25 @@ $(function() {
         get_pd(data.id_skpd);
         $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
         $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
-      });
 
-      $.get("{{url('')}}/mst/program_kerja/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
-        // console.log(data);
-        $.each(data, function(idx, val){
-          var r = "<tr>";
-          r += "<td>";
-          r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
-          r += "</td>";
-          r += "<td>";
-          r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-          r += "</td>";
-          r += "</tr>";
-          $("#cover-sasaran_edit").append(r);
+      }).done(function(res) {
+
+        $.get("{{url('')}}/mst/program_kerja/get_sasaran_by_id_kegiatan?id=" + res.id, function(data) {
+          // console.log(data);
+          $.each(data, function(idx, val){
+            var r = "<tr>";
+            r += "<td>";
+            r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
+            r += "</td>";
+            r += "<td>";
+            r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+            r += "</td>";
+            r += "</tr>";
+            $("#cover-sasaran_edit").append(r);
+          });
         });
       });
+
 
       $("#form_edit").attr('action', '{{url()->current()}}/edit/'+ id +'');
     } else {
@@ -85,7 +88,7 @@ $(function() {
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Edit Kegiatan</h4>
+        <h4 class="modal-title"><span id='popup-method-program-kerja'></span> Program Kerja</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 

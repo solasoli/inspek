@@ -23,6 +23,12 @@ class KegiatanService
     return self::proccess_data($t, $data);
   }
 
+  public static function createOrUpdate($id_kegiatan, $data) {
+
+    $t = Kegiatan::findOrNew($id_kegiatan);
+    return self::proccess_data($t, $data);
+  }
+
   private static function proccess_data(Kegiatan $kegiatan, $data) {
 
     DB::transaction(function() use ($kegiatan, $data) {
@@ -39,15 +45,16 @@ class KegiatanService
 
       $t = $kegiatan;
       $t->nama = $data['nama'];
-      $t->id_wilayah = $data['wilayah'];
+      // $t->id_wilayah = $data['wilayah'];
       $t->id_skpd = $data['opd'];
+      $t->id_program_kerja = $data['program_kerja'];
 
-      if(isset($data['type_pkpt'])) {
-        $t->type_pkpt = $data['type_pkpt'];
-      }
+      // if(isset($data['type_pkpt'])) {
+      //   $t->type_pkpt = $data['type_pkpt'];
+      // }
       
-      $t->dari = $use['dari'].' 00:00:00';
-      $t->sampai = $use['sampai'].' 00:00:00';
+      // $t->dari = $use['dari'].' 00:00:00';
+      // $t->sampai = $use['sampai'].' 00:00:00';
       $t->created_at = date('Y-m-d H:i:s');
       $t->created_by = Auth::id();
       $t->save();
@@ -64,9 +71,9 @@ class KegiatanService
       }
 
       // update dari & sampai surat perintah
-      DB::table('pkpt_surat_perintah')
-      ->where('id_kegiatan', $t->id)
-      ->update(['dari' => $t->dari, 'sampai' => $t->sampai]);
+      // DB::table('pkpt_surat_perintah')
+      // ->where('id_kegiatan', $t->id)
+      // ->update(['dari' => $t->dari, 'sampai' => $t->sampai]);
       
       DB::commit();
     });
@@ -75,6 +82,37 @@ class KegiatanService
       'kegiatan' => $kegiatan,
       'sasaran' => Sasaran::where("is_deleted", 0)->where("id_kegiatan", $kegiatan->id)->get()
     ];
+  }
+
+  public static function delete($id) {
+    $t = Kegiatan::findOrFail($id);
+    $t->deleted_at = date('Y-m-d H:i:s');
+    $t->deleted_by = Auth::id();
+    $t->is_deleted = 1;
+    $t->save();
+
+    DB::table('mst_sasaran')
+    ->where('id_kegiatan', $id)
+    ->update(['is_deleted' => 1]);
+  }
+
+  public static function get_kegiatan_by_type_pkpt($type_pkpt = 1) {
+    $data = DB::table("mst_program_kerja AS pk")
+    ->select(DB::raw("k.*,pk.dari,pk.sampai,pk.id_wilayah"))
+    ->join("mst_kegiatan AS k", "pk.id","=","k.id_program_kerja")
+    ->where("pk.is_deleted", 0)
+    ->where("k.is_deleted", 0)
+    ->where('pk.type_pkpt', $type_pkpt)
+    ->get();
+
+    return $data;
+  }
+
+  public static function delete_by_program_kerja($id_program_kerja) {
+    $t = Kegiatan::where('id_program_kerja', $id_program_kerja)->get();
+    foreach($t as $idx => $row) {
+      Self::delete($row->id);
+    }
   }
 
   // mengambil kegiatan yang di sort berdasarkan

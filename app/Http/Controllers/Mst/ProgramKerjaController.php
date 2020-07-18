@@ -14,6 +14,7 @@ use App\Sasaran;
 use App\Kegiatan;
 use App\Skpd;
 use App\Wilayah;
+use App\Service\ProgramKerjaService;
 use App\Service\KegiatanService;
 use App\ProgramKerja;
 
@@ -60,8 +61,8 @@ class ProgramKerjaController extends Controller
         'sampai.required' => 'Sampai harus diisi!',
       ]);
 
-
-      KegiatanService::create($request->input());
+      // dd($request->input());
+      ProgramKerjaService::create($request->input());
 
       $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/program_kerja');
@@ -98,7 +99,7 @@ class ProgramKerjaController extends Controller
         'sampai.required' => 'Sampai harus diisi!',
       ]);
 
-      KegiatanService::update($id, $request->input());
+      ProgramKerjaService::update($id, $request->input());
 
       $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/program_kerja');
@@ -109,15 +110,13 @@ class ProgramKerjaController extends Controller
       $logged_user = Auth::user();
 
       DB::transaction(function() use ($id) {
-        $t = Kegiatan::findOrFail($id);
+        $t = ProgramKerja::findOrFail($id);
         $t->deleted_at = date('Y-m-d H:i:s');
         $t->deleted_by = Auth::id();
         $t->is_deleted = 1;
         $t->save();
 
-        DB::table('mst_sasaran')
-        ->where('id_kegiatan', $id)
-        ->update(['is_deleted' => 1]);
+        KegiatanService::delete_by_program_kerja($id);
       });
 
       $request->session()->flash('success', "Data berhasil Dihapus!");
@@ -134,9 +133,9 @@ class ProgramKerjaController extends Controller
       return Datatables::of($data)->make(true);
     }
 
-    public function get_kegiatan_by_id(Request $request)
+    public function get_program_kerja_by_id(Request $request)
     {
-      $data = Kegiatan::find($request->input('id'));
+      $data = ProgramKerja::find($request->input('id'));
 
       return response()->json($data);
     }

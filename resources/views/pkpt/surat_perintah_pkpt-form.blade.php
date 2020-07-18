@@ -63,10 +63,10 @@
                   Pilih Kegiatan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <select name='program_kerja' class="form-control select2 program_kerja">
-                    @foreach($program_kerja as $idx => $row)
+                  <select name='kegiatan' class="form-control select2 kegiatan">
+                    @foreach($kegiatan as $idx => $row)
                       @php
-                      $selected = !is_null(old('program_kerja')) && old('program_kerja') == $row->id ? 'selected' : isset($data->id_program_kerja) && $data->id_program_kerja == $row->id ? 'selected' : '';
+                      $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id == $row->id ? 'selected' : '';
                       @endphp
                       <option value='{{$row->id}}' data-wilayah='{{$row->id_wilayah}}' data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}' data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->nama}}</option>
                     @endforeach
@@ -424,6 +424,7 @@
         $(".sasaran").html('');
         // console.log(data);
         $.each(data, function(idx, val){
+          console.log(val)
           var selected = data_edit.indexOf(val.id) != -1 ? 'selected' : '';
           var option = "<option value='"+val.id+"' "+ selected+">"+val.nama+"</option>";
           $(".sasaran").append(option);

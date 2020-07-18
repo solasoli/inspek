@@ -79,6 +79,7 @@ class SuratPerintahService
       $t->id_pengendali_teknis = $input['pengendali_teknis'];
       $t->id_ketua_tim = $input['ketua_tim'];
       $t->id_kegiatan = $kegiatan->id;
+      $t->id_program_kerja = $kegiatan->id_program_kerja;
       $t->no_surat = '';
       $t->dasar_surat = $input['dasar_surat'];
       $t->untuk = '';

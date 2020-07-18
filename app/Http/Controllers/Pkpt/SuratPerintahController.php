@@ -40,14 +40,14 @@ class SuratPerintahController extends Controller
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
       
       $periode = Periode::where("is_deleted", 0)->get();
-      $program_kerja = ProgramKerja::where("is_deleted", 0)->where("type_pkpt", 1)->get();
+      $kegiatan = KegiatanService::get_kegiatan_by_type_pkpt(1);
       $list_inspektur = $this->get_current_inspektur(0);
 
       $dasar_surat = DasarSurat::first();
       $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
 
       return view('pkpt.'. $surat_perintah_file,[
-        'program_kerja' => $program_kerja,
+        'kegiatan' => $kegiatan,
         'wilayah' => $wilayah,
         'dasar_surat' => $dasar_surat,
         'periode' => $periode,
@@ -73,7 +73,7 @@ class SuratPerintahController extends Controller
 
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
       $periode = Periode::where("is_deleted", 0)->get();
-      $program_kerja = ProgramKerja::where("is_deleted", 0)->where("type_pkpt", 1)->get();
+      $kegiatan = KegiatanService::get_kegiatan_by_type_pkpt(1);
       $list_inspektur = $this->get_current_inspektur(0);
 
       $type = $surat_perintah->is_pkpt;
@@ -91,7 +91,7 @@ class SuratPerintahController extends Controller
 
       return view('pkpt.'.$surat_perintah_file,[
         'data' => $surat_perintah,
-        'program_kerja' => $program_kerja,
+        'kegiatan' => $kegiatan,
         'wilayah' => $wilayah,
         'dasar_surat' => $dasar_surat,
         'periode' => $periode,
