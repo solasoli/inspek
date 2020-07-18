@@ -146,7 +146,7 @@ class SuratPerintahController extends Controller
       ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
       ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
       ->join("mst_program_kerja AS pk", "pk.id", "=", "sp.id_program_kerja")
-      ->join("mst_skpd AS skpd", "skpd.id", "=","k.id_skpd")
+      ->join("mst_skpd AS skpd", "skpd.id", "=","pk.id_skpd")
       ->where('sp.is_deleted', 0)
       ->where("sp.id", $id)
       ->first();
