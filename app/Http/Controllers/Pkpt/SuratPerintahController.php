@@ -23,6 +23,7 @@ use App\Model\Pegawai\Peran;
 use App\Kegiatan;
 use App\Service\KegiatanService;
 use App\Service\PegawaiService;
+use App\Service\ProgramKerjaService;
 use App\Service\SuratPerintahService;
 use App\ProgramKerja;
 
@@ -40,14 +41,14 @@ class SuratPerintahController extends Controller
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
       
       $periode = Periode::where("is_deleted", 0)->get();
-      $kegiatan = KegiatanService::get_kegiatan_by_type_pkpt(1);
+      $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
       $list_inspektur = $this->get_current_inspektur(0);
 
       $dasar_surat = DasarSurat::first();
       $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
 
       return view('pkpt.'. $surat_perintah_file,[
-        'kegiatan' => $kegiatan,
+        'program_kerja' => $program_kerja,
         'wilayah' => $wilayah,
         'dasar_surat' => $dasar_surat,
         'periode' => $periode,
@@ -73,7 +74,7 @@ class SuratPerintahController extends Controller
 
       $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
       $periode = Periode::where("is_deleted", 0)->get();
-      $kegiatan = KegiatanService::get_kegiatan_by_type_pkpt(1);
+      $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
       $list_inspektur = $this->get_current_inspektur(0);
 
       $type = $surat_perintah->is_pkpt;
@@ -91,7 +92,7 @@ class SuratPerintahController extends Controller
 
       return view('pkpt.'.$surat_perintah_file,[
         'data' => $surat_perintah,
-        'kegiatan' => $kegiatan,
+        'program_kerja' => $program_kerja,
         'wilayah' => $wilayah,
         'dasar_surat' => $dasar_surat,
         'periode' => $periode,
@@ -135,7 +136,7 @@ class SuratPerintahController extends Controller
           pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
           ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
           pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
-          pk.nama AS nama_kegiatan, skpd.name AS nama_skpd"))
+          pk.sub_kegiatan AS nama_kegiatan, skpd.name AS nama_skpd"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
       ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
       ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
@@ -165,7 +166,7 @@ class SuratPerintahController extends Controller
     public function kalendar()
     {
       $data = DB::table('pkpt_surat_perintah AS sp')
-      ->select(DB::raw("sp.id, sp.dari, sp.sampai, sp.is_pkpt, pk.nama AS nama_kegiatan"))
+      ->select(DB::raw("sp.id, sp.dari, sp.sampai, sp.is_pkpt, pk.sub_kegiatan AS nama_kegiatan"))
       ->join('mst_program_kerja AS pk', 'pk.id','=','sp.id_program_kerja')
       ->where("sp.is_deleted", 0)
       ->get();
@@ -178,7 +179,7 @@ class SuratPerintahController extends Controller
     {
       $data = DB::table("pkpt_surat_perintah AS sp")
       ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
-      w.nama AS wilayah, pk.nama AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
+      w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
       ->join("mst_program_kerja As pk", "pk.id", "=", "sp.id_program_kerja")
       ->join("pkpt_surat_perintah_sasaran As sps", "sp.id", "=", "sps.id_surat_perintah")
@@ -187,7 +188,7 @@ class SuratPerintahController extends Controller
       ->where('sps.is_deleted', 0)
       ->where('w.is_deleted', 0)
       ->where('pk.is_deleted', 0)
-      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.nama'])
+      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
       ->orderBy('sp.id', 'ASC');
       if($type > 0) {
         $data = $data->where("sp.is_pkpt", $type);
@@ -200,7 +201,7 @@ class SuratPerintahController extends Controller
     {
       $data = DB::table("pkpt_surat_perintah AS sp")
       ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
-      w.nama AS wilayah, pk.nama AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
+      w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
       ->join("mst_program_kerja As pk", "pk.id", "=", "sp.id_program_kerja")
       ->join("pkpt_surat_perintah_sasaran As sps", "sp.id", "=", "sps.id_surat_perintah")
@@ -210,7 +211,7 @@ class SuratPerintahController extends Controller
       ->where('w.is_deleted', 0)
       ->where('pk.is_deleted', 0)
       ->where("sp.is_approve", $approved)
-      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.nama'])
+      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
       ->orderBy('sp.id', 'ASC');
 
       return Datatables::of($data)->make(true);
@@ -220,16 +221,16 @@ class SuratPerintahController extends Controller
     {
       $data = DB::table("pkpt_surat_perintah AS sp")
       ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
-      w.nama AS wilayah, pk.nama AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
+      w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("mst_program_kerja As pk", "k.id", "=", "sp.id_program_kerja")
+      ->join("mst_program_kerja As pk", "pk.id", "=", "sp.id_program_kerja")
       ->join("pkpt_surat_perintah_sasaran As sps", "sp.id", "=", "sps.id_surat_perintah")
       ->join("mst_sasaran As s", "s.id", "=", "sps.id_sasaran")
       ->where('sp.is_deleted', 0)
       ->where('sps.is_deleted', 0)
       ->where('w.is_deleted', 0)
       ->where('pk.is_deleted', 0)
-      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.nama'])
+      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
       ->orderBy('sp.id', 'ASC');
       if($is_avail_no == 1) {
         $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) != ''"));

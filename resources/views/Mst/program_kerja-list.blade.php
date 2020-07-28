@@ -94,6 +94,8 @@
         var option = "<option value='"+val.id+"' " + selected + ">"+val.name+"</option>";
         $("select[name='opd']").append(option);
       });
+    }).done(function(){
+      $(".opd").trigger('change')
     });
   }
 </script>
@@ -176,6 +178,7 @@ $(function() {
     $("#cover-sasaran_edit").html('');
     $("#cover-sasaran_detail").html('');
   });
+
 
 });
 </script>

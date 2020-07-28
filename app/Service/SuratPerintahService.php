@@ -9,6 +9,7 @@ use App\Sasaran;
 use App\SuratPerintah;
 use App\SuratPerintahAnggota;
 use App\SuratPerintahSasaran;
+use App\ProgramKerja;
 use App\Service\KegiatanService;
 use App\Service\ProgramKerjaService;
 
@@ -36,7 +37,8 @@ class SuratPerintahService
       $new_sasaran = [];
 
       if ($type == 1) { // Surat Perintah PKPT
-        $kegiatan = Kegiatan::findOrFail($input['kegiatan']);
+        $program_kerja = ProgramKerja::findOrFail($input['program_kerja']);
+        $kegiatan = Kegiatan::findOrFail($program_kerja->id_kegiatan);
       } else { // Surat Perintah Non PKPT
 
         // prepare data kegiatan
@@ -79,8 +81,8 @@ class SuratPerintahService
       $t->id_inspektur_pembantu = $input['inspektur_pembantu'];
       $t->id_pengendali_teknis = $input['pengendali_teknis'];
       $t->id_ketua_tim = $input['ketua_tim'];
-      $t->id_kegiatan = $kegiatan->id;
-      $t->id_program_kerja = $kegiatan->id_program_kerja;
+      $t->id_kegiatan = $program_kerja->id_kegiatan;
+      $t->id_program_kerja = $program_kerja->id;
       $t->no_surat = '';
       $t->dasar_surat = $input['dasar_surat'];
       $t->tembusan = $input['tembusan'];

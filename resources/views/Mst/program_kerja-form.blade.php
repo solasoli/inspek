@@ -1,4 +1,22 @@
 <script>
+function get_sasaran(id) {
+  $("#cover-sasaran_edit").html('');
+  $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
+      // console.log(data);
+      $.each(data, function(idx, val){
+        var r = "<tr>";
+        r += "<td>";
+        r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
+        r += "</td>";
+        r += "<td>";
+        r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+        r += "</td>";
+        r += "</tr>";
+        $("#cover-sasaran_edit").append(r);
+    });
+  });
+}
+
 $(function() {
   $('#editModal').on('show.bs.modal', function(e) {
     $("select[name='wilayah']").val('').trigger('change');
@@ -8,29 +26,20 @@ $(function() {
     if(id > 0) {
       $.get("{{url('')}}/mst/program_kerja/get_program_kerja_by_id?id=" + id, function(data) {
         // console.log(data);
-        $('input[name="nama"]').val(data.nama);
-        $('select[name="wilayah"]').val(data.id_wilayah).trigger("change");
+        $('input[name="sub_kegiatan"]').val(data.sub_kegiatan);
+        $('select[name="wilayah"]').val(data.id_wilayah).trigger("change.select2");
         // $('select[name="opd"]').val(data.id_skpd).trigger("change");
         get_pd(data.id_skpd);
         $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
         $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
+        $('input[name="jml_wakil_penanggung_jawab"]').val(data.jml_wakil_penanggung_jawab);
+        $('input[name="jml_pengendali_teknis"]').val(data.jml_pengendali_teknis);
+        $('input[name="jml_ketua_tim"]').val(data.jml_ketua_tim);
+        $('input[name="jml_anggota"]').val(data.jml_anggota);
+        $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
+        
+        count_man_power();
 
-      }).done(function(res) {
-
-        $.get("{{url('')}}/mst/program_kerja/get_sasaran_by_id_kegiatan?id=" + res.id, function(data) {
-          // console.log(data);
-          $.each(data, function(idx, val){
-            var r = "<tr>";
-            r += "<td>";
-            r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
-            r += "</td>";
-            r += "<td>";
-            r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-            r += "</td>";
-            r += "</tr>";
-            $("#cover-sasaran_edit").append(r);
-          });
-        });
       });
 
 
@@ -80,6 +89,34 @@ $(function() {
     get_pd();
   });
 
+  $(".opd").on('change', function(){
+    $("#kegiatan_pr").html('').trigger('change')
+    $.get('{{ URL::to('/mst/kegiatan/get_kegiatan_by_id_skpd')}}', { id: $(this).val() } ,function(res) {
+
+      let options = ''
+      $.each(res, function(idx, k){
+        options += `<option value='${k.id}'>${k.nama}</option>`
+      })
+      $("#kegiatan_pr").html(options).trigger('change')
+    })
+
+  })
+
+  $("#kegiatan_pr").on('change', function() {
+    get_sasaran($(this).val())
+  })
+
+  $(".man-power").on('keyup change', function(){
+    count_man_power();
+  })
+
+  function count_man_power(){ 
+    let total = 0;
+    $('.man-power').map(function(){
+        total += $(this).val()/1
+    });
+    $('#jml_man_power').html(total)
+  }
 });
 </script>
 <div class="modal" id="editModal">
@@ -114,7 +151,7 @@ $(function() {
               Perangkat Daerah :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <select class="form-control select2" name="opd">
+              <select class="form-control select2 opd" name="opd">
               </select>
             </div>
           </div>
@@ -140,42 +177,111 @@ $(function() {
               </div>
             </div>
           </div>
-          <hr>
-          <div class="form-group row">
-            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
 
-            </label>
-            <div class="col-md-12">
-              <table class="table" width="100%">
-                <thead>
-                  <tr>
-                    <th>Kegiatan *</th>
-                    <th style="width:60px"></th>
-                  </tr>
-                </thead>
-                <tr>
-                  <td colspan="2">
-                    <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text" >
-                  </td>
-                </tr>
-              </table>
-              <table class="table" width="100%">
-                <thead>
-                  <tr>
-                    <th>Sasaran</th>
-                    <th style="width:60px"></th>
-                  </tr>
-                </thead>
-                <tbody id='cover-sasaran_edit'>
-                </tbody>
-                <tr>
-                  <td colspan="2">
-                    <button type="button" class="btn btn-info add-sasaran"> Tambah Sasaran</button>
-                  </td>
-                </tr>
-              </table>
+          <div class="divider"></div>
+
+          <div class="col-md-12">
+            <div class="label-modal">Kegiatan *</div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <select name='kegiatan' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='kegiatan_pr'>
+                </select>
             </div>
           </div>
+
+          <div class="divider"></div>
+
+          <div class="col-md-12">
+            <div class="label-modal">Sub Kegiatan *</div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <input name='sub_kegiatan' value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='sub_kegiatan'>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="margin: 0 5px">
+            <table class="table" width="100%">
+              <thead>
+                <tr>
+                  <th>Sasaran</th>
+                  <th style="width:60px"></th>
+                </tr>
+              </thead>
+              <tbody id='cover-sasaran_edit'>
+              </tbody>
+              <tr>
+                <td colspan="2">
+                  <button type="button" class="btn btn-info add-sasaran"> Tambah Sasaran</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="col-md-12">
+            <div class="label-modal">Anggaran</div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <input name='anggaran' required="required" class="form-control rupiah-format" type="text" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="col-md-12">
+            <div class="label-modal">Man Power</div>
+
+            <div class="form-group row justify-content-center">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Wakil Penanggung Jawab :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='jml_wakil_penanggung_jawab' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
+                Orang
+              </div>
+            </div>
+
+            <div class="form-group row justify-content-center">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Pengendali Teknis :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='jml_pengendali_teknis' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
+                Orang
+              </div>
+            </div>
+
+            <div class="form-group row justify-content-center">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Ketua Tim :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='jml_ketua_tim' required="required" class="form-control man-power" style='max-width:50px; display: inline' value='0' type="number" autocomplete="off">
+                Orang
+              </div>
+            </div>
+
+            <div class="form-group row justify-content-center">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Anggota :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='jml_anggota' style='max-width:50px; display: inline' required="required" class="form-control man-power" value='0' type="number" autocomplete="off">
+                Orang
+              </div>
+            </div>
+
+
+            <div class="form-group row justify-content-center">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Total Man Power :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <span id='jml_man_power'>0</span> Orang
+              </div>
+            </div>
+          </div>
+
           <div class="form-group row mt-4 d-flex justify-content-center">
             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-center">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>&nbsp;

@@ -63,12 +63,16 @@
                   Pilih Kegiatan
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <select name='kegiatan' class="form-control select2 kegiatan">
-                    @foreach($kegiatan as $idx => $row)
+                  <select name='program_kerja' class="form-control select2 kegiatan">
+                    @foreach($program_kerja as $idx => $row)
                       @php
                       $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id == $row->id ? 'selected' : '';
                       @endphp
-                      <option value='{{$row->id}}' data-wilayah='{{$row->id_wilayah}}' data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}' data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->nama}}</option>
+                      <option value='{{$row->id}}' 
+                        data-kegiatan='{{$row->id_kegiatan}}'
+                        data-wilayah='{{$row->id_wilayah}}' 
+                        data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}'
+                        data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->nama}}</option>
                     @endforeach
                   </select>
 
@@ -413,7 +417,7 @@
     });
 
     function get_sasaran(){
-      var id = $("select[name='kegiatan']").val();
+      var id = $("select[name='program_kerja']").find($('option:selected')).data('kegiatan');
       $(".sasaran").html('');
 
       @php

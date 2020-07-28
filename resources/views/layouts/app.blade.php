@@ -83,6 +83,8 @@
     <script src="{{ asset('admin_template/lib/select2/js/select2.min.js') }}"></script>
 
     <script src="{{ asset('admin_template/js/bracket.js') }}"></script>
+    <!-- autonumeric -->
+    <script src="{{ asset('admin_template/lib/auto-numeric/autoNumeric.js') }}"></script>
     <script>
       $(function(){
         /* aktif menu otomatis */
@@ -149,6 +151,16 @@
               }
           } );
         return text;
+      }
+
+      $(".rupiah-format").autoNumeric('init',{
+        aSep: '.',
+        aDec: ',',
+        mDec: 0
+      });
+
+      function set_number_formated(value){
+        value.toLocaleString('id-ID')
       }
     </script>
     @yield('scripts')

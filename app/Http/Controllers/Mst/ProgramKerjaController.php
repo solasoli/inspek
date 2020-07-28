@@ -46,15 +46,15 @@ class ProgramKerjaController extends Controller
     {
       $logged_user = Auth::user();
       request()->validate([
-        'nama' => 'required',
+        'sub_kegiatan' => 'required',
         'wilayah' => 'required',
         'opd' => 'required',
         'dari' => 'required',
         'sampai' => 'required',
         'sasaran' => 'required',
       ],[
-        'nama.required' => 'Nama Sasaran harus diisi!',
-        'nama.unique' => 'Nama Sasaran sudah ada!',
+        'sub_kegiatan.required' => 'Sub Kegiatan Sasaran harus diisi!',
+        'sub_kegiatan.unique' => 'Sub Kegiatan Sasaran sudah ada!',
         'wilayah.required' => 'Irban harus diisi!',
         'opd.required' => 'Perangkat Daerah harus diisi!',
         'dari.required' => 'Dari harus diisi!',
@@ -64,7 +64,7 @@ class ProgramKerjaController extends Controller
       // dd($request->input());
       ProgramKerjaService::create($request->input());
 
-      $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
+      $request->session()->flash('success', "<strong>".$request->input('sub_kegiatan')."</strong> Berhasil disimpan!");
       return redirect('/mst/program_kerja');
     }
 
@@ -84,15 +84,15 @@ class ProgramKerjaController extends Controller
     {
       $logged_user = Auth::user();
       request()->validate([
-        'nama' => 'required',
+        'sub_kegiatan' => 'required',
         'wilayah' => 'required',
         'opd' => 'required',
         'dari' => 'required',
         'sampai' => 'required',
         'sasaran' => 'required',
       ],[
-        'nama.required' => 'Nama Sasaran harus diisi!',
-        'nama.unique' => 'Nama Sasaran sudah ada!',
+        'sub_kegiatan.required' => 'Sub Kegiatan harus diisi!',
+        'sub_kegiatan.unique' => 'Sub Kegiatan sudah ada!',
         'wilayah.required' => 'Irban harus diisi!',
         'opd.required' => 'Perangkat Daerah harus diisi!',
         'dari.required' => 'Dari harus diisi!',
@@ -126,7 +126,7 @@ class ProgramKerjaController extends Controller
     public function list_datatables_api()
     {
       $data = DB::table("mst_program_kerja AS pk")
-      ->select(DB::raw("pk.id, pk.nama AS kegiatan, pk.nama AS wilayah, skpd.name AS skpd, pk.dari, pk.sampai, pk.type_pkpt"))
+      ->select(DB::raw("pk.id, pk.sub_kegiatan AS kegiatan, pk.sub_kegiatan AS wilayah, skpd.name AS skpd, pk.dari, pk.sampai, pk.type_pkpt"))
       ->join("mst_skpd AS skpd", "skpd.id", "=", "pk.id_skpd")
       ->join("mst_wilayah AS w", "w.id", "=", "pk.id_wilayah")
       ->where("pk.is_deleted", 0);

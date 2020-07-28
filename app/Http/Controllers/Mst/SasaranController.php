@@ -126,7 +126,11 @@ class SasaranController extends Controller
     public function get_sasaran_by_id_kegiatan(Request $request)
     {
       $id = $request->input('id');
-      $data = Sasaran::where("is_deleted", 0)->where("id_kegiatan", $id)->get();
+      $id = $id > 0 ? $id : 0;
+      $data = Sasaran::where("is_deleted", 0)
+      ->where("id_kegiatan", $id)
+      ->where("id_kegiatan",">",0)
+      ->get();
 
       return response()->json($data);
     }

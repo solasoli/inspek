@@ -58737,3 +58737,24 @@ a.hover-white-8:hover, a.hover-white-8:focus {
 .mx-wd-1350 {
   max-width: 1350px;
 }
+
+/* custom css */
+.label-modal {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #343a40;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(0,0,0,.15);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.divider {
+ margin:15px auto;
+ height: 1px;
+}
+
+.justify-content-center {
+  justify-content: center;
+}

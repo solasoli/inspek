@@ -98,8 +98,13 @@ class KegiatanService
 
   public static function get_kegiatan_by_type_pkpt($type_pkpt = 1) {
     $data = DB::table("mst_program_kerja AS pk")
-    ->select(DB::raw("k.*,pk.dari,pk.sampai,pk.id_wilayah"))
-    ->join("mst_kegiatan AS k", "pk.id","=","k.id_program_kerja")
+    ->select(DB::raw("k.id, k.nama AS kegiatan,
+      pk.id AS id_pk,
+      pk.sub_kegiatan AS nama,
+      pk.dari,
+      pk.sampai,
+      pk.id_wilayah"))
+    ->join("mst_kegiatan AS k", "pk.id_kegiatan","=","k.id")
     ->where("pk.is_deleted", 0)
     ->where("k.is_deleted", 0)
     ->where('pk.type_pkpt', $type_pkpt)

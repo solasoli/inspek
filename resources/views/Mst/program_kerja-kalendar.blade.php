@@ -12,10 +12,6 @@
 
 @php
   $list_arr = [];
-@endphp
-
-@foreach($program_kerja as $idx => $row)
-  @php
   $listcolor = [
     1 => [
       'bgColor' => '#3788d8',
@@ -30,6 +26,10 @@
       'label' => 'NON-PKPT'
     ]
   ];
+@endphp
+
+@foreach($program_kerja as $idx => $row)
+  @php
 
   $list_arr[] = [
     "title" => $row->nama,

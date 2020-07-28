@@ -40,7 +40,7 @@ class ProgramKerjaService
       ];
 
       $t = $program_kerja;
-      $t->nama = $data['nama'];
+      $t->sub_kegiatan = $data['sub_kegiatan'];
       $t->id_wilayah = $data['wilayah'];
       $t->id_skpd = $data['opd'];
 
@@ -50,6 +50,14 @@ class ProgramKerjaService
       
       $t->dari = $use['dari'].' 00:00:00';
       $t->sampai = $use['sampai'].' 00:00:00';
+      $t->id_kegiatan = $data['kegiatan'];
+      $t->anggaran = str_replace('.','',$data['anggaran']);
+      $t->jml_wakil_penanggung_jawab = $data['jml_wakil_penanggung_jawab'];
+      $t->jml_pengendali_teknis = $data['jml_pengendali_teknis'];
+      $t->jml_ketua_tim = $data['jml_ketua_tim'];
+      $t->jml_anggota = $data['jml_anggota'];
+      $jml_power = $t->jml_wakil_penanggung_jawab + $t->jml_pengendali_teknis + $t->jml_ketua_tim + $t->jml_anggota;
+      $t->jml_man_power = $jml_power;
       $t->created_at = date('Y-m-d H:i:s');
       $t->created_by = Auth::id();
       $t->save();
@@ -71,14 +79,12 @@ class ProgramKerjaService
       ->update(['dari' => $t->dari, 'sampai' => $t->sampai]);
       
       // buat kegiatan
-      $data['program_kerja'] = $t->id;
-      $kegiatan = KegiatanService::createOrUpdate($t->id, $data);
+      // $data['program_kerja'] = $t->id;
+      // $kegiatan = KegiatanService::createOrUpdate($t->id, $data);
       DB::commit();
 
       return [
-        'program_kerja' => $program_kerja,
-        'kegiatan' => $kegiatan['kegiatan'],
-        'sasaran' => $kegiatan['sasaran']
+        'program_kerja' => $program_kerja
       ];
     });
 
@@ -95,4 +101,20 @@ class ProgramKerjaService
     ->get();
   }
 
+  public static function get_program_kerja_by_type_pkpt($type_pkpt = 1) {
+    $data = DB::table("mst_program_kerja AS pk")
+    ->select(DB::raw("k.id AS id_kegiatan, k.nama AS kegiatan,
+      pk.id,
+      pk.sub_kegiatan AS nama,
+      pk.dari,
+      pk.sampai,
+      pk.id_wilayah"))
+    ->join("mst_kegiatan AS k", "pk.id_kegiatan","=","k.id")
+    ->where("pk.is_deleted", 0)
+    ->where("k.is_deleted", 0)
+    ->where('pk.type_pkpt', $type_pkpt)
+    ->get();
+
+    return $data;
+  }
 }
