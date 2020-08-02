@@ -63,13 +63,13 @@ class ProgramKerjaService
       $t->save();
 
       DB::table('mst_sasaran')
-      ->where('id_kegiatan', $t->id)
+      ->where('id_kegiatan', $t->id_kegiatan)
       ->update(['is_deleted' => 1]);
 
       foreach($data['sasaran'] AS $i => $v){
         $t2 = new Sasaran;
         $t2->nama = $v;
-        $t2->id_kegiatan = $t->id;
+        $t2->id_kegiatan = $t->id_kegiatan;
         $t2->save();
       }
 
@@ -83,9 +83,7 @@ class ProgramKerjaService
       // $kegiatan = KegiatanService::createOrUpdate($t->id, $data);
       DB::commit();
 
-      return [
-        'program_kerja' => $program_kerja
-      ];
+      return $program_kerja;
     });
 
     return $result;
@@ -114,6 +112,23 @@ class ProgramKerjaService
     ->where("k.is_deleted", 0)
     ->where('pk.type_pkpt', $type_pkpt)
     ->get();
+
+    return $data;
+  }
+
+  public static function get_by_id($id = 0) {
+    $data = DB::table("mst_program_kerja AS pk")
+    ->select(DB::raw(
+      "k.id AS id_kegiatan, k.nama AS nama_kegiatan,
+      pk.id, pk.sub_kegiatan, pk.dari,
+      pk.sampai, pk.id_skpd, pk.id_wilayah,
+      pk.anggaran")
+    )
+    ->join("mst_kegiatan AS k", "pk.id_kegiatan","=","k.id")
+    ->where("pk.is_deleted", 0)
+    ->where("k.is_deleted", 0)
+    ->where('pk.id', $id)
+    ->first();
 
     return $data;
   }

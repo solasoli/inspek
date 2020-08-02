@@ -49,18 +49,35 @@ class SuratPerintahService
           'dari' => $input['dari'],
           'sampai' => $input['sampai'],
           'sasaran' => $input['sasaran_kegiatan'],
+          'sub_kegiatan' => $input['make_sub_kegiatan'],
+          'anggaran' => $input['anggaran'],
+          'jml_wakil_penanggung_jawab' => 1,
+          'jml_pengendali_teknis' => 1,
+          'jml_ketua_tim' => 1,
+          'jml_anggota' => 1
         ];
 
+        $kegiatan = null;
+        $sasaran = [];
         if(isset($sp->id_program_kerja)) {
+          $update_kegiatan = KegiatanService::update($sp->id_kegiatan, $data_kegiatan);
+          $data_kegiatan['kegiatan'] = $update_kegiatan['kegiatan']->id;
+          $kegiatan = $data_kegiatan['kegiatan'];
+          $sasaran = $update_kegiatan['sasaran'];
+
           $program_kerja = ProgramKerjaService::update($sp->id_program_kerja, $data_kegiatan);
         } else {
+          // buat kegiatan
+          $make_kegiatan = KegiatanService::create($data_kegiatan, $type);
+          $data_kegiatan['kegiatan'] = $make_kegiatan['kegiatan']->id;
+          $kegiatan = $data_kegiatan['kegiatan'];
+          $sasaran = $make_kegiatan['sasaran'];
           $program_kerja = ProgramKerjaService::create($data_kegiatan, $type);
         }
 
-        $kegiatan = $program_kerja['kegiatan'];
 
         // insert to pkpt sasaran surat perintah
-        foreach($program_kerja['sasaran'] as $idx => $row){
+        foreach($sasaran as $idx => $row){
           $new_sasaran[] = $row->id;
         }
       }

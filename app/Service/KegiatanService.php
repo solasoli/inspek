@@ -18,7 +18,6 @@ class KegiatanService
   }
 
   public static function update($id_kegiatan, $data) {
-
     $t = Kegiatan::findOrFail($id_kegiatan);
     return self::proccess_data($t, $data);
   }
@@ -47,7 +46,7 @@ class KegiatanService
       $t->nama = $data['nama'];
       // $t->id_wilayah = $data['wilayah'];
       $t->id_skpd = $data['opd'];
-      $t->id_program_kerja = $data['program_kerja'];
+      // $t->id_program_kerja = $data['program_kerja'];
 
       // if(isset($data['type_pkpt'])) {
       //   $t->type_pkpt = $data['type_pkpt'];

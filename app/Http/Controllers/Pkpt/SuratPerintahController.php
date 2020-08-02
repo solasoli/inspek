@@ -62,6 +62,7 @@ class SuratPerintahController extends Controller
 
       $logged_user = Auth::user();
 
+      // dd($request->input());
       SuratPerintahService::create($request->input(), $type);
 
       $request->session()->flash('message', "Data Berhasil disimpan!");
@@ -84,7 +85,7 @@ class SuratPerintahController extends Controller
       $sp_sasaran = SuratPerintahService::get_sasaran($surat_perintah->id);
       $sp_anggota = SuratPerintahService::get_anggota($surat_perintah->id);
 
-      $current_progker = ProgramKerja::where("id", $surat_perintah->id_program_kerja)->first();
+      $current_progker = ProgramKerjaService::get_by_id($surat_perintah->id_program_kerja);
       $anggota = PegawaiService::get_anggota(false, $current_progker->id_wilayah);
 
       $surat_perintah_file = $surat_perintah->is_pkpt == 1 ? 'surat_perintah_pkpt-form' : ($surat_perintah->is_pkpt == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');

@@ -60,7 +60,23 @@
                 Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='make_kegiatan' autocomplete="off" value='{{ !is_null(old('make_kegiatan')) ? old('make_kegiatan') : (isset($current_progker->nama) ? $current_progker->nama : '') }}' required="required" class="form-control" type="text" >
+                <input name='make_kegiatan' autocomplete="off" value='{{ !is_null(old('make_kegiatan')) ? old('make_kegiatan') : (isset($current_progker->nama_kegiatan) ? $current_progker->nama_kegiatan : '') }}' required="required" class="form-control" type="text" >
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Sub Kegiatan <span class="required"></span> :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='make_sub_kegiatan' autocomplete="off" value='{{ !is_null(old('make_sub_kegiatan')) ? old('make_sub_kegiatan') : (isset($current_progker->sub_kegiatan) ? $current_progker->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Anggaran <span class="required"></span> :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <input name='anggaran' autocomplete="off" value='{{ !is_null(old('anggaran')) ? old('anggaran') : (isset($current_progker->anggaran) ? $current_progker->anggaran : '') }}' required="required" class="form-control rupiah-format" type="text" >
               </div>
             </div>
             <div class="form-group row">

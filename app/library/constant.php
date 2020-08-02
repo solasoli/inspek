@@ -1,5 +1,8 @@
 <?php
 
+$TYPE_SP_PKPT = 1;
+$TYPE_SP_NON_PKPT = 2;
+
 $NOT_DELETED = 0;
 $IS_DELETED = 1;
 
