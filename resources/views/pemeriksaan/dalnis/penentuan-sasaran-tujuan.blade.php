@@ -2,7 +2,7 @@
 @section('content')
 <div class="br-mainpanel" style="margin: 0px;">
     <div class="br-pagetitle">
-     <div>
+     <div style="margin-left: 20px">
       <h4>Penentuan Sasaran Tujuan</h4>
     </div>
   </div>
@@ -11,7 +11,7 @@
     <div class="col-lg-12">
       <div class="card bd-0 shadow-base" style="margin: 20px;">
 
-       <div class="br-pagebody">
+       <div class="br-pagebody" style="margin-bottom: 10px">
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item" style="width: 50%; text-align: center;">
             <a class="nav-link active" data-toggle="tab" href="#home"><b>Belum Di Setujui</b></a>
@@ -132,7 +132,7 @@
     </div>
   </div>
   <div class="col-sm-6">
-   <div id="oTableApprove_filter" class="dataTables_filter" style="margin-left: 900px;"><label><input type="search" class="form-control input-sm" placeholder="Search..." aria-controls="oTableApprove"></label></div>
+   <div id="oTableApprove_filter" class="dataTables_filter" style="margin-left: 865px;"><label><input type="search" class="form-control input-sm" placeholder="Search..." aria-controls="oTableApprove"></label></div>
  </div>
 </div>
 <div class="row">
