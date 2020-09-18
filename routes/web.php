@@ -199,23 +199,28 @@ Route::middleware(['auth'])->group(function () {
     });
   });
 
-  Route::prefix('laporan')->group(function () {
+  // Route::prefix('laporan')->group(function () {
 
-    Route::prefix('lhp')->group(function () {
-      Route::get('/', 'Laporan\LhpController@index');
-      Route::get('/add/{type}', 'Laporan\LhpController@create');
-      Route::get('/edit/{id}', 'Laporan\LhpController@edit');
-      Route::get('/delete/{id}', 'Laporan\LhpController@destroy');
-      Route::get('/approve/{id}', 'Laporan\LhpController@approve');
-      Route::get('/datatables/{type?}', 'Laporan\LhpController@list_datatables_api');
+  //   Route::prefix('lhp')->group(function () {
+  //     Route::get('/', 'Laporan\LhpController@index');
+  //     Route::get('/add/{type}', 'Laporan\LhpController@create');
+  //     Route::get('/edit/{id}', 'Laporan\LhpController@edit');
+  //     Route::get('/delete/{id}', 'Laporan\LhpController@destroy');
+  //     Route::get('/approve/{id}', 'Laporan\LhpController@approve');
+  //     Route::get('/datatables/{type?}', 'Laporan\LhpController@list_datatables_api');
 
-      Route::get('/info/{id}', 'Laporan\LhpController@info');
-      Route::get('/kalendar', 'Laporan\LhpController@kalendar');
-      /* Post section */
-      Route::post('/add/{type}', 'Laporan\LhpController@store');
-      Route::post('/edit/{id}', 'Laporan\LhpController@update');
-      Route::post('/check_jadwal', 'Laporan\LhpController@check_jadwal');
-    });
+  //     Route::get('/info/{id}', 'Laporan\LhpController@info');
+  //     Route::get('/kalendar', 'Laporan\LhpController@kalendar');
+  //     /* Post section */
+  //     Route::post('/add/{type}', 'Laporan\LhpController@store');
+  //     Route::post('/edit/{id}', 'Laporan\LhpController@update');
+  //     Route::post('/check_jadwal', 'Laporan\LhpController@check_jadwal');
+  //   });
+  // });
+
+  Route::prefix('pemeriksaan')->group(function(){
+
+    Route::get('/dalnis/penentuan-sasaran-tujuan', 'Pemeriksaan\PenentuanSasaranTujuan@index');
   });
 
   Route::prefix('acl')->group(function () {
@@ -296,4 +301,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/verify_temp/{id}', 'Mst\RkaUploadController@verify_temp');
   });
 
+  
+
 });
+
