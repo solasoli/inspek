@@ -221,7 +221,12 @@ Route::middleware(['auth'])->group(function () {
   Route::prefix('pemeriksaan')->group(function(){
 
     Route::get('/dalnis/penentuan-sasaran-tujuan', 'Pemeriksaan\PenentuanSasaranTujuan@index');
+    Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
+    Route::get('/ketua/program-kerja-audit', 'Pemeriksaan\PkaController@index');
+    
   });
+
+  
 
   Route::prefix('acl')->group(function () {
 
