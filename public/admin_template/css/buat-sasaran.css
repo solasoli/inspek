@@ -53,3 +53,11 @@ height :300px;
   font-size: 18px;
   margin-left: 10px;
 }
+
+#panel-0 {
+  margin: 0px !important;
+}
+
+.br-pagetitle {
+  margin-left: 20px;
+}
