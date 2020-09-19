@@ -1,0 +1,63 @@
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
+  padding: 10px;
+}
+
+/* Might want to wrap a span around your checkbox text */
+.checkboxtext
+{
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+}
+.ck.ck-editor {
+    width: 100%;
+    position: relative;
+    height: 350px;
+}
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+    border-color: var(--ck-color-base-border);
+    height: 300px;
+}
+.ck-rounded-corners .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners { 
+height :300px;
+} 
+
+#conditional_part{
+  padding: 6px 8px;
+  display:none;
+}
+#conditional_part2{
+  padding: 6px 8px;
+  display:none;
+}
+#conditional_part3{
+  padding: 6px 8px;
+  display:none;
+}
+#conditional_part4{
+  padding: 6px 8px;
+  display:none;
+}
+#conditional_part5{
+  padding: 6px 8px;
+  display:none;
+}
+#data1{
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+#panel-0 {
+  margin: 0px !important;
+}
+
+.br-pagetitle {
+  margin-left: 20px;
+}
