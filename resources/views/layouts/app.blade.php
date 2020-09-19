@@ -3,7 +3,7 @@
   <body>
 
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="br-logo"><a href=""><span>[</span>Inpektorat <i>Bogor</i><span>]</a></div>
+    <div class="br-logo"><a href=""><span><b>Inpektorat Daerah</b></span><br><i>BOGOR</i></a></div>
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
       <div class="br-sideleft-menu">
@@ -36,17 +36,19 @@
               <img src="{{ asset('img/user.png') }}" class="wd-32 rounded-circle" alt="">
               <!-- <span class="square-10 bg-success"></span> -->
             </span>
-            <!-- <div class="dropdown-menu dropdown-menu-header wd-200">
+            <div class="dropdown-menu dropdown-menu-header wd-250">
+              <div class="tx-center">
+                <a href=""><img src="https://via.placeholder.com/500" class="wd-80 rounded-circle" alt=""></a>
+                <h6 class="logged-fullname">Username</h6>
+                <p>username@domain.com</p>
+              </div>
+            
+              <hr>
               <ul class="list-unstyled user-profile-nav">
-                <li><a href=""><i class="icon ion-ios-person"></i> Edit Profile</a></li>
-                <li><a href=""><i class="icon ion-ios-gear"></i> Settings</a></li>
-                <li><a href=""><i class="icon ion-ios-download"></i> Downloads</a></li>
-                <li><a href=""><i class="icon ion-ios-star"></i> Favorites</a></li>
-                <li><a href=""><i class="icon ion-ios-folder"></i> Collections</a></li>
-                <li><a href=""><i class="icon ion-power"></i> Sign Out</a></li>
+                <li><a href="user.html"><i class="icon ion-ios-person"></i> Edit Profile</a></li>
+                <li><a href=""{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form2').submit();"><i class="icon ion-power"></i> Sign Out</a></li>
               </ul>
-            </div> -->
-          </div><!-- dropdown -->
+            </div><!-- dropdown-menu -->
         </nav>
         <!-- <div class="navicon-right"> -->
           <!-- <a id="btnRightMenu" href="" class="pos-relative"> -->
