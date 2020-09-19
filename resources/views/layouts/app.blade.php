@@ -3,7 +3,8 @@
   <body>
 
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="br-logo"><a href=""><span><b>Inpektorat Daerah</b></span><br><i>BOGOR</i></a></div>
+    <div class="br-logo"><img src="{{ ('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"> &nbsp;<a href=""><span><b>Inspektorat Daerah</b></span><br><i>KOTA BOGOR</i></a></div>
+    
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
       <div class="br-sideleft-menu">
