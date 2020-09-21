@@ -41,7 +41,7 @@
           <div class="float-right">
 
             @if(can_access("mst_skpd", "add"))
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal">Tambah</button>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
             @endif
           </div>
         </div>

@@ -48,17 +48,7 @@ class KegiatanController extends Controller
         'nama.unique' => 'Nama SKPD sudah ada!'
       ]);
 
-      $t = new Kegiatan;
-      $t->nama = $request->input('nama');
-      $t->id_skpd = $request->input('skpd');
-      $t->created_at = date('Y-m-d H:i:s');
-      $t->created_by = Auth::id();
-      $t->updated_at = NULL;
-      $t->updated_by = 0;
-      $t->deleted_at = NULL;
-      $t->deleted_by = 0;
-      $t->is_deleted = 0;
-      $t->save();
+      KegiatanService::create($request->input());
 
       $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/kegiatan');
@@ -85,12 +75,7 @@ class KegiatanController extends Controller
         'nama.unique' => 'Nama SKPD sudah ada!'
       ]);
 
-      $t = Kegiatan::findOrFail($id);
-      $t->nama = $request->input('nama');
-      $t->id_skpd = $request->input('skpd');
-      $t->updated_at = date('Y-m-d H:i:s');
-      $t->updated_by = Auth::id();
-      $t->save();
+      KegiatanService::update($id, $request->input());
 
       $request->session()->flash('success', "Data berhasil diubah!");
       return redirect('/mst/kegiatan');

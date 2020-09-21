@@ -3,7 +3,8 @@
   <body>
 
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="br-logo"><img src="{{ asset('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"> &nbsp;<a href=""><span><b>Inspektorat Daerah</b></span><br><i>KOTA BOGOR</i></a></div>
+    <div class="br-logo"
+    style="justify-content: center"><img src="{{ asset('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"></div>
     
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
@@ -25,6 +26,13 @@
             <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
           </span>
         </div> -->
+
+        <h6 
+          style="
+          display: flex;
+          align-self: center;
+          margin-top: 10px;
+          margin-left: 20px">INSPEKTORAT DAERAH KOTA BOGOR</h6>
       </div><!-- br-header-left -->
       <div class="br-header-right">
         <nav class="nav">
