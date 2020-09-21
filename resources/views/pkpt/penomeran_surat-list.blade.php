@@ -4,6 +4,13 @@
   .modal-lg{
     width: 750px !important;
   }
+  .table th, .table td {
+    white-space: nowrap;
+  }
+
+  .table-responsive {
+    overflow-y: auto;
+  }
 </style>
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
@@ -166,7 +173,7 @@ $(function() {
 
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' data-nomer='" + data.no_surat + "' href='#'><i class='fa fa-edit'></i> Beri Nomer</a>";
+          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' data-nomer='" + data.no_surat + "' href='#'><i class='fa fa-edit'></i> Rubah Nomer</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],

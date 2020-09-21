@@ -95,7 +95,7 @@ $(function() {
         f += "<form method='post' action='{{url()->current()}}/edit/"+ row.id +"' class='form-update'>";
         f += '{{ csrf_field() }}';
         f += "<input type='hidden' name='atasan_langsung' class='hidden_atasan_langsung'>";
-        f += "<input type='submit' class='btn btn-primary' value='simpan'>";
+        f += "<input type='submit' class='btn btn-primary btn-sm' value='simpan'>";
         f += "</form>";
         return f;
       }},

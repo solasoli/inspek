@@ -3,7 +3,7 @@
   <body>
 
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="br-logo justify-content-center"><a href=""><img src="{{ asset('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"></a></div>
+    <div class="br-logo justify-content-center"><img src="{{ asset('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"></div>
     
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
@@ -19,11 +19,13 @@
       <div class="br-header-left">
         <div class="navicon-left hidden-md-down"><a id="btnLeftMenu" href=""><i class="icon ion-navicon-round"></i></a></div>
         <div class="navicon-left hidden-lg-up"><a id="btnLeftMenuMobile" href=""><i class="icon ion-navicon-round"></i></a></div>
-        
-        <div class="input-group hidden-xs-down transition">
-          <span id="title-ins"><b>INSPEKTORAT DAERAH KOTA BOGOR</b></span>
-          
-        </div>
+
+        <h6 
+          style="
+          display: flex;
+          align-self: center;
+          margin-top: 10px;
+          margin-left: 20px">INSPEKTORAT DAERAH KOTA BOGOR</h6>
       </div><!-- br-header-left -->
       <div class="br-header-right">
         <nav class="nav">

@@ -51,7 +51,7 @@
 					<div class="tab-content">
             <div class="text-right mb-4">
               @if(can_access("mst_skpd", "add"))
-              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editModal" data-method='add'>Tambah Program Kerja</button>
+              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editModal" data-method='add'><i class='menu-item-icon icon ion-plus'></i> Tambah Program Kerja</button>
               @endif
             </div>
 						<div class="tab-pane fade active show" id="list">
@@ -148,7 +148,7 @@ $(function() {
           return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-method='edit' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
           @endif
           @if(can_access("mst_skpd", "delete"))
-          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
+          return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
           return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + data.kegiatan + "' data-wilayah='" + data.wilayah + "' data-skpd='" + data.skpd + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
           return return_button == "" ? "-" : return_button;
