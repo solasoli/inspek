@@ -3,7 +3,7 @@
   <body>
 
     <!-- ########## START: LEFT PANEL ########## -->
-    <div class="br-logo"><img src="{{ asset('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"> &nbsp;<a href=""><span><b>Inspektorat Daerah</b></span><br><i>KOTA BOGOR</i></a></div>
+    <div class="br-logo justify-content-center"><a href=""><img src="{{ asset('img/LOGOPinITDABogor.png') }}" class="img-fluid" width="50"></a></div>
     
     <div class="br-sideleft overflow-y-auto">
       <label class="sidebar-label pd-x-15 mg-t-20">Navigation</label>
@@ -19,12 +19,11 @@
       <div class="br-header-left">
         <div class="navicon-left hidden-md-down"><a id="btnLeftMenu" href=""><i class="icon ion-navicon-round"></i></a></div>
         <div class="navicon-left hidden-lg-up"><a id="btnLeftMenuMobile" href=""><i class="icon ion-navicon-round"></i></a></div>
-        <!-- <div class="input-group hidden-xs-down wd-170 transition">
-          <input id="searchbox" type="text" class="form-control" placeholder="Search">
-          <span class="input-group-btn">
-            <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-          </span>
-        </div> -->
+        
+        <div class="input-group hidden-xs-down transition">
+          <span id="title-ins"><b>INSPEKTORAT DAERAH KOTA BOGOR</b></span>
+          
+        </div>
       </div><!-- br-header-left -->
       <div class="br-header-right">
         <nav class="nav">

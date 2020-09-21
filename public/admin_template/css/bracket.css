@@ -58758,3 +58758,7 @@ a.hover-white-8:hover, a.hover-white-8:focus {
 .justify-content-center {
   justify-content: center;
 }
+#title-ins {
+  font-size: 15px;
+  margin: 18px;
+}
