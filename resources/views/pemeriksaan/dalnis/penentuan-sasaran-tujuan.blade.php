@@ -2,21 +2,21 @@
 @section('content')
 <div class="br-mainpanel" style="margin: 0px;">
     <div class="br-pagetitle">
-     <div style="margin-left: 20px">
-      <h4>Penentuan Sasaran Tujuan</h4>
+     <div style="padding-top: 20px">
+      <h5>Penentuan Sasaran Tujuan</h5>
     </div>
   </div>
 
   <div class="row row-sm mg-t-20">
     <div class="col-lg-12">
-      <div class="card bd-0 shadow-base" style="margin: 20px;">
+      <div class="card bd-0 shadow-base" style="margin: 20px;margin-top:0px">
 
        <div class="br-pagebody" style="margin-bottom: 10px">
        
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div id="home" class="container-fluid tab-pane active" style="padding: 0px"><br>
+          <div class="container-fluid tab-pane active" style="padding: 0px"><br>
             <div class="d-md-flex justify-content-between pd-25" style="padding: 0px">
               <div>
                 <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Penentuan Sasaran Tujuan</h6>
@@ -51,9 +51,7 @@
                     <th class="sorting_asc" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Type: activate to sort column descending" style="width: 0px;">Type</th>
                     <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="Irban: activate to sort column ascending" style="width: 0px;">Irban</th>
                     <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="Kegiatan: activate to sort column ascending" style="width: 0px;">Kegiatan</th>
-                    <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="Sasaran: activate to sort column ascending" style="width: 0px;">Sasaran</th>
-                    <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="Dari: activate to sort column ascending" style="width: 0px;">Dari</th>
-                    <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="Sampai: activate to sort column ascending" style="width: 0px;">Sampai</th>
+                    <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="SP: activate to sort column ascending" style="width: 0px;">Nomor SP</th>
                     <th class="sorting" tabindex="0" aria-controls="oTable" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 0px;">Status</th>
                     <th style="width: 0px;" class="text-center sorting_disabled" rowspan="1" colspan="1" aria-label="Aksi">Aksi</th>
                   </tr>
@@ -63,9 +61,7 @@
                   <td class="sorting_1">Non-PKPT</td>
                   <td>Inspektur Pembantu I</td>
                   <td>tes kegiatan</td>
-                  <td>sasaran 1; sasaran 2; sasaran 3</td>
-                  <td>04-05-2020</td>
-                  <td>07-05-2020</td>
+                  <td>12345678910</td>
                   <td><span class="text-danger">Waiting Approve</span></td>
                   <td class=" text-center">
                     <a class="btn btn-warning btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/edit/9">
@@ -80,8 +76,6 @@
                     <td>Inspektur Pembantu I</td>
                     <td>pemeriksaan baru</td>
                     <td>sasaran baru; sasaran lama</td>
-                    <td>19-05-2020</td>
-                    <td>26-05-2020</td>
                     <td><span class="text-danger">Waiting Approve</span></td>
                     <td class=" text-center"><a class="btn btn-warning btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/edit/12"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-danger btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/delete/12" onclick="return confirm(&quot;Apakah anda ingin menghapus data ini?&quot;)"><i class="fa fa-close"></i> Hapus</a> <a class="btn btn-success btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/approve/12"><i class="fa fa-check"></i> Approve</a>  <a class="btn btn-info btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/info/12"><i class="fa fa-eye"></i> Detail</a></td>
                   </tr>
@@ -138,9 +132,7 @@
       <th class="sorting_asc" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Type: activate to sort column descending" style="width: 65px;">Type</th>
       <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Irban: activate to sort column ascending" style="width: 134.889px;">Irban</th>
       <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Kegiatan: activate to sort column ascending" style="width: 149.889px;">Kegiatan</th>
-      <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Sasaran: activate to sort column ascending" style="width: 199.889px;">Sasaran</th>
-      <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Dari: activate to sort column ascending" style="width: 71.8889px;">Dari</th>
-      <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Sampai: activate to sort column ascending" style="width: 71.8889px;">Sampai</th>
+      <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Nomor SP: activate to sort column ascending" style="width: 199.889px;">No. Surat Perintah</th>
       <th class="sorting" tabindex="0" aria-controls="oTableApprove" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 60.8889px;">Status</th>
 
       <th style="width: 200.889px;" class="sorting_disabled" rowspan="1" colspan="1" aria-label="Aksi">Aksi</th>
@@ -151,80 +143,70 @@
     <td class="sorting_1">PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>percobaan kegiatan</td>
-    <td>sasaran 1; sasaran 2</td>
-    <td>19-05-2020</td>
-    <td>26-05-2020</td>
+    <td>700/222/NKT/2020</td>
     <td><span class="text-success">Approved</span></td>
     <td class="text-center">
       <a href="/pemeriksaan/dalnis/buat-sasaran"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan1.html"><button class="btn btn-primary mb-1"><i class="fa fa-eye"></i> Detail</button></a>
       <a href="detail_penentuan2.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="even">
     <td class="sorting_1">Non-PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>kegiatan non-pkpt</td>
-    <td>sasaran 1</td>
-    <td>18-05-2020</td>
-    <td>25-05-2020</td>
+    <td>700/222/NKT/2020</td>
     <td><span class="text-success">Approved</span></td>
     <td class="text-center">
       <a href="buat_sasaran.html"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan1.html"><button class="btn btn-primary mb-1"><i class="fa fa-eye"></i> Detail</button></a>
       <a href="detail_penentuan2.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="odd">
     <td class="sorting_1">PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>kegiatan baru</td>
-    <td>sasaran 1; sasaran 2; sasaran 3</td>
-    <td>04-08-2020</td>
-    <td>11-11-2020</td>
+    <td>	700/222/NKT/2020</td>
     <td><span class="text-success">Approved</span></td>
     <td class="text-center">
       <a href="buat_sasaran.html"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan1.html"><button class="btn btn-primary mb-1"><i class="fa fa-eye"></i> Detail</button></a>
       <a href="detail_penentuan2.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="even">
     <td class="sorting_1">PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>contoh kegiatan terbaru</td>
-    <td>sasaran 1; sasaran 2; sasaran 3</td>
-    <td>08-06-2020</td>
-    <td>15-06-2020</td>
+    <td>	700/222/NKT/2020</td>
     <td><span class="text-success">Approved</span></td>
     <td class="text-center">
       <a href="/pemeriksaan/dalnis/buat-sasaran"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan1.html"><button class="btn btn-primary mb-1"><i class="fa fa-eye"></i> Detail</button></a>
       <a href="detail_penentuan2.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="odd">
     <td class="sorting_1">Non-PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>kegiatan terbaru</td>
-    <td>sasaran baru; sasaran terbaru</td>
-    <td>22-06-2020</td>
-    <td>23-06-2020</td>
+    <td>700/222/NKT/2020</td>
     <td><span class="text-success">Approved</span></td>
     <td class="text-center">
       <a href="/pemeriksaan/dalnis/buat-sasaran"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan1.html"><button class="btn btn-primary mb-1"><i class="fa fa-eye"></i> Detail</button></a>
       <a href="detail_penentuan2.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
 </tbody>
@@ -292,7 +274,7 @@
                   <td class="sorting_1">Non-PKPT</td>
                   <td>Inspektur Pembantu I</td>
                   <td>tes kegiatan</td>
-                  <td>sasaran 1; sasaran 2; sasaran 3</td>
+                  <td>	700/222/NKT/2020</td>
                   <td>04-05-2020</td>
                   <td>07-05-2020</td>
                   <td><span class="text-danger">Waiting Approve</span></td>
@@ -309,8 +291,6 @@
                     <td>Inspektur Pembantu I</td>
                     <td>pemeriksaan baru</td>
                     <td>sasaran baru; sasaran lama</td>
-                    <td>19-05-2020</td>
-                    <td>26-05-2020</td>
                     <td><span class="text-danger">Waiting Approve</span></td>
                     <td class=" text-center"><a class="btn btn-warning btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/edit/12"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-danger btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/delete/12" onclick="return confirm(&quot;Apakah anda ingin menghapus data ini?&quot;)"><i class="fa fa-close"></i> Hapus</a> <a class="btn btn-success btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/approve/12"><i class="fa fa-check"></i> Approve</a>  <a class="btn btn-info btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/info/12"><i class="fa fa-eye"></i> Detail</a></td>
                   </tr>
@@ -386,7 +366,7 @@
       <a href="/pemeriksaan/dalnis/buat-sasaran"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="even">
@@ -401,14 +381,14 @@
       <a href="buat_sasaran.html"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="odd">
     <td class="sorting_1">PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>kegiatan baru</td>
-    <td>sasaran 1; sasaran 2; sasaran 3</td>
+    <td>	700/222/NKT/2020</td>
     <td>04-08-2020</td>
     <td>11-11-2020</td>
     <td><span class="text-success">Sudah Di Setujui</span></td>
@@ -416,14 +396,14 @@
       <a href="buat_sasaran.html"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="even">
     <td class="sorting_1">PKPT</td>
     <td>Inspektur Pembantu I</td>
     <td>contoh kegiatan terbaru</td>
-    <td>sasaran 1; sasaran 2; sasaran 3</td>
+    <td>	700/222/NKT/2020</td>
     <td>08-06-2020</td>
     <td>15-06-2020</td>
     <td><span class="text-success">Sudah Di Setujui</span></td>
@@ -431,7 +411,7 @@
       <a href="buat_sasaran.html"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
   <tr role="row" class="odd">
@@ -446,7 +426,7 @@
       <a href="buat_sasaran.html"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-      <button class="btn btn-warning mt-1"><i class="fa fa-trash"></i> Hapus</button>
+      <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
   </tr>
 </tbody>
