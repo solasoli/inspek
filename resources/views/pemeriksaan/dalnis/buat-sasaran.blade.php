@@ -112,7 +112,8 @@
                   <div class="card-header" style="display: none;"><p><input id="more_info6" name="more-info" type="checkbox" /> <input type="text" id="data1" name=""></label></p></div>
                     <input autocomplete="off" class="form-control" style="display: none;" id="field1" name="prof1" type="text" placeholder="" data-provide="typeahead" data-items="8" /><br>
                     <button id="b1" style="margin-left: 13px;width: 200px;" class="btn btn-success add-more" type="button">+ Tambah Poin</button>
-                    <center><button class="btn btn-primary" style="width:30%">SIMPAN</button></center>  
+                    <hr>
+                    <center><button class="btn btn-info" style="width:30%">SAVE AS DRAFT</button>&nbsp;<button class="btn btn-primary" style="width:30%">SIMPAN</button></center>  
                 </div>
                 
               </div>
@@ -134,22 +135,26 @@
            var addto = "#field" + next;
            var addRemove = "#field" + (next);
            next = next + 1;
-           var newIn = '<br /><label for="data" class="w-100"><div class="card-header"><p><input id="more_info5" name="more-info" type="checkbox" /> <input type="text" id="data1" name=""></label></p></div><input style="display:none" autocomplete="off" class="form-control" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
+           var newIn = '<br /><label for="data" class="w-100"><div class="card-header" id="field' + next + '" name="field' + next + '"><p><input id="more_info5" name="more-info" type="checkbox" /> <input type="text" id="data1" name=""></label></p></div><input style="display:none" autocomplete="off" class="form-control" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
            var newInput = $(newIn);
-           var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="more_info5">';
+           var removeBtn = '<button id="remove' + (next - 0) + '" class="btn btn-danger remove-me" style="margin:10px; margin-bottom:0px" >Hapus</button>';
 	         var removeButton = $(removeBtn);
            $(addto).after(newInput);
            $(addRemove).after(removeButton);
            $("#field" + next).attr('data-source',$(addto).attr('data-source'));
            $("#count").val(next);  
            
-           $('.remove-me').click(function (e) {
+         
+
+          $('body').on("click", ".remove-me", function(e){
             e.preventDefault();
-            var fieldNum = this.id.charAt(this.id.length - 1);
+            var fieldNum = this.id.charAt(this.id.length-1);
             var fieldID = "#field" + fieldNum;
             $(this).remove();
             $(fieldID).remove();
+            
           });
+
        });
    }); 
    

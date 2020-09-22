@@ -20,7 +20,7 @@
     <link href="{{ asset('admin_template/lib/datatables/jquery.dataTables.css') }}" rel="stylesheet">
     <link href="{{ asset('admin_template/lib/select2/css/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin_template/css/buat-sasaran.css')}}" rel="stylesheet">
-
+    
     <!-- Bracket CSS -->
     <link rel="stylesheet" href="{{ asset('admin_template/css/bracket.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/custom_css.css') }}">
