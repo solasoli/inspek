@@ -87,8 +87,8 @@ $(function() {
       { data: 'name', name: 'name'},
       // { data: 'singkatan_pd', name: 'singkatan_pd'},
       { data: 'pimpinan', name: 'pimpinan'},
-      { data: 'wilayah', name: 'wilayah'},
-      { data: null, orderable: false, render: function ( data, type, row ) {
+      { data: 'wilayah.nama', name: 'wilayah.nama'},
+      { data: null, orderable: false, searchable: false, render: function ( data, type, row ) {
         var return_button = "";
         @if(can_access("mst_skpd", "edit"))
         return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-idskpd='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";

@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\User as User;
 use Session;
+
 class CustomLoginController extends Controller
 {
-
-    public function __construct(){
-        //$this->middleware('csrf');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,94 +21,28 @@ class CustomLoginController extends Controller
         return view('auth.login');
     }
 
-    public function login_proses(Request $request){
+    public function login_proses(Request $request)
+    {
         /* find user */
         $find_user = User::where('username', $request->input('username'))->first();
-        if(Auth::attempt([
+        if (Auth::attempt([
             'username' => $request->input('username'),
-            'password' =>$request->input('password')
-        ])){
-          Auth::user()->push('username', $find_user->username);
-          Auth::user()->push('role', $find_user->id_role);
-          return redirect('/');
+            'password' => $request->input('password')
+        ])) {
+            Auth::user()->push('username', $find_user->username);
+            Auth::user()->push('role', $find_user->id_role);
+            return redirect('/');
         } else {
-          /* balikin ke login */
-          Session::flash('status', 'Invalid Username or Password');
-          return redirect('/login');
+            /* balikin ke login */
+            Session::flash('status', 'Invalid Username or Password');
+            return redirect('/login');
         }
-
     }
 
 
 
-    function not_allowed(){
+    function not_allowed()
+    {
         return view('page_403');
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -42,7 +42,7 @@
               Wilayah Kerja :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <select class="form-control select2" name="wilayah">
+              <select class="form-control select2" name="wilayah" required>
                 @foreach ($wilayah_kerja AS $row)
                   <option value="{{$row->id}}">{{$row->nama}}</option>
                 @endforeach
