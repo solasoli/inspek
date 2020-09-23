@@ -40,13 +40,13 @@ class BaseModel extends Model
         });
 
         self::deleting(function ($model) {
-            $model->deleted_at = date('Y-m-d H:i:s');
-            $model->deleted_by = Auth::id();
-            $model->is_deleted = 1;
-            return $model;
         });
 
         self::deleted(function ($model) {
+            $model->deleted_at = date('Y-m-d H:i:s');
+            $model->deleted_by = Auth::id();
+            $model->is_deleted = 1;
+            $model->save();
         });
     }
 }
