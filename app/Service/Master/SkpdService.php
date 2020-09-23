@@ -58,15 +58,15 @@ class SkpdService
         return self::proccess_data($t, $data);
     }
 
-    public static function update($id_skpd, $data)
+    public static function update($id, $data)
     {
-        $t = Skpd::findOrFail($id_skpd);
+        $t = Skpd::findOrFail($id);
         return self::proccess_data($t, $data);
     }
 
-    public static function createOrUpdate($id_skpd, $data)
+    public static function createOrUpdate($id, $data)
     {
-        $t = Skpd::findOrNew($id_skpd);
+        $t = Skpd::findOrNew($id);
         return self::proccess_data($t, $data);
     }
 
