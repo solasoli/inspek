@@ -11,10 +11,9 @@ use App\Repository\Master\Wilayah;
 class WilayahService
 {
 
-    public static function create($data, $type_pkpt = 1)
+    public static function create($data)
     {
         $t = new Kegiatan;
-        $data['type_pkpt'] = $type_pkpt;
         return self::proccess_data($t, $data);
     }
 
@@ -60,19 +59,11 @@ class WilayahService
 
     public static function delete($id)
     {
-        $t = Kegiatan::findOrFail($id);
-        $t->deleted_at = date('Y-m-d H:i:s');
-        $t->deleted_by = Auth::id();
-        $t->is_deleted = 1;
-        $t->save();
+        $t = Wilayah::findOrFail($id)->delete();
     }
 
-    public static function get_wilayah()
+    public static function get_data($is_deleted = 0)
     {
-        $data = Wilayah::where('is_deleted', 0)
-            ->orderBy('nama', 'ASC')
-            ->get();
-
-        return $data;
+        return Wilayah::where("is_deleted", $is_deleted)->get();
     }
 }

@@ -83,12 +83,12 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
       columns: [
-        { data: 'nama', name: 'p.nama' },
+        { data: 'nama', name: 'nama' },
         // { data: 'opd', name: 'skpd.name' },
         // { data: 'eselon', name: 'e.name' },
         // { data: 'pangkat', name: 'pk.name' },
-        { data: 'pangkat_golongan', name: 'pg.name' },
-        { data: 'jabatan', name: 'j.name' },
+        { data: 'pangkat_golongan.name', name: 'pangkat_golongan.name' },
+        { data: 'jabatan.name', name: 'jabatan.name' },
         { data: null, orderable: false, searchable: false,  render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("master_periode", "edit"))

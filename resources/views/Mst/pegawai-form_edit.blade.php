@@ -2,7 +2,7 @@
 $(function() {
   $('#editModal').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('id');
-    $.get("{{url('')}}/mst/pegawai/get_pegawai_by_id?id=" + id, function(data) {
+    $.get("{{url('')}}/mst/pegawai/get_pegawai_by_id/" + id, function(data) {
       $('select[name="opd"]').val(data.id_skpd).trigger("change");
       $('select[name="eselon"]').val(data.id_eselon).trigger("change");
       $('select[name="pangkat"]').val(data.id_pangkat).trigger("change");

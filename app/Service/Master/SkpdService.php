@@ -89,4 +89,9 @@ class SkpdService
     {
         $t = Skpd::findOrFail($id)->delete();
     }
+
+    public static function get_data($is_deleted = 0)
+    {
+        return Skpd::where("is_deleted", $is_deleted)->get();
+    }
 }

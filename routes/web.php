@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Mst\PegawaiController@edit');
       Route::get('/delete/{id}', 'Mst\PegawaiController@destroy');
       Route::get('/datatables', 'Mst\PegawaiController@list_datatables_api');
-      Route::get('/get_pegawai_by_id', 'Mst\PegawaiController@get_pegawai_by_id');
+      Route::get('/get_pegawai_by_id/{id}', 'Mst\PegawaiController@get_pegawai_by_id');
 
       Route::get('/inspektur', 'Mst\PegawaiController@inspektur');
       /* Post section */

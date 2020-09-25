@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Pegawai;
+namespace App\Repository\Pegawai;
 
 use Illuminate\Database\Eloquent\Model;
 

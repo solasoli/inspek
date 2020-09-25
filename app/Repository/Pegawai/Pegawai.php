@@ -1,11 +1,20 @@
 <?php
 
-namespace App\Model\Pegawai;
+namespace App\Repository\Pegawai;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Repository\BaseModel;
 
-class Pegawai extends Model
+class Pegawai extends BaseModel
 {
   protected $table = "pgw_pegawai";
-  public $timestamps = false;
+
+  public function pangkat_golongan()
+  {
+    return $this->belongsTo('App\Repository\Pegawai\PangkatGolongan', 'id_pangkat_golongan');
+  }
+
+  public function jabatan()
+  {
+    return $this->belongsTo('App\Repository\Pegawai\Jabatan', 'id_jabatan');
+  }
 }
