@@ -37,7 +37,7 @@ $(function() {
         $('input[name="jml_ketua_tim"]').val(data.jml_ketua_tim);
         $('input[name="jml_anggota"]').val(data.jml_anggota);
         $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
-        
+
         count_man_power();
 
       });
@@ -91,7 +91,7 @@ $(function() {
 
   $(".opd").on('change', function(){
     $("#kegiatan_pr").html('').trigger('change')
-    $.get('{{ URL::to('/mst/kegiatan/get_kegiatan_by_id_skpd')}}', { id: $(this).val() } ,function(res) {
+    $.get('{{ URL::to('/mst/kegiatan/get_kegiatan')}}', { id: $(this).val() } ,function(res) {
 
       let options = ''
       $.each(res, function(idx, k){
@@ -110,7 +110,7 @@ $(function() {
     count_man_power();
   })
 
-  function count_man_power(){ 
+  function count_man_power(){
     let total = 0;
     $('.man-power').map(function(){
         total += $(this).val()/1

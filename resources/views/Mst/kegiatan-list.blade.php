@@ -37,6 +37,21 @@
     </div>
   </div>
   @endif
+  
+  @if($errors->any())
+  <div class="row">
+    <div class="alert alert-danger col-lg-12">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="d-flex align-items-center justify-content-start">
+        @foreach ($errors->all() as $error)
+          <span>{{ $error }}</span>
+        @endforeach
+      </div>
+    </div>
+  </div>
+  @endif
 
   <div class="row">
     <div class="col-lg-12 widget-2 px-0">
@@ -55,8 +70,6 @@
             <thead>
               <tr>
                 <th>Nama Kegiatan</th>
-                <!-- <th>Singkatan PD</th> -->
-                <th>Perangkat Daerah</th>
                 <th style='width:150px'>Aksi</th>
               </tr>
             </thead>
@@ -90,9 +103,7 @@ $(function() {
     serverSide: true,
     ajax: '{{url()->current()}}/datatables/',
     columns: [
-      { data: 'nama', name: 'k.nama'},
-      // { data: 'singkatan_pd', name: 'singkatan_pd'},
-      { data: 'nama_skpd', name: 'skpd.name'},
+      { data: 'nama', name: 'nama'},
       { data: null, orderable: false, render: function ( data, type, row ) {
         var return_button = "";
         @if(can_access("mst_kegiatan", "edit"))
@@ -104,12 +115,8 @@ $(function() {
         return return_button == "" ? "-" : return_button;
       }},
     ],
-    columnDefs: [
-      {
-        targets: 2,
-        className: "text-center",
-      }],
     });
+
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
 
     setTimeout(function() {
