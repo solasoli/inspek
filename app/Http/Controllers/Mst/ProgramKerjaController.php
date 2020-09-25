@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
 use App\Sasaran;
-use App\Kegiatan;
-use App\Skpd;
-use App\Wilayah;
-use App\Service\ProgramKerjaService;
-use App\Service\KegiatanService;
-use App\ProgramKerja;
+use App\Repository\Master\Kegiatan;
+use App\Repository\Master\Skpd;
+use App\Repository\Master\Wilayah;
+use App\Repository\Master\ProgramKerja;
+use App\Service\Master\ProgramKerjaService;
+use App\Service\Master\KegiatanService;
 
 date_default_timezone_set('Asia/Jakarta');
 

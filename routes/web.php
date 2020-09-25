@@ -37,15 +37,15 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
     });
-    
+
     Route::prefix('kegiatan')->group(function () {
       Route::get('/', 'Mst\KegiatanController@index');
       Route::get('/add', 'Mst\KegiatanController@create');
       Route::get('/edit/{id}', 'Mst\KegiatanController@edit');
       Route::get('/delete/{id}', 'Mst\KegiatanController@destroy');
       Route::get('/datatables', 'Mst\KegiatanController@list_datatables_api');
+      Route::get('/get_kegiatan', 'Mst\KegiatanController@get_kegiatan');
       Route::get('/get_kegiatan_by_id', 'Mst\KegiatanController@get_kegiatan_by_id');
-      Route::get('/get_kegiatan_by_id_skpd', 'Mst\KegiatanController@get_kegiatan_by_id_skpd');
       /* Post section */
       Route::post('/add', 'Mst\KegiatanController@store');
       Route::post('/edit/{id}', 'Mst\KegiatanController@update');
@@ -224,10 +224,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
     Route::get('/ketua/program-kerja-audit', 'Pemeriksaan\PkaController@index');
     Route::get('/audit/audit', 'Pemeriksaan\AuditController@index');
-    
+
   });
 
-  
+
 
   Route::prefix('acl')->group(function () {
 
@@ -307,7 +307,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/verify_temp/{id}', 'Mst\RkaUploadController@verify_temp');
   });
 
-  
+
 
 });
-
