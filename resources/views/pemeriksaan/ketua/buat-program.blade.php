@@ -139,78 +139,84 @@
 
         <hr>
 
-    <form action="">    
-     <div class="container" id="tambah_anak" onclick="ShowHideDiv()" style=   "display: none;">
-            <h3>A. KAK</h3>
-            <table class="table table-borderless">
-          <tr>
-            <td width="15%"><h5 class="text-center">Tujuan Pemeriksaan</h5></td>
-            <td width="50%"><input type="text" name="judul_tugas" class="form-control" placeholder="Tujuan Pemeriksaan"></td>
-            <td width="25%"></td>
-          </tr>
-          <tr>
-            <td width="15%"><h5 class="text-center">Prosedur Pemeriksaan</h5></td>
-            <td width="65%"><input type="text" class="form-control" name="addmore2[]" placeholder="Prosedur Pemeriksaan">
-              
-            <td width="20%"><div class="input-group-btn">
-             <button class="btn btn-success add-mores" type="button">
-                <i class="glyphicon glyphicon-plus"></i> + Tambah
-              </button>
-            </div></td>
-          </tr>
-        </table>
-
-        <hr style="font-size: 10px solid">
-        <div class="row">
-          <div class="col-md-6">
-            <h5 class="text-center">RENCANA</h5>
-            <table class="table table-borderless">
-              <tr>
-                <td width="25%">Pelaksana</td>
-                <td width="5">:</td>
-                <td width="70%"><select class="form-control"><option></option></select></td>
-              </tr>
-              <tr>
-                <td>Jam</td>
-                <td>:</td>
-                <td><select class="form-control"><option></option></select></td>
-              </tr>
-            </table>
-          </div>
-          <div class="col-md-6">
-            <h5 class="text-center">REALISASI</h5>
-            <table class="table table-borderless">
-              <tr>
-                <td width="25%">Pelaksana</td>
-                <td width="5">:</td>
-                <td width="70%"><select class="form-control"><option></option></select></td>
-              </tr>
-              <tr>
-                <td>Jam</td>
-                <td>:</td>
-                <td><select class="form-control"><option></option></select></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </form>
-    <div class="copy-fields hide" style="display: none;">
-      <div class="control-group input-group" style="margin-top:-20px;">
-        <table class="table table-borderless">
-          <tr>
-            <td width="15%"></td>
-            <td width="65%"><input type="text" name="addmores[]" class="form-control" placeholder=""></td>
-            <td width="25%"><div class="input-group-btn">
-              <button class="btn btn-danger remove" type="button">X</button>
-            </div>
-          </td>
-        </tr>
-      </table>
+        <form action="">    
+                 <div class="container" id="tambah_anak" onclick="ShowHideDiv()" style="display: none;">
+                 <h4>A. KAK</h4>
+                  <div class="input-group control-group after-add-more2">
+                    
+                    <table class="table table-borderless">
+                      <tr>
+                        <td width="15%"><h6 class="text-center">Tujuan Pemeriksaan</h6></td>
+                        <td width="65%"><input type="text" name="judul_tugas" class="form-control w-100" placeholder="Tujuan Pemeriksaan"></td>
+                        <td width="20%"></td>
+                      </tr>
+                      <tr>
+                        <td width="15%"><h6 class="text-center">Prosedur Pemeriksaan</h6></td>
+                        <td width="65%"><input type="text" class="form-control w-100" name="addmore2[]" placeholder="Prosedur Pemeriksaan">
+                          
+                          <td width="20%"><div class="input-group-btn">
+                           <button class="btn btn-success add-more2" type="button">
+                            <i class="glyphicon glyphicon-plus"></i> + Tambah
+                          </button>
+                        </div></td>
+                      </tr>
+                    </table>
+                    
+                    <div class="copy-fields2 hide" style="display: none;">
+                      <div class="control-group input-group" style="margin-top:-20px;">
+                        <table class="table table-borderless">
+                          <tr>
+                            <td width="15%"></td>
+                            <td width="65%"><input type="text" name="addmore2[]" class="form-control w-100" placeholder=""></td>
+                            <td width="20%"><div class="input-group-btn">
+                              <button class="btn btn-danger removes" type="button">X</button>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
 
 
-    </div>
-  </div>
+                    </div>
+                  </div>
+                </div>
+                
+
+
+                <hr style="font-size: 10px solid">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h5 class="text-center">RENCANA</h5>
+                    <table class="table table-borderless">
+                      <tr>
+                        <td width="25%">Pelaksana</td>
+                        <td width="5">:</td>
+                        <td width="70%"><select class="form-control"><option></option></select></td>
+                      </tr>
+                      <tr>
+                        <td>Jam</td>
+                        <td>:</td>
+                        <td><select class="form-control"><option></option></select></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                    <h5 class="text-center">REALISASI</h5>
+                    <table class="table table-borderless">
+                      <tr>
+                        <td width="25%">Pelaksana</td>
+                        <td width="5">:</td>
+                        <td width="70%"><select class="form-control"><option></option></select></td>
+                      </tr>
+                      <tr>
+                        <td>Jam</td>
+                        <td>:</td>
+                        <td><select class="form-control"><option></option></select></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </form>
 
 
   <button class="btn btn-primary w-100">Simpan</button>
@@ -243,6 +249,19 @@
            $("#count").val(next);  
            
          
+           $(document).ready(function(){
+            var next = 1;
+            $(".add-more2").click(function(e){
+              e.preventDefault();
+              var addto = "#field" + next;
+              next = next + 1;
+              var newIn = '<br /><div class="card-header"><p><input name="sub_judul" type="text" /> <input type="text" id="data1" name=""></label></p></div><input style="display:none" autocomplete="off" class="form-control" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
+              var newInput = $(newIn);
+              $(addto).after(newInput);
+              $("#field" + next).attr('data-source',$(addto).attr('data-source'));
+              $("#count").val(next);  
+            });
+          }); 
 
           $('body').on("click", ".remove-me", function(e){
             e.preventDefault();
@@ -257,6 +276,24 @@
    }); 
    
        </script>
+
+    
+        <script type="text/javascript">
+          $(document).ready(function() {
+          //here first get the contents of the div with name class copy-fields and add it to after "after-add-more" div class.
+          $(".add-more2").click(function() {
+            var html = $(".copy-fields2").html();
+            $(".after-add-more2").after(html);
+          });
+          //here it will remove the current value of the remove button which has been pressed
+          $("body").on("click", ".removes", function() {
+            $(this)
+            .parents(".control-group")
+            .remove();
+          });
+        });
+
+        </script>
        <script>
          $(function(){
            'use strict'
