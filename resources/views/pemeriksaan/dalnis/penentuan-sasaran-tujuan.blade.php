@@ -148,7 +148,7 @@
     <td class="text-center">
       <a href="/pemeriksaan/dalnis/buat-sasaran"><button class="btn btn-info mb-1" data-toggle="modal" data-target="#myModal">Buat Sasaran Tujuan</button></a>
       <a href="/pemeriksaan/dalnis/detail-penentuan"><button class="btn btn-primary mb-1"><i class="fa fa-eye"></i> Detail</button></a>
-      <a href="detail_penentuan2.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
+      <a href="/pemeriksaan/dalnis/detail-sp"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail SP</button></a>
       <button class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
       <button class="btn btn-warning"><i class="fa fa-trash"></i> Hapus</button>
     </td>
