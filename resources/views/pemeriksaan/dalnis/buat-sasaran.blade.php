@@ -2,7 +2,7 @@
 @section('content')
 <div class="br-mainpanel" id="panel-0">
     <div class="br-pagetitle">
-      <div>
+      <div><br>
         <h4>Buat Sasaran Kerja</h4>
       </div>
     </div>
@@ -19,7 +19,7 @@
 
             <div class="card-header">
               <p><input id="more_info8" name="more-info" type="checkbox" />
-               <span id="data1">Penentuan Sasaran Tujuan</span></p>
+               <span id="data1">Dasar Pemeriksaan Tujuan Tertentu</span></p>
              </div>
             <div id="conditional_part8" style="display: none;">
               <table class="table">
@@ -30,19 +30,7 @@
               </table>
               
             </div>
-            <div class="card-header">
-              <p><input id="more_info" name="more-info" type="checkbox" />
-               <span id="data1">Dasar Pemeriksaan Tujuan Tertentu</span></p>
-             </div>
-             <div id="conditional_part">
-              <table class="table">
-                <tr>
-                  <td><textarea name="editor2" id="editor2" rows="10" cols="80"></textarea></td>
-                </tr>
-                
-              </table>
-              
-            </div>
+            
 
             <div class="card-header">
               <p><input id="more_info2" name="more-info" type="checkbox" />

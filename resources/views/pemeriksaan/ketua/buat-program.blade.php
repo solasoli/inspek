@@ -2,7 +2,7 @@
 @section('content')
 <div class="br-mainpanel" id="panel-0">
     <div class="br-pagetitle">
-      <div>
+      <div><br>
         <h4>Buat Program Kerja</h4>
       </div>
     </div>

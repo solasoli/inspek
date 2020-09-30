@@ -65,7 +65,7 @@
 
             </div>
             <center>
-              <a href="suratkerja2.html"><button class="btn btn-primary" style="width:30%; margin-top: 30px; margin-bottom: 30px">SIMPAN</button></a>
+              <a href="/pemeriksaan/audit/buat-kertaskerja-utama"><button class="btn btn-primary" style="width:30%; margin-top: 30px; margin-bottom: 30px">SIMPAN</button></a>
               <!-- <label for="tambah" class="btn btn-primary" style="width:30%; margin-top: 30px; margin-bottom: 30px"> SIMPAN
                 <input type="radio" id="tambah" name="chkPassPort" onclick="ShowHideDiv()" style="display: none;" />
               </label> -->
