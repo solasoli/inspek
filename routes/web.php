@@ -222,6 +222,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dalnis/penentuan-sasaran-tujuan', 'Pemeriksaan\PenentuanSasaranTujuan@index');
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
+    Route::get('/dalnis/detail-penentuan', 'Pemeriksaan\DetailPenentuan@index');
     Route::get('/ketua/program-kerja-audit', 'Pemeriksaan\PkaController@index');
     Route::get('/ketua/buat-program', 'Pemeriksaan\BuatProgram@index');
     Route::get('/audit/audit', 'Pemeriksaan\AuditController@index');
