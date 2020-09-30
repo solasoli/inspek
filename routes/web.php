@@ -225,6 +225,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ketua/program-kerja-audit', 'Pemeriksaan\PkaController@index');
     Route::get('/ketua/buat-program', 'Pemeriksaan\BuatProgram@index');
     Route::get('/audit/audit', 'Pemeriksaan\AuditController@index');
+    Route::get('/audit/buat-kertaskerja', 'Pemeriksaan\BuatKertasKerja@index');
     
   });
 
