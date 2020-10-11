@@ -146,7 +146,7 @@
   <td>700/222/NKT/2020	</td>
   <td><span class="text-success">Approved</span></td>
   <td class="text-center">
-    <a href="suratkerja.html"><button class="btn btn-info" data-toggle="modal" data-target="#myModal">Buat Kertas Kerja</button></a>
+    <a href="/pemeriksaan/audit/buat-kertaskerja"><button class="btn btn-info" data-toggle="modal" data-target="#myModal">Buat Kertas Kerja</button></a>
     <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
     <a href="review.html"><button class="btn btn-success mt-1"><i class="fa fa-star"></i> Review</button></a>
     <button class="btn btn-warning mt-1"><i class="fa fa-edit"></i> Edit</button>
