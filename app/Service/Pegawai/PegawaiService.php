@@ -2,15 +2,18 @@
 
 namespace App\Service\Pegawai;
 
-use DB;
+
+use Illuminate\Support\Facades\DB;
 use Auth;
 use App\Service\Master\SkpdService;
 use App\Service\Pegawai\EselonService;
 use App\Service\Pegawai\PangkatService;
 use App\Service\Pegawai\JabatanService;
+use App\Service\Pegawai\PeranService;
 use App\Repository\Pegawai\Pegawai;
 use App\Service\Master\WilayahService;
 use Illuminate\Validation\Rule;
+use App\Repository\Pegawai\PeranJabatan;
 
 class PegawaiService
 {
@@ -122,28 +125,39 @@ class PegawaiService
 
   public static function get_anggota($return_chain = false, $wilayah = null)
   {
-    $data = DB::table("pgw_pegawai AS p")
-      ->select(DB::raw("p.id, p.nama, p.id_jabatan, j.name AS jabatan, p.atasan_langsung"))
-      ->join("pgw_jabatan AS j", "p.id_jabatan", "=", "j.id")
-      ->join("pgw_eselon AS e", "p.id_eselon", "=", "e.id")
-      ->join("mst_wilayah AS w", "p.id_wilayah", "=", "w.id")
-      ->leftJoin("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=", "p.id_jabatan")
-      ->leftJoin("pgw_peran AS pp", "pp.id", "=", "ppj.id_peran")
-      ->whereRaw(DB::raw("e.level >= 3"))
-      ->where('p.is_deleted', 0)
-      ->whereRaw(DB::raw("pp.kode NOT IN ('sekretaris','wakil_sekretaris')"))
-      ->groupBy("p.id", "p.nama", "p.id_jabatan", "j.name", "p.atasan_langsung");
+    // get peran yang bukan inspektur dan sekretaris
+    $excludePeran = PeranService::get_specific_role_by_code(['sekretaris', 'wakil_sekretaris']);
 
-    if ($wilayah >= 0 && $wilayah !== null) {
-      $data = $data->where("w.id", $wilayah);
-    }
+    // get id jabatan by id peran
+    $listPeranJabatan = PeranJabatan::whereIn('id_peran', $excludePeran->map(function ($ep) {
+      return $ep->id;
+    }))->get();
+
+    $data = Pegawai::with([
+      'eselon' => function ($query) {
+        $query->whereRaw(DB::raw('level >= 3'));
+      }
+    ]);
+
+    $data->with([
+      'wilayah' => function ($query) use ($wilayah) {
+        if ($wilayah >= 0 && $wilayah !== null) {
+          $query->where("id", $wilayah);
+        }
+      }
+    ]);
+
+    $data->with('jabatan');
+    $data->whereNotIn('id_jabatan', $listPeranJabatan->map(function ($rw) {
+      return $rw->id_jabatan;
+    }));
 
     return $return_chain ? $data : $data->get();
   }
 
   public static function delete($id)
   {
-    $t = Pegawai::findOrFail($id)->delete();
+    return Pegawai::findOrFail($id)->delete();
   }
 
   public static function data_for_form($additional_data = [])
@@ -164,5 +178,19 @@ class PegawaiService
       'jabatan' => $jabatan,
       'wilayah' => $wilayah,
     ]);
+  }
+
+  public static function change_atasan_langsung($id_pegawai, $id_atasan_langsung)
+  {
+    
+    DB::transaction(function () use ($id_pegawai, $id_atasan_langsung) {
+      
+      $t = Pegawai::findOrFail($id_pegawai);
+      
+      $t->atasan_langsung = $id_atasan_langsung;
+      $t->save();
+
+      DB::commit();
+    });
   }
 }

@@ -17,4 +17,14 @@ class Pegawai extends BaseModel
   {
     return $this->belongsTo('App\Repository\Pegawai\Jabatan', 'id_jabatan');
   }
+
+  public function eselon()
+  {
+    return $this->belongsTo('App\Repository\Pegawai\Eselon', 'id_eselon');
+  }
+
+  public function wilayah()
+  {
+    return $this->belongsTo('App\Repository\Master\Wilayah', 'id_wilayah');
+  }
 }

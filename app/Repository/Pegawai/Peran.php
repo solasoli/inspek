@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Model\Pegawai;
+namespace App\Repository\Pegawai;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Repository\BaseModel;
 
-class Peran extends Model
+class Peran extends BaseModel
 {
   protected $table = "pgw_peran";
-  public $timestamps = false;
 }

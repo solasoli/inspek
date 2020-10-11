@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Model\Pegawai;
+namespace App\Repository\Pegawai;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class PeranJabatan extends Model
+class PeranJabatan extends Pivot
 {
   protected $table = "pgw_peran_jabatan";
   public $timestamps = false;
