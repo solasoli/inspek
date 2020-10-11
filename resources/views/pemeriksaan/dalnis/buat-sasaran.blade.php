@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
 <div class="br-mainpanel" id="panel-0">
     <div class="br-pagetitle">
       <div>
@@ -25,7 +24,7 @@
             <div id="conditional_part8" style="display: none;">
               <table class="table">
                 <tr>
-                  <td><div id="editor8" rows="5"><br></div></td>
+                  <td><textarea name="editor1" id="editor1" rows="10" cols="80"></textarea></td>
                 </tr>
                 
               </table>
@@ -38,7 +37,7 @@
              <div id="conditional_part">
               <table class="table">
                 <tr>
-                  <td><div id="editor2" rows="5"><br></div></td>
+                  <td><textarea name="editor2" id="editor2" rows="10" cols="80"></textarea></td>
                 </tr>
                 
               </table>
@@ -53,7 +52,7 @@
               <table class="table">
                
                 <tr>
-                  <td><div id="editor3" rows="5"><br></div></td>
+                  <td><textarea name="editor3" id="editor3" rows="10" cols="80"></textarea></td>
                 </tr>
                 
               </table>
@@ -68,7 +67,7 @@
               <table class="table">
 
                 <tr>
-                  <td><div id="editor4" rows="5"><br></div></td>
+                  <td><textarea name="editor4" id="editor4" rows="10" cols="80"></textarea></td>
                 </tr>
                 
                 
@@ -84,7 +83,7 @@
              <div id="conditional_part4">
               <table class="table">
                 <tr>
-                  <td><div id="editor5" rows="5"><br></div></td>
+                  <td><textarea name="editor5" id="editor5" rows="10" cols="80"></textarea></td>
                 </tr>
                 
               </table>
@@ -99,7 +98,7 @@
              <div id="conditional_part5">
               <table class="table">
                 <tr>
-                  <td><div id="editor6" rows="5"><br></div></td>
+                  <td><textarea name="editor6" id="editor6" rows="10" cols="80"></textarea></td>
                 </tr>
                 
               </table>
@@ -112,7 +111,8 @@
                   <div class="card-header" style="display: none;"><p><input id="more_info6" name="more-info" type="checkbox" /> <input type="text" id="data1" name=""></label></p></div>
                     <input autocomplete="off" class="form-control" style="display: none;" id="field1" name="prof1" type="text" placeholder="" data-provide="typeahead" data-items="8" /><br>
                     <button id="b1" style="margin-left: 13px;width: 200px;" class="btn btn-success add-more" type="button">+ Tambah Poin</button>
-                    <center><button class="btn btn-primary" style="width:30%">SIMPAN</button></center>  
+                    <hr>
+                    <center><button class="btn btn-info" style="width:30%">SAVE AS DRAFT</button>&nbsp;<button class="btn btn-primary" style="width:30%">SIMPAN</button></center>  
                 </div>
                 
               </div>
@@ -125,7 +125,7 @@
 
 
     </div><!-- br-pagebody -->
-
+    
     <script type="text/javascript">
         $(document).ready(function(){
        var next = 1;
@@ -134,22 +134,26 @@
            var addto = "#field" + next;
            var addRemove = "#field" + (next);
            next = next + 1;
-           var newIn = '<br /><label for="data" class="w-100"><div class="card-header"><p><input id="more_info5" name="more-info" type="checkbox" /> <input type="text" id="data1" name=""></label></p></div><input style="display:none" autocomplete="off" class="form-control" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
+           var newIn = '<br /><label for="data" class="w-100"><div class="card-header" id="field' + next + '" name="field' + next + '"><p><input id="more_info5" name="more-info" type="checkbox" /> <input type="text" id="data1" name=""></label></p></div><input style="display:none" autocomplete="off" class="form-control" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
            var newInput = $(newIn);
-           var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >Remove</button></div></div><div id="more_info5">';
+           var removeBtn = '<button id="remove' + (next - 0) + '" class="btn btn-danger remove-me" style="margin:10px; margin-bottom:0px" >Hapus</button>';
 	         var removeButton = $(removeBtn);
            $(addto).after(newInput);
            $(addRemove).after(removeButton);
            $("#field" + next).attr('data-source',$(addto).attr('data-source'));
            $("#count").val(next);  
            
-           $('.remove-me').click(function (e) {
+         
+
+          $('body').on("click", ".remove-me", function(e){
             e.preventDefault();
-            var fieldNum = this.id.charAt(this.id.length - 1);
+            var fieldNum = this.id.charAt(this.id.length-1);
             var fieldID = "#field" + fieldNum;
             $(this).remove();
             $(fieldID).remove();
+            
           });
+
        });
    }); 
    
@@ -231,6 +235,33 @@
                    console.error( error );
                } );
        </script>
+       <script type="text/javascript">
+  // Añade el CK Editor
+CKEDITOR.editorConfig = function (config) {
+    config.language = 'es';
+    config.uiColor = '#F7B42C';
+    config.height = 300;
+    config.toolbarCanCollapse = true;
+  };
+  CKEDITOR.replace('editor1');
+  CKEDITOR.replace('editor2');
+  CKEDITOR.replace('editor3');
+  CKEDITOR.replace('editor4');
+  CKEDITOR.replace('editor5');
+  CKEDITOR.replace('editor6');
+
+// ANADE IMG ON CLICK
+var brandImg = document.querySelectorAll("#brand-img img");
+
+for (var i = 0; i < brandImg.length; i++) {
+    ckEdiloop = brandImg[i];
+    ckEdiloop.addEventListener("click", function(el){
+        ckEdImg = '<p><img src="'+this.src+'" /></p>'; // La forma como las imágenes son envueltas en ckEditor
+        CKEDITOR.instances['editor1'].insertHtml(ckEdImg) // Añade img al editor
+    });
+}
+</script>
+
    
        <script type="text/javascript">
          $('#more_info').change(function() {

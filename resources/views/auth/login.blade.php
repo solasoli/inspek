@@ -79,7 +79,7 @@
         <div class="form-group">
           <input type="password" name="password" class="form-control" placeholder="Password">
         </div><!-- form-group -->
-        <button type="submit" class="btn btn-info btn-block">Login</button>
+        <button type="submit" class="btn btn-info btn-lg" style="float: right;">Login</button>
       </form>
 
 
