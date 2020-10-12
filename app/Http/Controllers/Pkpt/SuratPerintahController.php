@@ -5,27 +5,15 @@ namespace App\Http\Controllers\Pkpt;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Datatables;
-use Validator;
 use Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Input;
-use App\SuratPerintah;
-use App\SuratPerintahAnggota;
-use App\SuratPerintahSasaran;
-use App\Skpd;
+use App\Repository\SuratPerintah\SuratPerintah;
 use App\Wilayah;
-use App\Sasaran;
 use App\DasarSurat;
 use App\Periode;
-use App\Model\Pegawai\Pegawai;
-use App\Model\Pegawai\Peran;
-use App\Kegiatan;
-use App\Service\KegiatanService;
 use App\Service\PegawaiService;
 use App\Service\ProgramKerjaService;
-use App\Service\SuratPerintahService;
-use App\ProgramKerja;
+use App\Service\SuratPerintah\SuratPerintahService;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -130,36 +118,8 @@ class SuratPerintahController extends Controller
     {
       $data = SuratPerintah::find($id);
 
-      $data_sp = DB::table("pkpt_surat_perintah AS sp")
-        ->select(DB::raw("sp.*,
-          w.nama AS nama_wilayah,
-          pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
-          pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
-          ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
-          pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
-          pk.sub_kegiatan AS nama_kegiatan, skpd.name AS nama_skpd"))
-      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
-      ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
-      ->join("pgw_pegawai AS pib", "pib.id", "=", "sp.id_inspektur_pembantu")
-      ->join("pgw_jabatan AS pibj", "pibj.id", "=", "pib.id_jabatan")
-      ->join("pgw_pegawai AS ppt", "ppt.id", "=", "sp.id_pengendali_teknis")
-      ->join("pgw_jabatan AS pptj", "pptj.id", "=", "ppt.id_jabatan")
-      ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
-      ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
-      ->join("mst_program_kerja AS pk", "pk.id", "=", "sp.id_program_kerja")
-      ->join("mst_skpd AS skpd", "skpd.id", "=","pk.id_skpd")
-      ->where('sp.is_deleted', 0)
-      ->where("sp.id", $id)
-      ->first();
-
-      $anggota = SuratPerintahService::get_anggota($id);
-      $sasaran = SuratPerintahService::get_sasaran($id);
-
       return view('pkpt.surat_perintah-detail', [
-        'data' => $data_sp,
-        'anggota' => $anggota,
-        'sasaran' => $sasaran
+        'data' => $data
       ]);
     }
 

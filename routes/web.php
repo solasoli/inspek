@@ -219,8 +219,11 @@ Route::middleware(['auth'])->group(function () {
   // });
 
   Route::prefix('pemeriksaan')->group(function(){
-
-    Route::get('/dalnis/penentuan-sasaran-tujuan', 'Pemeriksaan\PenentuanSasaranTujuan@index');
+    Route::prefix('sasaran-tujuan')->group(function () {
+      Route::get('/', 'Pemeriksaan\SasaranTujuanController@index');
+      Route::get('/datatables', 'Pemeriksaan\SasaranTujuanController@list_datatables_api');
+      Route::get('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@edit');
+    });
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
     Route::get('/dalnis/detail-penentuan', 'Pemeriksaan\DetailPenentuan@index');
     Route::get('/dalnis/detail-sp', 'Pemeriksaan\DetailSP@index');

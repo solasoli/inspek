@@ -58762,3 +58762,8 @@ a.hover-white-8:hover, a.hover-white-8:focus {
   font-size: 15px;
   margin: 18px;
 }
+
+.wizard > .steps a {
+  flex-direction: row;
+  display: flex !important;
+}

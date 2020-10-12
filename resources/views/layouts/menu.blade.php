@@ -51,7 +51,7 @@
   </div>
 </a>
 <ul class="br-menu-sub nav flex-column">
-  <li class="nav-item"><a href="/pemeriksaan/dalnis/penentuan-sasaran-tujuan" class="nav-link">Penentuan Sasaran Tujuan</a></li>
+  <li class="nav-item"><a href="/pemeriksaan/sasaran-tujuan" class="nav-link">Penentuan Sasaran Tujuan</a></li>
   <li class="nav-item"><a href="/pemeriksaan/ketua/program-kerja-audit" class="nav-link">Program Kerja Audit</a></li>
   <li class="nav-item"><a href="/pemeriksaan/audit/audit" class="nav-link">Melakukan Audit</a></li>
   <li class="nav-item"><a href="/pemeriksaan/irban/draft-nhp" class="nav-link">Laporan NHP</a></li>

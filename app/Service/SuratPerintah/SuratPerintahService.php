@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\SuratPerintah;
 
 use DB;
 use Auth;
 use App\Kegiatan;
 use App\Sasaran;
-use App\SuratPerintah;
+use App\Repository\SuratPerintah\SuratPerintah;
 use App\SuratPerintahAnggota;
 use App\SuratPerintahSasaran;
 use App\ProgramKerja;
@@ -166,6 +166,15 @@ class SuratPerintahService
     ->join("mst_sasaran AS sa", "sa.id", "=", "ssa.id_sasaran")
     ->where("ssa.is_deleted", 0)
     ->where("sp.id", $id_sp);
+
+    return $return_chain ? $data : $data->get();
+  }
+
+  /**
+   * Get Valid Surat Perintah yang sudah bernomer surat
+   */
+  public static function get_valid_sp($return_chain = false) {
+    $data = SuratPerintah::whereRaw(DB::raw("no_surat <> ''"));
 
     return $return_chain ? $data : $data->get();
   }

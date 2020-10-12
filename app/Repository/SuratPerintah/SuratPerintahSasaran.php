@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Repository\SuratPerintah;
 
 use Illuminate\Database\Eloquent\Model;
 
