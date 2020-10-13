@@ -14,6 +14,7 @@ use App\Repository\Master\Skpd;
 use App\Repository\Master\Kegiatan;
 use App\Service\Master\SkpdService;
 use App\Service\Master\KegiatanService;
+use App\Http\Requests\Master\KegiatanRequest;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -26,34 +27,18 @@ class KegiatanController extends Controller
       return view('Mst.kegiatan-list');
     }
 
-    public function create()
+    public function store(KegiatanRequest $request)
     {
-    }
-
-    public function store(Request $request)
-    {
-      $validation = KegiatanService::get_validation();
-      request()->validate($validation->rules, $validation->label);
-
       KegiatanService::create($request->input());
-
-      $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
-      return redirect('/mst/kegiatan');
+      $request->session()->flash('success', "Data berhasil disimpan!");
+      return response()->json(['success' => true]);
     }
 
-    public function edit($id)
+    public function update(KegiatanRequest $request, $id)
     {
-    }
-
-    public function update(Request $request, $id)
-    {
-      $validation = KegiatanService::get_validation();
-      request()->validate($validation->rules, $validation->label);
-
       KegiatanService::update($id, $request->input());
-
-      $request->session()->flash('success', "Data berhasil diubah!");
-      return redirect('/mst/kegiatan');
+      $request->session()->flash('success', "Data berhasil disimpan!");
+      return response()->json(['success' => true]);
     }
 
     public function destroy(Request $request, $id)

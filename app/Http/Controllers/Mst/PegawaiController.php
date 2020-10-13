@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Repository\Pegawai\Pegawai;
 use App\Inspektur;
 use App\Service\Pegawai\PegawaiService;
+use App\Http\Requests\Master\PegawaiRequest;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -19,26 +20,18 @@ class PegawaiController extends Controller
       return view('Mst.pegawai-list', $data);
     }
 
-    public function store(Request $request)
+    public function store(PegawaiRequest $request)
     {
-      $validation_rules = PegawaiService::get_validation();
-      request()->validate($validation_rules->rules, $validation_rules->label);
-
       PegawaiService::create($request->input());
-
-      $request->session()->flash('success', "<strong>{$request->input('nama')}</strong> Berhasil disimpan!");
-      return redirect('/mst/pegawai');
+      $request->session()->flash('success', "Data berhasil disimpan!");
+      return response()->json(['success' => true]);
     }
 
-    public function update(Request $request, $id)
+    public function update(PegawaiRequest $request, $id)
     {
-      $validation_rules = PegawaiService::get_validation();
-      request()->validate($validation_rules->rules, $validation_rules->label);
-
       PegawaiService::update($id, $request->input());
-
-      $request->session()->flash('success', "Data berhasil diubah!");
-      return redirect('/mst/pegawai');
+      $request->session()->flash('success', "Data berhasil disimpan!");
+      return response()->json(['success' => true]);
     }
 
     public function destroy(Request $request, $id)
@@ -51,8 +44,8 @@ class PegawaiController extends Controller
 
     public function list_datatables_api()
     {
-      $data = Pegawai::with(['pangkat_golongan', 'jabatan']);
-  
+      $data = Pegawai::with(['pangkat_golongan', 'jabatan'])->where('is_deleted', 0);
+
       return Datatables::eloquent($data)->toJson();
     }
 

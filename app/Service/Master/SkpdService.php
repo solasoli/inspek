@@ -10,48 +10,6 @@ use App\Sasaran;
 
 class SkpdService
 {
-    public static function get_validation($id = 0)
-    {
-        $rules = [
-            'wilayah' => ['required']
-        ];
-
-        if ($id == 0) {
-            $rules = array_merge(
-                $rules,
-                ['name' => [
-                    'required',
-                    Rule::unique('mst_skpd', 'name')->where(function ($query) {
-                        return $query->where('is_deleted', 0);
-                    })
-
-                ]]
-            );
-        } else {
-            $rules = array_merge(
-                $rules,
-                ['name' => [
-                    'required',
-                    Rule::unique('mst_skpd', 'name')->where(function ($query) use ($id) {
-                        return $query->where('is_deleted', 0)->where("id", "!=", $id);
-                    })
-
-                ]]
-            );
-        }
-
-        $label = [
-            'name.required' => 'Nama SKPD harus diisi!',
-            'name.unique' => 'Nama SKPD sudah ada!',
-            'wilayah.required' => 'Wilayah harus diisi!'
-        ];
-
-        return (object) array(
-            'rules' => $rules,
-            'label' => $label
-        );
-    }
-
     public static function create($data)
     {
         $t = new Skpd;

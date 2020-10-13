@@ -182,11 +182,11 @@ class PegawaiService
 
   public static function change_atasan_langsung($id_pegawai, $id_atasan_langsung)
   {
-    
+
     DB::transaction(function () use ($id_pegawai, $id_atasan_langsung) {
-      
+
       $t = Pegawai::findOrFail($id_pegawai);
-      
+
       $t->atasan_langsung = $id_atasan_langsung;
       $t->save();
 

@@ -27,8 +27,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('skpd')->group(function () {
       Route::get('/', 'Mst\SkpdController@index');
-      Route::get('/add', 'Mst\SkpdController@create');
-      Route::get('/edit/{id}', 'Mst\SkpdController@edit');
       Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
       Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
       Route::get('/get_skpd_by_id', 'Mst\SkpdController@get_skpd_by_id');
@@ -232,7 +230,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit/audit', 'Pemeriksaan\AuditController@index');
     Route::get('/audit/buat-kertaskerja', 'Pemeriksaan\BuatKertasKerja@index');
     Route::get('/audit/buat-kertaskerja-utama', 'Pemeriksaan\BuatKertasKerjaUtama@index');
-    
+
   });
 
 
