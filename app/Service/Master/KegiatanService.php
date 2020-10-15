@@ -9,47 +9,6 @@ use App\Repository\Master\Kegiatan;
 
 class KegiatanService
 {
-  public static function get_validation($id = 0)
-  {
-      $rules = [
-          'nama' => ['required']
-      ];
-
-      if ($id == 0) {
-          $rules = array_merge(
-              $rules,
-              ['nama' => [
-                  'required',
-                  Rule::unique('mst_kegiatan', 'nama')->where(function ($query) {
-                      return $query->where('is_deleted', 0);
-                  })
-
-              ]]
-          );
-      } else {
-          $rules = array_merge(
-              $rules,
-              ['nama' => [
-                  'required',
-                  Rule::unique('mst_kegiatan', 'nama')->where(function ($query) use ($id) {
-                      return $query->where('is_deleted', 0)->where("id", "!=", $id);
-                  })
-
-              ]]
-          );
-      }
-
-      $label = [
-          'nama.required' => 'Nama Kegiatan harus diisi!',
-          'nama.unique' => 'Nama Kegiatan sudah ada!',
-      ];
-
-      return (object) array(
-          'rules' => $rules,
-          'label' => $label
-      );
-  }
-
   public static function create($data)
   {
     $t = new Kegiatan;

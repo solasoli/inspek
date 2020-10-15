@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Repository\Master\Skpd;
 use App\Service\Master\SkpdService;
 use App\Service\Master\WilayahService;
+use App\Http\Requests\Master\SkpdRequest;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -24,26 +25,18 @@ class SkpdController extends Controller
     ]);
   }
 
-  public function store(Request $request)
+  public function store(SkpdRequest $request)
   {
-    $validation_rules = SkpdService::get_validation();
-    request()->validate($validation_rules->rules, $validation_rules->label);
-
     SkpdService::create($request->input());
-
-    $request->session()->flash('success', "<strong>" . $request->input('name') . "</strong> Berhasil disimpan!");
-    return redirect('/mst/skpd');
+    $request->session()->flash('success', "Data berhasil disimpan!");
+    return response()->json(['success' => true]);
   }
 
-  public function update(Request $request, $id)
+  public function update(SkpdRequest $request, $id)
   {
-    $validation_rules = SkpdService::get_validation($id);
-    request()->validate($validation_rules->rules, $validation_rules->label);
-
     SkpdService::update($id, $request->input());
-
-    $request->session()->flash('success', "<strong>" . $request->input('name') . "</strong> berhasil diubah!");
-    return redirect('/mst/skpd');
+    $request->session()->flash('success', "Data berhasil disimpan!");
+    return response()->json(['success' => true]);
   }
 
   public function destroy(Request $request, $id)
@@ -56,7 +49,7 @@ class SkpdController extends Controller
 
   public function list_datatables_api()
   {
-    $data = Skpd::with('wilayah');
+    $data = Skpd::with('wilayah')->where('is_deleted', 0);
 
     return Datatables::eloquent($data)->toJson();
   }

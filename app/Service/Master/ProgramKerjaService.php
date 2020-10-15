@@ -4,10 +4,10 @@ namespace App\Service\Master;
 
 use DB;
 use Auth;
-use App\Kegiatan;
-use App\ProgramKerja;
-use App\Sasaran;
-use App\Service\KegiatanService;
+use App\Repository\Master\Kegiatan;
+use App\Repository\Master\ProgramKerja;
+use App\Repository\Master\Sasaran;
+use App\Service\Master\KegiatanService;
 
 class ProgramKerjaService
 {
@@ -47,7 +47,7 @@ class ProgramKerjaService
       if(isset($data['type_pkpt'])) {
         $t->type_pkpt = $data['type_pkpt'];
       }
-      
+
       $t->dari = $use['dari'].' 00:00:00';
       $t->sampai = $use['sampai'].' 00:00:00';
       $t->id_kegiatan = $data['kegiatan'];
@@ -77,7 +77,7 @@ class ProgramKerjaService
       DB::table('pkpt_surat_perintah')
       ->where('id_program_kerja', $t->id)
       ->update(['dari' => $t->dari, 'sampai' => $t->sampai]);
-      
+
       // buat kegiatan
       // $data['program_kerja'] = $t->id;
       // $kegiatan = KegiatanService::createOrUpdate($t->id, $data);

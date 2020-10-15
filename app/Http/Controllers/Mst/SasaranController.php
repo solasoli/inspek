@@ -9,9 +9,9 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
-use App\Skpd;
-use App\Sasaran;
 use App\Service\Master\SasaranService;
+use App\Repository\Master\Skpd;
+use App\Repository\Master\Sasaran;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -133,7 +133,7 @@ class SasaranController extends Controller
     }
 
     public function get_kegiatan_by_id_skpd(Request $request)
-    {  
+    {
       $id_skpd = $request->input('id') > 0 ? $request->input('id') : 0;
       $data = Sasaran::where('id_skpd', $id_skpd)
       ->where('is_deleted', 0)

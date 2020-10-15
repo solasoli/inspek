@@ -37,7 +37,7 @@
     </div>
   </div>
   @endif
-  
+
   @if($errors->any())
   <div class="row">
     <div class="alert alert-danger col-lg-12">
@@ -61,7 +61,7 @@
           <div class="float-right">
 
             @if(can_access("mst_kegiatan", "add"))
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-form" data-id="0"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
             @endif
           </div>
         </div>
@@ -80,11 +80,8 @@
   </div>
 </div>
 
-<!-- modal add -->
-@include('Mst.kegiatan-form_add')
-
-<!-- modal edit -->
-@include('Mst.kegiatan-form_edit')
+<!-- modal form -->
+@include('Mst.kegiatan-form')
 @endsection
 
 @section('scripts')
@@ -107,7 +104,7 @@ $(function() {
       { data: null, orderable: false, render: function ( data, type, row ) {
         var return_button = "";
         @if(can_access("mst_kegiatan", "edit"))
-        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-idkegiatan='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
+        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
         @endif
         @if(can_access("mst_kegiatan", "delete"))
         return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
@@ -123,7 +120,8 @@ $(function() {
       $(".alert-success").hide(1000);
     }, 3000);
 
-    $('#addModal, #editModal').on('show.bs.modal', function () {
+    $('#modal-form').on('show.bs.modal', function () {
+      $(this).find('.error').html('');
       $(this).find('form').trigger('reset');
     });
 
