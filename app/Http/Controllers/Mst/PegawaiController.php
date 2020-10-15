@@ -85,91 +85,24 @@ class PegawaiController extends Controller
 
     }
 
-    public function get_current_inspektur($return_object = false){
-
-      $list_inspektur = DB::table("pgw_pegawai AS p")
-      ->select(DB::raw("p.id, p.nama"))
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where("pp.kode", 'inspektur')
-      ->orWhere("p.id", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
-      ->groupBy("p.id", "p.nama")
-      ->first();
-
-      if($return_object){
-        return $inspektur;
-      }
-      else{
-        return response()->json(['data' => $inspektur]);
-      }
-
-    }
-
     public function get_inspektur_pembantu_by_wilayah(Request $request)
     {
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
 
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur_pembantu, p.id AS id_inspektur_pembantu"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where('p.is_deleted', 0)
-      ->whereIn("pp.kode", ['inspektur_pembantu', 'wakil_inspektur_pembantu'])
-      ->where("w.is_deleted", 0);
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
-      }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
+      $data = PegawaiService::get_inspektur_pembantu_by_wilayah($id_wilayah);
       return response()->json(["data" => $data]);
     }
 
 
     public function get_pengendali_teknis_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_pengendali_teknis, p.id AS id_pengendali_teknis"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where('p.is_deleted', 0)
-      ->whereIn("pp.kode", ['pengendali_mutu', 'pengendali_teknis'])
-      ->where("w.is_deleted", 0);
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
-      }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
+      $data = PegawaiService::get_pengendali_teknis_by_wilayah($request->input('id_wilayah'));
       return response()->json(["data" => $data]);
     }
 
     public function get_ketua_tim_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_ketua_tim, p.id AS id_ketua_tim"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where('p.is_deleted', 0)
-      ->where("pp.kode", 'ketua_tim')
-      ->where("w.is_deleted", 0);
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
-      }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
+      $data = PegawaiService::get_ketua_tim_by_wilayah($request->input('id_wilayah'));
       return response()->json(["data" => $data]);
     }
 

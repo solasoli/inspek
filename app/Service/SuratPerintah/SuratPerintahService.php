@@ -4,14 +4,18 @@ namespace App\Service\SuratPerintah;
 
 use DB;
 use Auth;
-use App\Kegiatan;
-use App\Sasaran;
+use App\Repository\Master\Kegiatan;
 use App\Repository\SuratPerintah\SuratPerintah;
-use App\SuratPerintahAnggota;
-use App\SuratPerintahSasaran;
-use App\ProgramKerja;
+use App\Repository\SuratPerintah\SuratPerintahAnggota;
+use App\Repository\SuratPerintah\SuratPerintahSasaran;
+use App\Repository\Master\ProgramKerja;
 use App\Service\KegiatanService;
-use App\Service\ProgramKerjaService;
+use App\Service\Master\ProgramKerjaService;
+use App\Service\Master\PeriodeService;
+use App\Service\Master\WilayahService;
+use App\Service\Pegawai\PegawaiService;
+
+use App\Repository\Master\DasarSurat;
 
 class SuratPerintahService
 {
@@ -148,28 +152,6 @@ class SuratPerintahService
     });
   }
 
-  public static function get_anggota($id_sp, $return_chain = false) {
-    $data = DB::table("pkpt_surat_perintah AS sp")
-    ->select(DB::raw("p.*"))
-    ->join("pkpt_surat_perintah_anggota AS spa", "spa.id_surat_perintah", "=", "sp.id")
-    ->join("pgw_pegawai AS p", "p.id", "=", "spa.id_anggota")
-    ->where("spa.is_deleted", 0)
-    ->where("sp.id", $id_sp);
-
-    return $return_chain ? $data : $data->get();
-  }
-
-  public static function get_sasaran($id_sp, $return_chain = false) {
-    $data = DB::table("pkpt_surat_perintah AS sp")
-    ->select(DB::raw("sa.*"))
-    ->join("pkpt_surat_perintah_sasaran AS ssa", "ssa.id_surat_perintah", "=", "sp.id")
-    ->join("mst_sasaran AS sa", "sa.id", "=", "ssa.id_sasaran")
-    ->where("ssa.is_deleted", 0)
-    ->where("sp.id", $id_sp);
-
-    return $return_chain ? $data : $data->get();
-  }
-
   /**
    * Get Valid Surat Perintah yang sudah bernomer surat
    */
@@ -177,6 +159,25 @@ class SuratPerintahService
     $data = SuratPerintah::whereRaw(DB::raw("no_surat <> ''"));
 
     return $return_chain ? $data : $data->get();
+  }
+
+  public static function data_for_form($additional_data = [], $id_sp = 0)
+  {
+
+    $wilayah = WilayahService::get_data();
+    $periode = PeriodeService::get_data();
+    $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
+    $list_inspektur = PegawaiService::get_current_inspektur($id_sp);
+
+    $dasar_surat = DasarSurat::first();
+
+    return array_merge($additional_data, [
+      'program_kerja' => $program_kerja,
+      'wilayah' => $wilayah,
+      'dasar_surat' => $dasar_surat,
+      'periode' => $periode,
+      'list_inspektur' => $list_inspektur,
+    ]);
   }
 
 }

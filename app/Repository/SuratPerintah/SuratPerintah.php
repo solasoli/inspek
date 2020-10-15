@@ -45,11 +45,13 @@ class SuratPerintah extends Model
 
   public function anggota()
   {
-    return $this->hasManyThrough('App\Repository\Pegawai\Pegawai', 'App\Repository\SuratPerintah\SuratPerintahAnggota', 'id_surat_perintah', 'id', null, 'id_anggota');
+    return $this->hasManyThrough('App\Repository\Pegawai\Pegawai', 'App\Repository\SuratPerintah\SuratPerintahAnggota', 'id_surat_perintah', 'id', null, 'id_anggota')
+    ->where('pkpt_surat_perintah_anggota.is_deleted',0);
   }
   
   public function sasaran()
   {
-    return $this->hasManyThrough('App\Repository\Master\Sasaran', 'App\Repository\SuratPerintah\SuratPerintahSasaran', 'id_surat_perintah', 'id', null, 'id_sasaran');
+    return $this->hasManyThrough('App\Repository\Master\Sasaran', 'App\Repository\SuratPerintah\SuratPerintahSasaran', 'id_surat_perintah', 'id', null, 'id_sasaran')
+    ->where('pkpt_surat_perintah_sasaran.is_deleted',0);
   }
 }

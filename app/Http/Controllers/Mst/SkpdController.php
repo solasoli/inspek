@@ -17,7 +17,7 @@ class SkpdController extends Controller
 
   public function index()
   {
-    $wilayah_kerja = WilayahService::get_wilayah();
+    $wilayah_kerja = WilayahService::get_data();
 
     return view('Mst.skpd-list', [
       'wilayah_kerja' => $wilayah_kerja

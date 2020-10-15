@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
 use App\Skpd;
 use App\Sasaran;
+use App\Service\Master\SasaranService;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -125,12 +126,8 @@ class SasaranController extends Controller
 
     public function get_sasaran_by_id_kegiatan(Request $request)
     {
-      $id = $request->input('id');
-      $id = $id > 0 ? $id : 0;
-      $data = Sasaran::where("is_deleted", 0)
-      ->where("id_kegiatan", $id)
-      ->where("id_kegiatan",">",0)
-      ->get();
+      $id_kegiatan = $request->input('id') > 0 ? $request->input('id') : 0;
+      $data = SasaranService::get_by_id_kegiatan($id_kegiatan);
 
       return response()->json($data);
     }

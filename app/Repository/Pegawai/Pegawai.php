@@ -32,4 +32,9 @@ class Pegawai extends BaseModel
   {
     return $this->belongsTo('App\Repository\Master\Wilayah', 'id_wilayah');
   }
+
+  public function peran()
+  {
+    return $this->belongsTo('App\Repository\Pegawai\Peran', 'id_peran');
+  }
 }

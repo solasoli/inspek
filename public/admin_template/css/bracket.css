@@ -58767,3 +58767,15 @@ a.hover-white-8:hover, a.hover-white-8:focus {
   flex-direction: row;
   display: flex !important;
 }
+
+.wizard > .steps a.danger {
+  color: #b51f2e !important;
+  background-color: #f7d1d5 !important;
+  border-color: #DC3545 !important;
+}
+
+.wizard > .steps a.success {
+  color: #1c9806 !important;
+  background-color: #bcfcb1 !important;
+  border-color: #23bf08 !important;
+}

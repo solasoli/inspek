@@ -4,12 +4,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">Surat Perintah {{ $type == 1 ? "PKPT" : "Non-PKPT"}}</a>
+    <a class="breadcrumb-item Active" href="#">Surat Perintah Non-PKPT</a>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Surat Perintah {{ $type == 1 ? "PKPT" : "Non-PKPT"}}</h4>
+  <h4 class="tx-gray-800 mg-b-5">{{ isset($data) ? "Edit" : "Tambah" }} Surat Perintah Non-PKPT</h4>
 </div>
 
 <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">

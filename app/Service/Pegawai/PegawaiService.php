@@ -14,6 +14,7 @@ use App\Repository\Pegawai\Pegawai;
 use App\Service\Master\WilayahService;
 use Illuminate\Validation\Rule;
 use App\Repository\Pegawai\PeranJabatan;
+use App\Repository\SuratPerintah\SuratPerintah;
 
 class PegawaiService
 {
@@ -182,15 +183,69 @@ class PegawaiService
 
   public static function change_atasan_langsung($id_pegawai, $id_atasan_langsung)
   {
-    
+
     DB::transaction(function () use ($id_pegawai, $id_atasan_langsung) {
-      
+
       $t = Pegawai::findOrFail($id_pegawai);
-      
+
       $t->atasan_langsung = $id_atasan_langsung;
       $t->save();
 
       DB::commit();
     });
+  }
+
+  public static function get_current_inspektur($id_sp = 0)
+  {
+
+    $list_inspektur = self::get_pegawai_by_peran(['inspektur']);
+
+    if ($id_sp > 0) {
+      $get_inspektur_from_sp = SuratPerintah::find($id_sp);
+      $list_inspektur = $list_inspektur->orWhere("id", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0);
+    }
+
+    $list_inspektur = $list_inspektur->get();
+
+    return $list_inspektur;
+  }
+
+  public static function get_inspektur_pembantu_by_wilayah($id_wilayah = 0)
+  {
+    $pegawai = self::get_pegawai_by_peran(['inspektur_pembantu']);
+
+    return $pegawai->where('id_wilayah', $id_wilayah)->get();
+  }
+
+  public static function get_pengendali_teknis_by_wilayah($id_wilayah)
+  {
+    $pegawai = self::get_pegawai_by_peran(['pengendali_teknis']);
+
+    if ($id_wilayah != 'all') {
+      $pegawai = $pegawai->where("id_wilayah", $id_wilayah);
+    }
+    return $pegawai->get();
+  }
+
+  public static function get_ketua_tim_by_wilayah($id_wilayah)
+  {
+    $pegawai = self::get_pegawai_by_peran(['ketua_tim']);
+
+    if ($id_wilayah != 'all') {
+      $pegawai = $pegawai->where("id_wilayah", $id_wilayah);
+    }
+    return $pegawai->get();
+  }
+
+  public static function get_pegawai_by_peran($role = [])
+  {
+
+    $pegawai = Pegawai::whereHas('jabatan', function ($q) use ($role) {
+      $q->whereHas('peran', function ($qj) use ($role) {
+        $qj->whereIn('kode', $role);
+      });
+    });
+
+    return $pegawai;
   }
 }
