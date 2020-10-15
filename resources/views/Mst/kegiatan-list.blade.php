@@ -38,6 +38,21 @@
   </div>
   @endif
 
+  @if($errors->any())
+  <div class="row">
+    <div class="alert alert-danger col-lg-12">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="d-flex align-items-center justify-content-start">
+        @foreach ($errors->all() as $error)
+          <span>{{ $error }}</span>
+        @endforeach
+      </div>
+    </div>
+  </div>
+  @endif
+
   <div class="row">
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
@@ -46,7 +61,7 @@
           <div class="float-right">
 
             @if(can_access("mst_kegiatan", "add"))
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-form" data-id="0"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
             @endif
           </div>
         </div>
@@ -55,8 +70,6 @@
             <thead>
               <tr>
                 <th>Nama Kegiatan</th>
-                <!-- <th>Singkatan PD</th> -->
-                <th>Perangkat Daerah</th>
                 <th style='width:150px'>Aksi</th>
               </tr>
             </thead>
@@ -67,11 +80,8 @@
   </div>
 </div>
 
-<!-- modal add -->
-@include('Mst.kegiatan-form_add')
-
-<!-- modal edit -->
-@include('Mst.kegiatan-form_edit')
+<!-- modal form -->
+@include('Mst.kegiatan-form')
 @endsection
 
 @section('scripts')
@@ -90,13 +100,11 @@ $(function() {
     serverSide: true,
     ajax: '{{url()->current()}}/datatables/',
     columns: [
-      { data: 'nama', name: 'k.nama'},
-      // { data: 'singkatan_pd', name: 'singkatan_pd'},
-      { data: 'nama_skpd', name: 'skpd.name'},
+      { data: 'nama', name: 'nama'},
       { data: null, orderable: false, render: function ( data, type, row ) {
         var return_button = "";
         @if(can_access("mst_kegiatan", "edit"))
-        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-idkegiatan='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
+        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
         @endif
         @if(can_access("mst_kegiatan", "delete"))
         return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
@@ -104,19 +112,16 @@ $(function() {
         return return_button == "" ? "-" : return_button;
       }},
     ],
-    columnDefs: [
-      {
-        targets: 2,
-        className: "text-center",
-      }],
     });
+
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
 
     setTimeout(function() {
       $(".alert-success").hide(1000);
     }, 3000);
 
-    $('#addModal, #editModal').on('show.bs.modal', function () {
+    $('#modal-form').on('show.bs.modal', function () {
+      $(this).find('.error').html('');
       $(this).find('form').trigger('reset');
     });
 

@@ -8,11 +8,8 @@ use Datatables;
 use Validator;
 use Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Input;
 use App\Wilayah;
 use App\InspekturPembantu;
-use App\Skpd;
 use App\Model\Pegawai\Pegawai;
 
 date_default_timezone_set('Asia/Jakarta');

@@ -5,180 +5,103 @@ namespace App\Http\Controllers\Pkpt;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Datatables;
-use Validator;
 use Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Input;
-use App\SuratPerintah;
-use App\SuratPerintahAnggota;
-use App\SuratPerintahSasaran;
-use App\Skpd;
+use App\Repository\SuratPerintah\SuratPerintah;
 use App\Wilayah;
-use App\Sasaran;
 use App\DasarSurat;
 use App\Periode;
-use App\Model\Pegawai\Pegawai;
-use App\Model\Pegawai\Peran;
-use App\Kegiatan;
-use App\Service\KegiatanService;
-use App\Service\PegawaiService;
+use App\Service\Pegawai\PegawaiService;
 use App\Service\ProgramKerjaService;
-use App\Service\SuratPerintahService;
-use App\ProgramKerja;
+use App\Service\SuratPerintah\SuratPerintahService;
 
 date_default_timezone_set('Asia/Jakarta');
 
 class SuratPerintahController extends Controller
 {
-    public function index()
-    {
-      return view('pkpt.surat_perintah-list');
-    }
+  public function index()
+  {
+    return view('pkpt.surat_perintah-list');
+  }
 
-    public function create($type)
-    {
-      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      
-      $periode = Periode::where("is_deleted", 0)->get();
-      $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
-      $list_inspektur = $this->get_current_inspektur(0);
+  public function create($type)
+  {
 
-      $dasar_surat = DasarSurat::first();
-      $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
+    $data = SuratPerintahService::data_for_form();
+    $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
 
-      return view('pkpt.'. $surat_perintah_file,[
-        'program_kerja' => $program_kerja,
-        'wilayah' => $wilayah,
-        'dasar_surat' => $dasar_surat,
-        'periode' => $periode,
-        'list_inspektur' => $list_inspektur,
-        'type' => $type
-      ]);
-    }
+    return view('pkpt.' . $surat_perintah_file, $data);
+  }
 
-    public function store(Request $request, $type)
-    {
+  public function store(Request $request, $type)
+  {
+    SuratPerintahService::create($request->input(), $type);
 
-      $logged_user = Auth::user();
+    $request->session()->flash('message', "Data Berhasil disimpan!");
+    return redirect('/pkpt/surat_perintah');
+  }
 
-      // dd($request->input());
-      SuratPerintahService::create($request->input(), $type);
+  public function edit($id)
+  {
+    $surat_perintah = SuratPerintah::findOrFail($id);    
+    $anggota = PegawaiService::get_anggota(false, $surat_perintah->program_kerja->id_wilayah);
+    $data = SuratPerintahService::data_for_form(['data' => $surat_perintah, 'anggota' => $anggota]);
 
-      $request->session()->flash('message', "Data Berhasil disimpan!");
-      return redirect('/pkpt/surat_perintah');
-    }
+    $surat_perintah_file = $surat_perintah->is_pkpt == 1 ? 'surat_perintah_pkpt-form' : ($surat_perintah->is_pkpt == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
 
-    public function edit($id)
-    {
-      $surat_perintah = SuratPerintah::findOrFail($id);
+    // 'program_kerja' => $program_kerja,
+    // 'wilayah' => $wilayah,
+    // 'dasar_surat' => $dasar_surat,
+    // 'periode' => $periode,
+    // 'list_inspektur' => $list_inspektur,
 
-      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      $periode = Periode::where("is_deleted", 0)->get();
-      $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
-      $list_inspektur = $this->get_current_inspektur(0);
+    return view('pkpt.' . $surat_perintah_file, $data);
+  }
 
-      $type = $surat_perintah->is_pkpt;
+  public function update(Request $request, $id)
+  {
+    SuratPerintahService::update($id, $request->input());
 
-      $dasar_surat = DasarSurat::first();
+    $request->session()->flash('message', "Data berhasil Dirubah!");
+    return redirect('/pkpt/surat_perintah');
+  }
 
-      $sp_sasaran = SuratPerintahService::get_sasaran($surat_perintah->id);
-      $sp_anggota = SuratPerintahService::get_anggota($surat_perintah->id);
+  public function approve(Request $request, $id)
+  {
+    $logged_user = Auth::user();
+    $t = SuratPerintah::findOrFail($id);
+    $t->is_approve = 1;
+    $t->save();
 
-      $current_progker = ProgramKerjaService::get_by_id($surat_perintah->id_program_kerja);
-      $anggota = PegawaiService::get_anggota(false, $current_progker->id_wilayah);
+    $request->session()->flash('message', "<strong>" . $t->nama . "</strong> berhasil diapprove!");
+    return redirect('/pkpt/surat_perintah');
+  }
 
-      $surat_perintah_file = $surat_perintah->is_pkpt == 1 ? 'surat_perintah_pkpt-form' : ($surat_perintah->is_pkpt == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
+  public function info($id)
+  {
+    $data = SuratPerintah::find($id);
 
-
-      return view('pkpt.'.$surat_perintah_file,[
-        'data' => $surat_perintah,
-        'program_kerja' => $program_kerja,
-        'wilayah' => $wilayah,
-        'dasar_surat' => $dasar_surat,
-        'periode' => $periode,
-        'list_inspektur' => $list_inspektur,
-        'type' => $type,
-        'sp_sasaran' => $sp_sasaran,
-        'sp_anggota' => $sp_anggota,
-        'anggota' => $anggota,
-        'current_progker' => $current_progker,
-      ]);
-
-    }
-
-    public function update(Request $request, $id)
-    {
-      SuratPerintahService::update($id, $request->input());
-
-      $request->session()->flash('message', "Data berhasil Dirubah!");
-      return redirect('/pkpt/surat_perintah');
-    }
-
-    public function approve(Request $request, $id)
-    {
-      $logged_user = Auth::user();
-      $t = SuratPerintah::findOrFail($id);
-      $t->is_approve = 1;
-      $t->save();
-
-      $request->session()->flash('message', "<strong>".$t->nama."</strong> berhasil diapprove!");
-      return redirect('/pkpt/surat_perintah');
-    }
-
-    public function info($id)
-    {
-      $data = SuratPerintah::find($id);
-
-      $data_sp = DB::table("pkpt_surat_perintah AS sp")
-        ->select(DB::raw("sp.*,
-          w.nama AS nama_wilayah,
-          pi.nama AS nama_inspektur, pik.name AS inspektur_pangkat, pi.nip AS nip_inspektur,
-          pib.nama AS nama_inspektur_pembantu, pibj.name AS inspektur_pembantu_jabatan,
-          ppt.nama AS nama_pengendali_teknis, pptj.name AS pengendali_teknis_jabatan,
-          pkt.nama AS nama_ketua_tim, pktj.name AS ketua_tim_jabatan,
-          pk.sub_kegiatan AS nama_kegiatan, skpd.name AS nama_skpd"))
-      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("pgw_pegawai AS pi", "pi.id", "=", "sp.id_inspektur")
-      ->join("pgw_pangkat AS pik", "pik.id", "=", "pi.id_pangkat")
-      ->join("pgw_pegawai AS pib", "pib.id", "=", "sp.id_inspektur_pembantu")
-      ->join("pgw_jabatan AS pibj", "pibj.id", "=", "pib.id_jabatan")
-      ->join("pgw_pegawai AS ppt", "ppt.id", "=", "sp.id_pengendali_teknis")
-      ->join("pgw_jabatan AS pptj", "pptj.id", "=", "ppt.id_jabatan")
-      ->join("pgw_pegawai AS pkt", "pkt.id", "=", "sp.id_ketua_tim")
-      ->join("pgw_jabatan AS pktj", "pktj.id", "=", "pkt.id_jabatan")
-      ->join("mst_program_kerja AS pk", "pk.id", "=", "sp.id_program_kerja")
-      ->join("mst_skpd AS skpd", "skpd.id", "=","pk.id_skpd")
-      ->where('sp.is_deleted', 0)
-      ->where("sp.id", $id)
-      ->first();
-
-      $anggota = SuratPerintahService::get_anggota($id);
-      $sasaran = SuratPerintahService::get_sasaran($id);
-
-      return view('pkpt.surat_perintah-detail', [
-        'data' => $data_sp,
-        'anggota' => $anggota,
-        'sasaran' => $sasaran
-      ]);
-    }
+    return view('pkpt.surat_perintah-detail', [
+      'data' => $data
+    ]);
+  }
 
 
-    public function kalendar()
-    {
-      $data = DB::table('pkpt_surat_perintah AS sp')
+  public function kalendar()
+  {
+    $data = DB::table('pkpt_surat_perintah AS sp')
       ->select(DB::raw("sp.id, sp.dari, sp.sampai, sp.is_pkpt, pk.sub_kegiatan AS nama_kegiatan"))
-      ->join('mst_program_kerja AS pk', 'pk.id','=','sp.id_program_kerja')
+      ->join('mst_program_kerja AS pk', 'pk.id', '=', 'sp.id_program_kerja')
       ->where("sp.is_deleted", 0)
       ->get();
-      return view('pkpt.surat_perintah-kalendar', [
-        'data' => $data
-      ]);
-    }
+    return view('pkpt.surat_perintah-kalendar', [
+      'data' => $data
+    ]);
+  }
 
-    public function list_datatables_api($type = null)
-    {
-      $data = DB::table("pkpt_surat_perintah AS sp")
+  public function list_datatables_api($type = null)
+  {
+    $data = DB::table("pkpt_surat_perintah AS sp")
       ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
       w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
@@ -191,16 +114,16 @@ class SuratPerintahController extends Controller
       ->where('pk.is_deleted', 0)
       ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
       ->orderBy('sp.id', 'ASC');
-      if($type > 0) {
-        $data = $data->where("sp.is_pkpt", $type);
-      }
-
-      return Datatables::of($data)->make(true);
+    if ($type > 0) {
+      $data = $data->where("sp.is_pkpt", $type);
     }
 
-    public function list_datatables_approve_api($approved = 0)
-    {
-      $data = DB::table("pkpt_surat_perintah AS sp")
+    return Datatables::of($data)->make(true);
+  }
+
+  public function list_datatables_approve_api($approved = 0)
+  {
+    $data = DB::table("pkpt_surat_perintah AS sp")
       ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
       w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
@@ -215,12 +138,12 @@ class SuratPerintahController extends Controller
       ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
       ->orderBy('sp.id', 'ASC');
 
-      return Datatables::of($data)->make(true);
-    }
+    return Datatables::of($data)->make(true);
+  }
 
-    public function list_datatables_penomeran_api($is_avail_no = 0)
-    {
-      $data = DB::table("pkpt_surat_perintah AS sp")
+  public function list_datatables_penomeran_api($is_avail_no = 0)
+  {
+    $data = DB::table("pkpt_surat_perintah AS sp")
       ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
       w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
       ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
@@ -233,78 +156,65 @@ class SuratPerintahController extends Controller
       ->where('pk.is_deleted', 0)
       ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
       ->orderBy('sp.id', 'ASC');
-      if($is_avail_no == 1) {
-        $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) != ''"));
-      } else {
-        $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) = ''"));
-      }
-
-      return Datatables::of($data)->make(true);
+    if ($is_avail_no == 1) {
+      $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) != ''"));
+    } else {
+      $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) = ''"));
     }
 
-    public function check_jadwal(Request $request){
-      $dari = date("Y-m-d", strtotime($request->dari));
-      $sampai = date("Y-m-d", strtotime($request->sampai));
+    return Datatables::of($data)->make(true);
+  }
 
-      $data = DB::table("pkpt_surat_perintah as sp")
+  public function check_jadwal(Request $request)
+  {
+    $dari = date("Y-m-d", strtotime($request->dari));
+    $sampai = date("Y-m-d", strtotime($request->sampai));
+
+    $data = DB::table("pkpt_surat_perintah as sp")
       ->where("sp.is_deleted", 0)
       ->whereRaw(DB::raw("((sp.dari BETWEEN \"{$dari}\" AND \"{$sampai}\") OR (sp.sampai BETWEEN \"{$dari}\" AND \"{$sampai}\"))"))
       ->where("sp.id_wilayah", $request->id_wilayah)
-      ->where("sp.id","!=", $request->sp_id)
+      ->where("sp.id", "!=", $request->sp_id)
       ->get();
 
-      $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_TANGGAL_MSG') : ''; 
+    $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_TANGGAL_MSG') : '';
 
-      return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0 ]);
-    }
+    return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0]);
+  }
 
-    public function check_jadwal_by_id_kegiatan(Request $request){
-      $id_kegiatan = $request->kegiatan > 0 ? $request->kegiatan : 0;
-      $sp_id = $request->sp_id > 0 ? $request->sp_id : 0;
+  public function check_jadwal_by_id_kegiatan(Request $request)
+  {
+    $id_kegiatan = $request->kegiatan > 0 ? $request->kegiatan : 0;
+    $sp_id = $request->sp_id > 0 ? $request->sp_id : 0;
 
-      $data = DB::table("pkpt_surat_perintah as sp")
+    $data = DB::table("pkpt_surat_perintah as sp")
       ->where("sp.is_deleted", 0)
       ->where("sp.id_kegiatan", $id_kegiatan)
-      ->where("sp.id","!=", $sp_id)
+      ->where("sp.id", "!=", $sp_id)
       ->get();
 
-      $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_KEGIATAN_MSG') : ''; 
+    $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_KEGIATAN_MSG') : '';
 
-      return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0 ]);
-    }
-   
+    return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0]);
+  }
 
-    public function get_current_inspektur($id_sp) {
-      $get_inspektur_from_sp = SuratPerintah::find($id_sp);
 
-      $list_inspektur = DB::table("pgw_pegawai AS p")
-      ->select(DB::raw("p.id, p.nama"))
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where("pp.kode", 'inspektur')
-      ->orWhere("p.id", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
-      ->groupBy("p.id", "p.nama")
-      ->get();
+  public function penomeran_surat()
+  {
 
-      return $list_inspektur;
+    return view('pkpt.penomeran_surat-list');
+  }
 
-    }
+  public function rubah_nomer(Request $request)
+  {
 
-    public function penomeran_surat() {
+    $id = $request->id;
+    $logged_user = Auth::user();
+    $t = SuratPerintah::findOrFail($id);
+    $t->no_surat = $request->no_surat;
+    $t->save();
 
-      return view('pkpt.penomeran_surat-list');
-    }
-
-    public function rubah_nomer(Request $request)
-    {
-
-      $id = $request->id;
-      $logged_user = Auth::user();
-      $t = SuratPerintah::findOrFail($id);
-      $t->no_surat = $request->no_surat;
-      $t->save();
-
-      $request->session()->flash('success', "Berhasil merubah data!");
-      return redirect('/pkpt/surat_perintah/nomer');
-    }
+    $request->session()->flash('success', "Berhasil merubah data!");
+    return redirect('/pkpt/surat_perintah/nomer');
+  }
 }

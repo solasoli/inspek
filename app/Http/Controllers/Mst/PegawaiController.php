@@ -4,20 +4,11 @@ namespace App\Http\Controllers\Mst;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Datatables;
-use Validator;
-use Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Input;
-use App\Model\Pegawai\Pegawai;
-use App\Skpd;
-use App\Model\Pegawai\Eselon;
-use App\Model\Pegawai\Pangkat;
-use App\Model\Pegawai\PangkatGolongan;
-use App\Model\Pegawai\Jabatan;
+use App\Repository\Pegawai\Pegawai;
 use App\Inspektur;
-use App\Wilayah;
-use App\Service\PegawaiService;
+use App\Service\Pegawai\PegawaiService;
+use App\Http\Requests\Master\PegawaiRequest;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -25,190 +16,37 @@ class PegawaiController extends Controller
 {
     public function index()
     {
-      $opd = Skpd::where("is_deleted", 0)->get();
-      $eselon = Eselon::where("is_deleted", 0)->get();
-      $pangkat = Pangkat::where("is_deleted", 0)->get();
-      $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
-      $jabatan = Jabatan::where("is_deleted", 0)->get();
-      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      return view('Mst.pegawai-list',[
-        'opd' => $opd,
-        'eselon' => $eselon,
-        'pangkat' => $pangkat,
-        'pangkat_golongan' => $pangkat_golongan,
-        'jabatan' => $jabatan,
-        'wilayah' => $wilayah,
-      ]);
+      $data = PegawaiService::data_for_form();
+      return view('Mst.pegawai-list', $data);
     }
 
-    public function create()
+    public function store(PegawaiRequest $request)
     {
-      $opd = Skpd::where("is_deleted", 0)->get();
-      $eselon = Eselon::where("is_deleted", 0)->get();
-      $pangkat = Pangkat::where("is_deleted", 0)->get();
-      $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
-      $jabatan = Jabatan::where("is_deleted", 0)->get();
-      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      return view('Mst.pegawai-form',[
-        'opd' => $opd,
-        'eselon' => $eselon,
-        'pangkat' => $pangkat,
-        'pangkat_golongan' => $pangkat_golongan,
-        'jabatan' => $jabatan,
-        'wilayah' => $wilayah,
-      ]);
+      PegawaiService::create($request->input());
+      $request->session()->flash('success', "Data berhasil disimpan!");
+      return response()->json(['success' => true]);
     }
 
-    public function store(Request $request)
+    public function update(PegawaiRequest $request, $id)
     {
-      $logged_user = Auth::user();
-      request()->validate([
-        'opd' => 'required',
-        'eselon' => 'required',
-        'pangkat' => 'required',
-        'pangkat_golongan' => 'required',
-        'jabatan' => 'required',
-        'nip' => ['required',
-          Rule::unique('pgw_pegawai', 'nip')->where(function ($query){
-            return $query->where('is_deleted', 0);
-          })
-        ],
-        'nama' => 'required',
-        'nama_asli' => 'required',
-        'jenjab' => 'required',
-        'score_angka_credit' => 'required'
-      ],[
-        'opd.required' => 'OPD harus diisi!',
-        'eselon.required' => 'Eselon harus diisi!',
-        'pangkat.required' => 'Pangkat harus diisi!',
-        'pangkat_golongan.required' => 'Pangkat Golongan harus diisi!',
-        'jabatan.required' => 'Jabatan harus diisi!',
-        'nip.required' => 'NIP harus diisi!',
-        'nip.unique' => 'NIP sudah tersedia!',
-        'nama.required' => 'Nama harus diisi!',
-        'nama_asli.required' => 'Nama Asli harus diisi!',
-        'jenjab.required' => 'Jenjang Jabatan harus diisi!',
-        'score_angka_credit.required' => 'Score Angka Credit harus diisi!',
-      ]);
-
-      $t = new Pegawai;
-      $t->id_skpd = $request->input('opd');
-      $t->id_eselon = $request->input('eselon');
-      $t->id_pangkat = $request->input('pangkat');
-      $t->id_pangkat_golongan = $request->input('pangkat_golongan');
-      $t->id_jabatan = $request->input('jabatan');
-      $t->id_peran = 0; // ini diisi di menu struktur
-      $t->id_wilayah = 0; // ini diisi di menu struktur
-      $t->nip = $request->input('nip');
-      $t->nama = $request->input('nama');
-      $t->nama_asli = $request->input('nama_asli');
-      $t->jenjab = $request->input('jenjab');
-      $t->score_angka_credit = $request->input('score_angka_credit');
-      $t->is_deleted = 0;
-      $t->save();
-
-      $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
-      return redirect('/mst/pegawai');
-    }
-
-    public function edit($id)
-    {
-      $data = Pegawai::find($id);
-
-
-      $opd = Skpd::where("is_deleted", 0)->get();
-      $eselon = Eselon::where("is_deleted", 0)->get();
-      $pangkat = Pangkat::where("is_deleted", 0)->get();
-      $pangkat_golongan = PangkatGolongan::where("is_deleted", 0)->get();
-      $jabatan = Jabatan::where("is_deleted", 0)->get();
-      $wilayah = Wilayah::where("is_deleted", 0)->orderBy('nama')->get();
-      return view('Mst.pegawai-form', ['data' => $data,
-
-        'opd' => $opd,
-        'eselon' => $eselon,
-        'pangkat' => $pangkat,
-        'pangkat_golongan' => $pangkat_golongan,
-        'jabatan' => $jabatan,
-        'wilayah' => $wilayah
-      ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-      $logged_user = Auth::user();
-      request()->validate([
-        'opd' => 'required',
-        'eselon' => 'required',
-        'pangkat' => 'required',
-        'pangkat_golongan' => 'required',
-        'jabatan' => 'required',
-        'nip' => ['required',
-          Rule::unique('pgw_pegawai', 'nip')->where(function ($query) use($id) {
-            return $query->where('is_deleted', 0)
-            ->where("id" ,"!=", $id);
-          })
-        ],
-        'nama' => 'required',
-        'nama_asli' => 'required',
-        'jenjab' => 'required',
-        'score_angka_credit' => 'required'
-      ],[
-        'opd.required' => 'OPD harus diisi!',
-        'eselon.required' => 'Eselon harus diisi!',
-        'pangkat.required' => 'Pangkat harus diisi!',
-        'pangkat_golongan.required' => 'Pangkat Golongan harus diisi!',
-        'jabatan.required' => 'Jabatan harus diisi!',
-        'nip.required' => 'NIP harus diisi!',
-        'nip.unique' => 'NIP sudah tersedia!',
-        'nama.required' => 'Nama harus diisi!',
-        'nama_asli.required' => 'Nama Asli harus diisi!',
-        'jenjab.required' => 'Jenjang Jabatan harus diisi!',
-        'score_angka_credit.required' => 'Score Angka Credit harus diisi!',
-      ]);
-
-      $t = Pegawai::findOrFail($id);
-      $t->id_skpd = $request->input('opd');
-      $t->id_eselon = $request->input('eselon');
-      $t->id_pangkat = $request->input('pangkat');
-      $t->id_pangkat_golongan = $request->input('pangkat_golongan');
-      $t->id_jabatan = $request->input('jabatan');
-      // $t->id_peran = $request->input('peran');
-      // $t->id_wilayah = $request->input('wilayah');
-      $t->nip = $request->input('nip');
-      $t->nama = $request->input('nama');
-      $t->nama_asli = $request->input('nama_asli');
-      $t->jenjab = $request->input('jenjab');
-      $t->score_angka_credit = $request->input('score_angka_credit');
-      $t->save();
-
-      $request->session()->flash('success', "Data berhasil diubah!");
-      return redirect('/mst/pegawai');
+      PegawaiService::update($id, $request->input());
+      $request->session()->flash('success', "Data berhasil disimpan!");
+      return response()->json(['success' => true]);
     }
 
     public function destroy(Request $request, $id)
     {
-      $logged_user = Auth::user();
-      $t = Pegawai::findOrFail($id);
-      $t->deleted_at = date('Y-m-d H:i:s');
-      $t->deleted_by = Auth::id();
-      $t->is_deleted = 1;
-      $t->save();
+      PegawaiService::delete($id);
 
-      $request->session()->flash('success', "<strong>".$t->name."</strong> berhasil Dihapus!");
+      $request->session()->flash('success', "Data berhasil Dihapus!");
       return redirect('/mst/pegawai');
     }
 
     public function list_datatables_api()
     {
-      $data = DB::table("pgw_pegawai AS p")
-      ->select(DB::raw("p.*, skpd.name AS opd, e.name AS eselon, pk.name AS pangkat, pg.name AS pangkat_golongan, j.name AS jabatan"))
-      ->join("mst_skpd AS skpd" , "p.id_skpd", "=", "skpd.id")
-      ->join("pgw_eselon AS e", "p.id_eselon", "=", "e.id")
-      ->join("pgw_pangkat AS pk", "p.id_pangkat", "=", "pk.id")
-      ->join("pgw_pangkat_golongan AS pg", "p.id_pangkat_golongan", "=", "pg.id")
-      ->join("pgw_jabatan AS j", "p.id_jabatan", "=", "j.id")
-      ->where('p.is_deleted', 0);
-      return Datatables::of($data)->make(true);
+      $data = Pegawai::with(['pangkat_golongan', 'jabatan'])->where('is_deleted', 0);
+
+      return Datatables::eloquent($data)->toJson();
     }
 
     public function inspektur(){
@@ -240,91 +78,24 @@ class PegawaiController extends Controller
 
     }
 
-    public function get_current_inspektur($return_object = false){
-
-      $list_inspektur = DB::table("pgw_pegawai AS p")
-      ->select(DB::raw("p.id, p.nama"))
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where("pp.kode", 'inspektur')
-      ->orWhere("p.id", $get_inspektur_from_sp != null ? $get_inspektur_from_sp->id_inspektur : 0)
-      ->groupBy("p.id", "p.nama")
-      ->first();
-
-      if($return_object){
-        return $inspektur;
-      }
-      else{
-        return response()->json(['data' => $inspektur]);
-      }
-
-    }
-
     public function get_inspektur_pembantu_by_wilayah(Request $request)
     {
       $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
 
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_inspektur_pembantu, p.id AS id_inspektur_pembantu"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where('p.is_deleted', 0)
-      ->whereIn("pp.kode", ['inspektur_pembantu', 'wakil_inspektur_pembantu'])
-      ->where("w.is_deleted", 0);
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
-      }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
+      $data = PegawaiService::get_inspektur_pembantu_by_wilayah($id_wilayah);
       return response()->json(["data" => $data]);
     }
 
 
     public function get_pengendali_teknis_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_pengendali_teknis, p.id AS id_pengendali_teknis"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where('p.is_deleted', 0)
-      ->whereIn("pp.kode", ['pengendali_mutu', 'pengendali_teknis'])
-      ->where("w.is_deleted", 0);
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
-      }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
+      $data = PegawaiService::get_pengendali_teknis_by_wilayah($request->input('id_wilayah'));
       return response()->json(["data" => $data]);
     }
 
     public function get_ketua_tim_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
-      $data = DB::table("mst_wilayah AS w")
-      ->select(DB::raw("w.id, w.nama, p.nama AS nama_ketua_tim, p.id AS id_ketua_tim"))
-      ->join("pgw_pegawai AS p", "p.id_wilayah", "=", "w.id")
-      ->join("pgw_peran_jabatan AS ppj", "ppj.id_jabatan", "=","p.id_jabatan")
-      ->join("pgw_peran AS pp", "pp.id", "=","ppj.id_peran")
-      ->where('p.is_deleted', 0)
-      ->where("pp.kode", 'ketua_tim')
-      ->where("w.is_deleted", 0);
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = $data->where("w.id", $id_wilayah);
-      }
-
-      $data = $data->orderBy('w.nama', 'ASC')
-      ->groupBy("w.id", "w.nama", "p.nama", "p.id")
-      ->get();
+      $data = PegawaiService::get_ketua_tim_by_wilayah($request->input('id_wilayah'));
       return response()->json(["data" => $data]);
     }
 
@@ -341,9 +112,9 @@ class PegawaiController extends Controller
       return response()->json(["data" => $data->get()]);
     }
 
-    public function get_pegawai_by_id(Request $request)
+    public function get_pegawai_by_id(Request $request, $id)
     {
-      $data = Pegawai::find($request->input('id'));
+      $data = Pegawai::find($id);
 
       return response()->json($data);
     }

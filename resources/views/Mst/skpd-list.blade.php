@@ -39,7 +39,7 @@
           <div class="float-right">
 
             @if(can_access("mst_skpd", "add"))
-            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addModal"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-form" data-id="0"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
             @endif
           </div>
         </div>
@@ -61,11 +61,8 @@
   </div>
 </div>
 
-<!-- modal add -->
-@include('Mst.skpd-form_add')
-
-<!-- modal edit -->
-@include('Mst.skpd-form_edit')
+<!-- modal form -->
+@include('Mst.skpd-form')
 @endsection
 
 @section('scripts')
@@ -87,11 +84,11 @@ $(function() {
       { data: 'name', name: 'name'},
       // { data: 'singkatan_pd', name: 'singkatan_pd'},
       { data: 'pimpinan', name: 'pimpinan'},
-      { data: 'wilayah', name: 'wilayah'},
-      { data: null, orderable: false, render: function ( data, type, row ) {
+      { data: 'wilayah.nama', name: 'wilayah.nama'},
+      { data: null, orderable: false, searchable: false, render: function ( data, type, row ) {
         var return_button = "";
         @if(can_access("mst_skpd", "edit"))
-        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-idskpd='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
+        return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
         @endif
         @if(can_access("mst_skpd", "delete"))
         return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
@@ -111,7 +108,8 @@ $(function() {
       $(".alert-success").hide(1000);
     }, 3000);
 
-    $('#addModal, #editModal').on('show.bs.modal', function () {
+    $('#modal-form').on('show.bs.modal', function () {
+      $(this).find('.error').html('');
       $(this).find('form').trigger('reset');
     });
 

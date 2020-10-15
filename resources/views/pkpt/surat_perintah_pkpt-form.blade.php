@@ -222,8 +222,8 @@
                           <td></td>
                         </tr>
                       @endforeach
-                    @elseif(isset($sp_anggota))
-                      @foreach($sp_anggota AS $idx => $row)
+                    @elseif(isset($data->id))
+                      @foreach($data->anggota AS $idx => $row)
                         <tr>
                           <td>
                             <select name='anggota[]' class="form-control select2">
@@ -334,8 +334,8 @@
           var data_edit = {{isset($data->id_inspektur_pembantu) ? $data->id_inspektur_pembantu : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id_inspektur_pembantu ? "selected" : "";
-            $(".inspektur_pembantu").append("<option value='" + val.id_inspektur_pembantu +"' " +selected+ ">" + val.nama_inspektur_pembantu + "</option>");
+            var selected = data_edit == val.id ? "selected" : "";
+            $(".inspektur_pembantu").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
       });
@@ -349,8 +349,8 @@
           var data_edit = {{isset($data->id_pengendali_teknis) ? $data->id_pengendali_teknis : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id_pengendali_teknis ? "selected" : "";
-            $(".pengendali_teknis").append("<option value='" + val.id_pengendali_teknis +"' " +selected+ ">" + val.nama_pengendali_teknis + "</option>");
+            var selected = data_edit == val.id ? "selected" : "";
+            $(".pengendali_teknis").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
       });
@@ -364,8 +364,8 @@
           var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id_ketua_tim ? "selected" : "";
-            $(".ketua_tim").append("<option value='" + val.id_ketua_tim +"' " +selected+ ">" + val.nama_ketua_tim + "</option>");
+            var selected = data_edit == val.id ? "selected" : "";
+            $(".ketua_tim").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
       });
@@ -376,7 +376,6 @@
         if(res.data != null){
           $(".anggota").html('');
 
-          var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
           var option = '';
           $.when($.each(res.data, function(idx, val){
             $(".anggota").append("<option value='" + val.id +"'>" + val.nama + "</option>");
@@ -422,9 +421,9 @@
 
       @php
       $arr = [];
-      if(isset($sp_sasaran)){
+      if(isset($data->id)){
 
-        $arr = $sp_sasaran->map(function($val) use($arr) {
+        $arr = $data->sasaran->map(function($val) use($arr) {
           return $val->id;
         });
         $arr = $arr->toArray();

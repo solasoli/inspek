@@ -51,7 +51,7 @@
 					<div class="tab-content">
             <div class="text-right mb-4">
               @if(can_access("mst_skpd", "add"))
-              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editModal" data-method='add'><i class='menu-item-icon icon ion-plus'></i> Tambah Program Kerja</button>
+              <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-form"><i class='menu-item-icon icon ion-plus'></i> Tambah Program Kerja</button>
               @endif
             </div>
 						<div class="tab-pane fade active show" id="list">
@@ -131,9 +131,9 @@ $(function() {
           console.log(data);
           return data == 1 ? 'PKPT' : 'NON-PKPT'
         }},
-        { data: 'kegiatan', name: 'kegiatan'},
-        { data: 'wilayah', name: 'wilayah'},
-        { data: 'skpd', name: 'skpd'},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: 'skpd.name', name: 'skpd.name'},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
@@ -145,7 +145,7 @@ $(function() {
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
           @if(can_access("mst_skpd", "edit"))
-          return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editModal' data-method='edit' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
+          return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
           @endif
           @if(can_access("mst_skpd", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
@@ -167,16 +167,11 @@ $(function() {
   }, 3000);
 
   $('#editModal, #detailModal').on('show.bs.modal', function (e) {
-    let labelPopup = 'Tambah'
-    const elemButton = e.relatedTarget
-    if($(elemButton).data('method') == 'edit') {
-      labelPopup = 'Edit'
-    }
-    $("#popup-method-program-kerja").html(labelPopup)
     $(this).find('form').trigger('reset');
     $("#cover-sasaran").html('');
     $("#cover-sasaran_edit").html('');
     $("#cover-sasaran_detail").html('');
+    $(this).find('.error').html('');
   });
 
 

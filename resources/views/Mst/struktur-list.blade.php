@@ -76,8 +76,8 @@ $(function() {
     serverSide: true,
     ajax: '{{url()->current()}}/datatables/',
     columns: [
-      { data: 'nama', name: 'p.nama'},
-      { data: 'jabatan', name: 'j.name'},
+      { data: 'nama', name: 'nama'},
+      { data: 'jabatan.name', name: 'jabatan.name'},
 
       { data: null, searchable: false, orderable: false, render: function ( data, type, row ) { // atasan langsung
         var a = "";
