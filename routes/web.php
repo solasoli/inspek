@@ -233,7 +233,12 @@ Route::middleware(['auth'])->group(function () {
     
   });
 
-  
+  Route::prefix('angka-kredit')->group(function(){
+    Route::get('/tim-penilai/penilaian-angka-kredit', 'AngkaKredit\PenilaianAngkaKredit@index');
+    Route::get('/tim-penilai/penilaian-angka-review', 'AngkaKredit\PenilaianAngkaReview@index');
+    Route::get('/tim-penilai/penilaian-angka-catatan', 'AngkaKredit\PenilaianAngkaCatatan@index');
+
+  });
 
   Route::prefix('acl')->group(function () {
 
