@@ -11,6 +11,7 @@ use App\Repository\SuratPerintah\SuratPerintah;
 use App\Wilayah;
 use App\DasarSurat;
 use App\Periode;
+use App\Service\Master\KegiatanService;
 use App\Service\Pegawai\PegawaiService;
 use App\Service\ProgramKerjaService;
 use App\Service\SuratPerintah\SuratPerintahService;
@@ -43,17 +44,12 @@ class SuratPerintahController extends Controller
 
   public function edit($id)
   {
-    $surat_perintah = SuratPerintah::findOrFail($id);    
+    $surat_perintah = SuratPerintah::findOrFail($id);
+    $kegiatan = KegiatanService::get_data();
     $anggota = PegawaiService::get_anggota(false, $surat_perintah->program_kerja->id_wilayah);
-    $data = SuratPerintahService::data_for_form(['data' => $surat_perintah, 'anggota' => $anggota]);
+    $data = SuratPerintahService::data_for_form(['data' => $surat_perintah, 'anggota' => $anggota, 'kegiatan' => $kegiatan]);
 
     $surat_perintah_file = $surat_perintah->is_pkpt == 1 ? 'surat_perintah_pkpt-form' : ($surat_perintah->is_pkpt == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
-
-    // 'program_kerja' => $program_kerja,
-    // 'wilayah' => $wilayah,
-    // 'dasar_surat' => $dasar_surat,
-    // 'periode' => $periode,
-    // 'list_inspektur' => $list_inspektur,
 
     return view('pkpt.' . $surat_perintah_file, $data);
   }
@@ -61,17 +57,13 @@ class SuratPerintahController extends Controller
   public function update(Request $request, $id)
   {
     SuratPerintahService::update($id, $request->input());
-
     $request->session()->flash('message', "Data berhasil Dirubah!");
     return redirect('/pkpt/surat_perintah');
   }
 
   public function approve(Request $request, $id)
   {
-    $logged_user = Auth::user();
-    $t = SuratPerintah::findOrFail($id);
-    $t->is_approve = 1;
-    $t->save();
+    $t = SuratPerintahService::approve($id);
 
     $request->session()->flash('message', "<strong>" . $t->nama . "</strong> berhasil diapprove!");
     return redirect('/pkpt/surat_perintah');
@@ -89,80 +81,59 @@ class SuratPerintahController extends Controller
 
   public function kalendar()
   {
-    $data = DB::table('pkpt_surat_perintah AS sp')
-      ->select(DB::raw("sp.id, sp.dari, sp.sampai, sp.is_pkpt, pk.sub_kegiatan AS nama_kegiatan"))
-      ->join('mst_program_kerja AS pk', 'pk.id', '=', 'sp.id_program_kerja')
-      ->where("sp.is_deleted", 0)
-      ->get();
+    $listcolor = [
+      1 => [
+        'bgColor' => '#3788d8',
+        'borderColor' => '#3788d8',
+        'textColor' => '#fff',
+        'label' => 'PKPT'
+      ],
+      2 => [
+        'bgColor' => '#f8d7da',
+        'borderColor' => '#f5c6cb',
+        'textColor' => '#721c24',
+        'label' => 'NON-PKPT'
+      ],
+      // 3 => [
+      // 'bgColor' => '#4b476d',
+      // 'borderColor' => '#4b476d',
+      // 'textColor' => '',
+      // 'label' => 'KHUSUS'
+      // ]
+    ];
     return view('pkpt.surat_perintah-kalendar', [
-      'data' => $data
+      'listcolor' => $listcolor
     ]);
   }
 
   public function list_datatables_api($type = null)
   {
-    $data = DB::table("pkpt_surat_perintah AS sp")
-      ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
-      w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
-      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("mst_program_kerja As pk", "pk.id", "=", "sp.id_program_kerja")
-      ->join("pkpt_surat_perintah_sasaran As sps", "sp.id", "=", "sps.id_surat_perintah")
-      ->join("mst_sasaran As s", "s.id", "=", "sps.id_sasaran")
-      ->where('sp.is_deleted', 0)
-      ->where('sps.is_deleted', 0)
-      ->where('w.is_deleted', 0)
-      ->where('pk.is_deleted', 0)
-      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
-      ->orderBy('sp.id', 'ASC');
+    $data = SuratPerintah::with(['wilayah', 'program_kerja', 'sasaran']);
     if ($type > 0) {
       $data = $data->where("sp.is_pkpt", $type);
     }
 
-    return Datatables::of($data)->make(true);
+    return Datatables::eloquent($data)->toJson();
   }
 
   public function list_datatables_approve_api($approved = 0)
   {
-    $data = DB::table("pkpt_surat_perintah AS sp")
-      ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
-      w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
-      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("mst_program_kerja As pk", "pk.id", "=", "sp.id_program_kerja")
-      ->join("pkpt_surat_perintah_sasaran As sps", "sp.id", "=", "sps.id_surat_perintah")
-      ->join("mst_sasaran As s", "s.id", "=", "sps.id_sasaran")
-      ->where('sp.is_deleted', 0)
-      ->where('sps.is_deleted', 0)
-      ->where('w.is_deleted', 0)
-      ->where('pk.is_deleted', 0)
-      ->where("sp.is_approve", $approved)
-      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
-      ->orderBy('sp.id', 'ASC');
+    $data = SuratPerintah::with(['wilayah', 'program_kerja', 'sasaran', 'kegiatan'])->where('is_approve', $approved);
 
-    return Datatables::of($data)->make(true);
+    return Datatables::eloquent($data)->toJson();
   }
 
   public function list_datatables_penomeran_api($is_avail_no = 0)
   {
-    $data = DB::table("pkpt_surat_perintah AS sp")
-      ->select(DB::raw("sp.id, sp.no_surat, sp.dari, sp.sampai, sp.is_pkpt, sp.is_approve,
-      w.nama AS wilayah, pk.sub_kegiatan AS kegiatan, GROUP_CONCAT(DISTINCT s.nama ORDER BY sps.id ASC SEPARATOR '; ') AS sasaran"))
-      ->join("mst_wilayah AS w", "w.id", "=", "sp.id_wilayah")
-      ->join("mst_program_kerja As pk", "pk.id", "=", "sp.id_program_kerja")
-      ->join("pkpt_surat_perintah_sasaran As sps", "sp.id", "=", "sps.id_surat_perintah")
-      ->join("mst_sasaran As s", "s.id", "=", "sps.id_sasaran")
-      ->where('sp.is_deleted', 0)
-      ->where('sps.is_deleted', 0)
-      ->where('w.is_deleted', 0)
-      ->where('pk.is_deleted', 0)
-      ->groupBy(['sp.id', 'sp.no_surat', 'sp.dari', 'sp.sampai', 'sp.is_pkpt', 'sp.is_approve', 'w.nama', 'pk.sub_kegiatan'])
-      ->orderBy('sp.id', 'ASC');
+    $data = SuratPerintah::with(['wilayah', 'program_kerja', 'sasaran', 'kegiatan'])->where('is_approve', 1);
+
     if ($is_avail_no == 1) {
-      $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) != ''"));
+      $data = $data->whereRaw(DB::raw("TRIM(no_surat) != ''"));
     } else {
-      $data = $data->whereRaw(DB::raw("TRIM(sp.no_surat) = ''"));
+      $data = $data->whereRaw(DB::raw("TRIM(no_surat) = ''"));
     }
 
-    return Datatables::of($data)->make(true);
+    return Datatables::eloquent($data)->toJson();
   }
 
   public function check_jadwal(Request $request)
@@ -170,11 +141,9 @@ class SuratPerintahController extends Controller
     $dari = date("Y-m-d", strtotime($request->dari));
     $sampai = date("Y-m-d", strtotime($request->sampai));
 
-    $data = DB::table("pkpt_surat_perintah as sp")
-      ->where("sp.is_deleted", 0)
-      ->whereRaw(DB::raw("((sp.dari BETWEEN \"{$dari}\" AND \"{$sampai}\") OR (sp.sampai BETWEEN \"{$dari}\" AND \"{$sampai}\"))"))
-      ->where("sp.id_wilayah", $request->id_wilayah)
-      ->where("sp.id", "!=", $request->sp_id)
+    $data = SuratPerintah::whereRaw(DB::raw("((dari BETWEEN \"{$dari}\" AND \"{$sampai}\") OR (sampai BETWEEN \"{$dari}\" AND \"{$sampai}\"))"))
+      ->where("id_wilayah", $request->id_wilayah)
+      ->where("id", "!=", $request->sp_id)
       ->get();
 
     $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_TANGGAL_MSG') : '';
@@ -187,10 +156,9 @@ class SuratPerintahController extends Controller
     $id_kegiatan = $request->kegiatan > 0 ? $request->kegiatan : 0;
     $sp_id = $request->sp_id > 0 ? $request->sp_id : 0;
 
-    $data = DB::table("pkpt_surat_perintah as sp")
-      ->where("sp.is_deleted", 0)
-      ->where("sp.id_kegiatan", $id_kegiatan)
-      ->where("sp.id", "!=", $sp_id)
+    $data = SuratPerintah::where("is_deleted", 0)
+      ->where("id_kegiatan", $id_kegiatan)
+      ->where("id", "!=", $sp_id)
       ->get();
 
     $message = $data->count() > 0 ? get_constant('JADWAL_AVAILABLE_KEGIATAN_MSG') : '';
@@ -198,11 +166,57 @@ class SuratPerintahController extends Controller
     return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0]);
   }
 
-
   public function penomeran_surat()
   {
-
     return view('pkpt.penomeran_surat-list');
+  }
+
+  public function get_event_sp(Request $request)
+  {
+    $dari = date("Y-m-d", strtotime($request->start));
+    $sampai = date("Y-m-d", strtotime($request->end));
+
+    $data = SuratPerintah::whereRaw(DB::raw("((dari BETWEEN \"{$dari}\" AND \"{$sampai}\") OR (sampai BETWEEN \"{$dari}\" AND \"{$sampai}\"))"))
+    ->where('is_approve', 1)
+    ->get();
+
+    $list_arr = [];
+    $listcolor = [
+      1 => [
+        'bgColor' => '#3788d8',
+        'borderColor' => '#3788d8',
+        'textColor' => '#fff',
+        'label' => 'PKPT'
+      ],
+      2 => [
+        'bgColor' => '#f8d7da',
+        'borderColor' => '#f5c6cb',
+        'textColor' => '#721c24',
+        'label' => 'NON-PKPT'
+      ],
+      // 3 => [
+      // 'bgColor' => '#4b476d',
+      // 'borderColor' => '#4b476d',
+      // 'textColor' => '',
+      // 'label' => 'KHUSUS'
+      // ]
+    ];
+    foreach ($data as $idx => $row) {
+
+
+      $list_arr[] = [
+        "title" => $row->program_kerja->sub_kegiatan,
+        "start" => $row->dari,
+        // "daysOfWeek" =>  [ '3' ],
+        "end" => date("Y-m-d 23:59:59", strtotime($row->sampai)),
+        "url" => "/pkpt/surat_perintah/info/" . $row->id,
+        "backgroundColor" => $listcolor[$row->is_pkpt]['bgColor'],
+        "borderColor" => $listcolor[$row->is_pkpt]['borderColor'],
+        "textColor" => $listcolor[$row->is_pkpt]['textColor']
+      ];
+    }
+
+    return json_encode($list_arr);
   }
 
   public function rubah_nomer(Request $request)

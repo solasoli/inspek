@@ -144,41 +144,6 @@
       </div>
     </div>
   </div>
-<br>
-  <!-- <div class="row">
-    <div class="col-lg-12 widget-2 px-0">
-      <div class="card shadow-base">
-        <div class="card-header">
-          <h6 class="card-title float-left">Daftar Surat Perintah non-pkpt</h6>
-          <div class="float-right">
-
-            @if(can_access("pkpt_surat_perintah", "add"))
-            <a class='btn btn-sm btn-success' href='{{url()->current()}}/add/2'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
-            @endif
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped responsive" id="oTableNon" style="width:100%">
-              <thead>
-                <tr>
-                  <th>Irban</th>
-                  <th>Kegiatan</th>
-                  <th>Sasaran</th>
-                  <th>Dari</th>
-                  <th>Sampai</th>
-                  <th>Status</th>
-                  <th>Hasil</th>
-                  <th style='width:195px'>Aksi</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-<br>
 </div>
 @endsection
 
@@ -199,23 +164,26 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables_approve/0',
       columns: [
-        { data: 'is_pkpt', name: 'sp.is_pkpt', render: function(data, type, row){
+        { data: 'is_pkpt', name: 'is_pkpt', render: function(data, type, row){
           console.log(data.is_pkpt);
           return data == 2 ? 'Non-PKPT' : 'PKPT';
         }},
-        { data: 'wilayah', name: 'wilayah'},
-        { data: 'kegiatan', name: 'kegiatan'},
-        { data: 'sasaran', name: 'sasaran'},
-        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
-          var x = new Date(data);
-          return moment(x).format("DD-MM-YYYY");
-        }},
-        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
-          var x = new Date(data);
-          return moment(x).format("DD-MM-YYYY");
-        }},
+        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
+          const sasaranList = row.sasaran.map((r) => r.nama)
 
-        { data: null, name: 'sp.is_approve', render: function(data, type, row){
+          return sasaranList.join(', ')
+        }},
+        { data: 'dari', name: 'dari', render: function(data, type, row){
+          var x = new Date(data);
+          return moment(x).format("DD-MM-YYYY");
+        }},
+        { data: 'sampai', name: 'sampai', render: function(data, type, row){
+          var x = new Date(data);
+          return moment(x).format("DD-MM-YYYY");
+        }},
+        { data: null, name: 'is_approve', render: function(data, type, row){
           return data.is_approve == 1 ? "<span class='text-success'>Approved</span>" : "<span class='text-danger'>Waiting Approve</span>";
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
@@ -254,26 +222,30 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables_approve/1',
       columns: [
-        { data: 'is_pkpt', name: 'sp.is_pkpt', render: function(data, type, row){
+        { data: 'is_pkpt', name: 'is_pkpt', render: function(data, type, row){
           console.log(data.is_pkpt);
           return data == 2 ? 'Non-PKPT' : 'PKPT';
         }},
-        { data: 'wilayah', name: 'wilayah'},
-        { data: 'kegiatan', name: 'kegiatan'},
-        { data: 'sasaran', name: 'sasaran'},
-        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
+        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
+          const sasaranList = row.sasaran.map((r) => r.nama)
+
+          return sasaranList.join(', ')
+        }},
+        { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
-        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
+        { data: 'sampai', name: 'sampai', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
 
-        { data: null, name: 'sp.is_approve', render: function(data, type, row){
+        { data: null, name: 'is_approve', render: function(data, type, row){
           return data.is_approve == 1 ? "<span class='text-success'>Approved</span>" : "<span class='text-danger'>Waiting Approve</span>";
         }},
-        { data: null, name: 'sp.is_approve', render: function(data, type, row){
+        { data: null, name: 'is_approve', render: function(data, type, row){
           return data.is_approve == 1 ? "<span class='text-success'>Selesai</span>" : "<span class='text-danger'>Belum Selesai</span>";
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {

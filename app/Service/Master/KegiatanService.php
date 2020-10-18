@@ -44,6 +44,12 @@ class KegiatanService
     $t = Kegiatan::findOrFail($id)->delete();
   }
 
+  public static function get_data() {
+    $data = Kegiatan::all();
+
+    return $data;
+  }
+
   public static function get_kegiatan_by_type_pkpt($type_pkpt = 1) {
     $data = DB::table("mst_program_kerja AS pk")
     ->select(DB::raw("k.id, k.nama AS kegiatan,

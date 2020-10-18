@@ -121,14 +121,18 @@ $(function() {
       serverSide: true,
       ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_api')}}',
       columns: [
-        { data: 'wilayah', name: 'wilayah'},
-        { data: 'kegiatan', name: 'kegiatan'},
-        { data: 'sasaran', name: 'sasaran'},
-        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
+        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
+          const sasaranList = row.sasaran.map((r) => r.nama)
+
+          return sasaranList.join(', ')
+        }},
+        { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
-        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
+        { data: 'sampai', name: 'sampai', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
@@ -159,17 +163,22 @@ $(function() {
       ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_api/1')}}',
       columns: [
         { data: 'no_surat', name: 'no_surat'},
-        { data: 'wilayah', name: 'wilayah'},
-        { data: 'kegiatan', name: 'kegiatan'},
-        { data: 'sasaran', name: 'sasaran'},
-        { data: 'dari', name: 'sp.dari', render: function(data, type, row){
+        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
+          const sasaranList = row.sasaran.map((r) => r.nama)
+
+          return sasaranList.join(', ')
+        }},
+        { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
-        { data: 'sampai', name: 'sp.sampai', render: function(data, type, row){
+        { data: 'sampai', name: 'sampai', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
+
 
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
