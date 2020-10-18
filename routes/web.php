@@ -229,7 +229,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit/audit', 'Pemeriksaan\AuditController@index');
     Route::get('/audit/buat-kertaskerja', 'Pemeriksaan\BuatKertasKerja@index');
     Route::get('/audit/buat-kertaskerja-utama', 'Pemeriksaan\BuatKertasKerjaUtama@index');
-    
+    Route::get('/irban/draft-nhp', 'Pemeriksaan\DraftNHP@index');
+    Route::get('/irban/review-nhp', 'Pemeriksaan\ReviewNHP@index');
+    Route::get('/irban/lhp-tinjut', 'Pemeriksaan\LhpTinjut@index');
+    Route::get('/irban/review-lhp', 'Pemeriksaan\ReviewLHP@index');
+
     
   });
 
