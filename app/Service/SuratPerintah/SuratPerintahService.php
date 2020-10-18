@@ -20,21 +20,24 @@ use App\Repository\Master\DasarSurat;
 class SuratPerintahService
 {
 
-  public static function create($data, $type_pkpt = 1) {
+  public static function create($data, $type_pkpt = 1)
+  {
     $t = new SuratPerintah;
     $data['type'] = $type_pkpt;
     return self::proccess_data($t, $data);
   }
 
-  public static function update($id_sp, $data) {
+  public static function update($id_sp, $data)
+  {
     $t = SuratPerintah::findOrFail($id_sp);
     $data['type'] = $t->is_pkpt;
     return self::proccess_data($t, $data);
   }
 
-  private static function proccess_data(SuratPerintah $sp, $data) {
+  private static function proccess_data(SuratPerintah $sp, $data)
+  {
 
-    DB::transaction(function () use($sp, $data) {
+    DB::transaction(function () use ($sp, $data) {
 
       $type = $data['type'];
       $input = $data;
@@ -47,7 +50,7 @@ class SuratPerintahService
 
         // prepare data kegiatan
         $data_kegiatan = [
-          'nama' => $input['make_kegiatan'],
+          'kegiatan' => $input['kegiatan'],
           'wilayah' => $input['wilayah'],
           'opd' => $input['opd'],
           'dari' => $input['dari'],
@@ -63,11 +66,8 @@ class SuratPerintahService
 
         $kegiatan = null;
         $sasaran = [];
-        if(isset($sp->id_program_kerja)) {
-          $update_kegiatan = KegiatanService::update($sp->id_kegiatan, $data_kegiatan);
-          $data_kegiatan['kegiatan'] = $update_kegiatan['kegiatan']->id;
-          $kegiatan = $data_kegiatan['kegiatan'];
-          $sasaran = $update_kegiatan['sasaran'];
+
+        if (isset($sp->id_program_kerja)) {
 
           $program_kerja = ProgramKerjaService::update($sp->id_program_kerja, $data_kegiatan);
         } else {
@@ -81,15 +81,15 @@ class SuratPerintahService
 
 
         // insert to pkpt sasaran surat perintah
-        foreach($sasaran as $idx => $row){
+        foreach ($sasaran as $idx => $row) {
           $new_sasaran[] = $row->id;
         }
       }
 
       $dari = explode('-', $input['dari']);
-      $dari = $dari[2].'-'.$dari[1].'-'.$dari[0];
+      $dari = $dari[2] . '-' . $dari[1] . '-' . $dari[0];
       $sampai = explode('-', $input['sampai']);
-      $sampai = $sampai[2].'-'.$sampai[1].'-'.$sampai[0];
+      $sampai = $sampai[2] . '-' . $sampai[1] . '-' . $sampai[0];
 
       $data = [
         'dari' => $dari,
@@ -121,11 +121,11 @@ class SuratPerintahService
       $t->save();
 
       DB::table('pkpt_surat_perintah_anggota')
-      ->where('id_surat_perintah', $t->id)
-      ->update(['is_deleted' => 1]);
+        ->where('id_surat_perintah', $t->id)
+        ->update(['is_deleted' => 1]);
 
       // insert anggota
-      foreach($input['anggota'] as $idx => $row){
+      foreach ($input['anggota'] as $idx => $row) {
         $na = new SuratPerintahAnggota;
         $na->id_surat_perintah = $t->id;
         $na->id_anggota = $row;
@@ -134,13 +134,13 @@ class SuratPerintahService
 
 
       DB::table('pkpt_surat_perintah_sasaran')
-      ->where('id_surat_perintah', $t->id)
-      ->update(['is_deleted' => 1]);
+        ->where('id_surat_perintah', $t->id)
+        ->update(['is_deleted' => 1]);
 
       // insert sasaran
       $sasaran_for_insert = $type == 1 ? $input['sasaran'] : $new_sasaran;
 
-      foreach($sasaran_for_insert as $idx => $row){
+      foreach ($sasaran_for_insert as $idx => $row) {
         $sa = new SuratPerintahSasaran;
         $sa->id_surat_perintah = $t->id;
         $sa->id_sasaran = $row;
@@ -155,7 +155,8 @@ class SuratPerintahService
   /**
    * Get Valid Surat Perintah yang sudah bernomer surat
    */
-  public static function get_valid_sp($return_chain = false) {
+  public static function get_valid_sp($return_chain = false)
+  {
     $data = SuratPerintah::whereRaw(DB::raw("no_surat <> ''"));
 
     return $return_chain ? $data : $data->get();
@@ -180,4 +181,12 @@ class SuratPerintahService
     ]);
   }
 
+  public static function approve($id)
+  {
+    $t = SuratPerintah::findOrFail($id);
+    $t->is_approve = 1;
+    $t->save();
+
+    return $t;
+  }
 }

@@ -25,12 +25,12 @@
         <nav class="breadcrumb pd-0 mg-0 tx-12">
             <a class="breadcrumb-item" href="/">Dashboard</a>
             <a class="breadcrumb-item" href="#">Pemeriksaan</a>
-            <span class="breadcrumb-item active">Penentuan Sasaran Tujuan</span>
+            <span class="breadcrumb-item active">Program Kerja Audit</span>
         </nav>
     </div>
 
     <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-        <h4 class="tx-gray-800 mg-b-5">Penentuan Sasaran Tujuan</h4>
+        <h4 class="tx-gray-800 mg-b-5">Program kerja Audit</h4>
     </div>
 
     <div class="br-pagebody">
@@ -137,11 +137,16 @@
                         render: function(data, type, row) {
                             var return_button = "";
 
-                            @if(can_access("sasaran_tujuan", "add"))
-                            return_button += `<a class='btn btn-success btn-xs' href='{{url()->current()}}/edit/${data.id}'><i class='fa fa-pencil'></i> Sasaran Tujuan</a> `;
+                            
+                            @if(can_access("program_kerja_audit", "add"))
+                            return_button += `<a href='{{ URL::to('/pemeriksaan/program-kerja-audit') }}/edit/${row.id}' class="btn btn-xs btn-success"><i class='fa fa-pencil'></i> Program Kerja</a> `
                             @endif
-                            return_button += "<a href='detail_penentuan.html'><button class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> Detail</button></a>";
+                            
+                            @if(can_access("program_kerja_audit", "edit"))
+                            return_button += `<a href="{{ URL::to('/pemeriksaan/program-kerja-audit') }}/review/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                            @endif
 
+                            return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
                             return return_button == "" ? "-" : return_button
                         }
                     },

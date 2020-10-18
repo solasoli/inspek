@@ -19,6 +19,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        '/pkpt/surat_perintah/get_event_sp'
     ];
 }

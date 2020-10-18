@@ -58779,3 +58779,13 @@ a.hover-white-8:hover, a.hover-white-8:focus {
   background-color: #bcfcb1 !important;
   border-color: #23bf08 !important;
 }
+
+.border-left-success {
+  border-left: 10px solid;
+  border-color: #23bf08 !important;
+}
+
+.border-left-danger {
+  border-left: 10px solid;
+  border-color: #DC3545 !important;
+}

@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Service\SuratPerintah\SuratPerintahService;
 use Datatables;
 
-class AuditController extends Controller
+class ProgramKerjaAuditController extends Controller
 {
     public function index()
     {
-        return view('/pemeriksaan/audit/audit-list');
+        return view('/pemeriksaan/program-kerja-audit/program_kerja_audit-list');
     }
 
     public function edit($id)
     {
-        return view('/pemeriksaan/audit/audit-form');
+        return view('/pemeriksaan/program-kerja-audit/program_kerja_audit-form');
     }
 
     public function list_datatables_api()

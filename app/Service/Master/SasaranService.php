@@ -11,43 +11,43 @@ class SasaranService
 {
   public static function get_validation($id = 0)
   {
-      $rules = [
-          'nama' => ['required']
-      ];
+    $rules = [
+      'id_program_kerja' => ['required']
+    ];
 
-      if ($id == 0) {
-          $rules = array_merge(
-              $rules,
-              ['nama' => [
-                  'required',
-                  Rule::unique('mst_kegiatan', 'nama')->where(function ($query) {
-                      return $query->where('is_deleted', 0);
-                  })
+    if ($id == 0) {
+      $rules = array_merge(
+        $rules,
+        ['nama' => [
+          'required',
+          Rule::unique('mst_sasaran', 'nama')->where(function ($query) {
+            return $query->where('is_deleted', 0);
+          })
 
-              ]]
-          );
-      } else {
-          $rules = array_merge(
-              $rules,
-              ['nama' => [
-                  'required',
-                  Rule::unique('mst_kegiatan', 'nama')->where(function ($query) use ($id) {
-                      return $query->where('is_deleted', 0)->where("id", "!=", $id);
-                  })
-
-              ]]
-          );
-      }
-
-      $label = [
-          'nama.required' => 'Nama Sasaran harus diisi!',
-          'nama.unique' => 'Nama Sasaran sudah ada!',
-      ];
-
-      return (object) array(
-          'rules' => $rules,
-          'label' => $label
+        ]]
       );
+    } else {
+      $rules = array_merge(
+        $rules,
+        ['nama' => [
+          'required',
+          Rule::unique('mst_sasaran', 'nama')->where(function ($query) use ($id) {
+            return $query->where('is_deleted', 0)->where("id", "!=", $id);
+          })
+
+        ]]
+      );
+    }
+
+    $label = [
+      'nama.required' => 'Nama Sasaran harus diisi!',
+      'nama.unique' => 'Nama Sasaran sudah ada!',
+    ];
+
+    return (object) array(
+      'rules' => $rules,
+      'label' => $label
+    );
   }
 
   public static function create($data)
@@ -68,27 +68,35 @@ class SasaranService
     return self::proccess_data($t, $data);
   }
 
-  private static function proccess_data(Sasaran $kegiatan, $data) {
+  private static function proccess_data(Sasaran $sasaran, $data)
+  {
 
-    DB::transaction(function() use ($kegiatan, $data) {
-      $t = $kegiatan;
+    DB::transaction(function () use ($sasaran, $data) {
+      $t = $sasaran;
       $t->nama = $data['nama'];
+      $t->id_program_kerja = $data['id_program_kerja'];
       $t->save();
 
       DB::commit();
     });
 
-    return $kegiatan;
+    return $sasaran;
   }
 
-  public static function delete($id) {
+  public static function delete($id)
+  {
     $t = Sasaran::findOrFail($id)->delete();
   }
+  
+  public static function delete_by_program_kerja($id_program_kerja)
+  {
+    $t = Sasaran::where('id_program_kerja', $id_program_kerja)->update(array('is_deleted' => 1));
+  }
 
-  public static function get_by_id_kegiatan($id_kegiatan = 0) {
-    $data = Sasaran::where('id_kegiatan', $id_kegiatan)->get();
+  public static function get_by_id_sasaran($id_sasaran = 0)
+  {
+    $data = Sasaran::where('id_sasaran', $id_sasaran)->get();
 
     return $data;
   }
-
 }

@@ -66,7 +66,7 @@
                   <select name='program_kerja' class="form-control select2 kegiatan">
                     @foreach($program_kerja as $idx => $row)
                       @php
-                      $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id == $row->id ? 'selected' : '';
+                      $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_program_kerja == $row->id ? 'selected' : '';
                       @endphp
                       <option value='{{$row->id}}' 
                         data-kegiatan='{{$row->id_kegiatan}}'

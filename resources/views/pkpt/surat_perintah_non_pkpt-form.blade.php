@@ -46,7 +46,6 @@
             <h6 class="card-title float-left py-2">Penambahan SP</h6>
           </div>
           <div class="card-body">
-
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Dasar Surat
@@ -60,7 +59,14 @@
                 Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='make_kegiatan' autocomplete="off" value='{{ !is_null(old('make_kegiatan')) ? old('make_kegiatan') : (isset($current_progker->nama_kegiatan) ? $current_progker->nama_kegiatan : '') }}' required="required" class="form-control" type="text" >
+                <select name='kegiatan' class="form-control select2 kegiatan">
+                  @foreach($kegiatan as $idx => $row)
+                    @php
+                    $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_kegiatan == $row->id ? 'selected' : '';
+                    @endphp
+                    <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                  @endforeach
+                </select>
               </div>
             </div>
             <div class="form-group row">
@@ -68,7 +74,7 @@
                 Sub Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='make_sub_kegiatan' autocomplete="off" value='{{ !is_null(old('make_sub_kegiatan')) ? old('make_sub_kegiatan') : (isset($current_progker->sub_kegiatan) ? $current_progker->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
+                <input name='make_sub_kegiatan' autocomplete="off" value='{{ !is_null(old('make_sub_kegiatan')) ? old('make_sub_kegiatan') : (isset($data->id) ? $data->program_kerja->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
             <div class="form-group row">
@@ -76,7 +82,7 @@
                 Anggaran <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='anggaran' autocomplete="off" value='{{ !is_null(old('anggaran')) ? old('anggaran') : (isset($current_progker->anggaran) ? $current_progker->anggaran : '') }}' required="required" class="form-control rupiah-format" type="text" >
+                <input name='anggaran' autocomplete="off" value='{{ !is_null(old('anggaran')) ? old('anggaran') : (isset($data->id) ? $data->program_kerja->anggaran : '') }}' required="required" class="form-control rupiah-format" type="text" >
               </div>
             </div>
             <div class="form-group row">
@@ -91,8 +97,8 @@
                     </tr>
                   </thead>
                   <tbody id='cover-sasaran'>
-                    @if(isset($sp_sasaran))
-                      @foreach($sp_sasaran as $idx => $row)
+                    @if(isset($data->id))
+                      @foreach($data->sasaran as $idx => $row)
                         <tr>
                           <td>
                             <input name="sasaran_kegiatan[]" autocomplete="off" required="required" class="form-control" type="text" value='{{ $row->nama }}'>
@@ -272,8 +278,8 @@
                           <td></td>
                         </tr>
                       @endforeach
-                    @elseif(isset($sp_anggota))
-                      @foreach($sp_anggota AS $idx => $row)
+                    @elseif(isset($data->id))
+                      @foreach($data->anggota AS $idx => $row)
                         <tr>
                           <td>
                             <select name='anggota[]' class="form-control select2">
@@ -371,7 +377,7 @@
       get_pengendali_teknis(val);
       get_ketua_tim(val);
       get_anggota(val);
-      get_pd({{ isset($current_progker) ? $current_progker->id_skpd : 0 }});
+      get_pd({{ isset($data->id) ? $data->program_kerja->id_skpd : 0 }});
 
       check_jadwal_surat_perintah();
     }
@@ -385,7 +391,7 @@
 
           $.each(res.data, function(idx, val){
             var selected = data_edit == val.id_inspektur ? "selected" : "";
-            $(".inspektur_pembantu").append("<option value='" + val.id_inspektur +"' " +selected+ ">" + val.nama_inspektur + "</option>");
+            $(".inspektur_pembantu").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
       });
@@ -400,7 +406,7 @@
 
           $.each(res.data, function(idx, val){
             var selected = data_edit == val.id_pengendali_teknis ? "selected" : "";
-            $(".pengendali_teknis").append("<option value='" + val.id_pengendali_teknis +"' " +selected+ ">" + val.nama_pengendali_teknis + "</option>");
+            $(".pengendali_teknis").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
       });
@@ -415,7 +421,7 @@
 
           $.each(res.data, function(idx, val){
             var selected = data_edit == val.id_ketua_tim ? "selected" : "";
-            $(".ketua_tim").append("<option value='" + val.id_ketua_tim +"' " +selected+ ">" + val.nama_ketua_tim + "</option>");
+            $(".ketua_tim").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
       });

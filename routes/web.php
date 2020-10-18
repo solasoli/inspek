@@ -194,6 +194,7 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/check_jadwal_by_id_kegiatan', 'Pkpt\SuratPerintahController@check_jadwal_by_id_kegiatan');
 
       Route::post('/rubah_nomer', 'Pkpt\SuratPerintahController@rubah_nomer');
+      Route::post('/get_event_sp', 'Pkpt\SuratPerintahController@get_event_sp');
     });
   });
 
@@ -222,6 +223,19 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables', 'Pemeriksaan\SasaranTujuanController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@edit');
     });
+
+    Route::prefix('program-kerja-audit')->group(function () {
+      Route::get('/', 'Pemeriksaan\ProgramKerjaAuditController@index');
+      Route::get('/datatables', 'Pemeriksaan\ProgramKerjaAuditController@list_datatables_api');
+      Route::get('/edit/{id}', 'Pemeriksaan\ProgramKerjaAuditController@edit');
+    });
+
+    Route::prefix('audit')->group(function () {
+      Route::get('/', 'Pemeriksaan\AuditController@index');
+      Route::get('/datatables', 'Pemeriksaan\AuditController@list_datatables_api');
+      Route::get('/edit/{id}', 'Pemeriksaan\AuditController@edit');
+    });
+
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
     Route::get('/dalnis/detail-penentuan', 'Pemeriksaan\DetailPenentuan@index');
     Route::get('/dalnis/detail-sp', 'Pemeriksaan\DetailSP@index');
