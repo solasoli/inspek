@@ -55,6 +55,15 @@
                             </div> --}}
                             <div class="form-group row">
                                 <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                                    Tujuan Pemeriksaan
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <textarea name='judul_tugas' class="form-control">{{ !is_null(old('judul_tugas')) ? old('judul_tugas') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                                     Prosedur Pemeriksaan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -85,7 +94,38 @@
                                     <button type='button' class="btn btn-block btn-success btn-sm btn-uraian" data-idx="[idx]"><i class="fa fa-plus"></i> Uraian</button>
                                 </div>
                             </div>
-
+                            <div class="row">
+							    <div class="col-md-6">
+									<h4 class="text-center">RENCANA</h4>
+								    <table class="table table-borderless">
+										<tbody><tr>
+									    	<td width="25%">Pelaksana</td>
+											<td width="5">:</td>
+											<td width="70%"><select class="form-control"><option></option></select></td>
+										</tr>
+										<tr>
+											<td>Jam</td>
+											<td>:</td>
+											<td><select class="form-control"><option></option></select></td>
+											</tr>
+										</tbody></table>
+                                </div>
+								<div class="col-md-6">
+									<h4 class="text-center">REALISASI</h4>
+									<table class="table table-borderless">
+										<tbody><tr>
+											<td width="25%">Pelaksana</td>
+											<td width="5">:</td>
+								    		<td width="70%"><select class="form-control"><option></option></select></td>
+										</tr>
+										<tr>
+											<td>Jam</td>
+											<td>:</td>
+											<td><select class="form-control"><option></option></select></td>
+									    </tr>
+									</tbody></table>
+								</div>
+							</div>    
                         </div>
                     </div>
                 </div>
