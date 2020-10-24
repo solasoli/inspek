@@ -222,6 +222,8 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Pemeriksaan\SasaranTujuanController@index');
       Route::get('/datatables', 'Pemeriksaan\SasaranTujuanController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@edit');
+
+      Route::post('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@update');
     });
 
     Route::prefix('program-kerja-audit')->group(function () {
