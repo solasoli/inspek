@@ -59,8 +59,6 @@ class ProgramKerjaController extends Controller
         $t->deleted_by = Auth::id();
         $t->is_deleted = 1;
         $t->save();
-
-        KegiatanService::delete_by_program_kerja($id);
       });
 
       $request->session()->flash('success', "Data berhasil Dihapus!");

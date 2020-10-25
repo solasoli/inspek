@@ -25,7 +25,7 @@
         <h4 class="tx-gray-800 mg-b-5">Penentuan Sasaran Tujuan</h4>
     </div>
 
-    <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">
+    <form class="form-layout form-layout-5" id='form-rka' style="padding-top:0" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="br-pagebody">
             @if (Session::has('error'))
@@ -240,7 +240,7 @@
 
             function add_langkah_kerja_pemeriksaan_rinci() {
                 let template_lkpr = `
-                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci')
+                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['data' => $data])
                 `
                 template_lkpr = template_lkpr.replace(/\[idx]/gm, idx_pemeriksaan_rinci)
 
@@ -326,6 +326,13 @@
             /*
             End Langkah Kerja Pemeriksaan Rinci JS
             */
+
+            $('#form-rka').on('submit', function(e) {
+                e.preventDefault()
+                const fixInput = ['_token']
+
+                console.log($(this).serializeArray())
+            })
         })
 
     </script>

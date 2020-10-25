@@ -67,13 +67,6 @@ class KegiatanService
     return $data;
   }
 
-  public static function delete_by_program_kerja($id_program_kerja) {
-    $t = Kegiatan::where('id_program_kerja', $id_program_kerja)->get();
-    foreach($t as $idx => $row) {
-      Self::delete($row->id);
-    }
-  }
-
   // mengambil kegiatan yang di sort berdasarkan
   public static function get_kegiatan_sort_by_empty_sp($return_chain = false) {
     $data = DB::table("mst_kegiatan AS k")
