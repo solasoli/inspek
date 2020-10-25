@@ -140,7 +140,7 @@
                             @if(can_access("sasaran_tujuan", "add"))
                             return_button += `<a class='btn btn-success btn-xs' href='{{url()->current()}}/edit/${data.id}'><i class='fa fa-pencil'></i> Sasaran Tujuan</a> `;
                             @endif
-                            return_button += "<a href='detail_penentuan.html'><button class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> Detail</button></a>";
+                            return_button += `<a href='{{url()->current()}}/detail/${data.id}'><button class='btn btn-primary btn-xs'><i class='fa fa-eye'></i> Detail</button></a>`;
 
                             return return_button == "" ? "-" : return_button
                         }
