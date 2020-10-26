@@ -247,12 +247,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit/buat-kertaskerja', 'Pemeriksaan\BuatKertasKerja@index');
     Route::get('/audit/buat-kertaskerja-utama', 'Pemeriksaan\BuatKertasKerjaUtama@index');
 
+    Route::get('/irban/draft-nhp', 'Pemeriksaan\DraftNHP@index');
+    Route::get('/irban/lhp-tinjut', 'Pemeriksaan\LhpTinjut@index');
+    Route::get('/irban/review-lhp', 'Pemeriksaan\ReviewLHP@index');
+
+    
   });
 
+  Route::prefix('angka-kredit')->group(function(){
+    Route::get('/tim-penilai/penilaian-angka-kredit', 'AngkaKredit\PenilaianAngkaKredit@index');
+    Route::get('/tim-penilai/penilaian-angka-review', 'AngkaKredit\PenilaianAngkaReview@index');
+    Route::get('/tim-penilai/penilaian-angka-catatan', 'AngkaKredit\PenilaianAngkaCatatan@index');
 
+  });
 
   Route::prefix('acl')->group(function () {
-
     Route::prefix('role')->group(function () {
       Route::get('/', 'ACL\RoleController@index');
       Route::get('/add', 'ACL\RoleController@create');

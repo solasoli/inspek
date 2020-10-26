@@ -228,9 +228,7 @@
                     let template_sub_judul_tugas = `
                     @include('pemeriksaan.program-kerja-audit.partial-view.sub_judul_tugas')
                     `
-                    if (value.length > 0) {
-                        template_sub_judul_tugas = template_sub_judul_tugas.replace('[value]', value)
-                    }
+                    template_sub_judul_tugas = template_sub_judul_tugas.replace('[value]', value)
 
                     $(subJudulTugasEl).append(template_sub_judul_tugas)
                 } else {
@@ -329,9 +327,37 @@
 
             $('#form-rka').on('submit', function(e) {
                 e.preventDefault()
-                const fixInput = ['_token']
+                const fixInput = [
+                    '_token',
+                    'judul',
+                    'pendahuluan',
+                    'tujuan_pemeriksaan',
+                    'ruang_lingkup_pemeriksaan',
+                    'waktu_pelaksanaan',
+                ]
 
-                console.log($(this).serializeArray())
+                let input = $(this).serializeArray()
+                input = input.filter(r => fixInput.indexOf(r.name) !== -1)
+
+                const mappingLkp = []
+
+                /* mapping langkah pemeriksaan rinci */
+                $(".cover-langkah-kerja-pemeriksaan-rinci").find($(".br-pagebody")).map((idx, el) => {
+                    const judulTugas = $('.judul-tugas').val()
+                    console.log(el)
+                    const subJudulTugas = $(this).find($(".sub-judul-tugas-cover")).find($("textarea"))
+                    subJudulTugas.map((idSjt, elSubJudulTugas) => {
+                 
+                        console.log(elSubJudulTugas)
+                })
+
+                    mappingLkp.push({
+                        judulTugas,
+                        subJudulTugas,
+                    })
+                })
+
+                console.log(mappingLkp)
             })
         })
 
