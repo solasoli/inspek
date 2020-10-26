@@ -41,6 +41,18 @@ class SasaranTujuanController extends Controller
     return redirect("/pemeriksaan/sasaran-tujuan/edit/".$id);
   }
 
+  public function detail($id)
+  {
+    $sp = SuratPerintah::findOrFail($id);
+    $sasaran_tujuan = SasaranTujuan::all();
+
+    return view('/pemeriksaan/sasaran-tujuan/sasaran_tujuan-detail', [
+      'id' => $id,
+      'data' => $sp,
+      'sasaran_tujuan' => $sasaran_tujuan
+    ]);
+  }
+
   public function list_datatables_api()
   {
     $data = SuratPerintahService::get_valid_sp(true)
