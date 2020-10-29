@@ -281,9 +281,10 @@
             }
 
             function add_uraian_detail(idx_uraian) {
-                if (idx_uraian) {
+                console.log(idx_uraian)
+                if (idx_uraian != '') {
                     num_uraian[idx_uraian] = num_uraian[idx_uraian] != null ? num_uraian[idx_uraian] + 1 : 1
-                    const uraian_cover = $(`.cover-detail-uraian[data-idx='${idx_uraian}']`)
+                    const uraian_cover = $(`.cover-uraian-detail[data-idx='${idx_uraian}']`)
                     uraian_cover.find($(".no-available-uraian")).remove()
                     let template_uraian_detail = `
                     @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci-uraian-detail')
@@ -343,17 +344,43 @@
 
                 /* mapping langkah pemeriksaan rinci */
                 $(".cover-langkah-kerja-pemeriksaan-rinci").find($(".br-pagebody")).map((idx, el) => {
-                    const judulTugas = $('.judul-tugas').val()
-                    console.log(el)
-                    const subJudulTugas = $(this).find($(".sub-judul-tugas-cover")).find($("textarea"))
-                    subJudulTugas.map((idSjt, elSubJudulTugas) => {
-                 
-                        console.log(elSubJudulTugas)
-                })
+                    // Tugas tab
+                    const judulTugas = $(el).find($('.judul-tugas')).val()
+                    const subJudulTugasElement = $(el).find($(".sub-judul-tugas-cover")).find($(".sub-judul-tugas"))
+                    const subJudulTugas = []
+                    subJudulTugasElement.map((idSjt, elSubJudulTugas) => {
+                        subJudulTugas.push($(elSubJudulTugas).val())
+                    })
+
+                    // Prosedur Pemeriksaan
+                    const tujuanPemeriksaan = $(el).find($('.tujuan-pemeriksaan')).val()
+                    const prosedurPemeriksaan = $(el).find($('.prosedur-pemeriksaan')).val()
+                    const findUraian = $(el).find($(".cover-uraian")).find($('.uraian'))
+                    const uraian = []
+                    findUraian.map((idU, elUr) => {
+                        const idxUraian = $(elUr).data('idx')
+                        const findUraianDetail = $(`.cover-uraian-detail[data-idx='${idxUraian}']`).find($('.uraian-detail'))
+                        console.log(findUraianDetail)
+                        const uraianDetail = []
+                        findUraianDetail.map((idUd, elUd) => {
+                            console.log($(elUd).val(), $(elUd).html(),'asd')
+                            uraianDetail.push($(elUd).html())
+                        }) 
+
+                        uraian.push({
+                            uraian: $(elUr).val(),
+                            uraianDetail
+                        })
+                    })
+
+                    // Pelaksana tab
 
                     mappingLkp.push({
                         judulTugas,
                         subJudulTugas,
+                        prosedurPemeriksaan,
+                        tujuanPemeriksaan,
+                        uraian
                     })
                 })
 

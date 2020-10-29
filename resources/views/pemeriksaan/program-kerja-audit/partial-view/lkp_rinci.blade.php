@@ -33,7 +33,7 @@
                                     Sub Judul Tugas
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12 sub-judul-tugas-cover">
-                                    <textarea name='sub_judul_tugas' class="form-control"></textarea>
+                                    <textarea name='sub_judul_tugas' class="form-control sub-judul-tugas"></textarea>
                                 </div>
                             </div>
                             
@@ -52,7 +52,7 @@
                                     Tujuan Pemeriksaan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea name='judul_tugas' class="form-control"></textarea>
+                                    <textarea name='tujuan_pemeriksaan' class="form-control tujuan-pemeriksaan"></textarea>
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
                                     Prosedur Pemeriksaan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea name='judul_tugas' class="form-control"></textarea>
+                                    <textarea name='prosedur_pemeriksaan' class="form-control prosedur-pemeriksaan"></textarea>
                                 </div>
                             </div>
                             
