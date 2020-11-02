@@ -126,13 +126,18 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
       columns: [
-
         { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
           console.log(data);
           return data == 1 ? 'PKPT' : 'NON-PKPT'
         }},
-        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
-        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        // { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          return data.kegiatan != null ? data.kegiatan.nama : '';
+        }},
+        // { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          return data.wilayah != null ? data.wilayah.nama : '';
+        }},
         { data: 'skpd.name', name: 'skpd.name'},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
@@ -150,7 +155,12 @@ $(function() {
           @if(can_access("mst_skpd", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
-          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + data.kegiatan + "' data-wilayah='" + data.wilayah + "' data-skpd='" + data.skpd + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
+
+          const kegiatan_nama = data.kegiatan != null ? data.kegiatan.nama : '';
+          const wilayah_nama = data.wilayah != null ? data.wilayah.nama : '';
+          const skpd_nama = data.skpd != null ? data.skpd.name : '';
+
+          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + kegiatan_nama + "' data-wilayah='" + wilayah_nama + "' data-skpd='" + skpd_nama + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
           return return_button == "" ? "-" : return_button;
         }},
       ],
