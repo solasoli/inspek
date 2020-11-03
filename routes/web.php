@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Mst\SasaranController@destroy');
       Route::get('/datatables', 'Mst\SasaranController@list_datatables_api');
       Route::get('/get_sasaran_by_id', 'Mst\SasaranController@get_kegiatan_by_id');
-      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\SasaranController@get_sasaran_by_id_kegiatan');
+      Route::get('/get_sasaran_by_id_program_kerja', 'Mst\SasaranController@get_sasaran_by_id_program_kerja');
       Route::get('/get_sasaran_by_id_skpd', 'Mst\SasaranController@get_kegiatan_by_id_skpd');
       /* Post section */
       Route::post('/add', 'Mst\SasaranController@store');
@@ -222,6 +222,9 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Pemeriksaan\SasaranTujuanController@index');
       Route::get('/datatables', 'Pemeriksaan\SasaranTujuanController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@edit');
+      Route::get('/detail/{id}', 'Pemeriksaan\SasaranTujuanController@detail');
+
+      Route::post('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@update');
     });
 
     Route::prefix('program-kerja-audit')->group(function () {
@@ -245,12 +248,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/audit/buat-kertaskerja', 'Pemeriksaan\BuatKertasKerja@index');
     Route::get('/audit/buat-kertaskerja-utama', 'Pemeriksaan\BuatKertasKerjaUtama@index');
 
+    Route::get('/irban/draft-nhp', 'Pemeriksaan\DraftNHP@index');
+    Route::get('/irban/lhp-tinjut', 'Pemeriksaan\LhpTinjut@index');
+    Route::get('/irban/review-lhp', 'Pemeriksaan\ReviewLHP@index');
+
+
   });
 
+  Route::prefix('angka-kredit')->group(function(){
+    Route::get('/tim-penilai/penilaian-angka-kredit', 'AngkaKredit\PenilaianAngkaKredit@index');
+    Route::get('/tim-penilai/penilaian-angka-review', 'AngkaKredit\PenilaianAngkaReview@index');
+    Route::get('/tim-penilai/penilaian-angka-catatan', 'AngkaKredit\PenilaianAngkaCatatan@index');
 
+  });
 
   Route::prefix('acl')->group(function () {
-
     Route::prefix('role')->group(function () {
       Route::get('/', 'ACL\RoleController@index');
       Route::get('/add', 'ACL\RoleController@create');

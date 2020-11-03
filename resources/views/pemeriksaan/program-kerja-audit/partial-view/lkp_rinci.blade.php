@@ -13,6 +13,7 @@
                     <ul class="nav nav-tabs nav-justified mb-4">
                         <li class="nav-item"><a href="#tugas-[idx]" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Tugas</a></li>
                         <li class="nav-item"><a href="#tujuan-pemeriksaan-tab-[idx]" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Prosedur Pemeriksaan</a></li>
+                        <li class="nav-item"><a href="#pelaksana-tab-[idx]" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Pelaksana</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -23,7 +24,7 @@
                                     Judul Tugas
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea name='judul_tugas' class="form-control judul-tugas" data-idx='[idx]'>{{ !is_null(old('judul_tugas')) ? old('judul_tugas') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
+                                    <textarea name='judul_tugas' class="form-control judul-tugas" data-idx='[idx]'></textarea>
                                 </div>
                             </div>
 
@@ -32,7 +33,7 @@
                                     Sub Judul Tugas
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12 sub-judul-tugas-cover">
-                                    <textarea name='sub_judul_tugas' class="form-control">{{ !is_null(old('sub_judul_tugas')) ? old('sub_judul_tugas') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
+                                    <textarea name='sub_judul_tugas' class="form-control sub-judul-tugas"></textarea>
                                 </div>
                             </div>
                             
@@ -46,19 +47,12 @@
                         </div>
 
                         <div class="tab-pane fade" id="tujuan-pemeriksaan-tab-[idx]">
-                            {{-- <div class="form-group row">
-                                <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                                </label>
-                                <div class="col-md-9 col-sm-9 col-xs-12">
-                                    <h4 class="tx-gray-800 tx-uppercase tx-bold mg-b-10 tugas-label-[idx]"></h4>
-                                </div>
-                            </div> --}}
                             <div class="form-group row">
                                 <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                                     Tujuan Pemeriksaan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea name='judul_tugas' class="form-control">{{ !is_null(old('judul_tugas')) ? old('judul_tugas') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
+                                    <textarea name='tujuan_pemeriksaan' class="form-control tujuan-pemeriksaan"></textarea>
                                 </div>
                             </div>
 
@@ -67,7 +61,7 @@
                                     Prosedur Pemeriksaan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea name='judul_tugas' class="form-control">{{ !is_null(old('judul_tugas')) ? old('judul_tugas') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
+                                    <textarea name='prosedur_pemeriksaan' class="form-control prosedur-pemeriksaan"></textarea>
                                 </div>
                             </div>
                             
@@ -93,39 +87,61 @@
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <button type='button' class="btn btn-block btn-success btn-sm btn-uraian" data-idx="[idx]"><i class="fa fa-plus"></i> Uraian</button>
                                 </div>
-                            </div>
+                            </div>   
+                        </div>
+                        
+                        <div class="tab-pane fade" id="pelaksana-tab-[idx]">
+                            
                             <div class="row">
 							    <div class="col-md-6">
-									<h4 class="text-center">RENCANA</h4>
-								    <table class="table table-borderless">
-										<tbody><tr>
-									    	<td width="25%">Pelaksana</td>
-											<td width="5">:</td>
-											<td width="70%"><select class="form-control"><option></option></select></td>
-										</tr>
-										<tr>
-											<td>Jam</td>
-											<td>:</td>
-											<td><select class="form-control"><option></option></select></td>
-											</tr>
-										</tbody></table>
+                                    <h6 class="tx-gray-800 tx-uppercase tx-bold mg-b-10 text-center">Rencana</h6>
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                                            Pelaksana
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select name='rencana_pelaksana' class="form-control">
+                                                @foreach($data->anggota as $idx => $row)
+                                                    <option value='{{$row->id}}'>{{ $row->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                                            Durasi
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input name='rencana_durasi' class="form-control" value='{{ !is_null(old('judul_tugas')) ? old('judul_tugas') : '' }}' style='max-width: 50px; display:inline'> Jam
+                                        </div>
+                                    </div>
                                 </div>
 								<div class="col-md-6">
-									<h4 class="text-center">REALISASI</h4>
-									<table class="table table-borderless">
-										<tbody><tr>
-											<td width="25%">Pelaksana</td>
-											<td width="5">:</td>
-								    		<td width="70%"><select class="form-control"><option></option></select></td>
-										</tr>
-										<tr>
-											<td>Jam</td>
-											<td>:</td>
-											<td><select class="form-control"><option></option></select></td>
-									    </tr>
-									</tbody></table>
+                                    <h6 class="tx-gray-800 tx-uppercase tx-bold mg-b-10 text-center">Realisasi</h6>
+									<div class="form-group row">
+                                        <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                                            Pelaksana
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <select name='rencana_pelaksana' class="form-control">
+                                                @foreach($data->anggota as $idx => $row)
+                                                    <option value='{{$row->id}}'>{{ $row->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                                            Durasi
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input name='rencana_durasi' class="form-control" value='{{ !is_null(old('judul_tugas')) ? old('judul_tugas') : '' }}' style='max-width: 50px; display:inline'> Jam
+                                        </div>
+                                    </div>
 								</div>
-							</div>    
+							</div> 
                         </div>
                     </div>
                 </div>

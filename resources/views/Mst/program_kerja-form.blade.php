@@ -1,27 +1,37 @@
 <script>
-function get_sasaran(id) {
-  $("#cover-sasaran_edit").html('');
-  $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
-    // console.log(data);
-    $.each(data, function(idx, val){
-      var r = "<tr>";
-      r += "<td>";
-      r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
-      r += "</td>";
-      r += "<td>";
-      r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-      r += "</td>";
-      r += "</tr>";
-      $("#cover-sasaran_edit").append(r);
-    });
-  });
-}
+
 
 $(function() {
   $('#modal-form').on('show.bs.modal', function(e) {
+    var id = $(e.relatedTarget).data('id');
+
+    get_sasaran(id);
+    function get_sasaran(id) {
+      $("#cover-sasaran_edit").html('');
+      $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
+        // console.log(data);
+        if (id > 0) {
+          $.each(data, function(idx, val){
+            var r = "<tr>";
+            r += "<td>";
+            r += "<input name='sasaran[]' value='"+ val.nama +"' autocomplete='off' required='required' class='form-control' type='text'>";
+            r += "</td>";
+            r += "<td>";
+            r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+            r += "</td>";
+            r += "</tr>";
+            $("#cover-sasaran_edit").append(r);
+          });
+        }
+        else {
+          $("#cover-sasaran_edit").html('');
+        }
+
+      });
+    }
+
     $("select[name='wilayah']").val('').trigger('change');
     $("select[name='opd']").html(''); // api na benang , kakara di clir
-    var id = $(e.relatedTarget).data('id');
 
     if(id > 0) { // form edit
       $.get("{{url('')}}/mst/program_kerja/get_program_kerja_by_id?id=" + id, function(data) {
@@ -112,10 +122,6 @@ $(function() {
       $("#kegiatan_pr").html(options).trigger('change')
     })
 
-  })
-
-  $("#kegiatan_pr").on('change', function() {
-    get_sasaran($(this).val())
   })
 
   $(".man-power").on('keyup change', function(){

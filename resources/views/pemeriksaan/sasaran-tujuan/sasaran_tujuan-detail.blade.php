@@ -5,11 +5,11 @@
 <style>
 .wizard>.content>.body {
   width: 100% !important;
-  overflow: initial !important;
+  overflow: auto !important;
 }
 
 section {
-  overflow: hidden;
+  background: #fff;
 }
 
 </style>
@@ -25,8 +25,7 @@ section {
   <h4 class="tx-gray-800 mg-b-5">Penentuan Sasaran Tujuan</h4>
 </div>
 
-<form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">
-  {{ csrf_field() }}
+
   <div class="br-pagebody">
     @if (Session::has('error'))
     <div class="row">
@@ -72,9 +71,9 @@ section {
                 $isi = $all_isian->where('id_sasaran_tujuan', $row->id)->first();
                 $isi = $isi != null ? $isi->isi : '';
                 @endphp
-                <textarea name="sasaran_tujuan[{{ $row->id }}]" class='text-wizard' id="{{ str_replace(' ', '', $row->nama) }}" rows="10" cols="80">
-                  {{ $isi }}
-                </textarea>
+                <div class='text-wizard'>
+                  {!! $isi !!}
+                </div>
               </section>
               @endforeach
             </div>
@@ -85,9 +84,8 @@ section {
           <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                <a href='{{ url('') }}/pemeriksaan/sasaran-tujuan' class="btn btn-danger"
-                type="button">Cancel</a>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href='{{ url('') }}/pemeriksaan/sasaran-tujuan' class="btn btn-primary" type="button">Back</a>
+                <a href='{{ url('') }}/pemeriksaan/sasaran-tujuan/edit/{{$id}}' class="btn btn-success" type="button">Edit</a>
               </div>
             </div>
           </div>
@@ -95,7 +93,6 @@ section {
       </div>
     </div>
   </div><!-- br-pagebody -->
-</form>
 
 <script src="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>
 <script src="{{ asset('admin_template/lib/ckeditor/plugin/autogrow.js') }}"></script>

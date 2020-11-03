@@ -25,7 +25,7 @@
         <h4 class="tx-gray-800 mg-b-5">Penentuan Sasaran Tujuan</h4>
     </div>
 
-    <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">
+    <form class="form-layout form-layout-5" id='form-rka' style="padding-top:0" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <div class="br-pagebody">
             @if (Session::has('error'))
@@ -228,9 +228,7 @@
                     let template_sub_judul_tugas = `
                     @include('pemeriksaan.program-kerja-audit.partial-view.sub_judul_tugas')
                     `
-                    if (value.length > 0) {
-                        template_sub_judul_tugas = template_sub_judul_tugas.replace('[value]', value)
-                    }
+                    template_sub_judul_tugas = template_sub_judul_tugas.replace('[value]', value)
 
                     $(subJudulTugasEl).append(template_sub_judul_tugas)
                 } else {
@@ -240,7 +238,7 @@
 
             function add_langkah_kerja_pemeriksaan_rinci() {
                 let template_lkpr = `
-                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci')
+                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['data' => $data])
                 `
                 template_lkpr = template_lkpr.replace(/\[idx]/gm, idx_pemeriksaan_rinci)
 
@@ -283,9 +281,10 @@
             }
 
             function add_uraian_detail(idx_uraian) {
-                if (idx_uraian) {
+                console.log(idx_uraian)
+                if (idx_uraian != '') {
                     num_uraian[idx_uraian] = num_uraian[idx_uraian] != null ? num_uraian[idx_uraian] + 1 : 1
-                    const uraian_cover = $(`.cover-detail-uraian[data-idx='${idx_uraian}']`)
+                    const uraian_cover = $(`.cover-uraian-detail[data-idx='${idx_uraian}']`)
                     uraian_cover.find($(".no-available-uraian")).remove()
                     let template_uraian_detail = `
                     @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci-uraian-detail')
@@ -326,6 +325,67 @@
             /*
             End Langkah Kerja Pemeriksaan Rinci JS
             */
+
+            $('#form-rka').on('submit', function(e) {
+                e.preventDefault()
+                const fixInput = [
+                    '_token',
+                    'judul',
+                    'pendahuluan',
+                    'tujuan_pemeriksaan',
+                    'ruang_lingkup_pemeriksaan',
+                    'waktu_pelaksanaan',
+                ]
+
+                let input = $(this).serializeArray()
+                input = input.filter(r => fixInput.indexOf(r.name) !== -1)
+
+                const mappingLkp = []
+
+                /* mapping langkah pemeriksaan rinci */
+                $(".cover-langkah-kerja-pemeriksaan-rinci").find($(".br-pagebody")).map((idx, el) => {
+                    // Tugas tab
+                    const judulTugas = $(el).find($('.judul-tugas')).val()
+                    const subJudulTugasElement = $(el).find($(".sub-judul-tugas-cover")).find($(".sub-judul-tugas"))
+                    const subJudulTugas = []
+                    subJudulTugasElement.map((idSjt, elSubJudulTugas) => {
+                        subJudulTugas.push($(elSubJudulTugas).val())
+                    })
+
+                    // Prosedur Pemeriksaan
+                    const tujuanPemeriksaan = $(el).find($('.tujuan-pemeriksaan')).val()
+                    const prosedurPemeriksaan = $(el).find($('.prosedur-pemeriksaan')).val()
+                    const findUraian = $(el).find($(".cover-uraian")).find($('.uraian'))
+                    const uraian = []
+                    findUraian.map((idU, elUr) => {
+                        const idxUraian = $(elUr).data('idx')
+                        const findUraianDetail = $(`.cover-uraian-detail[data-idx='${idxUraian}']`).find($('.uraian-detail'))
+                        console.log(findUraianDetail)
+                        const uraianDetail = []
+                        findUraianDetail.map((idUd, elUd) => {
+                            console.log($(elUd).val(), $(elUd).html(),'asd')
+                            uraianDetail.push($(elUd).html())
+                        }) 
+
+                        uraian.push({
+                            uraian: $(elUr).val(),
+                            uraianDetail
+                        })
+                    })
+
+                    // Pelaksana tab
+
+                    mappingLkp.push({
+                        judulTugas,
+                        subJudulTugas,
+                        prosedurPemeriksaan,
+                        tujuanPemeriksaan,
+                        uraian
+                    })
+                })
+
+                console.log(mappingLkp)
+            })
         })
 
     </script>
