@@ -100,9 +100,9 @@ class ProgramKerjaService
   public static function get_program_kerja_by_type_pkpt($type_pkpt = 1)
   {
     $data = DB::table("mst_program_kerja AS pk")
-      ->select(DB::raw("k.id AS id_kegiatan, k.nama AS kegiatan,
+      ->select(DB::raw("k.id AS id_kegiatan, pk.id AS id_program_kerja, k.nama AS kegiatan,
       pk.id,
-      pk.sub_kegiatan AS nama,
+      pk.sub_kegiatan,
       pk.dari,
       pk.sampai,
       pk.id_wilayah"))

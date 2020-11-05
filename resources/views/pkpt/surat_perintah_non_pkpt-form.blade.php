@@ -59,14 +59,7 @@
                 Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <select name='kegiatan' class="form-control select2 kegiatan">
-                  @foreach($kegiatan as $idx => $row)
-                    @php
-                    $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_kegiatan == $row->id ? 'selected' : '';
-                    @endphp
-                    <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
-                  @endforeach
-                </select>
+                <input name='kegiatan' autocomplete="off" value='{{ !is_null(old('kegiatan')) ? old('kegiatan') : (isset($data->id) ? $data->program_kerja->kegiatan : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
             <div class="form-group row">
@@ -74,7 +67,7 @@
                 Sub Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='make_sub_kegiatan' autocomplete="off" value='{{ !is_null(old('make_sub_kegiatan')) ? old('make_sub_kegiatan') : (isset($data->id) ? $data->program_kerja->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
+                <input name='sub_kegiatan' autocomplete="off" value='{{ !is_null(old('sub_kegiatan')) ? old('sub_kegiatan') : (isset($data->id) ? $data->program_kerja->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
             <div class="form-group row">

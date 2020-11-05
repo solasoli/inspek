@@ -2,9 +2,9 @@
 
 namespace App\Repository\SuratPerintah;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Repository\BaseModel;
 
-class SuratPerintah extends Model
+class SuratPerintah extends BaseModel
 {
   protected $table = "pkpt_surat_perintah";
 
@@ -59,4 +59,5 @@ class SuratPerintah extends Model
   {
     return $this->hasMany('App\Repository\Pemeriksaan\PenentuanSasaranTujuan', 'id_surat_perintah')->where('sp_penentuan_sasaran_tujuan.is_deleted', 0);
   }
+
 }
