@@ -14,6 +14,7 @@ use App\Service\Master\ProgramKerjaService;
 use App\Service\Master\PeriodeService;
 use App\Service\Master\WilayahService;
 use App\Service\Pegawai\PegawaiService;
+use App\Service\Master\SasaranService;
 
 use App\Repository\Master\DasarSurat;
 
@@ -50,7 +51,7 @@ class SuratPerintahService
 
         // prepare data kegiatan
         $data_kegiatan = [
-          'nama' => $input['kegiatan'],
+          'kegiatan' => $input['kegiatan'],
           'wilayah' => $input['wilayah'],
           'opd' => $input['opd'],
           'dari' => $input['dari'],
@@ -61,28 +62,23 @@ class SuratPerintahService
           'jml_wakil_penanggung_jawab' => 1,
           'jml_pengendali_teknis' => 1,
           'jml_ketua_tim' => 1,
-          'jml_anggota' => 1
+          'jml_anggota' => count($input['anggota']),
         ];
 
         $kegiatan = null;
-        $sasaran = [];
 
         if (isset($sp->id_program_kerja)) {
 
           $program_kerja = ProgramKerjaService::update($sp->id_program_kerja, $data_kegiatan);
         } else {
-          // buat kegiatan
-          $make_kegiatan = KegiatanService::create($data_kegiatan);
-          $data_kegiatan['kegiatan'] = $make_kegiatan['kegiatan']->id;
-          $kegiatan = $data_kegiatan['kegiatan'];
-          $sasaran = $make_kegiatan['sasaran'];
+          // buat Program Kerja
           $program_kerja = ProgramKerjaService::create($data_kegiatan, $type);
         }
-
-
-        // insert to pkpt sasaran surat perintah
-        foreach ($sasaran as $idx => $row) {
-          $new_sasaran[] = $row->id;
+        
+        // set new sasaran to mst_sasaran
+        $get_created_sasaran =  SasaranService::get_sasaran_by_id_program_kerja($program_kerja->id);
+        foreach($get_created_sasaran as $csi => $rcs) { 
+          $new_sasaran[] = $rcs->id;
         }
       }
 
@@ -180,12 +176,14 @@ class SuratPerintahService
 
     $wilayah = WilayahService::get_data();
     $periode = PeriodeService::get_data();
+    $kegiatan = KegiatanService::get_data();
     $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
     $list_inspektur = PegawaiService::get_current_inspektur($id_sp);
 
     $dasar_surat = DasarSurat::first();
 
     return array_merge($additional_data, [
+      'kegiatan' => $kegiatan,
       'program_kerja' => $program_kerja,
       'wilayah' => $wilayah,
       'dasar_surat' => $dasar_surat,
