@@ -8,6 +8,7 @@ use Datatables;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use App\Repository\SuratPerintah\SuratPerintah;
+use App\Repository\Master\Skpd;
 use App\Wilayah;
 use App\DasarSurat;
 use App\Periode;
@@ -61,20 +62,30 @@ class SuratPerintahController extends Controller
     return redirect('/pkpt/surat_perintah');
   }
 
+  public function destroy(Request $request, $id)
+  {
+    SuratPerintahService::delete($id);
+
+    $request->session()->flash('message', "Data berhasil Dihapus!");
+    return redirect('/pkpt/surat_perintah');
+  }
+
   public function approve(Request $request, $id)
   {
     $t = SuratPerintahService::approve($id);
 
-    $request->session()->flash('message', "<strong>" . $t->nama . "</strong> berhasil diapprove!");
+    $request->session()->flash('message', "Berhasil diapprove!");
     return redirect('/pkpt/surat_perintah');
   }
 
   public function info($id)
   {
-    $data = SuratPerintah::find($id);
+    $data = SuratPerintah::findOrFail($id);
+    $skpd = Skpd::findOrFail($data->program_kerja->id_skpd);
 
     return view('pkpt.surat_perintah-detail', [
-      'data' => $data
+      'data' => $data,
+      'skpd' => $skpd
     ]);
   }
 

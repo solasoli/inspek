@@ -31,7 +31,7 @@ $(function() {
     q +="</tr>";
     $("#cover-sasaran_detail_1").append(q);
 
-    $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
+    $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
       // console.log(data);
       $.each(data, function(idx, val){
         i++;
@@ -62,7 +62,7 @@ $(function() {
         </table>
         <br><br>
         <table width="100%" cellpadding='5' class="table">
-          <th colspan="2" class="text-center">Program Kerja</th>
+          <th colspan="2" class="text-center">Sasaran</th>
           <tbody id='cover-sasaran_detail_2'>
           </tbody>
         </table>

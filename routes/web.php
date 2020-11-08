@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Mst\SasaranController@destroy');
       Route::get('/datatables', 'Mst\SasaranController@list_datatables_api');
       Route::get('/get_sasaran_by_id', 'Mst\SasaranController@get_kegiatan_by_id');
-      Route::get('/get_sasaran_by_id_kegiatan', 'Mst\SasaranController@get_sasaran_by_id_kegiatan');
+      Route::get('/get_sasaran_by_id_program_kerja', 'Mst\SasaranController@get_sasaran_by_id_program_kerja');
       Route::get('/get_sasaran_by_id_skpd', 'Mst\SasaranController@get_kegiatan_by_id_skpd');
       /* Post section */
       Route::post('/add', 'Mst\SasaranController@store');
@@ -255,7 +255,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/irban/lhp-tinjut', 'Pemeriksaan\LhpTinjut@index');
     Route::get('/irban/review-lhp', 'Pemeriksaan\ReviewLHP@index');
 
-    
+
   });
 
   Route::prefix('angka-kredit')->group(function(){

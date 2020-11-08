@@ -2,9 +2,9 @@
 
 namespace App\Repository\SuratPerintah;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Repository\BaseModel;
 
-class SuratPerintah extends Model
+class SuratPerintah extends BaseModel
 {
   protected $table = "pkpt_surat_perintah";
 

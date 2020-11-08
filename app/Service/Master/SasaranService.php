@@ -87,7 +87,7 @@ class SasaranService
   {
     $t = Sasaran::findOrFail($id)->delete();
   }
-  
+
   public static function delete_by_program_kerja($id_program_kerja)
   {
     $t = Sasaran::where('id_program_kerja', $id_program_kerja)->update(array('is_deleted' => 1));
@@ -96,6 +96,15 @@ class SasaranService
   public static function get_by_id_sasaran($id_sasaran = 0)
   {
     $data = Sasaran::where('id_sasaran', $id_sasaran)->get();
+
+    return $data;
+  }
+
+  public static function get_sasaran_by_id_program_kerja($id = 0)
+  {
+    $data = Sasaran::where('id_program_kerja', $id)
+    ->where('is_deleted', 0)
+    ->get();
 
     return $data;
   }

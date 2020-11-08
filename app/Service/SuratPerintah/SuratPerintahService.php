@@ -9,7 +9,7 @@ use App\Repository\SuratPerintah\SuratPerintah;
 use App\Repository\SuratPerintah\SuratPerintahAnggota;
 use App\Repository\SuratPerintah\SuratPerintahSasaran;
 use App\Repository\Master\ProgramKerja;
-use App\Service\KegiatanService;
+use App\Service\Master\KegiatanService;
 use App\Service\Master\ProgramKerjaService;
 use App\Service\Master\PeriodeService;
 use App\Service\Master\WilayahService;
@@ -50,13 +50,13 @@ class SuratPerintahService
 
         // prepare data kegiatan
         $data_kegiatan = [
-          'kegiatan' => $input['kegiatan'],
+          'nama' => $input['kegiatan'],
           'wilayah' => $input['wilayah'],
           'opd' => $input['opd'],
           'dari' => $input['dari'],
           'sampai' => $input['sampai'],
           'sasaran' => $input['sasaran_kegiatan'],
-          'sub_kegiatan' => $input['make_sub_kegiatan'],
+          'sub_kegiatan' => $input['sub_kegiatan'],
           'anggaran' => $input['anggaran'],
           'jml_wakil_penanggung_jawab' => 1,
           'jml_pengendali_teknis' => 1,
@@ -72,7 +72,7 @@ class SuratPerintahService
           $program_kerja = ProgramKerjaService::update($sp->id_program_kerja, $data_kegiatan);
         } else {
           // buat kegiatan
-          $make_kegiatan = KegiatanService::create($data_kegiatan, $type);
+          $make_kegiatan = KegiatanService::create($data_kegiatan);
           $data_kegiatan['kegiatan'] = $make_kegiatan['kegiatan']->id;
           $kegiatan = $data_kegiatan['kegiatan'];
           $sasaran = $make_kegiatan['sasaran'];
@@ -149,6 +149,19 @@ class SuratPerintahService
 
 
       DB::commit();
+    });
+  }
+
+  public static function delete($id)
+  {
+    DB::transaction(function () use ($id) {
+
+      SuratPerintah::findOrFail($id)->delete();
+      SuratPerintahSasaran::where('id_surat_perintah', $id)->update(['is_deleted' => 1]);
+      SuratPerintahAnggota::where('id_surat_perintah', $id)->update(['is_deleted'=> 1]);
+
+      DB::commit();
+
     });
   }
 
