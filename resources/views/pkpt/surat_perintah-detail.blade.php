@@ -189,8 +189,8 @@
                                 <div class="col-1">:</div>
                                 <div class="col-8">
                                     <ol style="padding-left: 15px;">
-                                        <li>{{ $data->nama_kegiatan }}, @foreach ($data->sasaran as $idx => $row)
-                                                {{ $row->nama }} pada {{ $data->nama_skpd }}
+                                        <li>{{ $data->kegiatan->nama }}, @foreach ($data->sasaran as $idx => $row)
+                                                {{ $row->nama }} pada {{ $skpd->name }}
                                             @endforeach pada tanggal
                                             {{ date('d', strtotime($data->dari)) }}
                                             {{ bulan_indonesia(date('m', strtotime($data->dari))) }}

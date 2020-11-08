@@ -68,11 +68,12 @@
                       @php
                       $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_program_kerja == $row->id ? 'selected' : '';
                       @endphp
-                      <option value='{{$row->id}}' 
+                      <option value='{{$row->id}}'
                         data-kegiatan='{{$row->id_kegiatan}}'
-                        data-wilayah='{{$row->id_wilayah}}' 
+                        data-program_kerja='{{$row->id_program_kerja}}'
+                        data-wilayah='{{$row->id_wilayah}}'
                         data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}'
-                        data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->nama}}</option>
+                        data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->sub_kegiatan}}</option>
                     @endforeach
                   </select>
 
@@ -311,6 +312,7 @@
 
     $(".kegiatan").on("change", function(){
       change_wilayah($(this));
+      kegiatan_filled_date();
     });
 
     function change_wilayah(el){
@@ -321,7 +323,7 @@
       get_pengendali_teknis(val);
       get_ketua_tim(val);
       get_anggota(val);
-      get_sasaran()
+      get_sasaran();
 
       check_jadwal_surat_perintah();
     }
@@ -390,9 +392,7 @@
     $("#wilayah, #dari_kalendar, #sampai_kalendar").on("change", function(){
       check_jadwal_surat_perintah();
     });
-    $(".kegiatan").on('change', function() {
-      kegiatan_filled_date();
-    })
+
 
     function check_jadwal_surat_perintah(){
       $("#jadwal_warning").hide();
@@ -416,7 +416,7 @@
     });
 
     function get_sasaran(){
-      var id = $("select[name='program_kerja']").find($('option:selected')).data('kegiatan');
+      var id = $("select[name='program_kerja']").find($('option:selected')).data('program_kerja');
       $(".sasaran").html('');
 
       @php
@@ -432,7 +432,7 @@
       @endphp
       var data_edit = [{{ implode(',',$arr) }}];
       console.log(data_edit);
-      $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_kegiatan?id=" + id, function(data) {
+      $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
         $(".sasaran").html('');
         // console.log(data);
         $.each(data, function(idx, val){

@@ -9,11 +9,12 @@ use App\Repository\SuratPerintah\SuratPerintah;
 use App\Repository\SuratPerintah\SuratPerintahAnggota;
 use App\Repository\SuratPerintah\SuratPerintahSasaran;
 use App\Repository\Master\ProgramKerja;
-use App\Service\KegiatanService;
+use App\Service\Master\KegiatanService;
 use App\Service\Master\ProgramKerjaService;
 use App\Service\Master\PeriodeService;
 use App\Service\Master\WilayahService;
 use App\Service\Pegawai\PegawaiService;
+use App\Service\Master\SasaranService;
 
 use App\Repository\Master\DasarSurat;
 
@@ -56,33 +57,28 @@ class SuratPerintahService
           'dari' => $input['dari'],
           'sampai' => $input['sampai'],
           'sasaran' => $input['sasaran_kegiatan'],
-          'sub_kegiatan' => $input['make_sub_kegiatan'],
+          'sub_kegiatan' => $input['sub_kegiatan'],
           'anggaran' => $input['anggaran'],
           'jml_wakil_penanggung_jawab' => 1,
           'jml_pengendali_teknis' => 1,
           'jml_ketua_tim' => 1,
-          'jml_anggota' => 1
+          'jml_anggota' => count($input['anggota']),
         ];
 
         $kegiatan = null;
-        $sasaran = [];
 
         if (isset($sp->id_program_kerja)) {
 
           $program_kerja = ProgramKerjaService::update($sp->id_program_kerja, $data_kegiatan);
         } else {
-          // buat kegiatan
-          $make_kegiatan = KegiatanService::create($data_kegiatan, $type);
-          $data_kegiatan['kegiatan'] = $make_kegiatan['kegiatan']->id;
-          $kegiatan = $data_kegiatan['kegiatan'];
-          $sasaran = $make_kegiatan['sasaran'];
+          // buat Program Kerja
           $program_kerja = ProgramKerjaService::create($data_kegiatan, $type);
         }
-
-
-        // insert to pkpt sasaran surat perintah
-        foreach ($sasaran as $idx => $row) {
-          $new_sasaran[] = $row->id;
+        
+        // set new sasaran to mst_sasaran
+        $get_created_sasaran =  SasaranService::get_sasaran_by_id_program_kerja($program_kerja->id);
+        foreach($get_created_sasaran as $csi => $rcs) { 
+          $new_sasaran[] = $rcs->id;
         }
       }
 
@@ -152,6 +148,19 @@ class SuratPerintahService
     });
   }
 
+  public static function delete($id)
+  {
+    DB::transaction(function () use ($id) {
+
+      SuratPerintah::findOrFail($id)->delete();
+      SuratPerintahSasaran::where('id_surat_perintah', $id)->update(['is_deleted' => 1]);
+      SuratPerintahAnggota::where('id_surat_perintah', $id)->update(['is_deleted'=> 1]);
+
+      DB::commit();
+
+    });
+  }
+
   /**
    * Get Valid Surat Perintah yang sudah bernomer surat
    */
@@ -167,12 +176,14 @@ class SuratPerintahService
 
     $wilayah = WilayahService::get_data();
     $periode = PeriodeService::get_data();
+    $kegiatan = KegiatanService::get_data();
     $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
     $list_inspektur = PegawaiService::get_current_inspektur($id_sp);
 
     $dasar_surat = DasarSurat::first();
 
     return array_merge($additional_data, [
+      'kegiatan' => $kegiatan,
       'program_kerja' => $program_kerja,
       'wilayah' => $wilayah,
       'dasar_surat' => $dasar_surat,

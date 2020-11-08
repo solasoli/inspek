@@ -54,27 +54,34 @@
                 <textarea name='dasar_surat' class="form-control">{{ !is_null(old('dasar_surat')) ? old('dasar_surat') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
               </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row" style="margin-bottom: 10px">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Kegiatan <span class="required"></span> :
+                Pilih Kegiatan
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name='kegiatan' class="form-control select2 kegiatan">
                   @foreach($kegiatan as $idx => $row)
                     @php
-                    $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_kegiatan == $row->id ? 'selected' : '';
+                    $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_program_kerja == $row->id ? 'selected' : '';
                     @endphp
-                    <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                    <option value='{{$row->id}}'
+                      data-kegiatan='{{$row->id_kegiatan}}'
+                      data-program_kerja='{{$row->id_program_kerja}}'
+                      data-wilayah='{{$row->id_wilayah}}'
+                      data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}'
+                      data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->nama}}</option>
                   @endforeach
                 </select>
+
               </div>
+
             </div>
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Sub Kegiatan <span class="required"></span> :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='make_sub_kegiatan' autocomplete="off" value='{{ !is_null(old('make_sub_kegiatan')) ? old('make_sub_kegiatan') : (isset($data->id) ? $data->program_kerja->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
+                <input name='sub_kegiatan' autocomplete="off" value='{{ !is_null(old('sub_kegiatan')) ? old('sub_kegiatan') : (isset($data->id) ? $data->program_kerja->sub_kegiatan : '') }}' required="required" class="form-control" type="text" >
               </div>
             </div>
             <div class="form-group row">
@@ -383,14 +390,14 @@
     }
 
     function get_inspektur_pembantu(val){
-      $.post("/mst/inspektur_pembantu/get_inspektur_pembantu_by_wilayah", {"id_wilayah": val}, function(res){
+      $.post("/mst/pegawai/get_inspektur_pembantu_by_wilayah", {"id_wilayah": val}, function(res){
         if(res.data != null){
           $(".inspektur_pembantu").html('');
 
           var data_edit = {{isset($data->id_inspektur_pembantu) ? $data->id_inspektur_pembantu : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id_inspektur ? "selected" : "";
+            var selected = data_edit == val.id ? "selected" : "";
             $(".inspektur_pembantu").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
@@ -405,7 +412,7 @@
           var data_edit = {{isset($data->id_pengendali_teknis) ? $data->id_pengendali_teknis : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id_pengendali_teknis ? "selected" : "";
+            var selected = data_edit == val.id ? "selected" : "";
             $(".pengendali_teknis").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }
@@ -420,7 +427,7 @@
           var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};
 
           $.each(res.data, function(idx, val){
-            var selected = data_edit == val.id_ketua_tim ? "selected" : "";
+            var selected = data_edit == val.id ? "selected" : "";
             $(".ketua_tim").append("<option value='" + val.id +"' " +selected+ ">" + val.nama + "</option>");
           });
         }

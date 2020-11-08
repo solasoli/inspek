@@ -22,11 +22,12 @@
     </div>
 
     <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-        <h4 class="tx-gray-800 mg-b-5">Penentuan Sasaran Tujuan</h4>
+        <h4 class="tx-gray-800 mg-b-5">Program Kerja Audit</h4>
     </div>
 
     <form class="form-layout form-layout-5" id='form-rka' style="padding-top:0" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
+        <input type='hidden' name='mapping_lkp' value='' id='mapping-lkp'>
         <div class="br-pagebody">
             @if (Session::has('error'))
                 <div class="row">
@@ -57,35 +58,31 @@
                     <div class="card shadow-base">
 
                         <div class="card-header alert-success">
-                            <h6 class="card-title">Penentuan Sasaran Tujuan</h6>
+                            <h6 class="card-title">Program Kerja Audit</h6>
                         </div>
                         <div class="card-body">
                             <div id="wizard3">
-                                <h3>Judul</h3>
-                                <section>
-                                    <textarea name="judul" class='text-wizard' id="judul" rows="10"
-                                        cols="80"></textarea>
-                                </section>
-                                <h3>Pendahuluan</h3>
-                                <section>
-                                    <textarea name="pendahuluan" class='text-wizard' id="pendahuluan" rows="10"
-                                        cols="80"></textarea>
-                                </section>
-                                <h3>Tujuan Pemeriksaan</h3>
-                                <section>
-                                    <textarea name="tujuan_pemeriksaan" class='text-wizard' id="tujuan_pemeriksaan" rows="10"
-                                        cols="80"></textarea>
-                                </section>
-                                <h3>Ruang Lingkup Pemeriksaan</h3>
-                                <section>
-                                    <textarea name="ruang_lingkup_pemeriksaan" class='text-wizard' id="ruang_lingkup_pemeriksaan" rows="10"
-                                        cols="80"></textarea>
-                                </section>
-                                <h3>Waktu Pelaksanaan</h3>
-                                <section>
-                                    <textarea name="waktu_pelaksanaan" class='text-wizard' id="waktu_pelaksanaan" rows="10"
-                                        cols="80"></textarea>
-                                </section>
+                                
+                                @php
+                                $all_input = [];
+                                $all_isian = $data->program_kerja_audit;
+                                @endphp
+                                @foreach($program_kerja_audit AS $idx => $row)
+                                    <h3>{{ $row->nama }}</h3>
+                                    <section>
+                                        <h5>{{ $row->nama }}</h5>
+                                        @php
+                                            $isi = $all_isian->where('id_program_kerja_audit', $row->id)->first();
+                                            $isi = $isi != null ? $isi->isi : '';
+                                            
+                                            $nama_field = str_replace(' ','_', strtolower(trim($row->nama))).'_rka';
+                                            $all_input[] = $nama_field;
+                                        @endphp
+                                        <textarea name="{{$nama_field}}" class='text-wizard' id="{{ str_replace(' ', '', $row->nama) }}" rows="10" cols="80">
+                                            {{ $isi }}
+                                        </textarea>
+                                    </section>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -100,6 +97,17 @@
         </div>
                               
         <div class='cover-langkah-kerja-pemeriksaan-rinci'>
+            @php
+            $idxLkp = 1;
+            @endphp
+            @if($data->langkah_kerja_pemeriksaan->count() > 0) 
+                @foreach($data->langkah_kerja_pemeriksaan as $idx => $row)
+                    @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['anggota' => $data->anggota, 'data' => $row, 'idx' => $idx + 1])
+                    @php
+                        $idxLkp++;
+                    @endphp
+                @endforeach
+            @endif
         </div>
 
         <div class="card-body">
@@ -157,6 +165,7 @@
                 config.toolbarCanCollapse = true;
             };
 
+            const plusHeightWizard = 65
             $('#' + wizardName).steps({
                 headerTag: 'h3',
                 bodyTag: 'section',
@@ -189,7 +198,7 @@
                             if (idx == 0) {
                                 $('#' + wizardName).find($(".content")).height(
                                     parentDiv
-                                    .find($(".cke")).height() + 35);
+                                    .find($(".cke")).height() + plusHeightWizard);
                             }
 
                             const html = e.editor.getData()
@@ -201,7 +210,7 @@
                             console.log('resized...');
 
                             $('#' + wizardName).find($(".content")).height(parentDiv
-                                .find($(".cke")).height() + 35);
+                                .find($(".cke")).height() + plusHeightWizard);
 
                         });
 
@@ -210,14 +219,14 @@
                 onStepChanged: function(event, currIdx) {
                     const content = $(`#${wizardName}-p-${currIdx}`).find($(".cke"))
 
-                    $(`#${wizardName}`).find($(".content")).height(content.height() + 35)
+                    $(`#${wizardName}`).find($(".content")).height(content.height() + plusHeightWizard)
                 }
             });
 
             /*
             Langkah Kerja Pemeriksaan Rinci JS
             */
-            let idx_pemeriksaan_rinci = 1
+            let idx_pemeriksaan_rinci = {{ $idxLkp }}
             const alpha_uraian = []
             const num_uraian = []
             add_langkah_kerja_pemeriksaan_rinci()
@@ -238,9 +247,10 @@
 
             function add_langkah_kerja_pemeriksaan_rinci() {
                 let template_lkpr = `
-                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['data' => $data])
+                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['anggota' => $data->anggota, 'idx' => null])
                 `
                 template_lkpr = template_lkpr.replace(/\[idx]/gm, idx_pemeriksaan_rinci)
+                console.log(idx_pemeriksaan_rinci, 'hei disini');
 
                 $('.cover-langkah-kerja-pemeriksaan-rinci').append(template_lkpr)
 
@@ -330,12 +340,10 @@
                 e.preventDefault()
                 const fixInput = [
                     '_token',
-                    'judul',
-                    'pendahuluan',
-                    'tujuan_pemeriksaan',
-                    'ruang_lingkup_pemeriksaan',
-                    'waktu_pelaksanaan',
+                    '{!! implode("','",$all_input) !!}'
                 ]
+
+                console.log(fixInput)
 
                 let input = $(this).serializeArray()
                 input = input.filter(r => fixInput.indexOf(r.name) !== -1)
@@ -360,11 +368,9 @@
                     findUraian.map((idU, elUr) => {
                         const idxUraian = $(elUr).data('idx')
                         const findUraianDetail = $(`.cover-uraian-detail[data-idx='${idxUraian}']`).find($('.uraian-detail'))
-                        console.log(findUraianDetail)
                         const uraianDetail = []
                         findUraianDetail.map((idUd, elUd) => {
-                            console.log($(elUd).val(), $(elUd).html(),'asd')
-                            uraianDetail.push($(elUd).html())
+                            uraianDetail.push($(elUd).val())
                         }) 
 
                         uraian.push({
@@ -374,17 +380,30 @@
                     })
 
                     // Pelaksana tab
+                    const rencana = {
+                        pelaksana: $(el).find($('.pelaksana-rencana')).val(),
+                        durasi: $(el).find($(".durasi-rencana")).val()
+                    }
+
+                    const realisasi = {
+                        pelaksana: $(el).find($('.pelaksana-realisasi')).val(),
+                        durasi: $(el).find($(".durasi-realisasi")).val()
+                    }
 
                     mappingLkp.push({
                         judulTugas,
                         subJudulTugas,
                         prosedurPemeriksaan,
                         tujuanPemeriksaan,
-                        uraian
+                        uraian,
+                        rencana,
+                        realisasi,
                     })
                 })
 
-                console.log(mappingLkp)
+                $('#mapping-lkp').val(JSON.stringify(mappingLkp))
+
+                $(this).unbind('submit').submit();
             })
         })
 
