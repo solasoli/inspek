@@ -59,4 +59,15 @@ class SuratPerintah extends Model
   {
     return $this->hasMany('App\Repository\Pemeriksaan\PenentuanSasaranTujuan', 'id_surat_perintah')->where('sp_penentuan_sasaran_tujuan.is_deleted', 0);
   }
+
+  public function program_kerja_audit()
+  {
+    return $this->hasMany('App\Repository\Pemeriksaan\ProgramKerjaAudit', 'id_surat_perintah');
+  }
+  
+  public function langkah_kerja_pemeriksaan()
+  {
+    return $this->hasMany('App\Repository\Pemeriksaan\LangkahKerjaPemeriksaan', 'id_surat_perintah');
+  }
+
 }

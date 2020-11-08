@@ -231,6 +231,9 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Pemeriksaan\ProgramKerjaAuditController@index');
       Route::get('/datatables', 'Pemeriksaan\ProgramKerjaAuditController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\ProgramKerjaAuditController@edit');
+
+      
+      Route::post('/edit/{id}', 'Pemeriksaan\ProgramKerjaAuditController@update');
     });
 
     Route::prefix('audit')->group(function () {
