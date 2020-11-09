@@ -58,32 +58,25 @@
             </div>
           </div>
           <div class="card-body">
-            <table class="table table-bordered table-striped" id="users-table" style="width:100%">
+            <table class="table table-bordered table-striped" style="width:100%">
               <tr>
-                <th style="width: 1px;white-space: nowrap;">#</th>
                 <th>Menu</th>
                 <th style="width: 1px;white-space: nowrap;">View</th>
                 <th style="width: 1px;white-space: nowrap;">Add</th>
                 <th style="width: 1px;white-space: nowrap;">Edit</th>
                 <th style="width: 1px;white-space: nowrap;">Delete</th>
+                <th style="width: 1px;white-space: nowrap;">All</th>
               </tr>
-              @foreach($menu as $idx => $row)
-              @php
-              $view_checked = isset($data_array['view'][$row->id]) && $data_array['view'][$row->id] == 1 ? "checked" : "";
-              $add_checked = isset($data_array['add'][$row->id]) && $data_array['add'][$row->id] == 1 ? "checked" : "";
-              $edit_checked = isset($data_array['edit'][$row->id]) && $data_array['edit'][$row->id] == 1 ? "checked" : "";
-              $delete_checked = isset($data_array['delete'][$row->id]) && $data_array['delete'][$row->id] == 1 ? "checked" : "";
-              @endphp
-              <tr>
-                <td>{{$row->id}}</td>
-                <td>{{$row->nama}} <input type="hidden" name="menu[]" value={{$row->id}}></td>
-                <td align="center"><input name="view[{{$row->id}}]" type="checkbox" value="1" {{$view_checked}}></td>
-                <td align="center"><input name="add[{{$row->id}}]" type="checkbox" value="1" {{$add_checked}}></td>
-                <td align="center"><input name="edit[{{$row->id}}]" type="checkbox" value="1" {{$edit_checked}}></td>
-                <td align="center"><input name="delete[{{$row->id}}]" type="checkbox" value="1" {{$delete_checked}}></td>
-              </tr>
+              @foreach($menu->where("level", 1) as $idx => $row)
+                @php
+                echo generateChildPermission($row->id, $data_array);
+
+                @endphp
+
               @endforeach
             </table>
+            @php
+            @endphp
           </div>
         </div>
       </div>

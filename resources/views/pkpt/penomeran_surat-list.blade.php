@@ -119,7 +119,7 @@ $(function() {
       responsive: true,
       processing: true,
       serverSide: true,
-      ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_api')}}',
+      ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_api/0')}}',
       columns: [
         { data: 'wilayah.nama', name: 'wilayah.nama'},
         { data: 'kegiatan.nama', name: 'kegiatan.nama'},

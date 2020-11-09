@@ -143,8 +143,7 @@ class SuratPerintahController extends Controller
     } else {
       $data = $data->whereRaw(DB::raw("TRIM(no_surat) = ''"));
     }
-
-    return Datatables::eloquent($data)->toJson();
+    return Datatables::of($data->get())->toJson();
   }
 
   public function check_jadwal(Request $request)
@@ -235,6 +234,7 @@ class SuratPerintahController extends Controller
 
     $id = $request->id;
     $logged_user = Auth::user();
+
     $t = SuratPerintah::findOrFail($id);
     $t->no_surat = $request->no_surat;
     $t->save();

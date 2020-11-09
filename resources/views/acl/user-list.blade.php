@@ -72,8 +72,8 @@ $(function() {
       serverSide: true,
       ajax: '{{url()->current()}}/datatables/',
       columns: [
-        { data: 'username', name: 'u.username', orderable:false },
-        { data: 'role', name: 'r.nama', orderable:false },
+        { data: 'username', name: 'username', orderable:false },
+        { data: 'role.nama', name: 'role.nama', orderable:false },
         { data: null, orderable: false, render: function ( data, type, row ) {
           var return_button = "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-trash'></i> Hapus</a>";

@@ -64,23 +64,24 @@
             </div>
 
             <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Url : <span class="tx-danger">*</span></label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
-              </div>
-            </div>
-
-            <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Parent : <span class="tx-danger">*</span></label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
+                <select class="form-control" name="id_parent">
+                  <option value="0">0</option>
+                  @foreach($all_menu->where('url', '#') as $row)
+                    @php
+                    $selected = !is_null(old('id_parent')) && old('id_parent') == $row->id ? "selected" : isset($data->id_parent) && $data->id_parent == $row->id ? "selected" : "";
+                    @endphp
+                    <option value="{{ $row->id }}" {{ $selected }}>{{ $row->nama }}</option>
+                  @endforeach
+                </select>
               </div>
             </div>
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Slug : <span class="tx-danger">*</span></label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='nama' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" type="text">
+                <input name='slug' autocomplete="off" value='{{ !is_null(old('slug')) ? old('slug') : (isset($data->slug) ? $data->slug : '') }}' required="required" class="form-control" type="text">
               </div>
             </div>
             <div class="form-group row">
