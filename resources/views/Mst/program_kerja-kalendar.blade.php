@@ -32,7 +32,7 @@
   @php
 
   $list_arr[] = [
-    "title" => $row->kegiatan->nama,
+    "title" => $row->sub_kegiatan,
     "start" => $row->dari,
     "end" => date("Y-m-d 23:59:59", strtotime($row->sampai)),
     "url" => "#". $row->id,
