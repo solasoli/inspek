@@ -37,7 +37,7 @@ $tagIdx = !is_null($data) && !is_null($idx) ? $idx : '[idx]';
                                     Sub Judul Tugas
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12 sub-judul-tugas-cover">
-                                    @if (isset($data) && $data->sub_judul()->count() > 0)
+                                    @if (isset($data) && $data->sub_judul != null && $data->sub_judul()->count() > 0)
                                         <textarea name='sub_judul_tugas' class="form-control sub-judul-tugas">{{ isset($data) ? $data->sub_judul_tugas : '' }}</textarea>
                                    
                                         @foreach($data->sub_judul as $idx => $row) 
