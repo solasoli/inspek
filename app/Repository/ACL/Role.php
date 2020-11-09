@@ -4,9 +4,9 @@ namespace App\Repository\ACL;
 
 use App\Repository\BaseModel;
 
-class Menu extends BaseModel
+class Role extends BaseModel
 {
-  protected $table = "acl_menu";
+  protected $table = "acl_role";
   protected $primaryKey = "id";
   public $timestamps = false;
 }

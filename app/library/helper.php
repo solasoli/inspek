@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Repository\ACL\Menu;
-use App\Permission;
-use App\SKPD;
-use App\Konfigurasi;
+use App\Repository\ACL\Permission;
+use App\Repository\Master\Skpd;
 
 if (!function_exists("can_access")) {
   function can_access($slug, $type = "view")
@@ -37,7 +36,7 @@ if (!function_exists("can_access")) {
 if (!function_exists("can_access_from_url")) {
   function can_access_from_url($type = "view")
   {
-    //get slug by url 
+    //get slug by url
     $slug = Request::segment(1) . "_" . Request::segment(2);
     // $type = "add" / "view"/ "edit"/ "delete"
     $find_menu = Menu::where("slug", $slug)->first();
@@ -196,10 +195,10 @@ if (!function_exists("get_skpd_by_login")) {
   function get_skpd_by_login()
   {
     if (Auth::user()->id_role == 1) {
-      return SKPD::where("is_deleted", 0)->get();
+      return Skpd::where("is_deleted", 0)->get();
     } else {
 
-      return SKPD::where("is_deleted", 0)->where("id", Auth::user()->id_skpd)->get();
+      return Skpd::where("is_deleted", 0)->where("id", Auth::user()->id_skpd)->get();
     }
   }
 }

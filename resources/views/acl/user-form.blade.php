@@ -87,14 +87,8 @@
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Password {!! !isset($data->id) ? '<span class="tx-danger">*</span>' : ''!!} :</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='password' autocomplete="off" {!! !isset($data->id) ? 'required' : ''!!} class="form-control" type="password">
+                <input name='password' autocomplete="off" {!! !isset($data->id) ? 'required' : ''!!} class="form-control" type="text">
                 {!! isset($data->id) ? '<span class="tx-danger" align="center">isi Password jika ingin menggantinya</span>' : ''!!}
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Konfirmasi Password {!! !isset($data->id) ? '<span class="tx-danger">*</span>' : ''!!} :</label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <input name='conf_password' {!! !isset($data->id) ? 'required' : ''!!} class="form-control" type="password">
               </div>
             </div>
             <div class="form-group row mt-4 d-flex justify-content-center">

@@ -10,7 +10,9 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
-use App\Menu;
+use App\Repository\ACL\Menu;
+use App\Service\ACL\MenuService;
+use App\Http\Requests\ACL\MenuRequest;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -23,85 +25,38 @@ class MenuController extends Controller
 
     public function create()
     {
-      return view('acl.menu-form');
+      $all_menu = Menu::where('is_deleted', 0)->get();
+      return view('acl.menu-form', ['all_menu' => $all_menu]);
     }
 
-    public function store(Request $request)
+    public function store(MenuRequest $request)
     {
-      $logged_user = Auth::user();
-      request()->validate([
-        'nama' => [
-          'required',
-          Rule::unique('acl_menu', 'nama')->where(function ($query){
-            return $query->where('is_deleted', 0);
-          })
-        ],
-        'url' => 'required'
-      ],[
-        'nama.required' => 'Nama menu harus diisi!',
-        'url.required' => 'url menu harus diisi!',
-        'nama.unique' => 'Menu sudah ada!'
-      ]);
-
-      $t = new Menu;
-      $t->nama = $request->input('nama');
-      $t->slug = str_replace(" ", "-", strtolower($request->input('nama')));
-      $t->url = $request->input('url');
-      $t->created_at = date('Y-m-d H:i:s');
-      $t->created_by = Auth::id();
-      $t->updated_at = NULL;
-      $t->updated_by = 0;
-      $t->deleted_at = NULL;
-      $t->deleted_by = 0;
-      $t->is_deleted = 0;
-      $t->save();
-
+      MenuService::create($request->input());
       $request->session()->flash('success', "Data berhasil disimpan.");
       return redirect('/acl/menu');
     }
 
     public function edit($id)
     {
+      $all_menu = Menu::where('is_deleted', 0)->get();
       $data = Menu::findOrFail($id);
 
-      return view('acl.menu-form', ['data' => $data]);
+      return view('acl.menu-form', [
+        'data' => $data,
+        'all_menu' => $all_menu
+      ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(MenuRequest $request, $id)
     {
-      $logged_user = Auth::user();
-      request()->validate([
-        'nama' => [
-          'required',
-          'unique:acl_menu,nama,'.$id
-        ],
-        'url' => 'required'
-      ],[
-        'nama.required' => 'Nama menu harus diisi!',
-        'url.required' => 'url menu harus diisi!',
-        'nama.unique' => 'Menu sudah ada!'
-      ]);
-
-      $t = Menu::findOrFail($id);
-      $t->nama = $request->input('nama');
-      $t->slug = str_replace(" ", "-", strtolower($request->input('nama')));
-      $t->url = $request->input('url');
-      $t->updated_at = date('Y-m-d H:i:s');
-      $t->updated_by = Auth::id();
-      $t->save();
-
-      $request->session()->flash('success', "Data berhasil diubah.");
+      MenuService::update($id, $request->input());
+      $request->session()->flash('success', "Data berhasil disimpan!");
       return redirect("/acl/menu/edit/{$id}");
     }
 
     public function destroy(Request $request, $id)
     {
-      $logged_user = Auth::user();
-      $t = Menu::findOrFail($id);
-      $t->deleted_at = date('Y-m-d H:i:s');
-      $t->deleted_by = Auth::id();
-      $t->is_deleted = 1;
-      $t->save();
+      MenuService::delete($id);
 
       $request->session()->flash('success', "Data berhasil dihapus!");
       return redirect('/acl/menu');

@@ -42,6 +42,8 @@
            <thead>
              <tr>
                <th>Nama Menu</th>
+               <th>Parent</th>
+               <th>Slug</th>
                <th>URL</th>
                <th style='width:150px'>Aksi</th>
              </tr>
@@ -74,6 +76,8 @@ $(function() {
     ajax: '{{url()->current()}}/datatables/',
     columns: [
       { data: 'nama', name: 'nama' },
+      { data: 'id_parent', name: 'id_parent' },
+      { data: 'slug', name: 'slug' },
       { data: 'url', name: 'url' },
       { data: null, orderable: false, render: function ( data, type, row ) {
         var return_button = "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
@@ -83,7 +87,7 @@ $(function() {
     ],
     columnDefs: [
     {
-      targets: 2,
+      targets: 4,
       className: "text-center",
    }],
   });

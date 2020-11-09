@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
-use App\Role;
-use App\Menu;
-use App\Permission;
+
+use App\Repository\ACL\Role;
+use App\Repository\ACL\Menu;
+use App\Repository\ACL\Permission;
 
 class PermissionController extends Controller
 {
