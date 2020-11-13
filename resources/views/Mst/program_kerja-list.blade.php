@@ -50,7 +50,7 @@
 
 					<div class="tab-content">
             <div class="text-right mb-4">
-              @if(can_access("mst_skpd", "add"))
+              @if(can_access("mst_program_kerja", "add"))
               <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-form"><i class='menu-item-icon icon ion-plus'></i> Tambah Program Kerja</button>
               @endif
             </div>
@@ -149,18 +149,20 @@ $(function() {
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          @if(can_access("mst_skpd", "edit"))
+
+          @if(can_access("mst_program_kerja", "edit"))
           return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
           @endif
-          @if(can_access("mst_skpd", "delete"))
+
+          @if(can_access("mst_program_kerja", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
 
           const kegiatan_nama = data.kegiatan != null ? data.kegiatan.nama : '';
           const wilayah_nama = data.wilayah != null ? data.wilayah.nama : '';
           const skpd_nama = data.skpd != null ? data.skpd.name : '';
+          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + kegiatan_nama + "' data-sub_kegiatan='"+ data.sub_kegiatan +"' data-wilayah='" + wilayah_nama + "' data-skpd='" + skpd_nama + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
 
-          return_button += "<button class='btn btn-info btn-xs btn-detail' data-toggle='modal' data-target='#detailModal' data-id='" + data.id + "' data-kegiatan='" + kegiatan_nama + "' data-wilayah='" + wilayah_nama + "' data-skpd='" + skpd_nama + "' data-dari='" + data.dari + "' data-sampai='" + data.sampai + "'><i class='fa fa-eye'></i> Detail</button> ";
           return return_button == "" ? "-" : return_button;
         }},
       ],

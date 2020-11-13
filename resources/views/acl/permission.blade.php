@@ -37,7 +37,7 @@
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">Role :</label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name="role" class="form-control select2" required="required">
-                  @foreach($role as $idx => $row)
+                  @foreach($role->whereNotIn('id', [1]) as $idx => $row)
                   <option value="{{$row->id}}" {{$row->id == $current_role ? "selected" : ""}}>{{$row->nama}}</option>
                   @endforeach
                 </select>
@@ -65,6 +65,7 @@
                 <th style="width: 1px;white-space: nowrap;">Add</th>
                 <th style="width: 1px;white-space: nowrap;">Edit</th>
                 <th style="width: 1px;white-space: nowrap;">Delete</th>
+                <th style="width: 1px;white-space: nowrap;">Additional</th>
                 <th style="width: 1px;white-space: nowrap;">All</th>
               </tr>
               @foreach($menu->where("level", 1) as $idx => $row)
@@ -92,6 +93,11 @@ $(function(){
     location.href = '/acl/permission/' + $(this).val();
     return false;
   });
+
+  $(document).on('click', ".check_all", function(){
+    console.log($(this).is(":checked"));
+    $(this).parent().closest("tr").find($("input[type='checkbox']")).prop("checked", $(this).is(":checked"));
+  })
 });
 </script>
 @endsection
