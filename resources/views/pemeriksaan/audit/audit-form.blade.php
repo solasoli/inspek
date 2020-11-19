@@ -85,6 +85,16 @@
                 </div>
             </div>
         </div><!-- br-pagebody -->
+        
+        <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-20 d-flex justify-content-end">
+            <button type='button' class="btn btn-primary btn-sm add-kertas-kerja-ikhtisar">
+                <i class="fa fa-plus"></i> Kertas Kerja Ikhtisar
+            </button>
+        </div>
+
+        <div class='cover-kertas-kerja-ikhtisar'>
+        </div>
+
         <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -181,6 +191,21 @@
             });
 
             $("div#dropzone").dropzone({ url: "/file/post" });
+
+            
+            function add_langkah_kerja_pemeriksaan_rinci() {
+                let template_lkpr = `
+                {{ adt_kertas_kerja_ikhtisar() }}
+                `
+
+                $('.cover-kertas-kerja-ikhtisar').append(template_lkpr)
+
+            }
+
+            $(document).on('click', '.add-sub-judul-tugas', function() {
+
+                add_langkah_kerja_pemeriksaan_rinci()
+            })
         })
 
     </script>

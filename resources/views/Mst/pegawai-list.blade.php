@@ -40,7 +40,7 @@
           <h6 class="card-title float-left">List Pegawai</h6>
           <div class="float-right">
 
-            @if(can_access("mst_skpd", "add"))
+            @if(can_access("mst_pegawai", "add"))
             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-toggle="modal" data-target="#modal-form" data-id="0"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
             @endif
           </div>
@@ -50,9 +50,6 @@
              <thead>
                  <tr>
                      <th>Nama</th>
-                     <!-- <th>OPD</th> -->
-                     <!-- <th>Eselon</th> -->
-                     <!-- <th>Pangkat</th> -->
                      <th>Pangkat Golongan</th>
                      <th>Jabatan</th>
                      <th style='width:150px'>Aksi</th>
@@ -81,22 +78,24 @@ $(function() {
       ajax: '{{url()->current()}}/datatables/',
       columns: [
         { data: 'nama', name: 'nama' },
-        // { data: 'opd', name: 'skpd.name' },
-        // { data: 'eselon', name: 'e.name' },
-        // { data: 'pangkat', name: 'pk.name' },
         { data: 'pangkat_golongan.name', name: 'pangkat_golongan.name' },
         { data: 'jabatan.name', name: 'jabatan.name' },
         { data: null, orderable: false, searchable: false,  render: function ( data, type, row ) {
           var return_button = "";
-          @if(can_access("master_periode", "edit"))
+          @if(can_access("mst_pegawai", "edit"))
           return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
           @endif
-          @if(can_access("master_periode", "delete"))
+          @if(can_access("mst_pegawai", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a>";
           @endif
           return return_button == "" ? "-" : return_button;
         }},
-      ]
+      ],
+      columnDefs: [
+        {
+          targets: 3,
+          className: "text-center",
+        }],
   });
 
   setTimeout(function() {

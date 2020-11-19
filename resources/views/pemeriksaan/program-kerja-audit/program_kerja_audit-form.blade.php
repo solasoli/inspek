@@ -99,10 +99,22 @@
         <div class='cover-langkah-kerja-pemeriksaan-rinci'>
             @php
             $idxLkp = 1;
+            $alphaProsedur = [];
+            $numProsedur = [];
             @endphp
             @if($data->langkah_kerja_pemeriksaan->count() > 0) 
                 @foreach($data->langkah_kerja_pemeriksaan as $idx => $row)
-                    @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['anggota' => $data->anggota, 'data' => $row, 'idx' => $idx + 1])
+                    @php
+                        // preparing alpha prosedur
+                        $alphaProsedur[$idx + 1] = $row->prosedur != null ? $row->prosedur->count() : 0;
+                        // preparing num prosedur detail
+                        if($row->prosedur != null) {
+                            foreach($row->prosedur as $iNpp => $rNpp) {
+                                $numProsedur[($idx + 1).'-'.num2alpha($iNpp)] = $rNpp->prosedur_detail != null ? $rNpp->prosedur_detail->count() : 0; 
+                            }
+                        }
+                    @endphp
+                    {{ pka_lkp_rinci($data->anggota, $idxLkp, $row) }}
                     @php
                         $idxLkp++;
                     @endphp
@@ -120,7 +132,6 @@
             </div>
         </div>
     </form>
-
     <script src="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>
     <script src="{{ asset('admin_template/lib/ckeditor/plugin/autogrow.js') }}"></script>
     <script src="{{ asset('admin_template/lib/jquery.steps/jquery.steps.js') }}"></script>
@@ -227,15 +238,22 @@
             Langkah Kerja Pemeriksaan Rinci JS
             */
             let idx_pemeriksaan_rinci = {{ $idxLkp }}
-            const alpha_uraian = []
-            const num_uraian = []
+            const alpha_prosedur = []
+            @foreach($alphaProsedur as $iAp => $rAp)
+                alpha_prosedur[{{$iAp}}] = {{$rAp}};
+            @endforeach
+            const num_prosedur = []
+            @foreach($numProsedur as $iNpr => $rNpr)
+                num_prosedur['{{$iNpr}}'] = {{$rNpr}};
+            @endforeach
+
             add_langkah_kerja_pemeriksaan_rinci()
             
             function add_sub_judul_tugas(subJudulTugasEl, value) {
                 if (typeof subJudulTugasEl != 'undefined') {
                     value = typeof value != 'undefined' ? value.trim() : '' 
                     let template_sub_judul_tugas = `
-                    @include('pemeriksaan.program-kerja-audit.partial-view.sub_judul_tugas')
+                    {{ pka_sub_judul_tugas() }}
                     `
                     template_sub_judul_tugas = template_sub_judul_tugas.replace('[value]', value)
 
@@ -247,10 +265,9 @@
 
             function add_langkah_kerja_pemeriksaan_rinci() {
                 let template_lkpr = `
-                @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci', ['anggota' => $data->anggota, 'idx' => null])
+                {{ pka_lkp_rinci($data->anggota) }}
                 `
                 template_lkpr = template_lkpr.replace(/\[idx]/gm, idx_pemeriksaan_rinci)
-                console.log(idx_pemeriksaan_rinci, 'hei disini');
 
                 $('.cover-langkah-kerja-pemeriksaan-rinci').append(template_lkpr)
 
@@ -272,39 +289,98 @@
                 $(this).parent().closest($(".row")).remove();
             })
 
-            function add_uraian(idx_uraian) {
-                if (idx_uraian) {
-                    alpha_uraian[idx_uraian] = alpha_uraian[idx_uraian] != null ? alpha_uraian[idx_uraian] + 1 : 1
-                    const uraian_cover = $(`.cover-uraian[data-idx='${idx_uraian}']`)
-                    uraian_cover.find($(".no-available-uraian")).remove()
-                    let template_uraian = `
-                    @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci-uraian')
-                    `
+            function confirmProsedur(){
+                return confirm('Detail Prosedur akan ikut terhapus. Lanjutkan?')
+            }
+            
+            function confirmLki(){
+                return confirm('Data Langkah Kerja Pemeriksaan akan terhapus. Lanjutkan?')
+            }
 
-                    const alphabet = numToSSColumn(alpha_uraian[idx_uraian])
-                    template_uraian = template_uraian.replace(/\[idx_uraian]/gm, idx_pemeriksaan_rinci)
-                    template_uraian = template_uraian.replace(/\[alpha_uraian]/gm, alphabet)
-                    uraian_cover.append(template_uraian)
+            $(document).on('click', '.btn-delete-lki', function() {
+
+                const confirm = confirmLki()
+                if(confirm) {
+                    $(this).parent().closest($(".lkp-rinci")).remove()
+                }
+            })
+
+            $(document).on('click', '.remove-prosedur', function() {
+                const idx = $(this).data('idx');
+                const coverDetailElement = $(`.cover-prosedur-detail[data-idx='${idx}']`)
+                const countElement = coverDetailElement.find($('.row')).length
+                if(countElement > 0) {
+                    const confirm = confirmProsedur()
+                    console.log(confirm)
+                    if(confirm) {
+                        coverDetailElement.parent().closest($(".row")).remove();
+                        $(this).parent().closest($(".row")).remove();
+                    }
                 } else {
-                    console.log('FAILED TO GENERATE IDX URAIAN')
+                    $(this).parent().closest($(".row")).remove();
+                    coverDetailElement.parent().closest($(".row")).remove();
+                }
+
+            })
+
+            $(document).on('blur', '.prosedur', function() {
+                var data = $(this).data('idx')
+                $(`.prosedur-label-${data}`).html($(this).val())
+            })
+            
+            $(document).on('blur', '.prosedur-detail', function() {
+                var data = $(this).data('idx')
+                console.log(data)
+                $(`.prosedur-detail-list[data-idx='${data}']`).html($(this).val())
+            })
+
+            function add_prosedur(idx_pemeriksaan_rinci, idx_prosedur) {
+                console.log(idx_prosedur, 'prosedur');
+                if (idx_prosedur) {
+                    alpha_prosedur[idx_prosedur] = alpha_prosedur[idx_prosedur] != null ? alpha_prosedur[idx_prosedur] + 1 : 1
+                    const prosedur_cover = $(`.cover-prosedur[data-idx='${idx_prosedur}']`)
+                    prosedur_cover.find($(".no-available-prosedur")).remove()
+                    let template_prosedur = `
+                    {{ pka_lkp_rinci_prosedur() }}
+                    `
+                    console.log(alpha_prosedur[idx_prosedur]);
+                    const alphabet = numToSSColumn(alpha_prosedur[idx_prosedur])
+                    template_prosedur = template_prosedur.replace(/\[idx_prosedur]/gm, idx_pemeriksaan_rinci)
+                    template_prosedur = template_prosedur.replace(/\[alpha_prosedur]/gm, alphabet)
+                    prosedur_cover.append(template_prosedur)
+
+                    // adding pelaksana
+                    let template_pelaksana = `
+                    {{ pka_lkp_pelaksana($data->anggota) }}
+                    `
+                    template_pelaksana = template_pelaksana.replace(/\[idx_prosedur]/gm, idx_pemeriksaan_rinci)
+                    template_pelaksana = template_pelaksana.replace(/\[alpha_prosedur]/gm, alphabet)
+                    $(`#pelaksana-tab-${idx_prosedur}`).append(template_pelaksana)
+
+                } else {
+                    console.log('FAILED TO GENERATE IDX prosedur')
                 }
             }
 
-            function add_uraian_detail(idx_uraian) {
-                console.log(idx_uraian)
-                if (idx_uraian != '') {
-                    num_uraian[idx_uraian] = num_uraian[idx_uraian] != null ? num_uraian[idx_uraian] + 1 : 1
-                    const uraian_cover = $(`.cover-uraian-detail[data-idx='${idx_uraian}']`)
-                    uraian_cover.find($(".no-available-uraian")).remove()
-                    let template_uraian_detail = `
-                    @include('pemeriksaan.program-kerja-audit.partial-view.lkp_rinci-uraian-detail')
+            function add_prosedur_detail(idx_prosedur) {
+                console.log(idx_prosedur)
+                if (idx_prosedur != '') {
+                    num_prosedur[idx_prosedur] = num_prosedur[idx_prosedur] != null ? num_prosedur[idx_prosedur] + 1 : 1
+                    const prosedur_cover = $(`.cover-prosedur-detail[data-idx='${idx_prosedur}']`)
+                    prosedur_cover.find($(".no-available-prosedur")).remove()
+                    let template_prosedur_detail = `
+                    {{ pka_lkp_rinci_prosedur_detail() }}
                     `
 
-                    const alphabet = numToSSColumn(num_uraian[idx_uraian])
-                    template_uraian_detail = template_uraian_detail.replace(/\[num_uraian]/gm, num_uraian[idx_uraian])
-                    uraian_cover.append(template_uraian_detail)
+                    const alphabet = numToSSColumn(num_prosedur[idx_prosedur])
+                    template_prosedur_detail = template_prosedur_detail.replace(/\[num_prosedur]/gm, num_prosedur[idx_prosedur])
+                    template_prosedur_detail = template_prosedur_detail.replace(/\[idx_prosedur]/gm, idx_prosedur)
+                    prosedur_cover.append(template_prosedur_detail)
+                    
+                    // adding list
+                    $(`.list-prosedur-detail[data-idx='${idx_prosedur}']`).append(`<li class='prosedur-detail-list' data-idx='${idx_prosedur}-${num_prosedur[idx_prosedur]}'></li>`)
                 } else {
-                    console.log('FAILED TO GENERATE IDX URAIAN')
+                    console.log('FAILED TO GENERATE IDX prosedur')
                 }
             }
 
@@ -319,12 +395,13 @@
                 return s || undefined;
             }
 
-            $(document).on('click', '.btn-uraian', function() {
-                add_uraian($(this).data('idx'))
+            $(document).on('click', '.btn-prosedur', function() {
+                const lkpElement = $(this).parent().closest($(".lkp-rinci"))
+                add_prosedur(lkpElement.data('idx'), $(this).data('idx'))
             })
 
-            $(document).on('click', '.btn-detail-uraian', function() {
-                add_uraian_detail($(this).data('idx'))
+            $(document).on('click', '.btn-detail-prosedur', function() {
+                add_prosedur_detail($(this).data('idx'))
             })
 
             $(document).on('keyup', '.judul-tugas', function() {
@@ -362,47 +439,54 @@
 
                     // Prosedur Pemeriksaan
                     const tujuanPemeriksaan = $(el).find($('.tujuan-pemeriksaan')).val()
-                    const prosedurPemeriksaan = $(el).find($('.prosedur-pemeriksaan')).val()
-                    const findUraian = $(el).find($(".cover-uraian")).find($('.uraian'))
-                    const uraian = []
-                    findUraian.map((idU, elUr) => {
-                        const idxUraian = $(elUr).data('idx')
-                        const findUraianDetail = $(`.cover-uraian-detail[data-idx='${idxUraian}']`).find($('.uraian-detail'))
-                        const uraianDetail = []
-                        findUraianDetail.map((idUd, elUd) => {
-                            uraianDetail.push($(elUd).val())
+                    const findprosedur = $(el).find($(".cover-prosedur")).find($('.prosedur'))
+                    const prosedur = []
+                    findprosedur.map((idU, elUr) => {
+                        const idxprosedur = $(elUr).data('idx')
+                        const findprosedurDetail = $(`.cover-prosedur-detail[data-idx='${idxprosedur}']`).find($('.prosedur-detail'))
+                        const prosedurDetail = []
+                        findprosedurDetail.map((idUd, elUd) => {
+                            prosedurDetail.push({ idProsedurDetail: $(elUd).data('id'), prosedurDetail: $(elUd).val()})
                         }) 
 
-                        uraian.push({
-                            uraian: $(elUr).val(),
-                            uraianDetail
+                        const pelaksanaRow = $(`.pelaksana-row[data-idx='${idxprosedur}']`)
+                        console.log(idxprosedur)
+                        console.log(pelaksanaRow.html())
+                        // Pelaksana tab
+                        const rencana = {
+                            pelaksana: $(pelaksanaRow).find($('.pelaksana-rencana')).val(),
+                            durasi: $(pelaksanaRow).find($(".durasi-rencana")).val()
+                        }
+
+                        const realisasi = {
+                            pelaksana: $(pelaksanaRow).find($('.pelaksana-realisasi')).val(),
+                            durasi: $(pelaksanaRow).find($(".durasi-realisasi")).val()
+                        }
+
+                        prosedur.push({
+                            idProsedur: $(elUr).data('id'),
+                            prosedur: $(elUr).val(),
+                            prosedurDetail,
+                            pelaksana: {
+                                rencana,
+                                realisasi
+                            }
                         })
                     })
 
-                    // Pelaksana tab
-                    const rencana = {
-                        pelaksana: $(el).find($('.pelaksana-rencana')).val(),
-                        durasi: $(el).find($(".durasi-rencana")).val()
-                    }
-
-                    const realisasi = {
-                        pelaksana: $(el).find($('.pelaksana-realisasi')).val(),
-                        durasi: $(el).find($(".durasi-realisasi")).val()
-                    }
 
                     mappingLkp.push({
+                        idLkp: $(el).data('id'),
                         judulTugas,
                         subJudulTugas,
-                        prosedurPemeriksaan,
                         tujuanPemeriksaan,
-                        uraian,
-                        rencana,
-                        realisasi,
+                        prosedur,
                     })
                 })
 
                 $('#mapping-lkp').val(JSON.stringify(mappingLkp))
 
+                console.log(mappingLkp);
                 $(this).unbind('submit').submit();
             })
         })

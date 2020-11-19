@@ -293,10 +293,12 @@ if (!function_exists("generateChildPermission")) {
         $add_checked = isset($data_array['add'][$rw->id]) && $data_array['add'][$rw->id] == 1 ? "checked" : "";
         $edit_checked = isset($data_array['edit'][$rw->id]) && $data_array['edit'][$rw->id] == 1 ? "checked" : "";
         $delete_checked = isset($data_array['delete'][$rw->id]) && $data_array['delete'][$rw->id] == 1 ? "checked" : "";
+        $additional_checked = isset($data_array['additional'][$rw->id]) && $data_array['additional'][$rw->id] == 1 ? "checked" : "";
         $check_all_checked = $view_checked == "checked" &&
           $add_checked == "checked" &&
           $edit_checked == "checked" &&
-          $delete_checked == "checked" ? "checked" : "";
+          $delete_checked == "checked" &&
+          $additional_checked == "checked" ? "checked" : "";
 
         $check_html = "<td align='center'>
         <input type='hidden' name='menu[]' value={$rw->id}>
@@ -310,6 +312,9 @@ if (!function_exists("generateChildPermission")) {
         </td>
         <td align='center'>
           <input name='delete[{$rw->id}]' type='checkbox' value='1' {$delete_checked}>
+        </td>
+        <td align='center'>
+          <input name='additional[{$rw->id}]' type='checkbox' value='1' {$additional_checked}>
         </td>
         <td align='center'>
           <input class='check_all' type='checkbox' value='1' {$check_all_checked}>
@@ -327,10 +332,12 @@ if (!function_exists("generateChildPermission")) {
       $add_checked = isset($data_array['add'][$parent_row->id]) && $data_array['add'][$parent_row->id] == 1 ? "checked" : "";
       $edit_checked = isset($data_array['edit'][$parent_row->id]) && $data_array['edit'][$parent_row->id] == 1 ? "checked" : "";
       $delete_checked = isset($data_array['delete'][$parent_row->id]) && $data_array['delete'][$parent_row->id] == 1 ? "checked" : "";
+      $additional_checked = isset($data_array['additional'][$parent_row->id]) && $data_array['additional'][$parent_row->id] == 1 ? "checked" : "";
       $check_all_checked = $view_checked == "checked" &&
         $add_checked == "checked" &&
         $edit_checked == "checked" &&
-        $delete_checked == "checked" ? "checked" : "";
+        $delete_checked == "checked" &&
+        $additional_checked == "checked" ? "checked" : "";
       $menu_child_html .= "<tr><td>{$parent_nbsp}{$parent_row->nama}</td>
         <td align='center'>
           <input type='hidden' name='menu[]' value={$parent_row->id}>
@@ -344,6 +351,9 @@ if (!function_exists("generateChildPermission")) {
         </td>
         <td align='center'>
           <input name='delete[{$parent_row->id}]' type='checkbox' value='1' {$delete_checked}>
+        </td>
+        <td align='center'>
+          <input name='additional[{$parent_row->id}]' type='checkbox' value='1' {$additional_checked}>
         </td>
         <td align='center'>
           <input class='check_all' type='checkbox' value='1' {$check_all_checked}>
@@ -361,5 +371,14 @@ if (!function_exists("get_constant")) {
     // loading constant variable
     include 'constant.php';
     return $$constant;
+  }
+}
+
+if (!function_exists('num2alpha')) {
+  function num2alpha($n)
+  {
+    for ($r = ""; $n >= 0; $n = intval($n / 26) - 1)
+      $r = chr($n % 26 + 0x41) . $r;
+    return $r;
   }
 }
