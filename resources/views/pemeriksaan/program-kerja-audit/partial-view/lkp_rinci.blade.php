@@ -130,7 +130,6 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
 </div>
 @php
 // clearing the variable
-echo $idx;
 unset($idx);
 
 @endphp

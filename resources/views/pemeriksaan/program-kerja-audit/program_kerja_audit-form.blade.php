@@ -3,9 +3,14 @@
     <link href="{{ asset('admin_template/lib/jquery.steps/jquery.steps.css') }}" rel="stylesheet">
 
     <style>
+        .wizard>.content {
+            height: auto !important;
+        }
         .wizard>.content>.body {
             width: 100% !important;
+            height: auto !important;
             overflow: initial !important;
+            position: relative !important;
         }
 
         section {
@@ -139,7 +144,6 @@
         $(function() {
             const localStoragePrefix = 'sasaran_tujuan-{{ Auth::user()->id . ' - ' . Request::segment(4) }}'
             const wizardName = 'wizard3'
-            console.log(localStoragePrefix)
 
             let countDownKeyupEditor
 
@@ -205,11 +209,7 @@
                         editor.setData(localStorage.getItem(
                             `${localStoragePrefix}-${idEl}`))
                         editor.on('instanceReady', function(e) {
-                            console.log($(this))
                             if (idx == 0) {
-                                $('#' + wizardName).find($(".content")).height(
-                                    parentDiv
-                                    .find($(".cke")).height() + plusHeightWizard);
                             }
 
                             const html = e.editor.getData()
@@ -217,11 +217,6 @@
                         });
 
                         editor.on('resize', function() {
-                            console.log($(this))
-                            console.log('resized...');
-
-                            $('#' + wizardName).find($(".content")).height(parentDiv
-                                .find($(".cke")).height() + plusHeightWizard);
 
                         });
 
