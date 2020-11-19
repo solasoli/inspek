@@ -112,6 +112,11 @@ $(function() {
         return return_button == "" ? "-" : return_button;
       }},
     ],
+    columnDefs: [
+      {
+        targets: 1,
+        className: "text-center",
+      }]
     });
 
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });

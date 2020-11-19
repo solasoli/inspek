@@ -25,6 +25,7 @@ class PermissionController extends Controller
 			$data_array['add'][$row->id_menu] = $row->add;
 			$data_array['edit'][$row->id_menu] = $row->edit;
 			$data_array['delete'][$row->id_menu] = $row->delete;
+			$data_array['additional'][$row->id_menu] = $row->additional;
 		}
 		return view('acl.permission', [
 			'role' => $role,
@@ -43,6 +44,7 @@ class PermissionController extends Controller
 			$add = isset($request->input('add')[$val]) ? $request->input('add')[$val] : 0;
 			$edit = isset($request->input("edit")[$val]) ? $request->input("edit")[$val] : 0;
 			$delete = isset($request->input("delete")[$val]) ? $request->input("delete")[$val] : 0;
+			$additional = isset($request->input("additional")[$val]) ? $request->input("additional")[$val] : 0;
 
 			$find_permission = Permission::where("id_menu", $val)->where("id_role", $request->input('role'))->first();
 			if(isset($find_permission->id)){
@@ -54,6 +56,7 @@ class PermissionController extends Controller
 				$t->add = $add;
 				$t->edit = $edit;
 				$t->delete = $delete;
+				$t->additional = $additional;
 				$t->save();
 			} else {
 				// create
@@ -64,6 +67,7 @@ class PermissionController extends Controller
 				$t->add = $add;
 				$t->edit = $edit;
 				$t->delete = $delete;
+				$t->additional = $additional;
 				$t->save();
 			}
 		}

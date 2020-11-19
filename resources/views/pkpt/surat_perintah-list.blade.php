@@ -12,7 +12,7 @@
 
   .form-inline.dt-bootstrap {
     display: block !important;
-  } 
+  }
 </style>
 
 <div class="modal" id="type_pkpt_modal">
@@ -85,7 +85,7 @@
           <h6 class="card-title float-left">Daftar Surat Perintah</h6>
           <div class="float-right">
 
-            @if(can_access("pkpt_surat_perintah", "add"))
+            @if(can_access("sp_surat_perintah", "add"))
             <a class='btn btn-sm btn-success' href='#' data-toggle='modal' data-target='#type_pkpt_modal'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
             @endif
           </div>
@@ -188,15 +188,17 @@ $(function() {
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          @if(can_access("pkpt_surat_perintah", "edit"))
+          @if(can_access("sp_surat_perintah", "edit"))
           return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
-          @if(can_access("pkpt_surat_perintah", "delete"))
+          @if(can_access("sp_surat_perintah", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
 
           if(data.is_approve == 0){
+            @if(can_access("sp_surat_perintah", "additional"))
             return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a> ";
+            @endif
           }
 
           return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
@@ -210,7 +212,7 @@ $(function() {
      }],
   });
 
-  // non PKPT 
+  // non PKPT
    $('#oTableApprove').DataTable({
     language: {
         searchPlaceholder: 'Search...',
@@ -250,10 +252,10 @@ $(function() {
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          @if(can_access("pkpt_surat_perintah", "edit"))
+          @if(can_access("sp_surat_perintah", "edit"))
           return_button += "<a class='btn btn-warning btn-xs' href='{{url()->current()}}/edit/" + data.id + "'><i class='fa fa-pencil'></i> Edit</a> ";
           @endif
-          @if(can_access("pkpt_surat_perintah", "delete"))
+          @if(can_access("sp_surat_perintah", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
 
@@ -263,7 +265,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 7,
+        targets: 8,
         className: "text-center",
      }],
   });

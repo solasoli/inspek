@@ -41,6 +41,7 @@
             @if(can_access("mst_skpd", "add"))
             <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-form" data-id="0"><i class='menu-item-icon icon ion-plus'></i> Tambah</button>
             @endif
+
           </div>
         </div>
         <div class="card-body">
@@ -98,7 +99,7 @@ $(function() {
     ],
     columnDefs: [
       {
-        targets: 2,
+        targets: 3,
         className: "text-center",
       }],
     });

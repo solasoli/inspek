@@ -13,6 +13,9 @@ $(function() {
     q +=  "<td width='20%'>Kegiatan</td>";
     q +=  "<td>: "+ $(el_btn_detail).data('kegiatan') +"</td>";
     q +="</tr>";
+    q +=  "<td>Sub Kegiatan</td>";
+    q +=  "<td>: "+ $(el_btn_detail).data('sub_kegiatan') +"</td>";
+    q +="</tr>";
     q += "<tr>";
     q +=  "<td width='1%'>Irban</td>";
     q +=  "<td>: "+ $(el_btn_detail).data('wilayah') +"</td>";
