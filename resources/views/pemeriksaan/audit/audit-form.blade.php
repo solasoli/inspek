@@ -1,11 +1,17 @@
 @extends('layouts.app')
 @section('content')
     <link href="{{ asset('admin_template/lib/dropzone/min/dropzone.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin_template/lib/jquery.steps/jquery.steps.css') }}" rel="stylesheet">
 
     <style>
+        .wizard>.content {
+            height: auto !important;
+        }
         .wizard>.content>.body {
             width: 100% !important;
+            height: auto !important;
             overflow: initial !important;
+            position: relative !important;
         }
 
         section {
@@ -109,11 +115,11 @@
     <script src="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>
     <script src="{{ asset('admin_template/lib/ckeditor/plugin/autogrow.js') }}"></script>
     <script src="{{ asset('admin_template/lib/dropzone/min/dropzone.min.js') }}"></script>
+    <script src="{{ asset('admin_template/lib/jquery.steps/jquery.steps.js') }}"></script>
     <script type="text/javascript">
+        var idx_kki = 1;
         $(function() {
             const localStoragePrefix = 'audit-{{ Auth::user()->id . '-' . Request::segment(4) }}'
-            const wizardName = 'wizard3'
-            console.log(localStoragePrefix)
 
             let countDownKeyupEditor
 
@@ -126,7 +132,7 @@
                 }, 300)
             }
 
-            function bgStepChange(idx, txt) {
+            function bgStepChange(idx, txt, wizardName) {
                 const parsedTxt = txt.replace(/\s/g, '')
                 console.log(parsedTxt)
                 const tab = $(`#${wizardName}-t-${idx}`)
@@ -167,44 +173,84 @@
                 console.log(localStorage.getItem(`${localStoragePrefix}-${idEl}`))
                 editor.setData(localStorage.getItem(
                     `${localStoragePrefix}-${idEl}`))
-                editor.on('instanceReady', function(e) {
-                    console.log($(this))
-                    if (idx == 0) {
-                        $('#' + wizardName).find($(".content")).height(
-                            parentDiv
-                            .find($(".cke")).height() + 35);
-                    }
-
-                    const html = e.editor.getData()
-                    bgStepChange(idx, $(html).text())
-                });
-
-                editor.on('resize', function() {
-                    console.log($(this))
-                    console.log('resized...');
-
-                    $('#' + wizardName).find($(".content")).height(parentDiv
-                        .find($(".cke")).height() + 35);
-
-                });
 
             });
 
-            $("div#dropzone").dropzone({ url: "/file/post" });
-
-            
-            function add_langkah_kerja_pemeriksaan_rinci() {
-                let template_lkpr = `
-                {{ adt_kertas_kerja_ikhtisar() }}
-                `
-
-                $('.cover-kertas-kerja-ikhtisar').append(template_lkpr)
-
+            function generateTextWizard(wizardName) {
+                const plusHeightWizard = 65
+                $('#' + wizardName).steps({
+                    headerTag: 'h3',
+                    bodyTag: 'section',
+                    autoFocus: true,
+                    enableAllSteps: true,
+                    enablePagination: false,
+                    titleTemplate: '<span class="number" data-number="#index#">#index#</span> <span class="title">#title#</span>',
+                    stepsOrientation: 1,
+                    onInit: function() {
+                        $('#' + wizardName).find(".text-wizard").map(function(idx, val) {
+                            const parentDiv = $(this).parent().closest('section')
+                            const idEl = $(this).attr('id')
+                            console.log(parentDiv)
+                            const editor = CKEDITOR.replace($(this).attr('id'), {
+                                extraPlugins: 'autogrow',
+                                on: {
+                                    change: function(e) {
+                                        handlingKeyupEditor(idx, idEl, e.editor
+                                            .getData())
+                                    }
+                                }
+                            });
+    
+                            console.log(localStorage.getItem(`${localStoragePrefix}-${idEl}`))
+                            const kodeTemuanCoverHeight = typeof parentDiv.find($(".kode_temuan_cover")) != 'undefined' ? parentDiv.find($(".kode_temuan_cover")).height() : 0;
+                            console.log(kodeTemuanCoverHeight ,'kode temua cover heigh') 
+                            editor.setData(localStorage.getItem(
+                                `${localStoragePrefix}-${idEl}`))
+                            editor.on('instanceReady', function(e) {
+                                if (idx == 0) {
+                                }
+    
+                                const html = e.editor.getData()
+                                bgStepChange(idx, $(html).text(), wizardName)
+                            });
+    
+                            editor.on('resize', function() {
+                                console.log(wizardName);
+    
+                            });
+    
+                        });
+                    },
+                    onStepChanged: function(event, currIdx) {
+                        const content = $(`#${wizardName}-p-${currIdx}`).find($(".cke"))
+    
+                        $(`#${wizardName}`).find($(".content")).height(content.height() + plusHeightWizard)
+                    }
+                });
             }
 
-            $(document).on('click', '.add-sub-judul-tugas', function() {
+            $("div#dropzone").dropzone({ url: "/file/post" });
 
-                add_langkah_kerja_pemeriksaan_rinci()
+            function add_kertas_kerja_ikhtisar() {
+                console.log(idx_kki)
+                let template_kki = `
+                {{ adt_kertas_kerja_ikhtisar() }}
+                `
+                template_kki = template_kki.replace(/\[idx]/gm, idx_kki)
+
+                $('.cover-kertas-kerja-ikhtisar').append(template_kki)
+                generateTextWizard(`wizard${idx_kki}`)
+
+                idx_kki++;
+            }
+
+            add_kertas_kerja_ikhtisar()
+            $(document).on('click', '.add-kertas-kerja-ikhtisar', function() {
+                add_kertas_kerja_ikhtisar()
+            })
+
+            $(document).on('change', '.kode_temuan', function(){
+                const currentLevel = $(this).data('level');
             })
         })
 
