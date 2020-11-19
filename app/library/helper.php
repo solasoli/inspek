@@ -363,3 +363,12 @@ if (!function_exists("get_constant")) {
     return $$constant;
   }
 }
+
+if (!function_exists('num2alpha')) {
+  function num2alpha($n)
+  {
+    for ($r = ""; $n >= 0; $n = intval($n / 26) - 1)
+      $r = chr($n % 26 + 0x41) . $r;
+    return $r;
+  }
+}
