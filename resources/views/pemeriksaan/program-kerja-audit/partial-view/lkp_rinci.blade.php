@@ -108,7 +108,7 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                         <div class="tab-pane fade" id="pelaksana-tab-{{ $tagIdx }}">
                             @if(isset($data) && $data->prosedur != null && $data->prosedur->count() > 0) 
                                 @foreach($data->prosedur as $iPsd => $rPsd)
-                                    @if($rPsd->prosedur_pelaksana->count() > 0)
+                                    @if($rPsd->prosedur_pelaksana != null && $rPsd->prosedur_pelaksana->count() > 0)
                                         {{ pka_lkp_pelaksana($anggota, $tagIdx, $rPsd, $iPsd, $rPsd->prosedur_pelaksana) }}
                                     @endif
                                 @endforeach
