@@ -167,6 +167,10 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/', 'Mst\DasarSuratController@store');
     });
 
+    Route::prefix('kode_temuan')->group(function () {
+      Route::post("/get_kode_temuan_by_level", "Mst\KodeTemuanController@get_kode_temuan_by_level");
+      Route::post("/check_last_update", "Mst\KodeTemuanController@check_last_update");
+    });
   });
 
 
@@ -240,6 +244,9 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Pemeriksaan\AuditController@index');
       Route::get('/datatables', 'Pemeriksaan\AuditController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\AuditController@edit');
+
+      Route::post("/upload_bukti_kertas_kerja/{id_sp}", "Pemeriksaan\AuditController@upload_bukti_kertas_kerja");
+      Route::post('/edit/{id}', 'Pemeriksaan\AuditController@update');
     });
 
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
