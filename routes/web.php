@@ -254,6 +254,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/irban/draft-nhp', 'Pemeriksaan\DraftNHP@index');
     Route::get('/irban/lhp-tinjut', 'Pemeriksaan\LhpTinjut@index');
     Route::get('/irban/review-lhp', 'Pemeriksaan\ReviewLHP@index');
+    Route::get('/irban/matrix-tindak-lanjut', 'Pemeriksaan\MatrixTindaklanjut@index');
 
 
   });
