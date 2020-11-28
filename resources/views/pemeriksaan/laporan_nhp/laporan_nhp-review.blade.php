@@ -30,28 +30,6 @@
     <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
         <h4 class="tx-gray-800 mg-b-5">Uraian Singkat</h4>
     </div>
-    
-    <div class="br-pagebody">
-        <div class="row">
-            <div class="col-lg-12 widget-2 px-0">
-                <div class="card shadow-base">
-
-                    <div class="card-header alert-success">
-                        <h6 class="card-title">Unggah File</h6>
-                    </div>
-                    <div class="card-body">
-                        <form action="/pemeriksaan/audit/upload_bukti_kertas_kerja/{{Request::segment(4)}}" class="dropzone" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            <div class="fallback">
-                            <input name="file" type="file" multiple />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="br-pagebody">
         <div class="row">
@@ -63,11 +41,9 @@
                     </div>
                     <div class="card-body">
                         <ol class='file-upload-res'>
-                        @if(isset($data))
-                            @foreach($data->audit_berkas as $idx => $row)
-                                <li><a href='{{ URL::to('upload_file/'.$row->file_url) }}'>{{ $row->file_url }}</a></li>
-                            @endforeach
-                        @endif
+                        @foreach($data->audit_berkas as $idx => $row)
+                            <li><a href='{{ URL::to('upload_file/'.$row->file_url) }}'>{{ $row->file_url }}</a></li>
+                        @endforeach
                         </ol>
                     </div>
                 </div>
@@ -75,9 +51,10 @@
         </div>
     </div>
 
-    <form class="form-layout form-layout-5" id='form-audit' style="padding-top:0" method="post" enctype="multipart/form-data">
+    <form class="form-layout form-layout-5" id='form-review' style="padding-top:0" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <input type='hidden' name='mapping_kki' value='' id='mapping-kki'>
+        <input type='hidden' name='step_approve' value='' id='step-approve'>
         <div class="br-pagebody">
             @if (Session::has('error'))
                 <div class="row">
@@ -111,29 +88,30 @@
                             <h6 class="card-title">Uraian Singkat</h6>
                         </div>
                         <div class="card-body">
+                            {!! $data->uraian_singkat !!}
+                            <hr>
+                            <h6 class="card-title">Review</h6>
+                            <br>
+                            @php 
+                            $review_uraian_singkat = $data->review->where('tipe','nhp')->first();
+                            @endphp
                             <textarea name="uraian_singkat" class='text-wizard' id="uraian_singkat" rows="10" cols="80">
-                                {{ $data->uraian_singkat }}
+                               {{ !is_null($review_uraian_singkat) ? $review_uraian_singkat->uraian_singkat : ''  }}
                             </textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div><!-- br-pagebody -->
-        
-        <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-20 d-flex justify-content-end">
-            <button type='button' class="btn btn-primary btn-sm add-kertas-kerja-ikhtisar">
-                <i class="fa fa-plus"></i> Kertas Kerja Ikhtisar
-            </button>
-        </div>
 
         <div class='cover-kertas-kerja-ikhtisar'>
             @php
             $idx_kki = 1;
-            $kki = $data->kertas_kerja_ikhtisar;   
+            $kki = $data->kertas_kerja_ikhtisar->where('created_by', Auth::user()->id);   
             @endphp
             @if($kki->count() > 0)
                 @foreach($kki as $idx => $row)
-                    {{ adt_kertas_kerja_ikhtisar($idx +1, $row) }}
+                    {{ adt_kertas_kerja_ikhtisar_review($idx +1, $row, 'nhp') }}
 
                     @php
                      $idx_kki++;   
@@ -146,9 +124,8 @@
         <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a href='{{ url('') }}/pemeriksaan/audit/review_list/{{$data->surat_perintah->id}}' class="btn btn-danger"
-                        type="button">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-info review-submit"><i class="fa fa-star"></i> Review</button>
+                    <button type="button" class="btn btn-primary approve-submit"><i class="fa fa-check"></i> Approve</button>
                 </div>
             </div>
         </div>
@@ -172,15 +149,13 @@
             function handlingKeyupEditor(idx, elId, txt) {
                 clearTimeout(countDownKeyupEditor)
                 countDownKeyupEditor = setTimeout(function() {
-                    console.log(idx, $(txt).text())
                     localStorage.setItem(`${localStoragePrefix}-${elId}`, txt);
-                    bgStepChange(idx, $(txt).text())
+                    //bgStepChange(idx, $(txt).text())
                 }, 300)
             }
 
             function bgStepChange(idx, txt, wizardName) {
                 const parsedTxt = txt.replace(/\s/g, '')
-                console.log(parsedTxt)
                 const tab = $(`#${wizardName}-t-${idx}`)
                 if (parsedTxt.length > 10) {
                     tab.find($('.number')).html(`<i class='fa fa-check'></i>`)
@@ -233,14 +208,11 @@
                         $('#' + wizardName).find(".text-wizard").map(function(idx, val) {
                             const parentDiv = $(this).parent().closest('section')
                             const idEl = $(this).attr('id')
-                            console.log(parentDiv)
                             const editor = CKEDITOR.replace($(this).attr('id'), {
                                 extraPlugins: 'autogrow',
                                 on: {
                                     change: function(e) {
-                                        console.log(e.editor.getData())
                                         $(`#${idEl}`).val(e.editor.getData())
-                                        console.log( $(`#${idEl}`).val())
                                         // handlingKeyupEditor(idx, idEl, e.editor.getData())
                                     },
                                     blur: function(e) {
@@ -258,11 +230,10 @@
                                 }
     
                                 const html = e.editor.getData()
-                                bgStepChange(idx, $(html).text(), wizardName)
+                                //bgStepChange(idx, $(html).text(), wizardName)
                             });
     
                             editor.on('resize', function() {
-                                console.log(wizardName);
     
                             });
     
@@ -277,7 +248,6 @@
             }
 
             function trigger_kki(idx_kki) {
-                console.log(idx_kki,'idx_kki');
                 generateTextWizard(`wizard${idx_kki}`)
 
                 // code temuan
@@ -287,18 +257,6 @@
                 })
             }
 
-            function add_kertas_kerja_ikhtisar() {
-                console.log(idx_kki)
-                let template_kki = `
-                {{ adt_kertas_kerja_ikhtisar() }}
-                `
-                template_kki = template_kki.replace(/\[idx]/gm, idx_kki)
-
-                $('.cover-kertas-kerja-ikhtisar').append(template_kki)
-                trigger_kki(idx_kki);
-                
-                idx_kki++;
-            }
 
             if(idx_kki > 1) {
                 for(var i = 1; i < idx_kki; i++) {
@@ -312,89 +270,38 @@
                 })
             }
             
-            function confirmKki(){
-                return confirm('Data KertasKKerja Ikhtisar akan terhapus. Lanjutkan?')
+            function confirmReview(){
+                return confirm('Apakah anda yakin untuk melanjutkan Review?')
             }
 
-            $(document).on('click', '.btn-delete-kki', function() {
+            function confirmApprove(){
+                return confirm('Semua Data Review Tidak Akan Disimpan. Apakah anda yakin untuk melanjutkan Approve?')
+            }
 
-                const confirm = confirmKki()
+            $(".review-submit").on('click', function(){
+                $("#step-approve").val('review');
+                const confirm = confirmReview();
+                console.log(confirm);
                 if(confirm) {
-                    $(this).parent().closest($(".kertas-kerja-ikhtisar")).remove()
+                    $("#form-review").submit();
                 }
             })
 
-            add_kertas_kerja_ikhtisar()
-            $(document).on('click', '.add-kertas-kerja-ikhtisar', function() {
-                add_kertas_kerja_ikhtisar()
-            })
-
-            $(document).on('change', '.kode_temuan', function(){
-                changeKodeTemuan($(this))
-            })
-
-            // first element render kode temuan
-            $(".kode_temuan[data-level=1]").map(function(el) {
-                changeKodeTemuan($(el))
-            })
-
-            async function changeKodeTemuan(el) {
-                const currentLevel = $(el).data('level');
-                console.log(currentLevel,'current level');
-                const nextLevel = currentLevel + 1;
-
-                if(nextLevel <= 3) {
-                    const nextElement = $(el).parent().closest($(".kode_temuan_cover")).find($(`.kode_temuan[data-level=${nextLevel}]`))
-                    nextElement.html(`<option value=''>- Pilih Kode Temuan -</option>`)
-                    const option = [];
-
-                    /* check last update 
-                    let getKodeTemuanFlag = false;
-                    await $.post('/mst/kode_temuan/check_last_update', function(res) {
-                        if(kode_temuan_last_update != res.last_update) {
-                            getKodeTemuanFlag = true;
-                            kode_temuan_last_update = res.last_update;
-                        }
-                    }) */
-
-                    // find option 
-                    let baseOption = baseOptionKodeTemuan.find(r=> r.id_parent == $(el).val())
-                    if(typeof baseOption == 'undefined') {
-                        await $.post('/mst/kode_temuan/get_kode_temuan_by_level', { level: nextLevel, parent: $(el).val() }, function(res) {
-                            
-                            const temuan = {
-                                id_parent: $(el).val(),
-                                options: []
-                            }
-                            res.data.map(function (dt) {
-                                temuan.options.push(`<option value='${dt.id}'>${dt.kode}. ${dt.temuan}</option>`);
-                            })
-                            baseOptionKodeTemuan.push(temuan)
-                            baseOption = temuan
-                            console.log(baseOption, temuan,'koplik')
-                        })
-                    }
-
-                    option.push(baseOption.options)
-                    nextElement.append(option.join(''))
-
-                    const value = $(nextElement).data('value');
-                    if(value > 0) {
-                        nextElement.val(value).trigger('change');
-                    }
-
+            $(".approve-submit").on('click', function(){
+                $("#step-approve").val('approve');
+                const confirm = confirmApprove();
+                if(confirm) {
+                    $("#form-review").submit();
                 }
-            }
+            })
 
             
-            $('#form-audit').on('submit', function(e) {
+            $('#form-review').on('submit', function(e) {
                 e.preventDefault()
                 const fixInput = [
                     '_token',
                     'uraian_singkat',
                 ]
-
-                console.log(fixInput)
 
                 let input = $(this).serializeArray()
                 input = input.filter(r => fixInput.indexOf(r.name) !== -1)
@@ -406,45 +313,9 @@
                     const tagIdx = $(el).data('idx')
                     console.log(tagIdx);
                     // judul kondisi
-                    const judul_kondisi_el = $(el).find($(`#judul_kondisi_${tagIdx}`))
-                    console.log(judul_kondisi_el.val())
-                    const judul_kondisi = {
-                        judul_kondisi: judul_kondisi_el.val(),
-                        kode_temuan: [
-                            {
-                                level: 1,
-                                id_kode_temuan: judul_kondisi_el.parent().find($(".kode_temuan[data-level=1]")).val()
-                            },
-                            {
-                                level: 2,
-                                id_kode_temuan: judul_kondisi_el.parent().find($(".kode_temuan[data-level=2]")).val() 
-                            },
-                            {
-                                level: 3,
-                                id_kode_temuan: judul_kondisi_el.parent().find($(".kode_temuan[data-level=3]")).val()
-                            }
-                        ]
-                    }
-
+                    const judul_kondisi = $(el).find($(`#judul_kondisi_${tagIdx}`)).val()
                     // uraian kondisi
-                    const uraian_kondisi_el = $(el).find($("textarea[name='uraian_kondisi']"))
-                    const uraian_kondisi = {
-                        uraian_kondisi: uraian_kondisi_el.val(),
-                        kode_temuan: [
-                            {
-                                level: 1,
-                                id_kode_temuan: uraian_kondisi_el.parent().find($(".kode_temuan[data-level=1]")).val()
-                            },
-                            {
-                                level: 2,
-                                id_kode_temuan: uraian_kondisi_el.parent().find($(".kode_temuan[data-level=2]")).val() 
-                            },
-                            {
-                                level: 3,
-                                id_kode_temuan: uraian_kondisi_el.parent().find($(".kode_temuan[data-level=3]")).val()
-                            }
-                        ]
-                    }
+                    const uraian_kondisi = $(el).find($("textarea[name='uraian_kondisi']")).val()
 
                     // kriteria
                     const kriteria = $(el).find($("textarea[name='kriteria']")).val()
@@ -456,20 +327,7 @@
                     const akibat = $(el).find($("textarea[name='akibat']")).val()
 
                     // rekomendasi
-                    const rekomendasi_el = $(el).find($("textarea[name='rekomendasi']"))
-                    const rekomendasi = {
-                        rekomendasi: rekomendasi_el.val(),
-                        kode_rekomendasi: [
-                            {
-                                level: 1,
-                                id_kode_rekomendasi: rekomendasi_el.parent().find($(".kode_rekomendasi[data-level=1]")).val()
-                            },
-                            {
-                                level: 2,
-                                id_kode_rekomendasi: rekomendasi_el.parent().find($(".kode_rekomendasi[data-level=2]")).val() 
-                            }
-                        ]
-                    }
+                    const rekomendasi = $(el).find($("textarea[name='rekomendasi']")).val()
 
                     mappingKki.push({
                         idKki: $(el).data('id'),
@@ -482,8 +340,7 @@
                     })
                     console.log(rekomendasi)
                 })
-
-                console.log(mappingKki)
+                
                 $('#mapping-kki').val(JSON.stringify(mappingKki))
 
                 $(this).unbind('submit').submit();

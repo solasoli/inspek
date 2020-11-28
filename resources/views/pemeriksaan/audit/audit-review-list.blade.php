@@ -66,25 +66,47 @@
             <div class="col-lg-12 widget-2 px-0">
                 <div class="card shadow-base">
                     <div class="card-header">
-                        <h6 class="card-title float-left">List Surat Perintah</h6>
+                        <h6 class="card-title float-left">List Kertas Kerja</h6>
                         <div class="float-right">
 
+                            @if(can_access("audit", "add"))
+                            <a class='btn btn-sm btn-success' href='{{ URL::to('pemeriksaan/audit/add/'.$data->id)}}'><i class='menu-item-icon icon ion-plus'></i> Tambah</a>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="alert alert-info">
-                            <i class="fa fa-info-circle"></i> Klik No. Surat untuk melihat detail Surat Perintah
-                        </div>
                         <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Type</th>
-                                    <th>Irban</th>
-                                    <th>Kegiatan</th>
-                                    <th>No Surat Perintah</th>
+                                    <th>Uraian Singkat</th>
+                                    <th>Jumlah Kertas Kerja Ikhtisar</th>
+                                    <th>Oleh</th>
+                                    <th>Status</th>
                                     <th style='width:195px'>Aksi</th>
                                 </tr>
                             </thead>
+                            <tbody>
+
+                                @foreach($data->audit_kertas_kerja as $row)
+
+                                    <tr>
+                                        <td>{!! $row->uraian_singkat !!}</td>
+                                        <td>{{ $row->kertas_kerja_ikhtisar->count() }}</td>
+                                        <td>{{ $row->oleh->username }}</td>
+                                        <td>{!! kertas_kerja_status_label($row->status) !!}</td>
+                                        <td>
+                                            @if(can_access("audit", "add") && ($row->status->id == 1 || $row->status->id == 2))
+                                                <a href="{{ URL::to('/pemeriksaan/audit') }}/edit/{{ $row->id }}" class="btn btn-xs btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+                                            @endif
+                                            @if(can_access("audit", "edit") && ($row->status->id <= 4))
+                                                <a href="{{ URL::to('/pemeriksaan/audit') }}/review/{{ $row->id }}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a>
+                                            @endif
+                                            <a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>
+                                        </td>
+                                            
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -104,51 +126,16 @@
                     sSearch: '',
                     lengthMenu: '_MENU_ items/page',
                 },
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{{ url()->current() }}/datatables/',
-                columns: [{
-                        data: 'is_pkpt',
-                        name: 'is_pkpt',
-                        render: function(data, type, row) {
-                            console.log(data.is_pkpt);
-                            return data == 2 ? 'Non-PKPT' : 'PKPT';
-                        }
-                    },
-                    {
-                        data: 'wilayah.nama',
-                        name: 'wilayah.nama'
-                    },
-                    {
-                        data: 'kegiatan.nama',
-                        name: 'kegiatan.nama'
-                    },
-                    {
-                        data: 'no_surat',
-                        name: 'no_surat',
-                        render: function(data, type, row) {
-                            return `<a target='_blank' href='{{ URL::to('/pkpt/surat_perintah/info') }}/${row.id}'>${data}</a>`
-                        }
-                    },
-                    {
-                        data: null,
-                        orderable: false,
-                        render: function(data, type, row) {
-                            var return_button = "";
-
-                            
-                            
-                            @if(can_access("program_kerja_audit", "edit"))
-                            return_button += `<a href="{{ URL::to('/pemeriksaan/audit') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
-                            @endif
-
-                            return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
-                            return return_button == "" ? "-" : return_button
-                        }
-                    },
-                ],
             });
+
+            $('#oTable2').DataTable({
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: '_MENU_ items/page',
+                },
+            });
+
 
             $('.dataTables_length select').select2({
                 minimumResultsForSearch: Infinity

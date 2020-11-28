@@ -167,6 +167,10 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/', 'Mst\DasarSuratController@store');
     });
 
+    Route::prefix('kode_temuan')->group(function () {
+      Route::post("/get_kode_temuan_by_level", "Mst\KodeTemuanController@get_kode_temuan_by_level");
+      Route::post("/check_last_update", "Mst\KodeTemuanController@check_last_update");
+    });
   });
 
 
@@ -239,7 +243,30 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('audit')->group(function () {
       Route::get('/', 'Pemeriksaan\AuditController@index');
       Route::get('/datatables', 'Pemeriksaan\AuditController@list_datatables_api');
+      Route::get('/add/{id}', 'Pemeriksaan\AuditController@add');
       Route::get('/edit/{id}', 'Pemeriksaan\AuditController@edit');
+      Route::get('/review_list/{id}', 'Pemeriksaan\AuditController@review_list');
+      Route::get('/review/{id}', 'Pemeriksaan\AuditController@review');
+      Route::post('/review/{id}', 'Pemeriksaan\AuditController@submit_review');
+
+      Route::post("/upload_bukti_kertas_kerja/{id}", "Pemeriksaan\AuditController@upload_bukti_kertas_kerja");
+      Route::post('/edit/{id}', 'Pemeriksaan\AuditController@update');
+    });
+
+    Route::prefix('laporan_nhp')->group(function () {
+      Route::get('/', 'Pemeriksaan\LaporanNhpController@index');
+      Route::get('/review_list/{id}', 'Pemeriksaan\LaporanNhpController@review_list');
+      Route::get('/review/{id}', 'Pemeriksaan\LaporanNhpController@review');
+      Route::post('/review/{id}', 'Pemeriksaan\LaporanNhpController@submit_review');
+      Route::get('/datatables/{status}', 'Pemeriksaan\LaporanNhpController@list_datatables_api');
+    });
+
+    Route::prefix('laporan_lhp')->group(function () {
+      Route::get('/', 'Pemeriksaan\LaporanLhpController@index');
+      Route::get('/review_list/{id}', 'Pemeriksaan\LaporanLhpController@review_list');
+      Route::get('/review/{id}', 'Pemeriksaan\LaporanLhpController@review');
+      Route::post('/review/{id}', 'Pemeriksaan\LaporanLhpController@submit_review');
+      Route::get('/datatables/{status}', 'Pemeriksaan\LaporanLhpController@list_datatables_api');
     });
 
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');
