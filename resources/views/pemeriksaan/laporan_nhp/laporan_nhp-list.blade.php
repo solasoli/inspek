@@ -25,12 +25,12 @@
         <nav class="breadcrumb pd-0 mg-0 tx-12">
             <a class="breadcrumb-item" href="/">Dashboard</a>
             <a class="breadcrumb-item" href="#">Pemeriksaan</a>
-            <span class="breadcrumb-item active">Audit</span>
+            <span class="breadcrumb-item active">Laporan NHP</span>
         </nav>
     </div>
 
     <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-        <h4 class="tx-gray-800 mg-b-5">Audit</h4>
+        <h4 class="tx-gray-800 mg-b-5">Laporan NHP</h4>
     </div>
 
     <div class="br-pagebody">
@@ -75,17 +75,41 @@
                         <div class="alert alert-info">
                             <i class="fa fa-info-circle"></i> Klik No. Surat untuk melihat detail Surat Perintah
                         </div>
-                        <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Irban</th>
-                                    <th>Kegiatan</th>
-                                    <th>No Surat Perintah</th>
-                                    <th style='width:195px'>Aksi</th>
-                                </tr>
-                            </thead>
-                        </table>
+
+                        <ul class="nav nav-tabs nav-justified mb-4">
+                          <li class="nav-item"><a href="#not_approved" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Di Approve</a></li>
+                          <li class="nav-item"><a href="#approved" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah DI Approve</a></li>
+                        </ul>
+              
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="not_approved">
+                                <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Irban</th>
+                                            <th>Kegiatan</th>
+                                            <th>No Surat Perintah</th>
+                                            <th style='width:195px'>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="approved">
+                                <table class="table table-bordered table-striped responsive" id="oTable2" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Irban</th>
+                                            <th>Kegiatan</th>
+                                            <th>No Surat Perintah</th>
+                                            <th style='width:195px'>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,7 +131,57 @@
                 responsive: true,
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url()->current() }}/datatables/',
+                ajax: '{{ url()->current() }}/datatables/1',
+                columns: [{
+                        data: 'is_pkpt',
+                        name: 'is_pkpt',
+                        render: function(data, type, row) {
+                            console.log(data.is_pkpt);
+                            return data == 2 ? 'Non-PKPT' : 'PKPT';
+                        }
+                    },
+                    {
+                        data: 'wilayah.nama',
+                        name: 'wilayah.nama'
+                    },
+                    {
+                        data: 'kegiatan.nama',
+                        name: 'kegiatan.nama'
+                    },
+                    {
+                        data: 'no_surat',
+                        name: 'no_surat',
+                        render: function(data, type, row) {
+                            return `<a target='_blank' href='{{ URL::to('/pkpt/surat_perintah/info') }}/${row.id}'>${data}</a>`
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            var return_button = "";
+                            
+                            @if(can_access("laporan_nhp", "edit"))
+                            return_button += `<a href="{{ URL::to('/pemeriksaan/laporan_nhp') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                            @endif
+
+                            return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
+                            return return_button == "" ? "-" : return_button
+                        }
+                    },
+                ],
+            });
+
+            $('#oTable2').DataTable({
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: '_MENU_ items/page',
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url()->current() }}/datatables/2',
                 columns: [{
                         data: 'is_pkpt',
                         name: 'is_pkpt',
@@ -137,18 +211,13 @@
                         render: function(data, type, row) {
                             var return_button = "";
 
-                            
-                            
-                            @if(can_access("program_kerja_audit", "edit"))
-                            return_button += `<a href="{{ URL::to('/pemeriksaan/audit') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
-                            @endif
-
                             return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
                             return return_button == "" ? "-" : return_button
                         }
                     },
                 ],
             });
+
 
             $('.dataTables_length select').select2({
                 minimumResultsForSearch: Infinity

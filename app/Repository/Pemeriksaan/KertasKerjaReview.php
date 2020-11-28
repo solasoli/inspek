@@ -4,10 +4,14 @@ namespace App\Repository\Pemeriksaan;
 
 use App\Repository\BaseModel;
 
-class AuditBerkas extends BaseModel
+class KertasKerjaReview extends BaseModel
 {
-  protected $table = "adt_audit_berkas";
-  protected $fillable = ['id_kertas_kerja','file_url'];
+  protected $table = "adt_audit_kertas_kerja_review";
+  protected $fillable = [
+    'id_kertas_kerja', 
+    'uraian_singkat', 
+    'tipe'
+  ];
 
   public function kertas_kerja()
   {

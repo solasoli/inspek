@@ -13,4 +13,9 @@ class KertasKerjaIkhtisarKodeTemuan extends BaseModel
   {
     return $this->belongsTo('App\Repository\Pemeriksaan\KertasKerjaIkhtisar', 'id_kertas_kerja_ikhtisar')->where('adt_audit_kertas_kerja_ikhtisar.is_deleted', 0);
   }
+
+  public function kode_temuan()
+  {
+    return $this->belongsTo('App\Repository\Master\KodeTemuan', 'id_kode_temuan');
+  }
 }

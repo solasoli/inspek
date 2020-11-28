@@ -13,4 +13,9 @@ class KertasKerjaIkhtisarKodeRekomendasi extends BaseModel
   {
     return $this->belongsTo('App\Repository\Pemeriksaan\KertasKerjaIkhtisar', 'id_kertas_kerja_ikhtisar')->where('adt_audit_kertas_kerja_ikhtisar.is_deleted', 0);
   }
+  
+  public function kode_rekomendasi()
+  {
+    return $this->belongsTo('App\Repository\Master\KodeRekomendasi', 'id_kode_rekomendasi');
+  }
 }

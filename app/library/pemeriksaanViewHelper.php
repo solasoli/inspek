@@ -102,4 +102,36 @@ if (!function_exists('adt_kertas_kerja_ikhtisar')) {
     }
 }
 
+if (!function_exists('adt_kertas_kerja_ikhtisar_review')) {
+    function adt_kertas_kerja_ikhtisar_review($idx = null, $data = null, $tipe_review = 'audit')
+    {   
+        return view(
+            'pemeriksaan.audit.partial-view.kertas_kerja_ikhtisar-review',
+            [
+                'idx' => $idx,
+                'data' => $data,
+                'tipe_review' => $tipe_review
+            ]
+        );
+    }
+}
 /* End Audit Section*/
+
+/* Laporan NHP Section */
+
+/* End Laporan NHP Section*/
+
+
+if (!function_exists('kertas_kerja_status_label')) {
+
+    function kertas_kerja_status_label($status) {
+        $class = '';
+        if(strpos($status->code, 'review') !== false) {
+            $class = 'text-danger';
+        } elseif(strpos($status->code, 'approved') !== false) {
+            $class = 'text-success';
+        }
+        
+        return "<b class='". $class ."'>". $status->description ."</b>";
+    }
+}

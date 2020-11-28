@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pemeriksaan;
 
 use App\Http\Controllers\Controller;
+use App\Repository\Pemeriksaan\KertasKerja;
 use App\Repository\SuratPerintah\SuratPerintah;
 use App\Service\SuratPerintah\SuratPerintahService;
 use App\Service\Pemeriksaan\AuditService;
@@ -18,18 +19,64 @@ class AuditController extends Controller
         return view('/pemeriksaan/audit/audit-list');
     }
 
+    public function add($id)
+    {
+        $new_kertas_kerja = KertasKerja::create(['id_surat_perintah' => $id]);
+        return redirect("/pemeriksaan/audit/edit/".$new_kertas_kerja->id);
+
+    }
+    
+    public function store($id_sp, Request $request){
+        AuditService::create($id_sp, $request->input());
+        $request->session()->flash('success', "Data berhasil disimpan!");
+        return redirect("/pemeriksaan/audit/edit/".$id_sp);
+    }
+
     public function edit($id)
     {
-        $sp = SuratPerintah::findOrFail($id);
+        $sp = KertasKerja::findOrFail($id);
         return view('/pemeriksaan/audit/audit-form', [
             'data' => $sp
         ]);
     }
 
-    public function update($id_sp, Request $request){
-        AuditService::createOrUpdate($id_sp, $request->input());
+    public function update($id, Request $request){
+        AuditService::createOrUpdate($id, $request->input());
         $request->session()->flash('success', "Data berhasil disimpan!");
-        return redirect("/pemeriksaan/audit/edit/".$id_sp);
+        return redirect("/pemeriksaan/audit/edit/".$id);
+    }
+    
+    public function review_list($id)
+    {
+        $sp = SuratPerintah::findOrFail($id);
+        return view('/pemeriksaan/audit/audit-review-list', [
+            'data' => $sp
+        ]);
+    }
+
+
+    public function review($id)
+    {
+        $data = KertasKerja::findOrFail($id);
+        $sp = SuratPerintah::findOrFail($data->surat_perintah->id);
+        return view('/pemeriksaan/audit/audit-review', [
+            'data' => $data,
+            'sp' => $sp
+        ]);
+    }
+
+    public function submit_review($id_kertas_kerja, Request $request){
+        if($request->input('step_approve') == 'review') {
+            AuditService::review($id_kertas_kerja, $request->input());
+            $request->session()->flash('success', "Data berhasil disimpan!");
+            return redirect("/pemeriksaan/audit/review/".$id_kertas_kerja);
+        } else {
+            
+            $data = KertasKerja::findOrFail($id_kertas_kerja);
+            AuditService::approve($id_kertas_kerja);
+            $request->session()->flash('success', "Data berhasil disimpan!");
+            return redirect("/pemeriksaan/audit/review_list/".$data->surat_perintah->id);
+        }
     }
 
     public function list_datatables_api()
@@ -39,7 +86,7 @@ class AuditController extends Controller
         return Datatables::eloquent($data)->toJson();
     }
 
-    public function upload_bukti_kertas_kerja(Request $request, $id_sp)
+    public function upload_bukti_kertas_kerja(Request $request, $id)
     {
         $this->validate($request, [
             'file' => 'required',
@@ -55,7 +102,7 @@ class AuditController extends Controller
         $file->move($tujuan_upload, $nama_file);
 
         // insert into audit berkas
-        AuditService::insert_berkas($id_sp, $nama_file);
+        AuditService::insert_berkas($id, $nama_file);
 
         return ['file_url' => URL::to('upload_file/'.$nama_file), 'file_name' => $nama_file];
     }

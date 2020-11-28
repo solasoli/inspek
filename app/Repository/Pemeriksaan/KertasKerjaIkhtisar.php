@@ -17,9 +17,9 @@ class KertasKerjaIkhtisar extends BaseModel
       'rekomendasi'
     ];
 
-  public function surat_perintah()
+  public function kertas_kerja()
   {
-    return $this->belongsTo('App\Repository\SuratPerintah\SuratPerintah', 'id_surat_perintah')->where('pkpt_surat_perintah.is_deleted', 0);
+    return $this->belongsTo('App\Repository\Pemeriksaan\KertasKerja', 'id_kertas_kerja');
   }
   
   public function kode_temuan()
@@ -31,4 +31,10 @@ class KertasKerjaIkhtisar extends BaseModel
   {
     return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaIkhtisarKodeRekomendasi', 'id_kertas_kerja_ikhtisar');
   }
+
+  public function review()
+  {
+    return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaIkhtisarReview', 'id_kertas_kerja_ikhtisar');
+  }
+
 }

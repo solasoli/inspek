@@ -4,14 +4,12 @@ namespace App\Service\Pemeriksaan;
 
 use DB;
 use Auth;
-use App\Repository\Pemeriksaan\Audit;
 use App\Repository\Pemeriksaan\AuditBerkas;
 use App\Repository\Pemeriksaan\KertasKerja;
 use App\Repository\Pemeriksaan\KertasKerjaIkhtisar;
-use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaan;
-use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedur;
-use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedurDetail;
-use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedurPelaksana;
+use App\Repository\Pemeriksaan\KertasKerjaIkhtisarReview;
+use App\Repository\Pemeriksaan\KertasKerjaReview;
+use App\Repository\Pemeriksaan\KertasKerjaStatus;
 use App\Repository\SuratPerintah\SuratPerintah;
 
 class AuditService
@@ -20,35 +18,19 @@ class AuditService
     public static function createOrUpdate($id, $data) // $id = id_surat_perintah
     {
         DB::transaction(function () use ($id, $data) {
-
-            $check = SuratPerintah::findOrFail($id);
-
             self::proccess_data($id, $data);
             DB::commit();
         });
     }
 
-    private static function proccess_data($id_sp, $data)
+    private static function proccess_data($id_kertas_kerja, $data)
     {
-        DB::transaction(function () use ($id_sp, $data) {
+        DB::transaction(function () use ($id_kertas_kerja, $data) {
             // saving uraian singkat
-            $findUraianSingkat = KertasKerja::where('created_by', Auth::user()->id)
-            ->where('id_surat_perintah', $id_sp)
-            ->first();
-
-            if(is_null($findUraianSingkat)) {
-                KertasKerja::create([
-                    'id_surat_perintah' => $id_sp,
-                    'uraian_singkat' => $data['uraian_singkat']
-                ]);
-            } else {
-                $findUraianSingkat->uraian_singkat = $data['uraian_singkat'];
-                $findUraianSingkat->save();
-            }
-
-            // find surat perintah
-            $surat_perintah = SuratPerintah::findOrFail($id_sp);
-
+            $kertas_kerja = KertasKerja::findOrFail($id_kertas_kerja);
+            $kertas_kerja->uraian_singkat = $data['uraian_singkat'];
+            $kertas_kerja->save();
+            
             // inserting Langkah Kerja Pemeriksaan Rinci
             $mapping_kki = json_decode($data['mapping_kki']);
             $delete_data = [
@@ -72,9 +54,10 @@ class AuditService
                     continue;
 
                 if ($rKki->idKki == 0) {
-                    $kki = $surat_perintah->audit_kertas_kerja_ikhtisar()->create($data_ins_kki);
+                    $kki = $kertas_kerja->kertas_kerja_ikhtisar()->create($data_ins_kki);
                 } else {
-                    $kki = KertasKerjaIkhtisar::findOrNew($rKki->idKki);
+                    $kki = KertasKerjaIkhtisar::find($rKki->idKki);
+                    $kki->id_status_kertas_kerja = 1;
                     $kki->update($data_ins_kki);
                 }
                 $id_kki[] = $kki->id;
@@ -128,7 +111,7 @@ class AuditService
                 }
                 $kki->kode_rekomendasi()->createMany($list_rekomendasi);
             }
-            KertasKerjaIkhtisar::where('id_surat_perintah', $id_sp)->whereNotIn('id', $id_kki)->update($delete_data);
+            KertasKerjaIkhtisar::where('id_kertas_kerja', $id_kertas_kerja)->whereNotIn('id', $id_kki)->update($delete_data);
             DB::commit();
         });
     }
@@ -145,7 +128,86 @@ class AuditService
         return $let_all_filled;
     }
 
-    public static function insert_berkas($id_sp, $nama_berkas) {
-        AuditBerkas::create(['id_surat_perintah' => $id_sp, 'file_url' => $nama_berkas]);
+    public static function insert_berkas($id_kertas_kerja, $nama_berkas) {
+        AuditBerkas::create(['id_kertas_kerja' => $id_kertas_kerja, 'file_url' => $nama_berkas]);
+    }
+
+    public static function review($id, $data, $tipe_review = 'audit') // $id = id_surat_perintah
+    {
+        DB::transaction(function () use ($id, $data, $tipe_review) {
+
+
+            self::proccess_review($id, $data, $tipe_review);
+            DB::commit();
+        });
+    }
+
+    private static function proccess_review($id_kertas_kerja, $data, $tipe_review)
+    {
+        DB::transaction(function () use ($id_kertas_kerja, $data, $tipe_review) {
+
+            // find Kertas Kerja
+            $status = self::get_status_by_code('review_'. $tipe_review);
+            $kertas_kerja = KertasKerja::findOrFail($id_kertas_kerja);
+            $kertas_kerja->id_status_kertas_kerja = $status->id;
+            $kertas_kerja->save();
+
+            // find review
+            $review = $kertas_kerja->review()->where('tipe',$tipe_review)->first();
+            if(is_null($review)) {
+                KertasKerjaReview::create([
+                    'id_kertas_kerja' => $id_kertas_kerja,
+                    'tipe' => $tipe_review,
+                    'uraian_singkat' => $data['uraian_singkat']
+                ]);
+            } else {
+                $review->uraian_singkat = $data['uraian_singkat'];
+                $review->save();
+            }
+
+            // inserting Langkah Kerja Pemeriksaan Rinci
+            $mapping_kki = json_decode($data['mapping_kki']);
+            $delete_data = [
+                'is_deleted' => 1,
+                'deleted_by' => Auth::user()->id,
+                'deleted_at' => date("Y-m-d H:i:s"),
+            ];
+
+            foreach ($mapping_kki as $iKki => $rKki) {
+
+                $data_ins_kki = [
+                    'judul_kondisi' => $rKki->judul_kondisi,
+                    'uraian_kondisi' => $rKki->uraian_kondisi,
+                    'kriteria' => $rKki->kriteria,
+                    'sebab' => $rKki->sebab,
+                    'akibat' => $rKki->akibat,
+                    'rekomendasi' => $rKki->rekomendasi,
+                    'tipe' => $tipe_review
+                ];
+
+                $kki = KertasKerjaIkhtisarReview::where('id_kertas_kerja_ikhtisar', $rKki->idKki)->where('tipe', $tipe_review)->first();
+                if(is_null($kki)){
+                    $data_ins_kki['id_kertas_kerja_ikhtisar'] = $rKki->idKki;
+                    $kki = KertasKerjaIkhtisarReview::create($data_ins_kki);
+                } else {
+                    $kki->update($data_ins_kki);
+                }
+            }
+            DB::commit();
+
+        });
+    }
+
+    public static function approve($id_kertas_kerja, $tipe_review = 'audit') {
+        $status = self::get_status_by_code('approved_'. $tipe_review);
+        $kertas_kerja = KertasKerja::findOrFail($id_kertas_kerja);
+        $kertas_kerja->id_status_kertas_kerja = $status->id;
+        $kertas_kerja->save();
+    }
+
+    public static function get_status_by_code($code) {
+        $status = KertasKerjaStatus::where('code', $code)->first();
+
+        return $status;
     }
 }
