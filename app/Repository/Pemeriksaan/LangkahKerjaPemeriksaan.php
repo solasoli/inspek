@@ -42,4 +42,9 @@ class LangkahKerjaPemeriksaan extends BaseModel
   {
     return $this->hasMany('App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedur', 'id_lkp')->where('sp_langkah_kerja_pemeriksaan_prosedur.is_deleted', 0);
   }
+
+  public function review()
+  {
+    return $this->hasOne('App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanReview', 'id_langkah_kerja_pemeriksaan');
+  }
 }

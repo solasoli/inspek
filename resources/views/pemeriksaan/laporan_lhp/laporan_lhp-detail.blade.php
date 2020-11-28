@@ -44,7 +44,7 @@
                 @endphp
                 @if($kki->count() > 0)
                     @foreach($kki as $ix => $rw)
-                        {{ adt_kertas_kerja_ikhtisar_review($idx_kki, $rw, 'lhp') }}
+                        {{ adt_kertas_kerja_ikhtisar_detail($idx_kki, $rw, 'lhp') }}
 
                         @php
                         $idx_kki++;   
@@ -61,8 +61,6 @@
                     <a href='{{ URL::to('/pemeriksaan/laporan_lhp/')}}' class="btn btn-info">Kembali Ke Review</a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-info review-submit"><i class="fa fa-star"></i> Review</button> &nbsp;
-                    <button type="button" class="btn btn-primary approve-submit"><i class="fa fa-check"></i> Approve</button>
                 </div>
             </div>
         </div>

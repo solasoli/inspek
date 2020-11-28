@@ -17,5 +17,17 @@ class RoleSeeder extends Seeder
           'nama' => "Super Administrator",
         ]
       ]);
+      DB::table('acl_role')->insert([
+        [
+          'id' => 2,
+          'nama' => "Administrator",
+        ]
+      ]);
+      DB::table('acl_role')->insert([
+        [
+          'id' => 3,
+          'nama' => "Pegawai",
+        ]
+      ]);
     }
 }

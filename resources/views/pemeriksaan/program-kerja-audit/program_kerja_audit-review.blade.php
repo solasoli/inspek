@@ -30,8 +30,9 @@
         <h4 class="tx-gray-800 mg-b-5">Program Kerja Audit</h4>
     </div>
 
-    <form class="form-layout form-layout-5" id='form-rka' style="padding-top:0" method="post" enctype="multipart/form-data">
+    <form class="form-layout form-layout-5" id='form-review' style="padding-top:0" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
+        <input type='hidden' name='step_approve' value='' id='step-approve'>
         <input type='hidden' name='mapping_lkp' value='' id='mapping-lkp'>
         <div class="br-pagebody">
             @if (Session::has('error'))
@@ -80,7 +81,6 @@
                                         @php
                                             $isi = $all_isian->where('id_program_kerja_audit', $row->id)->first();
                                             $isi = $isi != null ? $isi->isi : '';
-
                                             
                                             $isi_review = $review->where('id_program_kerja_audit', $row->id)->first();
                                             $isi_review = $isi_review != null ? $isi_review->isi : '';
@@ -89,15 +89,11 @@
                                             $nama_field = str_replace(' ','_', strtolower(trim($row->nama))).'_rka';
                                             $all_input[] = $nama_field;
                                         @endphp
-
-                                        @if($isi_review != '')
-                                        <br>
-                                        <h6 class="card-title">Review : </h6>
-                                        <b>{!! $isi_review !!}</b>
-                                        @endif
-
+                                        {!! $isi !!}
+                                        <hr>
+                                        <h6>Review</h6>
                                         <textarea name="{{$nama_field}}" class='text-wizard' id="{{ str_replace(' ', '', $row->nama) }}" rows="10" cols="80">
-                                            {{ $isi }}
+                                            {{ $isi_review }}
                                         </textarea>
                                     </section>
                                 @endforeach
@@ -108,12 +104,6 @@
             </div>
         </div><!-- br-pagebody -->
 
-        <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-20 d-flex justify-content-end">
-            <button type='button' class="btn btn-primary btn-sm add-langkah-kerja-pemeriksaan-rinci">
-                <i class="fa fa-plus"></i> Langkah Kerja Pemeriksaan Rinci
-            </button>
-        </div>
-                              
         <div class='cover-langkah-kerja-pemeriksaan-rinci'>
             @php
             $idxLkp = 1;
@@ -132,7 +122,7 @@
                             }
                         }
                     @endphp
-                    {{ pka_lkp_rinci($data->anggota, $idxLkp, $row) }}
+                    {{ pka_lkp_rinci_review($data->anggota, $idxLkp, $row) }}
                     @php
                         $idxLkp++;
                     @endphp
@@ -142,10 +132,12 @@
 
         <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a href='{{ url('') }}/pemeriksaan/sasaran-tujuan' class="btn btn-danger"
-                        type="button">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-start">
+                    <a href='{{ url('') }}/pemeriksaan/program-kerja-audit' class="btn btn-info">Kembali</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-info review-submit"><i class="fa fa-star"></i> Review</button>&nbsp;
+                    <button type="button" class="btn btn-primary approve-submit"><i class="fa fa-check"></i> Approve</button>
                 </div>
             </div>
         </div>
@@ -155,7 +147,7 @@
     <script src="{{ asset('admin_template/lib/jquery.steps/jquery.steps.js') }}"></script>
     <script type="text/javascript">
         $(function() {
-            const localStoragePrefix = 'sasaran_tujuan-{{ Auth::user()->id . ' - ' . Request::segment(4) }}'
+            const localStoragePrefix = 'sasaran_tujuan-review-{{ Auth::user()->id . ' - ' . Request::segment(4) }}'
             const wizardName = 'wizard3'
 
             let countDownKeyupEditor
@@ -164,7 +156,7 @@
                 clearTimeout(countDownKeyupEditor)
                 countDownKeyupEditor = setTimeout(function() {
                     console.log(idx, $(txt).text())
-                    localStorage.setItem(`${localStoragePrefix}-${elId}`, txt);
+                    // localStorage.setItem(`${localStoragePrefix}-${elId}`, txt);
                     bgStepChange(idx, $(txt).text())
                 }, 300)
             }
@@ -242,186 +234,35 @@
                 }
             });
 
-            /*
-            Langkah Kerja Pemeriksaan Rinci JS
-            */
-            let idx_pemeriksaan_rinci = {{ $idxLkp }}
-            const alpha_prosedur = []
-            @foreach($alphaProsedur as $iAp => $rAp)
-                alpha_prosedur[{{$iAp}}] = {{$rAp}};
-            @endforeach
-            const num_prosedur = []
-            @foreach($numProsedur as $iNpr => $rNpr)
-                num_prosedur['{{$iNpr}}'] = {{$rNpr}};
-            @endforeach
-
-            add_langkah_kerja_pemeriksaan_rinci()
-            
-            function add_sub_judul_tugas(subJudulTugasEl, value) {
-                if (typeof subJudulTugasEl != 'undefined') {
-                    value = typeof value != 'undefined' ? value.trim() : '' 
-                    let template_sub_judul_tugas = `
-                    {{ pka_sub_judul_tugas() }}
-                    `
-                    template_sub_judul_tugas = template_sub_judul_tugas.replace('[value]', value)
-
-                    $(subJudulTugasEl).append(template_sub_judul_tugas)
-                } else {
-                    console.log("CANNOT FIND SUB JUDUL TUGAS ELEMENT")
-                }
+            function confirmReview(){
+                return confirm('Apakah anda yakin untuk melanjutkan Review?')
             }
 
-            function add_langkah_kerja_pemeriksaan_rinci() {
-                let template_lkpr = `
-                {{ pka_lkp_rinci($data->anggota) }}
-                `
-                template_lkpr = template_lkpr.replace(/\[idx]/gm, idx_pemeriksaan_rinci)
-
-                $('.cover-langkah-kerja-pemeriksaan-rinci').append(template_lkpr)
-
-                idx_pemeriksaan_rinci++
+            function confirmApprove(){
+                return confirm('Semua Data Review Tidak Akan Disimpan. Apakah anda yakin untuk melanjutkan Approve?')
             }
 
-            $(document).on('click', '.add-sub-judul-tugas', function() {
-                const tugas_tab = $(this).parent().closest($(".tugas-tab"))
-                const sub_judul_tugas_cover = tugas_tab.find($(".sub-judul-tugas-cover"))
-
-                add_sub_judul_tugas(sub_judul_tugas_cover)
-            })
-            
-            $(document).on('click', '.add-langkah-kerja-pemeriksaan-rinci', function() {
-                add_langkah_kerja_pemeriksaan_rinci()
-            })
-
-            $(document).on('click', '.remove-sub-judul-tugas', function() {
-                $(this).parent().closest($(".row")).remove();
-            })
-
-            function confirmProsedur(){
-                return confirm('Detail Prosedur akan ikut terhapus. Lanjutkan?')
-            }
-            
-            function confirmLki(){
-                return confirm('Data Langkah Kerja Pemeriksaan akan terhapus. Lanjutkan?')
-            }
-
-            $(document).on('click', '.btn-delete-lki', function() {
-
-                const confirm = confirmLki()
+            $(".review-submit").on('click', function(){
+                $("#step-approve").val('review');
+                const confirm = confirmReview();
+                console.log(confirm);
                 if(confirm) {
-                    $(this).parent().closest($(".lkp-rinci")).remove()
+                    $("#form-review").submit();
                 }
             })
 
-            $(document).on('click', '.remove-prosedur', function() {
-                const idx = $(this).data('idx');
-                const coverDetailElement = $(`.cover-prosedur-detail[data-idx='${idx}']`)
-                const countElement = coverDetailElement.find($('.row')).length
-                if(countElement > 0) {
-                    const confirm = confirmProsedur()
-                    console.log(confirm)
-                    if(confirm) {
-                        coverDetailElement.parent().closest($(".row")).remove();
-                        $(this).parent().closest($(".row")).remove();
-                    }
-                } else {
-                    $(this).parent().closest($(".row")).remove();
-                    coverDetailElement.parent().closest($(".row")).remove();
+            $(".approve-submit").on('click', function(){
+                $("#step-approve").val('approve');
+                const confirm = confirmApprove();
+                if(confirm) {
+                    $("#form-review").submit();
                 }
-
             })
-
-            $(document).on('blur', '.prosedur', function() {
-                var data = $(this).data('idx')
-                $(`.prosedur-label-${data}`).html($(this).val())
-            })
-            
-            $(document).on('blur', '.prosedur-detail', function() {
-                var data = $(this).data('idx')
-                console.log(data)
-                $(`.prosedur-detail-list[data-idx='${data}']`).html($(this).val())
-            })
-
-            function add_prosedur(idx_pemeriksaan_rinci, idx_prosedur) {
-                console.log(idx_prosedur, 'prosedur');
-                if (idx_prosedur) {
-                    alpha_prosedur[idx_prosedur] = alpha_prosedur[idx_prosedur] != null ? alpha_prosedur[idx_prosedur] + 1 : 1
-                    const prosedur_cover = $(`.cover-prosedur[data-idx='${idx_prosedur}']`)
-                    prosedur_cover.find($(".no-available-prosedur")).remove()
-                    let template_prosedur = `
-                    {{ pka_lkp_rinci_prosedur() }}
-                    `
-                    console.log(alpha_prosedur[idx_prosedur]);
-                    const alphabet = numToSSColumn(alpha_prosedur[idx_prosedur])
-                    template_prosedur = template_prosedur.replace(/\[idx_prosedur]/gm, idx_pemeriksaan_rinci)
-                    template_prosedur = template_prosedur.replace(/\[alpha_prosedur]/gm, alphabet)
-                    prosedur_cover.append(template_prosedur)
-
-                    // adding pelaksana
-                    let template_pelaksana = `
-                    {{ pka_lkp_pelaksana($data->anggota) }}
-                    `
-                    template_pelaksana = template_pelaksana.replace(/\[idx_prosedur]/gm, idx_pemeriksaan_rinci)
-                    template_pelaksana = template_pelaksana.replace(/\[alpha_prosedur]/gm, alphabet)
-                    $(`#pelaksana-tab-${idx_prosedur}`).append(template_pelaksana)
-
-                } else {
-                    console.log('FAILED TO GENERATE IDX prosedur')
-                }
-            }
-
-            function add_prosedur_detail(idx_prosedur) {
-                console.log(idx_prosedur)
-                if (idx_prosedur != '') {
-                    num_prosedur[idx_prosedur] = num_prosedur[idx_prosedur] != null ? num_prosedur[idx_prosedur] + 1 : 1
-                    const prosedur_cover = $(`.cover-prosedur-detail[data-idx='${idx_prosedur}']`)
-                    prosedur_cover.find($(".no-available-prosedur")).remove()
-                    let template_prosedur_detail = `
-                    {{ pka_lkp_rinci_prosedur_detail() }}
-                    `
-
-                    const alphabet = numToSSColumn(num_prosedur[idx_prosedur])
-                    template_prosedur_detail = template_prosedur_detail.replace(/\[num_prosedur]/gm, num_prosedur[idx_prosedur])
-                    template_prosedur_detail = template_prosedur_detail.replace(/\[idx_prosedur]/gm, idx_prosedur)
-                    prosedur_cover.append(template_prosedur_detail)
-                    
-                    // adding list
-                    $(`.list-prosedur-detail[data-idx='${idx_prosedur}']`).append(`<li class='prosedur-detail-list' data-idx='${idx_prosedur}-${num_prosedur[idx_prosedur]}'></li>`)
-                } else {
-                    console.log('FAILED TO GENERATE IDX prosedur')
-                }
-            }
-
-            function numToSSColumn(num){
-                var s = '', t;
-
-                while (num > 0) {
-                    t = (num - 1) % 26;
-                    s = String.fromCharCode(65 + t) + s;
-                    num = (num - t)/26 | 0;
-                }
-                return s || undefined;
-            }
-
-            $(document).on('click', '.btn-prosedur', function() {
-                const lkpElement = $(this).parent().closest($(".lkp-rinci"))
-                add_prosedur(lkpElement.data('idx'), $(this).data('idx'))
-            })
-
-            $(document).on('click', '.btn-detail-prosedur', function() {
-                add_prosedur_detail($(this).data('idx'))
-            })
-
-            $(document).on('keyup', '.judul-tugas', function() {
-                const curr_idx = $(this).data('idx')
-                $(`.tugas-label-${curr_idx}`).html($(this).val())
-            })
-
             /*
             End Langkah Kerja Pemeriksaan Rinci JS
             */
 
-            $('#form-rka').on('submit', function(e) {
+            $('#form-review').on('submit', function(e) {
                 e.preventDefault()
                 const fixInput = [
                     '_token',

@@ -19,6 +19,15 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                         <h3>Judul Kondisi</h3>
                         <section>
                             <h5>Judul Kondisi</h5>
+                            @if(isset($data) && $data->review->where('judul_kondisi', '!=','')->count() > 0)
+                              <h6>Review :</h6>
+                              @foreach($data->review as $row)
+                              
+                                @if($row->judul_kondisi !='')
+                                  <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->judul_kondisi !!} </li>
+                                @endif
+                              @endforeach
+                            @endif
                             <div class='kode_temuan_cover'>
                               <br>
                               <h6>Kode Temuan</h6>
@@ -57,6 +66,15 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                         <h3>Uraian Kondisi</h3>
                         <section>
                             <h5>Uraian Kondisi</h5>
+                            @if(isset($data) && $data->review->where('uraian_kondisi', '!=','')->count() > 0)
+                              <h6>Review :</h6>
+                              @foreach($data->review as $row)
+                              
+                                @if($row->uraian_kondisi !='')
+                                  <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->uraian_kondisi !!} </li>
+                                @endif
+                              @endforeach
+                            @endif
                             <div class='kode_temuan_cover'>
                               <br>
                               <h6>Kode Temuan</h6>
@@ -94,18 +112,45 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                         <h3>Kriteria</h3>
                         <section>
                             <h5>Kriteria</h5>
+                            @if(isset($data) && $data->review->where('kriteria', '!=','')->count() > 0)
+                              <h6>Review :</h6>
+                              @foreach($data->review as $row)
+                              
+                                @if($row->kriteria !='')
+                                  <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->kriteria !!} </li>
+                                @endif
+                              @endforeach
+                            @endif
                             <textarea name="kriteria" class='text-wizard' id="kriteria_{{ $tagIdx }}" rows="10" cols="80">{{ isset($data) ? $data->kriteria : "" }}</textarea>
                         </section>
 
                         <h3>Sebab</h3>
                         <section>
                             <h5>Sebab</h5>
+                            @if(isset($data) && $data->review->where('sebab', '!=','')->count() > 0)
+                              <h6>Review :</h6>
+                              @foreach($data->review as $row)
+                              
+                                @if($row->sebab !='')
+                                  <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->sebab !!} </li>
+                                @endif
+                              @endforeach
+                            @endif
                             <textarea name="sebab" class='text-wizard' id="sebab_{{ $tagIdx }}" rows="10" cols="80">{{ isset($data) ? $data->sebab : "" }}</textarea>
                         </section>
 
                         <h3>Akibat</h3>
                         <section>
                             <h5>Akibat</h5>
+                            @if(isset($data) && $data->review->where('akibat', '!=','')->count() > 0)
+                              <h6>Review :</h6>
+                              @foreach($data->review as $row)
+                              
+                                @if($row->akibat !='')
+                                  <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->akibat !!} </li>
+                                @endif
+                              @endforeach
+                            @endif
                             <textarea name="akibat" class='text-wizard' id="akibat_{{ $tagIdx }}" rows="10" cols="80">{{ isset($data) ? $data->akibat : "" }}</textarea>
                         </section>
 
@@ -115,8 +160,16 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                             <div class='kode_rekomendasi_cover'>
                               <br>
                               <h6>Kode Rekomendasi</h6>
-                              
-                              
+                                  
+                              @if(isset($data) && $data->review->where('rekomendasi', '!=','')->count() > 0)
+                                <h6>Review :</h6>
+                                @foreach($data->review as $row)
+                                
+                                  @if($row->rekomendasi !='')
+                                    <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->rekomendasi !!} </li>
+                                  @endif
+                                @endforeach
+                              @endif
                               @php
                                 $valueLevelKk1 = 0;
                                 $valueLevelKk2 = 0; 

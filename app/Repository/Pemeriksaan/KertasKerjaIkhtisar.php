@@ -34,7 +34,7 @@ class KertasKerjaIkhtisar extends BaseModel
 
   public function review()
   {
-    return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaIkhtisarReview', 'id_kertas_kerja_ikhtisar');
+    return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaIkhtisarReview', 'id_kertas_kerja_ikhtisar')->where("adt_audit_kertas_kerja_ikhtisar_review.is_deleted" , 0);
   }
 
 }

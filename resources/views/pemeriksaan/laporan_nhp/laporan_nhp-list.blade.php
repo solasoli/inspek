@@ -78,7 +78,7 @@
 
                         <ul class="nav nav-tabs nav-justified mb-4">
                           <li class="nav-item"><a href="#not_approved" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Di Approve</a></li>
-                          <li class="nav-item"><a href="#approved" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah DI Approve</a></li>
+                          <li class="nav-item"><a href="#approved" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah DI Approve <span class="badge badge-danger badge-need-review" style='display:none'>!</span></a> </li>
                         </ul>
               
                         <div class="tab-content">
@@ -90,6 +90,7 @@
                                             <th>Irban</th>
                                             <th>Kegiatan</th>
                                             <th>No Surat Perintah</th>
+                                            <th>Status</th>
                                             <th style='width:195px'>Aksi</th>
                                         </tr>
                                     </thead>
@@ -104,6 +105,7 @@
                                             <th>Irban</th>
                                             <th>Kegiatan</th>
                                             <th>No Surat Perintah</th>
+                                            <th>Status</th>
                                             <th style='width:195px'>Aksi</th>
                                         </tr>
                                     </thead>
@@ -123,6 +125,60 @@
     <script>
         $(function() {
             $('#oTable').DataTable({
+                language: {
+                    searchPlaceholder: 'Search...',
+                    sSearch: '',
+                    lengthMenu: '_MENU_ items/page',
+                },
+                responsive: true,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url()->current() }}/datatables/0',
+                columns: [{
+                        data: 'is_pkpt',
+                        name: 'is_pkpt',
+                        render: function(data, type, row) {
+                            console.log(data.is_pkpt);
+                            return data == 2 ? 'Non-PKPT' : 'PKPT';
+                        }
+                    },
+                    {
+                        data: 'wilayah.nama',
+                        name: 'wilayah.nama'
+                    },
+                    {
+                        data: 'kegiatan.nama',
+                        name: 'kegiatan.nama'
+                    },
+                    {
+                        data: 'no_surat',
+                        name: 'no_surat',
+                        render: function(data, type, row) {
+                            return `<a target='_blank' href='{{ URL::to('/pkpt/surat_perintah/info') }}/${row.id}'>${data}</a>`
+                        }
+                    },
+                    {
+                        data: 'status.description',
+                        name: 'status.description'
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            var return_button = "";
+                            
+                            @if(can_access("laporan_nhp", "edit"))
+                            return_button += `<a href="{{ URL::to('/pemeriksaan/laporan_nhp') }}/review/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                            @endif
+
+                            return_button += `<a href="{{ URL::to('/pemeriksaan/laporan_nhp') }}/detail/${row.id}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
+                            return return_button == "" ? "-" : return_button
+                        }
+                    },
+                ],
+            });
+
+            $('#oTable2').DataTable({
                 language: {
                     searchPlaceholder: 'Search...',
                     sSearch: '',
@@ -156,62 +212,22 @@
                         }
                     },
                     {
+                        data: 'status.description',
+                        name: 'status.description'
+                    },
+                    {
                         data: null,
                         orderable: false,
                         render: function(data, type, row) {
                             var return_button = "";
-                            
+
                             @if(can_access("laporan_nhp", "edit"))
-                            return_button += `<a href="{{ URL::to('/pemeriksaan/laporan_nhp') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                            if(data.id_status_sp == 6) {
+                                return_button += `<a href="{{ URL::to('/pemeriksaan/laporan_nhp') }}/review/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                                $(".badge-need-review").show();
+                            }
                             @endif
-
-                            return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
-                            return return_button == "" ? "-" : return_button
-                        }
-                    },
-                ],
-            });
-
-            $('#oTable2').DataTable({
-                language: {
-                    searchPlaceholder: 'Search...',
-                    sSearch: '',
-                    lengthMenu: '_MENU_ items/page',
-                },
-                responsive: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{{ url()->current() }}/datatables/2',
-                columns: [{
-                        data: 'is_pkpt',
-                        name: 'is_pkpt',
-                        render: function(data, type, row) {
-                            console.log(data.is_pkpt);
-                            return data == 2 ? 'Non-PKPT' : 'PKPT';
-                        }
-                    },
-                    {
-                        data: 'wilayah.nama',
-                        name: 'wilayah.nama'
-                    },
-                    {
-                        data: 'kegiatan.nama',
-                        name: 'kegiatan.nama'
-                    },
-                    {
-                        data: 'no_surat',
-                        name: 'no_surat',
-                        render: function(data, type, row) {
-                            return `<a target='_blank' href='{{ URL::to('/pkpt/surat_perintah/info') }}/${row.id}'>${data}</a>`
-                        }
-                    },
-                    {
-                        data: null,
-                        orderable: false,
-                        render: function(data, type, row) {
-                            var return_button = "";
-
-                            return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
+                            return_button += `<a href="{{ URL::to('/pemeriksaan/laporan_nhp') }}/detail/${row.id}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
                             return return_button == "" ? "-" : return_button
                         }
                     },
