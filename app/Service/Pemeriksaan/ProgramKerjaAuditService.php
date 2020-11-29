@@ -51,7 +51,7 @@ class ProgramKerjaAuditService
           'id_surat_perintah' => $id_sp,
           'id_program_kerja_audit' => $val->id,
         ]);
-        $t->isi = $isi;
+        $t->isi = !is_null($isi) ? $isi : '';
         $t->created_at = date('Y-m-d H:i:s');
         $t->created_by = Auth::id();
         $t->save();
