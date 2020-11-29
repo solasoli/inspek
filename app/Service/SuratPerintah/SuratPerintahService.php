@@ -162,7 +162,7 @@ class SuratPerintahService
   }
 
   /**
-   * Get Valid Surat Perintah yang sudah bernomer surat
+   * Get Valid Surat Perintah yang sudah berNomor surat
    */
   public static function get_valid_sp($return_chain = false)
   {

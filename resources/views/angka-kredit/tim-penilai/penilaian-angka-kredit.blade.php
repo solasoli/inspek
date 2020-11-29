@@ -155,7 +155,7 @@
             <td><span class="text-success">Approved</span></td>
             <td class="text-center">
               
-              <a href="/angka-kredit/tim-penilai/penilaian-angka-review"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukakan Penilaian</button></a>
+              <a href="/angka-kredit/tim-penilai/penilaian-angka-review"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukan Penilaian</button></a>
               
             </td>
           </tr>
@@ -169,7 +169,7 @@
             <td><span class="text-success">Approved</span></td>
             <td class="text-center">
 
-              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukakan Penilaian</button></a>
+              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukan Penilaian</button></a>
               
             </td>
           </tr>
@@ -183,7 +183,7 @@
             <td><span class="text-success">Approved</span></td>
             <td class="text-center">
 
-              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukakan Penilaian</button></a>
+              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukan Penilaian</button></a>
               
             </td>
           </tr>
@@ -197,7 +197,7 @@
             <td><span class="text-success">Approved</span></td>
             <td class="text-center">
 
-              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukakan Penilaian</button></a>
+              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukan Penilaian</button></a>
               
             </td>
           </tr>
@@ -211,7 +211,7 @@
             <td><span class="text-success">Approved</span></td>
             <td class="text-center">
 
-              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukakan Penilaian</button></a>
+              <a href="review.html"><button class="btn btn-success"><i class="fa fa-star"></i> Lakukan Penilaian</button></a>
               
             </td>
           </tr>

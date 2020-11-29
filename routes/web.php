@@ -186,10 +186,10 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/approve/{id}', 'Pkpt\SuratPerintahController@approve');
       Route::get('/datatables/{type?}', 'Pkpt\SuratPerintahController@list_datatables_api');
       Route::get('/datatables_approve/{type?}', 'Pkpt\SuratPerintahController@list_datatables_approve_api');
-      Route::get('/datatables_penomeran_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_api');
+      Route::get('/datatables_peNomoran_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_peNomoran_api');
 
 
-      Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
+      Route::get('/Nomor', 'Pkpt\SuratPerintahController@peNomoran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
@@ -199,7 +199,7 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/check_jadwal', 'Pkpt\SuratPerintahController@check_jadwal');
       Route::post('/check_jadwal_by_id_kegiatan', 'Pkpt\SuratPerintahController@check_jadwal_by_id_kegiatan');
 
-      Route::post('/rubah_nomer', 'Pkpt\SuratPerintahController@rubah_nomer');
+      Route::post('/rubah_Nomor', 'Pkpt\SuratPerintahController@rubah_Nomor');
       Route::post('/get_event_sp', 'Pkpt\SuratPerintahController@get_event_sp');
     });
   });

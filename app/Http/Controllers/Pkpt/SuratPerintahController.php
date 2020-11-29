@@ -134,7 +134,7 @@ class SuratPerintahController extends Controller
     return Datatables::eloquent($data)->toJson();
   }
 
-  public function list_datatables_penomeran_api($is_avail_no = 0)
+  public function list_datatables_peNomoran_api($is_avail_no = 0)
   {
     $data = SuratPerintah::with(['wilayah', 'program_kerja', 'sasaran', 'kegiatan'])->where('is_approve', 1);
 
@@ -176,9 +176,9 @@ class SuratPerintahController extends Controller
     return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0]);
   }
 
-  public function penomeran_surat()
+  public function peNomoran_surat()
   {
-    return view('pkpt.penomeran_surat-list');
+    return view('pkpt.peNomoran_surat-list');
   }
 
   public function get_event_sp(Request $request)
@@ -229,7 +229,7 @@ class SuratPerintahController extends Controller
     return json_encode($list_arr);
   }
 
-  public function rubah_nomer(Request $request)
+  public function rubah_Nomor(Request $request)
   {
 
     $id = $request->id;
@@ -240,6 +240,6 @@ class SuratPerintahController extends Controller
     $t->save();
 
     $request->session()->flash('success', "Berhasil merubah data!");
-    return redirect('/pkpt/surat_perintah/nomer');
+    return redirect('/pkpt/surat_perintah/Nomor');
   }
 }
