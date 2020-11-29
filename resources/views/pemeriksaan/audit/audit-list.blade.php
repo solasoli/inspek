@@ -142,10 +142,11 @@
                         render: function(data, type, row) {
                             var return_button = "";
 
-                            
-                            
                             @if(can_access("audit", "edit"))
-                            return_button += `<a href="{{ URL::to('/pemeriksaan/audit') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                                @if(Auth::user()->role->id != 1)
+                                if(data.id_ketua_tim == {{ $id_pegawai }})
+                                @endif
+                                    return_button += `<a href="{{ URL::to('/pemeriksaan/audit') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
                             @endif
 
                             return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
