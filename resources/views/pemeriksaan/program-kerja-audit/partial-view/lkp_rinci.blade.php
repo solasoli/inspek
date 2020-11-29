@@ -47,7 +47,7 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                                             @include('pemeriksaan.program-kerja-audit.partial-view.sub_judul_tugas', ['sub_judul' => $row->sub_judul])
                                         @endforeach
                                     @else
-                                        <textarea name='sub_judul_tugas' class="form-control sub-judul-tugas"></textarea>
+                                        <textarea name='sub_judul_tugas' class="form-control sub-judul-tugas">{{ isset($data) ? $data->sub_judul_tugas : '' }}</textarea>
                                     @endif
                                 </div>
                             </div>
@@ -83,7 +83,7 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                             <div class="cover-prosedur" data-idx="{{ $tagIdx }}">
                                 @if(isset($data) && $data->prosedur != null && $data->prosedur->count() > 0) 
                                     @foreach($data->prosedur as $iPsd => $rPsd)
-                                        {{ pka_lkp_rinci_prosedur($idx + 1, $iPsd, $rPsd) }}
+                                        {{ pka_lkp_rinci_prosedur($idx, $iPsd, $rPsd) }}
                                     @endforeach
                                 @else
                                     <div class="row no-available-prosedur">

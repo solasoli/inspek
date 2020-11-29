@@ -329,6 +329,8 @@
                     coverDetailElement.parent().closest($(".row")).remove();
                 }
 
+                // remove pelaksana 
+                $(`.pelaksana-row[data-idx=${idx}]`).remove();
             })
 
             $(document).on('blur', '.prosedur', function() {
@@ -348,6 +350,11 @@
                     alpha_prosedur[idx_prosedur] = alpha_prosedur[idx_prosedur] != null ? alpha_prosedur[idx_prosedur] + 1 : 1
                     const prosedur_cover = $(`.cover-prosedur[data-idx='${idx_prosedur}']`)
                     prosedur_cover.find($(".no-available-prosedur")).remove()
+
+                    // remove notice
+                    $(`#pelaksana-tab-${idx_prosedur}`).find($(".no-available-prosedur")).remove()
+
+                    console.log(prosedur_cover);
                     let template_prosedur = `
                     {{ pka_lkp_rinci_prosedur() }}
                     `
