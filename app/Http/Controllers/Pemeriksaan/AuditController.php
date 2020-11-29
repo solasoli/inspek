@@ -17,7 +17,10 @@ class AuditController extends Controller
 {
     public function index()
     {
-        return view('/pemeriksaan/audit/audit-list');
+        $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
+        return view('/pemeriksaan/audit/audit-list',[
+            'id_pegawai' => $id_pegawai
+        ]);
     }
 
     public function add($id)
@@ -49,9 +52,21 @@ class AuditController extends Controller
     
     public function review_list($id)
     {
+        if(Auth::user()->role->id != 1) {
+            $kk = KertasKerja::where('created_by', Auth::user()->id)->first();
+            
+            if($kk != null) {
+                return redirect("/pemeriksaan/audit/edit/".$kk->id);
+            } else {
+                return redirect("/pemeriksaan/audit/add/". $id);
+            }
+        }
+
+        $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
         $sp = SuratPerintah::findOrFail($id);
         return view('/pemeriksaan/audit/audit-review-list', [
-            'data' => $sp
+            'data' => $sp,
+            'id_pegawai' => $id_pegawai
         ]);
     }
 
