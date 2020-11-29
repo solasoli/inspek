@@ -192,7 +192,11 @@
                             </div>
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
+<<<<<<< HEAD
                                     <button type="submit" class="btn btn-info review-submit" {{ $errors->id_status_kertas_kerja >= 5 ? 'disabled' : '' }}>Simpan</button>&nbsp;
+=======
+                                    <button type="submit" class="btn btn-info review-submit" {{ $data->id_status_sp >= 5 ? 'disabled' : '' }}>Simpan</button>&nbsp;
+>>>>>>> 4e422ef13c78588636fab84306e66e5fef8b7532
                                 </div>
                             </div>
                         </div>
