@@ -37,4 +37,9 @@ class KertasKerjaIkhtisar extends BaseModel
     return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaIkhtisarReview', 'id_kertas_kerja_ikhtisar')->where("adt_audit_kertas_kerja_ikhtisar_review.is_deleted" , 0);
   }
 
+  public function tindak_lanjut()
+  {
+    return $this->hasOne('App\Repository\Pemeriksaan\KertasKerjaIkhtisarTindakLanjut', 'id_kertas_kerja_ikhtisar')->where("adt_audit_kertas_kerja_ikhtisar_tindak_lanjut.is_deleted" , 0);
+  }
+
 }

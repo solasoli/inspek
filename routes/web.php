@@ -299,6 +299,21 @@ Route::middleware(['auth'])->group(function () {
 
 
   });
+  
+  Route::prefix('tindak_lanjut')->group(function () {
+    Route::prefix('matrik')->group(function () {
+      Route::get('/', 'TindakLanjut\MatrikController@index');
+      Route::get('/review_list/{id}', 'TindakLanjut\MatrikController@review_list');
+      Route::get('/edit/{id}', 'TindakLanjut\MatrikController@edit');
+      Route::get('/review/{id}', 'TindakLanjut\MatrikController@review');
+      Route::get('/detail/{id}', 'TindakLanjut\MatrikController@detail');
+      Route::get('/datatables/{status}', 'TindakLanjut\MatrikController@list_datatables_api');
+      
+      Route::post('/review/{id}', 'TindakLanjut\MatrikController@submit_review');
+      Route::post('/edit/{id}', 'TindakLanjut\MatrikController@update');
+    });
+  });
+
 
   Route::prefix('angka-kredit')->group(function(){
     Route::get('/tim-penilai/penilaian-angka-kredit', 'AngkaKredit\PenilaianAngkaKredit@index');
