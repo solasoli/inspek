@@ -77,8 +77,8 @@
                         </div>
 
                         <ul class="nav nav-tabs nav-justified mb-4">
-                          <li class="nav-item"><a href="#not_approved" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Di Approve</a></li>
-                          <li class="nav-item"><a href="#approved" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah DI Approve</a></li>
+                          <li class="nav-item"><a href="#not_approved" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Disetujui</a></li>
+                          <li class="nav-item"><a href="#approved" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Disetujui</a></li>
                         </ul>
               
                         <div class="tab-content">

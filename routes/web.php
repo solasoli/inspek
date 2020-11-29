@@ -190,7 +190,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables_penomeran_lhp_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_lhp_api');
       
 
-      Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
+      Route::get('/Nomor', 'Pkpt\SuratPerintahController@peNomoran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
@@ -295,6 +295,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/irban/draft-nhp', 'Pemeriksaan\DraftNHP@index');
     Route::get('/irban/lhp-tinjut', 'Pemeriksaan\LhpTinjut@index');
     Route::get('/irban/review-lhp', 'Pemeriksaan\ReviewLHP@index');
+    Route::get('/irban/matrix-tindak-lanjut', 'Pemeriksaan\MatrixTindaklanjut@index');
 
 
   });

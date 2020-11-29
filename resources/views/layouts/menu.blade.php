@@ -65,7 +65,7 @@ function getChildMenu($menu_id) {
   </div>
 </a>
 <ul class='br-menu-sub nav flex-column'>
-  <li class='nav-item'><a href='/mst/skpd' class='nav-link'>Perangkat Daerah</a></li>
+  <li class='nav-item'><a href='cd/mst/skpd' class='nav-link'>Perangkat Daerah</a></li>
   <li class='nav-item'><a href='/mst/pegawai' class='nav-link'>Data Pegawai</a></li>
   <li class='nav-item'><a href='/mst/struktur' class='nav-link'>Struktur Organigram</a></li>
   <li class='nav-item'><a href='/mst/kegiatan' class='nav-link'>Kegiatan</a></li>
@@ -81,7 +81,7 @@ function getChildMenu($menu_id) {
 </a>
 <ul class="br-menu-sub nav flex-column">
   <li class="nav-item"><a href="/pkpt/surat_perintah" class="nav-link">Buat Surat Perintah</a></li>
-  <li class="nav-item"><a href="/pkpt/surat_perintah/nomer" class="nav-link">Penomeran Surat</a></li>
+  <li class="nav-item"><a href="/pkpt/surat_perintah/Nomor" class="nav-link">PeNomoran Surat</a></li>
   <li class="nav-item"><a href="/pkpt/surat_perintah/kalendar" class="nav-link">Kalender Kerja</a></li>
 </ul>
 
