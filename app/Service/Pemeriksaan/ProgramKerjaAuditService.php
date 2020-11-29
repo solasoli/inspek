@@ -141,9 +141,9 @@ class ProgramKerjaAuditService
           $data_prosedur_pelaksana = [
             'id_prosedur' => $prosedur->id,
             'id_pelaksana_rencana' => $pelaksana->rencana->pelaksana,
-            'durasi_rencana' => $pelaksana->rencana->durasi,
+            'durasi_rencana' => $pelaksana->rencana->durasi > 0 ? $pelaksana->rencana->durasi : 0,
             'id_pelaksana_realisasi' => $pelaksana->realisasi->pelaksana,
-            'durasi_realisasi' => $pelaksana->realisasi->durasi
+            'durasi_realisasi' => $pelaksana->realisasi->durasi > 0 ? $pelaksana->realisasi->durasi : 0,
           ];
 
           $findPelaksana = $prosedur->prosedur_pelaksana;
