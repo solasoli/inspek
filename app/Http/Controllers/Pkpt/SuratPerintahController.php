@@ -146,6 +146,19 @@ class SuratPerintahController extends Controller
     return Datatables::of($data->get())->toJson();
   }
 
+  public function list_datatables_penomeran_lhp_api($is_avail_no = 0)
+  {
+    $data = SuratPerintah::with(['wilayah', 'program_kerja', 'sasaran', 'kegiatan'])->where('is_approve', 1)
+    ->where('id_status_sp', 7);
+
+    if ($is_avail_no == 1) {
+      $data = $data->whereRaw(DB::raw("(TRIM(no_lhp) != '' AND no_lhp IS NOT null)"));
+    } else {
+      $data = $data->whereRaw(DB::raw("(TRIM(no_lhp) = '' OR no_lhp IS null)"));
+    }
+    return Datatables::of($data->get())->toJson();
+  }
+
   public function check_jadwal(Request $request)
   {
     $dari = date("Y-m-d", strtotime($request->dari));
@@ -179,6 +192,11 @@ class SuratPerintahController extends Controller
   public function penomeran_surat()
   {
     return view('pkpt.penomeran_surat-list');
+  }
+
+  public function penomeran_lhp()
+  {
+    return view('pkpt.penomeran_lhp-list');
   }
 
   public function get_event_sp(Request $request)
@@ -241,5 +259,19 @@ class SuratPerintahController extends Controller
 
     $request->session()->flash('success', "Berhasil merubah data!");
     return redirect('/pkpt/surat_perintah/nomer');
+  }
+
+  public function rubah_nomer_lhp(Request $request)
+  {
+
+    $id = $request->id;
+    $logged_user = Auth::user();
+
+    $t = SuratPerintah::findOrFail($id);
+    $t->no_lhp = $request->no_surat;
+    $t->save();
+
+    $request->session()->flash('success', "Berhasil merubah data!");
+    return redirect('/pemeriksaan/laporan_lhp/penomeran_lhp');
   }
 }

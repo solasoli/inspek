@@ -187,7 +187,8 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables/{type?}', 'Pkpt\SuratPerintahController@list_datatables_api');
       Route::get('/datatables_approve/{type?}', 'Pkpt\SuratPerintahController@list_datatables_approve_api');
       Route::get('/datatables_penomeran_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_api');
-
+      Route::get('/datatables_penomeran_lhp_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_lhp_api');
+      
 
       Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
 
@@ -200,6 +201,7 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/check_jadwal_by_id_kegiatan', 'Pkpt\SuratPerintahController@check_jadwal_by_id_kegiatan');
 
       Route::post('/rubah_nomer', 'Pkpt\SuratPerintahController@rubah_nomer');
+      Route::post('/rubah_nomer_lhp', 'Pkpt\SuratPerintahController@rubah_nomer_lhp');
       Route::post('/get_event_sp', 'Pkpt\SuratPerintahController@get_event_sp');
     });
   });
@@ -276,6 +278,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/review/{id}', 'Pemeriksaan\LaporanLhpController@review');
       Route::get('/detail/{id}', 'Pemeriksaan\LaporanLhpController@detail');
       Route::get('/datatables/{status}', 'Pemeriksaan\LaporanLhpController@list_datatables_api');
+      Route::get('/penomeran_lhp', 'Pkpt\SuratPerintahController@penomeran_lhp');
       
       Route::post('/review/{id}', 'Pemeriksaan\LaporanLhpController@submit_review');
     });
