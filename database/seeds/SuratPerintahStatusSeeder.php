@@ -1,9 +1,9 @@
 <?php
 
-use App\Repository\Pemeriksaan\KertasKerjaStatus;
+use App\Repository\SuratPerintah\SuratPerintahStatus;
 use Illuminate\Database\Seeder;
 
-class KertasKerjaStatusSeeder extends Seeder
+class SuratPerintahStatusSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class KertasKerjaStatusSeeder extends Seeder
      */
     public function run()
     {
-        KertasKerjaStatus::create([
+        SuratPerintahStatus::create([
             'id' => 1,
             'code' => 'draft',
             'description' => 'Menunggu Persetujuan Ketua Tim',
@@ -25,7 +25,9 @@ class KertasKerjaStatusSeeder extends Seeder
             'is_deleted' => 0
         ]);
 
-        KertasKerjaStatus::create([
+
+
+        SuratPerintahStatus::create([
             'id' => 2,
             'code' => 'review_audit',
             'description' => 'Perlu Di Revisi Auditor',
@@ -38,7 +40,9 @@ class KertasKerjaStatusSeeder extends Seeder
             'is_deleted' => 0
         ]);
 
-        KertasKerjaStatus::create([
+
+
+        SuratPerintahStatus::create([
             'id' => 3,
             'code' => 'approved_audit',
             'description' => 'Sudah Di Setujui Ketua Tim',
@@ -51,7 +55,9 @@ class KertasKerjaStatusSeeder extends Seeder
             'is_deleted' => 0
         ]);
 
-        KertasKerjaStatus::create([
+
+
+        SuratPerintahStatus::create([
             'id' => 4,
             'code' => 'review_nhp',
             'description' => 'Perlu Di Revisi Ketua Tim',
@@ -64,7 +70,9 @@ class KertasKerjaStatusSeeder extends Seeder
             'is_deleted' => 0
         ]);
 
-        KertasKerjaStatus::create([
+
+
+        SuratPerintahStatus::create([
             'id' => 5,
             'code' => 'approved_nhp',
             'description' => 'Sudah Di Setujui Pengendali Teknis',
@@ -77,7 +85,9 @@ class KertasKerjaStatusSeeder extends Seeder
             'is_deleted' => 0
         ]);
 
-        KertasKerjaStatus::create([
+
+
+        SuratPerintahStatus::create([
             'id' => 6,
             'code' => 'review_lhp',
             'description' => 'Perlu Di Revisi Pengendali Teknis',
@@ -90,10 +100,12 @@ class KertasKerjaStatusSeeder extends Seeder
             'is_deleted' => 0
         ]);
 
-        KertasKerjaStatus::create([
+
+
+        SuratPerintahStatus::create([
             'id' => 7,
             'code' => 'approved_lhp',
-            'description' => 'Telah Di Setujui Inspektur',
+            'description' => 'Sudah Di Setujui Inspektur',
             'created_at' => NULL,
             'created_by' => 0,
             'updated_at' => NULL,

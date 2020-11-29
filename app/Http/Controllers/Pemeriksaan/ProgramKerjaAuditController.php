@@ -8,6 +8,7 @@ use App\Repository\SuratPerintah\SuratPerintah;
 use App\Service\SuratPerintah\SuratPerintahService;
 use App\Service\Pemeriksaan\ProgramKerjaAuditService;
 use Datatables;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProgramKerjaAuditController extends Controller
@@ -33,10 +34,48 @@ class ProgramKerjaAuditController extends Controller
         return redirect("/pemeriksaan/program-kerja-audit/edit/".$id_sp);
     }
 
+    public function review($id)
+    {
+        $data = SuratPerintah::findOrFail($id);
+        $program_kerja_audit = ProgramKerjaAudit::all();
+        return view('/pemeriksaan/program-kerja-audit/program_kerja_audit-review', [
+            'data' => $data,
+            'program_kerja_audit' => $program_kerja_audit,
+        ]);
+    }
+
+    public function detail($id)
+    {
+        $data = SuratPerintah::findOrFail($id);
+        $program_kerja_audit = ProgramKerjaAudit::all();
+        return view('/pemeriksaan/program-kerja-audit/program_kerja_audit-detail', [
+            'data' => $data,
+            'program_kerja_audit' => $program_kerja_audit,
+        ]);
+    }
+
+    public function submit_review($id, Request $request){
+        if($request->input('step_approve') == 'review') {
+            ProgramKerjaAuditService::review($id, $request->input());
+            $request->session()->flash('success', "Data berhasil disimpan!");
+            return redirect("/pemeriksaan/program-kerja-audit/review/".$id);
+        } else {
+            ProgramKerjaAuditService::approve($id);
+            $request->session()->flash('success', "Data berhasil disimpan!");
+            return redirect("/pemeriksaan/program-kerja-audit");
+        }
+    }
+
     public function list_datatables_api()
     {
         $data = SuratPerintahService::get_valid_sp(true)
             ->with((['wilayah', 'kegiatan']));
+            
+        if(Auth::user()->role->id != 1) {
+            $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
+            $data = $data->whereRaw('(id_ketua_tim = '.$id_pegawai. ' OR id_pengendali_teknis = '. $id_pegawai .')');
+        }
+        
         return Datatables::eloquent($data)->toJson();
     }
 }

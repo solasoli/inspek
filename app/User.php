@@ -41,4 +41,10 @@ class User extends Authenticatable
     {
       return $this->belongsTo('App\Repository\ACL\Role', 'id_role');
     }
+
+    
+    public function user_pegawai()
+    {
+      return $this->hasOne('App\Repository\Pegawai\UserPegawai', 'id_user');
+    }
 }

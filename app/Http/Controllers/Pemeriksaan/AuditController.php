@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pemeriksaan;
 
 use App\Http\Controllers\Controller;
+use App\Repository\Pemeriksaan\AuditBerkas;
 use App\Repository\Pemeriksaan\KertasKerja;
 use App\Repository\SuratPerintah\SuratPerintah;
 use App\Service\SuratPerintah\SuratPerintahService;
@@ -55,6 +56,23 @@ class AuditController extends Controller
     }
 
 
+    public function detail($id)
+    {
+        $data = KertasKerja::findOrFail($id);
+        $sp = SuratPerintah::findOrFail($data->surat_perintah->id);
+        return view('/pemeriksaan/audit/audit-detail', [
+            'data' => $data,
+            'sp' => $sp
+        ]);
+    }
+
+    public function remove_audit_berkas($id) {
+        $audit = AuditBerkas::find($id);
+        $audit->is_deleted = 1;
+        $audit->save();
+
+    }
+
     public function review($id)
     {
         $data = KertasKerja::findOrFail($id);
@@ -79,10 +97,23 @@ class AuditController extends Controller
         }
     }
 
+    
+    public function submit_kompilasi($id_sp, Request $request){
+        AuditService::submit_kompilasi($id_sp, $request->input());
+        $request->session()->flash('success', "Data berhasil disimpan!");
+        return redirect("/pemeriksaan/audit/review_list/".$id_sp);
+    }
+
     public function list_datatables_api()
     {
         $data = SuratPerintahService::get_valid_sp(true)
-            ->with((['wilayah', 'kegiatan']));
+            ->with((['wilayah', 'kegiatan','status']));
+    
+        if(Auth::user()->role->id != 1) {
+            $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
+            $data = $data->whereRaw('(id_ketua_tim = '.$id_pegawai. ' OR (select count(id) FROM pkpt_surat_perintah_anggota WHERE id_anggota = '. $id_pegawai .') > 0)');
+        }
+        
         return Datatables::eloquent($data)->toJson();
     }
 
@@ -102,8 +133,8 @@ class AuditController extends Controller
         $file->move($tujuan_upload, $nama_file);
 
         // insert into audit berkas
-        AuditService::insert_berkas($id, $nama_file);
+        $insert_berkas = AuditService::insert_berkas($id, $nama_file);
 
-        return ['file_url' => URL::to('upload_file/'.$nama_file), 'file_name' => $nama_file];
+        return ['file_url' => URL::to('upload_file/'.$nama_file), 'file_name' => $nama_file, 'id' => $insert_berkas->id];
     }
 }

@@ -65,6 +65,11 @@ class SuratPerintah extends BaseModel
     return $this->hasMany('App\Repository\Pemeriksaan\ProgramKerjaAudit', 'id_surat_perintah');
   }
   
+  public function program_kerja_audit_review()
+  {
+    return $this->hasMany('App\Repository\Pemeriksaan\ProgramKerjaAuditReview', 'id_surat_perintah');
+  }
+
   public function langkah_kerja_pemeriksaan()
   {
     return $this->hasMany('App\Repository\Pemeriksaan\LangkahKerjaPemeriksaan', 'id_surat_perintah');

@@ -27,42 +27,95 @@
         </nav>
     </div>
 
+    <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
+        <h4 class="tx-gray-800 mg-b-5">Uraian Singkat</h4>
+    </div>
+
+    <div class="br-pagebody">
+        <div class="row">
+            <div class="col-lg-12 widget-2 px-0">
+                <div class="card shadow-base">
+
+                    <div class="card-header alert-success">
+                        <h6 class="card-title">Berkas Audit</h6>
+                    </div>
+                    <div class="card-body">
+                        <ol class='file-upload-res'>
+                        @foreach($data->audit_berkas as $idx => $row)
+                            <li><a href='{{ URL::to('upload_file/'.$row->file_url) }}'>{{ $row->file_url }}</a></li>
+                        @endforeach
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <form class="form-layout form-layout-5" id='form-review' style="padding-top:0" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
         <input type='hidden' name='mapping_kki' value='' id='mapping-kki'>
         <input type='hidden' name='step_approve' value='' id='step-approve'>
+        <div class="br-pagebody">
+            @if (Session::has('error'))
+                <div class="row">
+                    <div class="alert alert-danger col-lg-12">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="d-flex align-items-center justify-content-start">
+                            <span>{!! Session::get('error') !!}</span>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if (Session::has('success'))
+                <div class="row">
+                    <div class="alert alert-success col-lg-12">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="d-flex align-items-center justify-content-start">
+                            <span>{!! Session::get('success') !!}</span>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            <div class="row">
+                <div class="col-lg-12 widget-2 px-0">
+                    <div class="card shadow-base">
+
+                        <div class="card-header alert-success">
+                            <h6 class="card-title">Uraian Singkat</h6>
+                        </div>
+                        <div class="card-body">
+                            {!! $data->uraian_singkat !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- br-pagebody -->
 
         <div class='cover-kertas-kerja-ikhtisar'>
             @php
-            
             $idx_kki = 1;
+            $kki = $data->kertas_kerja_ikhtisar->where('created_by', Auth::user()->id);   
             @endphp
-            @foreach ($data->audit_kertas_kerja as $row)
-                @php
-                $kki = $row->kertas_kerja_ikhtisar->where('is_compilation', 1);   
-                @endphp
-                @if($kki->count() > 0)
-                    @foreach($kki as $ix => $rw)
-                        {{ adt_kertas_kerja_ikhtisar_review($idx_kki, $rw, 'lhp') }}
+            @if($kki->count() > 0)
+                @foreach($kki as $idx => $row)
+                    {{ adt_kertas_kerja_ikhtisar_detail($idx +1, $row) }}
 
-                        @php
-                        $idx_kki++;   
-                        @endphp
-                    @endforeach
+                    @php
+                     $idx_kki++;   
+                    @endphp
+                @endforeach
 
-                @endif
-            @endforeach
+            @endif
         </div>
 
         <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-start">
-                    <a href='{{ URL::to('/pemeriksaan/laporan_lhp/')}}' class="btn btn-info">Kembali Ke Review</a>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-end">
-                    <button type="button" class="btn btn-info review-submit"><i class="fa fa-star"></i> Review</button> &nbsp;
-                    <button type="button" class="btn btn-primary approve-submit"><i class="fa fa-check"></i> Approve</button>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <a href='{{ URL::to('/pemeriksaan/audit/review_list/'.$data->surat_perintah->id)}}' class="btn btn-info">Kembali Ke Review</a>
                 </div>
             </div>
         </div>

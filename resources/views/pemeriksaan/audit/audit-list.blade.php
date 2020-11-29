@@ -82,6 +82,7 @@
                                     <th>Irban</th>
                                     <th>Kegiatan</th>
                                     <th>No Surat Perintah</th>
+                                    <th>status</th>
                                     <th style='width:195px'>Aksi</th>
                                 </tr>
                             </thead>
@@ -132,6 +133,10 @@
                         }
                     },
                     {
+                        data: 'status.description',
+                        name: 'status.description'
+                    },
+                    {
                         data: null,
                         orderable: false,
                         render: function(data, type, row) {
@@ -139,7 +144,7 @@
 
                             
                             
-                            @if(can_access("program_kerja_audit", "edit"))
+                            @if(can_access("audit", "edit"))
                             return_button += `<a href="{{ URL::to('/pemeriksaan/audit') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
                             @endif
 

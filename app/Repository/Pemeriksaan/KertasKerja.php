@@ -21,12 +21,12 @@ class KertasKerja extends BaseModel
 
   public function audit_berkas()
   {
-    return $this->hasMany('App\Repository\Pemeriksaan\AuditBerkas', 'id_kertas_kerja');
+    return $this->hasMany('App\Repository\Pemeriksaan\AuditBerkas', 'id_kertas_kerja')->where("adt_audit_berkas.is_deleted", 0);
   }
 
   public function review()
   {
-    return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaReview', 'id_kertas_kerja');
+    return $this->hasMany('App\Repository\Pemeriksaan\KertasKerjaReview', 'id_kertas_kerja')->where("adt_audit_kertas_kerja_review.is_deleted" , 0);
   }
 
   public function oleh()

@@ -10,6 +10,8 @@ use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaan;
 use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedur;
 use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedurDetail;
 use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanProsedurPelaksana;
+use App\Repository\Pemeriksaan\LangkahKerjaPemeriksaanReview;
+use App\Repository\Pemeriksaan\ProgramKerjaAuditReview;
 use App\Repository\SuratPerintah\SuratPerintah;
 
 class ProgramKerjaAuditService
@@ -47,7 +49,7 @@ class ProgramKerjaAuditService
 
         $t = ProgramKerjaAudit::firstOrNew([
           'id_surat_perintah' => $id_sp,
-          'id_program_kerja_audit' => $val->id
+          'id_program_kerja_audit' => $val->id,
         ]);
         $t->isi = $isi;
         $t->created_at = date('Y-m-d H:i:s');
@@ -158,6 +160,64 @@ class ProgramKerjaAuditService
 
       LangkahKerjaPemeriksaan::where('id_surat_perintah', $id_sp)->whereNotIn('id', $id_lkp)->update($delete_data);
 
+      DB::commit();
+    });
+  }
+
+  public static function review($id_sp, $data)
+  {
+    DB::transaction(function () use ($id_sp, $data) {
+
+      // find surat perintah
+      $surat_perintah = SuratPerintah::findOrFail($id_sp);
+      $program_kerja_audit = MstProgramKerjaAudit::all();
+
+      foreach ($program_kerja_audit as $key => $val) {
+        $nama_field = str_replace(' ', '_', strtolower(trim($val->nama))) . '_rka';
+        $isi = $data[$nama_field];
+
+        $t = ProgramKerjaAuditReview::firstOrNew([
+          'id_surat_perintah' => $id_sp,
+          'id_program_kerja_audit' => $val->id,
+        ]);
+        $t->isi = $isi;
+        $t->created_at = date('Y-m-d H:i:s');
+        $t->created_by = Auth::id();
+        $t->save();
+      }
+
+      foreach($surat_perintah->langkah_kerja_pemeriksaan as $row) {
+        
+        $t = LangkahKerjaPemeriksaanReview::where('id_langkah_kerja_pemeriksaan', $row->id)
+        ->where('is_deleted', 0)->first();
+        if(!is_null($t)) {
+          $t->isi = $data['lkp_review_'.$row->id];
+          $t->save();
+        } else {
+          $t = new LangkahKerjaPemeriksaanReview;
+          $t->isi = $data['lkp_review_'.$row->id];
+          $t->id_langkah_kerja_pemeriksaan = $row->id;
+          $t->save();
+        }
+      }
+      DB::commit();
+    });
+  }
+
+  public static function approve($id_sp)
+  {
+    DB::transaction(function () use ($id_sp) {
+
+      // find surat perintah
+      $surat_perintah = SuratPerintah::findOrFail($id_sp);
+      $surat_perintah->is_approved_pka = 1;
+      $surat_perintah->save();
+
+      foreach($surat_perintah->langkah_kerja_pemeriksaan as $row) {
+        
+        $t = LangkahKerjaPemeriksaanReview::where('id_langkah_kerja_pemeriksaan', $row->id)
+        ->update(['is_deleted' => 1]);
+      }
       DB::commit();
     });
   }

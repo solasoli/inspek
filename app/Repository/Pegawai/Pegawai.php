@@ -13,6 +13,11 @@ class Pegawai extends BaseModel
     return $this->belongsTo('App\Repository\Pegawai\PangkatGolongan', 'id_pangkat_golongan');
   }
 
+  public function user_pegawai()
+  {
+    return $this->hasOne('App\Repository\Pegawai\UserPegawai', 'id_pegawai');
+  }
+
   public function pangkat()
   {
     return $this->belongsTo('App\Repository\Pegawai\Pangkat', 'id_pangkat');

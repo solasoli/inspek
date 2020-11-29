@@ -92,6 +92,12 @@
                             <hr>
                             <h6 class="card-title">Review</h6>
                             <br>
+                            <ul>
+                                @foreach($data->review->where('tipe','!=', 'audit') as $row)
+                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->uraian_singkat !!} </li>
+                                @endforeach
+                            </ul>
+                            <br>
                             @php 
                             $review_uraian_singkat = $data->review->where('tipe','audit')->first();
                             @endphp
@@ -123,8 +129,11 @@
 
         <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button type="button" class="btn btn-info review-submit"><i class="fa fa-star"></i> Review</button>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-start">
+                    <a href='{{ URL::to('/pemeriksaan/audit/review_list/'.$data->surat_perintah->id)}}' class="btn btn-info">Kembali Ke Review</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-end">
+                    <button type="button" class="btn btn-info review-submit"><i class="fa fa-star"></i> Review</button>&nbsp;
                     <button type="button" class="btn btn-primary approve-submit"><i class="fa fa-check"></i> Approve</button>
                 </div>
             </div>

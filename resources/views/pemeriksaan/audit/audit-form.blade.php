@@ -65,7 +65,10 @@
                         <ol class='file-upload-res'>
                         @if(isset($data))
                             @foreach($data->audit_berkas as $idx => $row)
-                                <li><a href='{{ URL::to('upload_file/'.$row->file_url) }}'>{{ $row->file_url }}</a></li>
+                                <li>
+                                    <a href='{{ URL::to('upload_file/'.$row->file_url) }}' style='margin-right: 20px'>{{ $row->file_url }}</a>
+                                    <a href='#' class="btn btn-danger btn-xs btn-remove-file" data-id='{{ $row->id }}'><i class="fa fa-close"></i></a> 
+                                </li>
                             @endforeach
                         @endif
                         </ol>
@@ -205,7 +208,10 @@
             $(".dropzone").dropzone({
                 success: function(res){
                     const resJson = JSON.parse(res.xhr.response)
-                    $(".file-upload-res").append(`<li><a href='${resJson.file_url}'>${resJson.file_name}</a>`)
+                    $(".file-upload-res").append(`<li>
+                        <a href='${resJson.file_url}' style='margin-right: 20px'>${resJson.file_name}</a>
+                        <a href='#' class="btn btn-danger btn-xs btn-remove-file" data-id='${resJson.id}'><i class="fa fa-close"></i></a> 
+                    </li>`)
                 }
             })
 
@@ -386,6 +392,18 @@
                 }
             }
 
+            function confirmRemoveBerkas() {
+                return confirm("Apakah anda yakin untuk menghapus berkas ini ?")
+            }
+
+            $(document).on('click', ".btn-remove-file" , function() {
+                const confirm = confirmRemoveBerkas()
+                if(confirm) {
+                    $.get(`{{ URL::to("/pemeriksaan/audit/remove_audit_berkas/") }}/${$(this).data('id')}`)
+                    $(this).parent().remove()
+                }
+            })
+
             
             $('#form-audit').on('submit', function(e) {
                 e.preventDefault()
@@ -393,8 +411,6 @@
                     '_token',
                     'uraian_singkat',
                 ]
-
-                console.log(fixInput)
 
                 let input = $(this).serializeArray()
                 input = input.filter(r => fixInput.indexOf(r.name) !== -1)

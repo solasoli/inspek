@@ -81,6 +81,7 @@
                                     <th>Type</th>
                                     <th>Irban</th>
                                     <th>Kegiatan</th>
+                                    <th>Status</th>
                                     <th>No Surat Perintah</th>
                                     <th style='width:195px'>Aksi</th>
                                 </tr>
@@ -124,6 +125,15 @@
                         data: 'kegiatan.nama',
                         name: 'kegiatan.nama'
                     },
+                    
+                    {
+                        data: null,
+                        orderable: false,
+                        searcable: false,
+                        render: function(data, type, row) {
+                            return data.is_approved_pka == 0 ? 'Not Approved' : 'Approved'
+                        }
+                    },
                     {
                         data: 'no_surat',
                         name: 'no_surat',
@@ -134,19 +144,21 @@
                     {
                         data: null,
                         orderable: false,
+                        searcable: false,
                         render: function(data, type, row) {
                             var return_button = "";
 
-                            
-                            @if(can_access("program_kerja_audit", "add"))
-                            return_button += `<a href='{{ URL::to('/pemeriksaan/program-kerja-audit') }}/edit/${row.id}' class="btn btn-xs btn-success"><i class='fa fa-pencil'></i> Program Kerja</a> `
-                            @endif
-                            
-                            @if(can_access("program_kerja_audit", "edit"))
-                            return_button += `<a href="{{ URL::to('/pemeriksaan/program-kerja-audit') }}/review/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
-                            @endif
+                            if(data.is_approved_pka == 0) {
+                                @if(can_access("program_kerja_audit", "add"))
+                                return_button += `<a href='{{ URL::to('/pemeriksaan/program-kerja-audit') }}/edit/${row.id}' class="btn btn-xs btn-success"><i class='fa fa-pencil'></i> Program Kerja</a> `
+                                @endif
+                                
+                                @if(can_access("program_kerja_audit", "edit"))
+                                return_button += `<a href="{{ URL::to('/pemeriksaan/program-kerja-audit') }}/review/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
+                                @endif
+                            }
 
-                            return_button += `<a href="detail_penentuan.html" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
+                            return_button += `<a href="{{ URL::to('/pemeriksaan/program-kerja-audit') }}/detail/${row.id}" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> Detail</a>`
                             return return_button == "" ? "-" : return_button
                         }
                     },

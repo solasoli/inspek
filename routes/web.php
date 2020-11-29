@@ -20,6 +20,8 @@ Route::get('/login', 'Auth\CustomLoginController@index')->name('login');
 Route::get('/403', 'Auth\CustomLoginController@not_allowed')->name('unauthorized');
 Route::post('/login', 'Auth\CustomLoginController@login_proses');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/sync_user_pegawai', 'DashboardController@sync_user_pegawai');
+
 
 Route::middleware(['auth'])->group(function () {
 
@@ -235,8 +237,10 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Pemeriksaan\ProgramKerjaAuditController@index');
       Route::get('/datatables', 'Pemeriksaan\ProgramKerjaAuditController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\ProgramKerjaAuditController@edit');
+      Route::get('/review/{id}', 'Pemeriksaan\ProgramKerjaAuditController@review');
+      Route::get('/detail/{id}', 'Pemeriksaan\ProgramKerjaAuditController@detail');
 
-      
+      Route::post('/review/{id}', 'Pemeriksaan\ProgramKerjaAuditController@submit_review');
       Route::post('/edit/{id}', 'Pemeriksaan\ProgramKerjaAuditController@update');
     });
 
@@ -247,26 +251,33 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/edit/{id}', 'Pemeriksaan\AuditController@edit');
       Route::get('/review_list/{id}', 'Pemeriksaan\AuditController@review_list');
       Route::get('/review/{id}', 'Pemeriksaan\AuditController@review');
-      Route::post('/review/{id}', 'Pemeriksaan\AuditController@submit_review');
+      Route::get('/detail/{id}', 'Pemeriksaan\AuditController@detail');
+      Route::get('/remove_audit_berkas/{id}', 'Pemeriksaan\AuditController@remove_audit_berkas');
 
       Route::post("/upload_bukti_kertas_kerja/{id}", "Pemeriksaan\AuditController@upload_bukti_kertas_kerja");
+      Route::post('/submit_kompilasi/{id}', 'Pemeriksaan\AuditController@submit_kompilasi');
       Route::post('/edit/{id}', 'Pemeriksaan\AuditController@update');
+      Route::post('/review/{id}', 'Pemeriksaan\AuditController@submit_review');
     });
 
     Route::prefix('laporan_nhp')->group(function () {
       Route::get('/', 'Pemeriksaan\LaporanNhpController@index');
       Route::get('/review_list/{id}', 'Pemeriksaan\LaporanNhpController@review_list');
       Route::get('/review/{id}', 'Pemeriksaan\LaporanNhpController@review');
-      Route::post('/review/{id}', 'Pemeriksaan\LaporanNhpController@submit_review');
+      Route::get('/detail/{id}', 'Pemeriksaan\LaporanNhpController@detail');
       Route::get('/datatables/{status}', 'Pemeriksaan\LaporanNhpController@list_datatables_api');
+
+      Route::post('/review/{id}', 'Pemeriksaan\LaporanNhpController@submit_review');
     });
 
     Route::prefix('laporan_lhp')->group(function () {
       Route::get('/', 'Pemeriksaan\LaporanLhpController@index');
       Route::get('/review_list/{id}', 'Pemeriksaan\LaporanLhpController@review_list');
       Route::get('/review/{id}', 'Pemeriksaan\LaporanLhpController@review');
-      Route::post('/review/{id}', 'Pemeriksaan\LaporanLhpController@submit_review');
+      Route::get('/detail/{id}', 'Pemeriksaan\LaporanLhpController@detail');
       Route::get('/datatables/{status}', 'Pemeriksaan\LaporanLhpController@list_datatables_api');
+      
+      Route::post('/review/{id}', 'Pemeriksaan\LaporanLhpController@submit_review');
     });
 
     Route::get('/dalnis/buat-sasaran', 'Pemeriksaan\BuatSasaran@index');

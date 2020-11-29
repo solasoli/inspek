@@ -1,6 +1,5 @@
 @php
 $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
-$review = $data->review->where('tipe',$tipe_review)->first();
 @endphp
 <style>
   .wizard > .content > .body ul.list-unstyled {
@@ -41,15 +40,6 @@ $review = $data->review->where('tipe',$tipe_review)->first();
                             </div>
                             <h6>Judul Kondisi</h6>
                             {!! $data->judul_kondisi !!}
-                            <hr>
-                            <h6>Review</h6>
-                            
-                            @foreach($data->review->where('tipe','!=', $tipe_review) as $row)
-                              @if($row->judul_kondisi !='')
-                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->judul_kondisi !!} </li>
-                              @endif
-                            @endforeach
-                            <textarea name="judul_kondisi" class='text-wizard' id="judul_kondisi_{{ $tagIdx }}" rows="10" cols="80">{{ isset($review) ? $review->judul_kondisi : "" }}</textarea>
                         </section>
 
                         <h3>Uraian Kondisi</h3>
@@ -73,70 +63,31 @@ $review = $data->review->where('tipe',$tipe_review)->first();
                             </div>
                             <h6>Uraian Kondisi</h6>
                             {!! $data->uraian_kondisi !!}
-                            <hr>
-                            <h6>Review</h6>
-                            
-                            @foreach($data->review->where('tipe','!=', $tipe_review) as $row)
-                            
-                              @if($row->uraian_kondisi !='')
-                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->uraian_kondisi !!} </li>
-                              @endif
-                            @endforeach
-                            <textarea name="uraian_kondisi" class='text-wizard' id="uraian_kondisi_{{ $tagIdx }}" rows="10" cols="80">{{ isset($review) ? $review->uraian_kondisi : "" }}</textarea>
                         </section>
 
                         <h3>Kriteria</h3>
                         <section>
                             <h5>Kriteria</h5>
                             {!! $data->kriteria !!}
-                            <hr>
-                            <h6>Review</h6>
-                            
-                            @foreach($data->review->where('tipe','!=', $tipe_review) as $row)
-                              @if($row->kriteria !='')
-                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->kriteria !!} </li>
-                              @endif
-                            @endforeach
-                            <textarea name="kriteria" class='text-wizard' id="kriteria_{{ $tagIdx }}" rows="10" cols="80">{{ isset($review) ? $review->kriteria : "" }}</textarea>
                         </section>
 
                         <h3>Sebab</h3>
                         <section>
                             <h5>Sebab</h5>
                             {!! $data->sebab !!}
-                            <hr>
-                            <h6>Review</h6>
-                            
-                            @foreach($data->review->where('tipe','!=', $tipe_review) as $row)
-                              @if($row->sebab !='')
-                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->sebab !!} </li>
-                              @endif
-                            @endforeach
-                            <textarea name="sebab" class='text-wizard' id="sebab_{{ $tagIdx }}" rows="10" cols="80">{{ isset($review) ? $review->sebab : "" }}</textarea>
                         </section>
 
                         <h3>Akibat</h3>
                         <section>
                             <h5>Akibat</h5>
                             {!! $data->akibat !!}
-                            <h6>Review</h6>
-                            
-                            @foreach($data->review->where('tipe','!=', $tipe_review) as $row)
-                              @if($row->akibat !='')
-                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->akibat !!} </li>
-                              @endif
-                            @endforeach
-                            <textarea name="akibat" class='text-wizard' id="akibat_{{ $tagIdx }}" rows="10" cols="80">{{ isset($review) ? $review->akibat : "" }}</textarea>
                         </section>
 
                         <h3>Rekomendasi</h3>
                         <section>
                             <h5>Rekomendasi</h5>
-                            {!! $data->rekomendasi !!}
-                            <hr>
-                            <h6>Review</h6>
+                            <br>
                             <div class='kode_rekomendasi_cover'>
-                              <br>
                               <h6>Kode Rekomendasi</h6>
                               @php
                                 $valueLevelKk1 = $data->kode_rekomendasi->where('level', 1)->first();
@@ -146,18 +97,10 @@ $review = $data->review->where('tipe',$tipe_review)->first();
                                 <li>{{ $valueLevelKk1->kode_rekomendasi->kode }}. {{ $valueLevelKk1->kode_rekomendasi->rekomendasi }}</li>
                                 <li>{{ $valueLevelKk2->kode_rekomendasi->kode }}. {{ $valueLevelKk2->kode_rekomendasi->rekomendasi }}</li>
                               </ul>
-                              <hr>
                             </div>
-                            {!! $data->judul_kondisi !!}
                             <hr>
-                            <h6>Review</h6>
-                            
-                            @foreach($data->review->where('tipe','!=', $tipe_review) as $row)
-                              @if($row->rekomendasi !='')
-                                <li>Dari <b>{{ pemeriksaan_get_reviewer_tipe($row->tipe) }}</b> : {!! $row->rekomendasi !!} </li>
-                              @endif
-                            @endforeach
-                            <textarea name="rekomendasi" class='text-wizard' id="rekomendasi_{{ $tagIdx }}" rows="10" cols="80">{{ isset($review) ? $review->rekomendasi : "" }}</textarea>
+                            <h6>Rekomendasi</h6>
+                            {!! $data->rekomendasi !!}
                         </section>
 
                     </div>

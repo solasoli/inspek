@@ -30,33 +30,47 @@ class LaporanNhpController extends Controller
 
     public function review($id)
     {
-        $data = KertasKerja::findOrFail($id);
-        $sp = SuratPerintah::findOrFail($data->surat_perintah->id);
+        $sp = SuratPerintah::findOrFail($id);
         return view('/pemeriksaan/laporan_nhp/laporan_nhp-review', [
-            'data' => $data,
-            'sp' => $sp
+            'data' => $sp
         ]);
     }
 
-    public function submit_review($id_kertas_kerja, Request $request){
+    public function submit_review($id_sp, Request $request){
         if($request->input('step_approve') == 'review') {
-            AuditService::review($id_kertas_kerja, $request->input(), 'nhp');
+            AuditService::review_by_id_sp($id_sp, $request->input(), 'nhp');
             $request->session()->flash('success', "Data berhasil disimpan!");
-            return redirect("/pemeriksaan/laporan_nhp/review/".$id_kertas_kerja);
+            return redirect("/pemeriksaan/laporan_nhp/review/".$id_sp);
         } else {
-            
-            $data = KertasKerja::findOrFail($id_kertas_kerja);
-            AuditService::approve($id_kertas_kerja, 'nhp');
+            AuditService::approve_by_id_sp($id_sp, 'nhp');
             $request->session()->flash('success', "Data berhasil disimpan!");
-            return redirect("/pemeriksaan/laporan_nhp/review_list/".$data->surat_perintah->id);
+            return redirect("/pemeriksaan/laporan_nhp");
         }
     }
 
-    public function list_datatables_api()
+    public function list_datatables_api($status = 0)
     {
         $data = SuratPerintahService::get_valid_sp(true)
-            ->with((['wilayah', 'kegiatan']));
+            ->with((['wilayah', 'kegiatan', 'status']));
+        if($status == 0) {
+            $data = $data->whereIn('id_status_sp', [1,2,3]);
+        } else {
+            $data = $data->whereIn('id_status_sp', [4,5,6,7]);
+        }
+
+        if(Auth::user()->role->id != 1) {
+            $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
+            $data = $data->where('id_pengendali_teknis', $id_pegawai);
+        }
         return Datatables::eloquent($data)->toJson();
     }
 
+    
+    public function detail($id)
+    {
+        $sp = SuratPerintah::findOrFail($id);
+        return view('/pemeriksaan/laporan_nhp/laporan_nhp-detail', [
+            'data' => $sp
+        ]);
+    }
 }
