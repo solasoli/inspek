@@ -219,7 +219,8 @@ if (!function_exists("getAllParentMenuUser")) {
   {
 
     $access_user = DB::table("acl_menu AS m")
-      ->select("m.id");
+      ->select("m.id")
+      ->where('is_deleted', 0);
     if (Auth::user()->id_role != 1) {
       $access_user = $access_user->where("id_role", Auth::user()->id_role)
         ->where("view", 1)
