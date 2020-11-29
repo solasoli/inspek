@@ -84,4 +84,9 @@ class SuratPerintah extends BaseModel
   {
     return $this->belongsTo('App\Repository\SuratPerintah\SuratPerintahStatus', 'id_status_sp');
   }
+
+  public function tindak_lanjut_review()
+  {
+    return $this->hasOne('App\Repository\SuratPerintah\SuratPerintahTindakLanjutReview', 'id_surat_perintah')->where('pkpt_surat_perintah_tindak_lanjut_review.is_deleted', 0);
+  }
 }
