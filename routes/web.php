@@ -225,13 +225,13 @@ Route::middleware(['auth'])->group(function () {
   //   });
   // });
 
+  
   Route::prefix('pemeriksaan')->group(function(){
     Route::prefix('sasaran-tujuan')->group(function () {
       Route::get('/', 'Pemeriksaan\SasaranTujuanController@index');
       Route::get('/datatables', 'Pemeriksaan\SasaranTujuanController@list_datatables_api');
       Route::get('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@edit');
       Route::get('/detail/{id}', 'Pemeriksaan\SasaranTujuanController@detail');
-
       Route::post('/edit/{id}', 'Pemeriksaan\SasaranTujuanController@update');
     });
 

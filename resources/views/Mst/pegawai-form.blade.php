@@ -216,6 +216,7 @@ $(function() {
             </div>
           </div>
         </form>
+        <a href=""><button type="submit" class="btn btn-success" style="margin-top:-153px; margin-left:334px">Detail Angka Kredit</button></a>
       </div>
     </div>
   </div>
