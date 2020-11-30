@@ -256,40 +256,57 @@ $(function() {
             <div class="label-modal">Man Power</div>
 
             <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+            <div class="col-md-4 col-sm-4 col-xs-12">
+                
+              </div>
+
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                
+              <div class="card-header float-right" style="border-bottom: none;background:none;">
+                <p><input id="more_info" name="more-info" type="checkbox" />
+                  <label style="font-size:13px; margin-left:8px;">Sertakan Nama Auditor</label></p>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                 <div class="form-group row justify-content-center">
+              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
                 Wakil Penanggung Jawab :
               </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
                 <input name='jml_wakil_penanggung_jawab' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
                 Orang
               </div>
+              
             </div>
 
             <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
                 Pengendali Teknis :
               </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
                 <input name='jml_pengendali_teknis' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
                 Orang
               </div>
             </div>
 
             <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
                 Ketua Tim :
               </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
                 <input name='jml_ketua_tim' required="required" class="form-control man-power" style='max-width:50px; display: inline' value='0' type="number" autocomplete="off">
                 Orang
               </div>
             </div>
 
             <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
                 Anggota :
               </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
                 <input name='jml_anggota' style='max-width:50px; display: inline' required="required" class="form-control man-power" value='0' type="number" autocomplete="off">
                 Orang
               </div>
@@ -297,13 +314,34 @@ $(function() {
 
 
             <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
                 Total Man Power :
               </label>
-              <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="col-md-4 col-sm-4 col-xs-12">
                 <span id='jml_man_power'>0</span> Orang
               </div>
             </div>
+          </div> 
+
+          <div class="col-4">
+              <div id="conditional_part">
+                  <div class="form-group">
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+                  <div class="form-group">
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+                  <div class="form-group">
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+                  <div class="form-group">
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+                </div>
+              </div>
+              </div>
+
+            
           </div>
 
           <div class="form-group row mt-4 d-flex justify-content-center">
@@ -317,3 +355,14 @@ $(function() {
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+      $('#more_info').change(function() {
+        if(this.checked != true){
+          $("#conditional_part").hide();
+        }
+        else{
+          $("#conditional_part").show();
+        }
+      });
+</script>
