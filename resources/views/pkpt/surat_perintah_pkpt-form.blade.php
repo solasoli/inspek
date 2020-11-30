@@ -131,6 +131,30 @@
                 </div>
               </div>
 
+              <div class="form-group row">
+                <div class="col-md-3">
+                    <div class="card-header float-right" style="border-bottom: none;">
+                    <p><input id="more_info" name="more-info" type="checkbox" />
+                    <label id="data1">Jenis Kualifikasi</label></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                <div id="conditional_part">
+                  <div class="form-group">
+                    <label for="pwd">Unsur</label>
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="pwd"> Sub Unsur</label>
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="pwd">Butir Kegiatan</label>
+                    <select name="" id="" class="form-control"></select>
+                  </div>
+              </div>
+                </div>
+              </div>
 
               <div class="form-group row">
                 <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
@@ -450,5 +474,15 @@
     @endif
 
   });
+</script>
+<script type="text/javascript">
+      $('#more_info').change(function() {
+        if(this.checked != true){
+          $("#conditional_part").hide();
+        }
+        else{
+          $("#conditional_part").show();
+        }
+      });
 </script>
 @endsection
