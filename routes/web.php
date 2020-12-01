@@ -26,7 +26,8 @@ Route::get('/sync_user_pegawai', 'DashboardController@sync_user_pegawai');
 Route::middleware(['auth'])->group(function () {
 
   Route::prefix('mst')->group(function () {
-
+    Route::get('/pegawai/detail-angka-kredit', 'Mst\DetailAngkaKredit@index');
+    
     Route::prefix('skpd')->group(function () {
       Route::get('/', 'Mst\SkpdController@index');
       Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
@@ -36,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
       /* Post section */
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
+      
     });
 
     Route::prefix('kegiatan')->group(function () {
@@ -84,14 +86,11 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Mst\PegawaiController@destroy');
       Route::get('/datatables', 'Mst\PegawaiController@list_datatables_api');
       Route::get('/get_pegawai_by_id/{id}', 'Mst\PegawaiController@get_pegawai_by_id');
-
       Route::get('/inspektur', 'Mst\PegawaiController@inspektur');
       /* Post section */
       Route::post('/add', 'Mst\PegawaiController@store');
       Route::post('/edit/{id}', 'Mst\PegawaiController@update');
-
       Route::post('/inspektur', 'Mst\PegawaiController@update_inspektur');
-
       Route::post("/get_inspektur_pembantu_by_wilayah", "Mst\PegawaiController@get_inspektur_pembantu_by_wilayah");
       Route::post("/get_pengendali_teknis_by_wilayah", "Mst\PegawaiController@get_pengendali_teknis_by_wilayah");
       Route::post("/get_ketua_tim_by_wilayah", "Mst\PegawaiController@get_ketua_tim_by_wilayah");
