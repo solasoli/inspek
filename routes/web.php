@@ -324,6 +324,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pejabat-pengusul', 'AngkaKredit\PejabatPengusul@index');
     Route::get('/review-pejabat-pengusul', 'AngkaKredit\ReviewPejabatPengusul@index');
+
+    Route::get('/penetapan-dupak', 'AngkaKredit\PenetapanDupak@index');
+    Route::get('/review-penetapan-dupak', 'AngkaKredit\ReviewPenetapanDupak@index');
+    Route::get('/detail-penetapan-dupak', 'AngkaKredit\DetailPenetapanDupak@index');
   });
 
   Route::prefix('acl')->group(function () {
