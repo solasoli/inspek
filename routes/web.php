@@ -328,6 +328,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/penetapan-dupak', 'AngkaKredit\PenetapanDupak@index');
     Route::get('/review-penetapan-dupak', 'AngkaKredit\ReviewPenetapanDupak@index');
     Route::get('/detail-penetapan-dupak', 'AngkaKredit\DetailPenetapanDupak@index');
+
+    Route::get('/tim-penilai', 'AngkaKredit\TimPenilai@index');
+    Route::get('/review-tim-penilai', 'AngkaKredit\ReviewTimPenilai@index');
+    Route::get('/perbandingan-penilaian', 'AngkaKredit\PerbandinganPenilaian@index');
+    Route::get('/review-perbandingan-penilaian', 'AngkaKredit\ReviewPerbandinganPenilaian@index');
   });
 
   Route::prefix('acl')->group(function () {

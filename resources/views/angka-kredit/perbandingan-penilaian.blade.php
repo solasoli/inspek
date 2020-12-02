@@ -39,7 +39,7 @@
               <td>1</td>
               <td>Lorem Ipsum Lorem Ipsum</td>
               <td>Sudah Di Setujui</td>
-              <td><a href="/angka-kredit/review-penetapan-dupak"><button class="btn btn-info w-100">Review</button></a>
+              <td><a href="/angka-kredit/review-perbandingan-penilaian"><button class="btn btn-info w-100">Review</button></a>
                 <a href="/angka-kredit/detail-penetapan-dupak"><button class="btn btn-success w-100 mt-1">Detail</button></a>
               </td>
 

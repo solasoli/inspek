@@ -3,7 +3,7 @@
 <div class="br-mainpanel" style="margin: 0px;">
   <div class="br-pagetitle">
    <div style="padding-top: 20px">
-    <h5>Detail Penetapan Dupak</h5><br>
+   
   </div>
 </div>
 
