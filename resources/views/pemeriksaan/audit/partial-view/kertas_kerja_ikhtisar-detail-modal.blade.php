@@ -12,8 +12,8 @@
             @endphp
             <ul class="list-unstyled">
                 <li>{{ $valueLevelJk1->kode_temuan->kode }}. {{ $valueLevelJk1->kode_temuan->temuan }}</li>
-                <li>{{ $valueLevelJk2->kode_temuan->kode }}. {{ $valueLevelJk2->kode_temuan->temuan }}</li>
-                <li>{{ $valueLevelJk3->kode_temuan->kode }}. {{ $valueLevelJk3->kode_temuan->temuan }}</li>
+                <li>{{ !is_null($valueLevelJk2) ? $valueLevelJk2->kode_temuan->kode : ''}}. {{ !is_null($valueLevelJk2) ? $valueLevelJk2->kode_temuan->temuan : ''}}</li>
+                <li>{{ !is_null($valueLevelJk3) ? $valueLevelJk3->kode_temuan->kode : ''}}. {{ !is_null($valueLevelJk3) ? $valueLevelJk3->kode_temuan->temuan : ''}}</li>
             </ul>
         </div>
         <h6>Judul Kondisi</h6>

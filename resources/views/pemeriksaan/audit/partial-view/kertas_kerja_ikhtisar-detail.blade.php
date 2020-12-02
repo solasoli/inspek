@@ -33,8 +33,8 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                               @endphp
                               <ul class="list-unstyled">
                                 <li>{{ $valueLevelJk1->kode_temuan->kode }}. {{ $valueLevelJk1->kode_temuan->temuan }}</li>
-                                <li>{{ $valueLevelJk2->kode_temuan->kode }}. {{ $valueLevelJk2->kode_temuan->temuan }}</li>
-                                <li>{{ $valueLevelJk3->kode_temuan->kode }}. {{ $valueLevelJk3->kode_temuan->temuan }}</li>
+                                <li>{{ !is_null($valueLevelJk2) ? $valueLevelJk2->kode_temuan->kode : ''}}. {{ !is_null($valueLevelJk2) ? $valueLevelJk2->kode_temuan->temuan : ''}}</li>
+                                <li>{{ !is_null($valueLevelJk3) ? $valueLevelJk3->kode_temuan->kode : ''}}. {{ !is_null($valueLevelJk3) ? $valueLevelJk3->kode_temuan->temuan : ''}}</li>
                               </ul>
                               <hr>
                             </div>
@@ -56,8 +56,8 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                               @endphp
                               <ul class="list-unstyled">
                                 <li>{{ $valueLevelUk1->kode_temuan->kode }}. {{ $valueLevelUk1->kode_temuan->temuan }}</li>
-                                <li>{{ $valueLevelUk2->kode_temuan->kode }}. {{ $valueLevelUk2->kode_temuan->temuan }}</li>
-                                <li>{{ $valueLevelUk3->kode_temuan->kode }}. {{ $valueLevelUk3->kode_temuan->temuan }}</li>
+                                <li>{{ !is_null($valueLevelUk2) ? $valueLevelUk2->kode_temuan->kode : ''}}. {{ !is_null($valueLevelUk2) ? $valueLevelUk2->kode_temuan->temuan : ''}}</li>
+                                <li>{{ !is_null($valueLevelUk3) ? $valueLevelUk3->kode_temuan->kode : ''}}. {{ !is_null($valueLevelUk3) ? $valueLevelUk3->kode_temuan->temuan : ''}}</li>
                               </ul>
                               <hr>
                             </div>
