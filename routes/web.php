@@ -321,6 +321,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/sekretariat-dupak', 'AngkaKredit\SekretariatDupak@index');
     Route::get('/review-sekretariat-dupak', 'AngkaKredit\ReviewSekretariatDupak@index');
+
+    Route::get('/pejabat-pengusul', 'AngkaKredit\PejabatPengusul@index');
+    Route::get('/review-pejabat-pengusul', 'AngkaKredit\ReviewPejabatPengusul@index');
   });
 
   Route::prefix('acl')->group(function () {
