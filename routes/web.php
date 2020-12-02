@@ -189,7 +189,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables_penomeran_lhp_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_lhp_api');
       
 
-      Route::get('/nomor-surat-perintah', 'Pkpt\SuratPerintahController@penomoran_surat');
+      Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');

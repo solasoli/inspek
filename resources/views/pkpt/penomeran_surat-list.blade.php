@@ -16,12 +16,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="#">PKPT</a>
-    <span class="breadcrumb-item active">PeNomoran Surat Perintah</span>
+    <span class="breadcrumb-item active">Penomeran Surat Perintah</span>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">PeNomoran Surat Perintah</h4>
+  <h4 class="tx-gray-800 mg-b-5">Penomeran Surat Perintah</h4>
 </div>
 
 
@@ -51,8 +51,8 @@
 
 
           <ul class="nav nav-tabs nav-justified mb-4">
-            <li class="nav-item"><a href="#not_avail" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Memiliki Nomor</a></li>
-            <li class="nav-item"><a href="#avail" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Memiliki Nomor</a></li>
+            <li class="nav-item"><a href="#not_avail" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Memiliki nomer</a></li>
+            <li class="nav-item"><a href="#avail" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Memiliki nomer</a></li>
           </ul>
 
           <div class="tab-content">
@@ -101,7 +101,7 @@
   </div>
 
 <!-- modal add -->
-@include('pkpt.penomoran_surat-form')
+@include('pkpt.penomeran_surat-form')
 
 @endsection
 
@@ -119,7 +119,7 @@ $(function() {
       responsive: true,
       processing: true,
       serverSide: true,
-      ajax: '{{URL::to('pkpt/surat_perintah/datatables_peNomoran_api/0')}}',
+      ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_api/0')}}',
       columns: [
         { data: 'wilayah.nama', name: 'wilayah.nama'},
         { data: 'kegiatan.nama', name: 'kegiatan.nama'},
@@ -139,7 +139,7 @@ $(function() {
 
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          return_button += " <a class='btn btn-success btn-xs btn-modal-Nomor' data-toggle='modal' data-target='#NomorModal' data-id='" + data.id + "' href='#'><i class='fa fa-edit'></i> Beri Nomor</a>";
+          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' href='#'><i class='fa fa-edit'></i> Beri nomer</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
@@ -160,7 +160,7 @@ $(function() {
       responsive: true,
       processing: true,
       serverSide: true,
-      ajax: '{{URL::to('pkpt/surat_perintah/datatables_peNomoran_api/1')}}',
+      ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_api/1')}}',
       columns: [
         { data: 'no_surat', name: 'no_surat'},
         { data: 'wilayah.nama', name: 'wilayah.nama'},
@@ -182,7 +182,7 @@ $(function() {
 
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          return_button += " <a class='btn btn-success btn-xs btn-modal-Nomor' data-toggle='modal' data-target='#NomorModal' data-id='" + data.id + "' data-Nomor='" + data.no_surat + "' href='#'><i class='fa fa-edit'></i> Rubah Nomor</a>";
+          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' data-nomer='" + data.no_surat + "' href='#'><i class='fa fa-edit'></i> Rubah nomer</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
@@ -194,11 +194,11 @@ $(function() {
   });
 
 
-  $(document).on('click', '.btn-modal-Nomor', function() {
-    $("#id_peNomoran").val($(this).data('id'))
+  $(document).on('click', '.btn-modal-nomer', function() {
+    $("#id_penomeran").val($(this).data('id'))
     $(".no-surat").val('');
-      if(typeof $(this).data('Nomor') != 'undefined') {
-        $(".no-surat").val($(this).data('Nomor'));
+      if(typeof $(this).data('nomer') != 'undefined') {
+        $(".no-surat").val($(this).data('nomer'));
       }
   })
 
@@ -208,7 +208,7 @@ $(function() {
       $(".alert-success").hide(1000);
     }, 3000);
 
-    $('#NomorModal').on('show.bs.modal', function () {
+    $('#nomerModal').on('show.bs.modal', function () {
       $(this).find('form').trigger('reset');
     });
 
