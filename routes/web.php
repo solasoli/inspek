@@ -316,7 +316,11 @@ Route::middleware(['auth'])->group(function () {
 
   Route::prefix('angka-kredit')->group(function(){
     Route::get('/perhitungan-angka-kredit', 'AngkaKredit\PerhitunganAngkaKredit@index');
+    Route::get('/tambah-angka-kredit', 'AngkaKredit\TambahAngkaKredit@index');
+    Route::get('/edit-angka-kredit', 'AngkaKredit\EditAngkaKredit@index');
 
+    Route::get('/sekretariat-dupak', 'AngkaKredit\SekretariatDupak@index');
+    Route::get('/review-sekretariat-dupak', 'AngkaKredit\ReviewSekretariatDupak@index');
   });
 
   Route::prefix('acl')->group(function () {
