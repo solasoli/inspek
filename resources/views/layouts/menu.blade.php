@@ -120,7 +120,7 @@ function getChildMenu($menu_id) {
   </div>
 </a>
 <ul class="br-menu-sub nav flex-column">
-  <li class="nav-item"><a href="/angka-kredit/tim-penilai/penilaian-angka-kredit" class="nav-link">Penilaian Angka Kredit</a></li>
+  <li class="nav-item"><a href="/angka-kredit/tim-penilai/penilaian-angka-kredit" class="nav-link">Perhitungan Angka Kredit</a></li>
 </ul>
 
 

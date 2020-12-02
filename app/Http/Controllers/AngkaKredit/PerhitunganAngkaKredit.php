@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
 
-class PenilaianAngkaKredit extends Controller{
+class PerhitunganAngkaKredit extends Controller{
     public function index()
     {
-        return view('/angka-kredit/tim-penilai/penilaian-angka-kredit');
+        return view('/angka-kredit/perhitungan-angka-kredit');
     }
 }

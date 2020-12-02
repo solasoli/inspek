@@ -133,8 +133,6 @@ $(function() {
             </div>
           </div>
 
-
-
           <div class="form-group row" style="display: none">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Pangkat <span class="required">*</span> :
