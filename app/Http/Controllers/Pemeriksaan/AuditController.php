@@ -54,7 +54,7 @@ class AuditController extends Controller
     {
         $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
         $sp = SuratPerintah::findOrFail($id);
-        if(Auth::user()->role->id != 1 || $id_pegawai != $sp->id_ketua_tim) {
+        if(Auth::user()->role->id != 1 && $id_pegawai != $sp->id_ketua_tim) {
             $kk = KertasKerja::where('created_by', Auth::user()->id)->first();
             
             if($kk != null) {
