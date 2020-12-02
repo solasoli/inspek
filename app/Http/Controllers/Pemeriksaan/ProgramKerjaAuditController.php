@@ -15,7 +15,10 @@ class ProgramKerjaAuditController extends Controller
 {
     public function index()
     {
-        return view('/pemeriksaan/program-kerja-audit/program_kerja_audit-list');
+        $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
+        return view('/pemeriksaan/program-kerja-audit/program_kerja_audit-list',[
+            'id_pegawai'=> $id_pegawai
+        ]);
     }
 
     public function edit($id)

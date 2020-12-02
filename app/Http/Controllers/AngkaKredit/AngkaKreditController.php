@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Pemeriksaan;
+namespace App\Http\Controllers\AngkaKredit;
 
 use App\Http\Controllers\Controller;
+use App\Repository\AngkaKredit\Unsur;
+use App\Repository\Pegawai\Pegawai;
 use App\Repository\Pemeriksaan\AuditBerkas;
 use App\Repository\Pemeriksaan\KertasKerja;
 use App\Repository\SuratPerintah\SuratPerintah;
@@ -13,21 +15,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Auth;
 
-class AuditController extends Controller
+class AngkaKreditController extends Controller
 {
     public function index()
     {
         $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
-        return view('/pemeriksaan/audit/audit-list',[
-            'id_pegawai' => $id_pegawai
+        $unsur = Unsur::where('is_deleted', 0)->get();
+        return view('/angka_kredit/angka_kredit/angka_kredit-list',[
+            'id_pegawai' => $id_pegawai,
+            'unsur' => $unsur
         ]);
     }
 
-    public function add($id)
+    public function add($code)
     {
-        $new_kertas_kerja = KertasKerja::create(['id_surat_perintah' => $id]);
-        return redirect("/pemeriksaan/audit/edit/".$new_kertas_kerja->id);
-
+        if($code == 'pendidikan') {
+            $pegawai = Pegawai::where('is_deleted', 0)->get();
+            $unsur = Unsur::where('is_deleted', 0)->where('code', 'pendidikan')->first();
+            return view('/angka_kredit/angka_kredit/pendidikan/angka_kredit_pendidikan-form',[
+                'unsur' => $unsur,
+                'pegawai' => $pegawai
+            ]);
+        }
     }
     
     public function store($id_sp, Request $request){
@@ -122,8 +131,7 @@ class AuditController extends Controller
     public function list_datatables_api()
     {
         $data = SuratPerintahService::get_valid_sp(true)
-            ->with((['wilayah', 'kegiatan','status']))
-            ->where('is_approved_pka', 1);
+            ->with((['wilayah', 'kegiatan','status']));
     
         if(Auth::user()->role->id != 1) {
             $id_pegawai = Auth::user()->user_pegawai->id_pegawai;

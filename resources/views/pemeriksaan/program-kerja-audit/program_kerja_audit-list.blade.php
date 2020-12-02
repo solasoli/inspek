@@ -150,10 +150,16 @@
 
                             if(data.is_approved_pka == 0) {
                                 @if(can_access("program_kerja_audit", "add"))
-                                return_button += `<a href='{{ URL::to('/pemeriksaan/program-kerja-audit') }}/edit/${row.id}' class="btn btn-xs btn-success"><i class='fa fa-pencil'></i> Program Kerja</a> `
+                                @if(Auth::user()->role->id != 1)
+                                if(data.id_ketua_tim == {{ $id_pegawai }})
+                                @endif
+                                    return_button += `<a href='{{ URL::to('/pemeriksaan/program-kerja-audit') }}/edit/${row.id}' class="btn btn-xs btn-success"><i class='fa fa-pencil'></i> Program Kerja</a> `
                                 @endif
                                 
                                 @if(can_access("program_kerja_audit", "edit"))
+                                @if(Auth::user()->role->id != 1)
+                                if(data.id_pengendali_teknis == {{ $id_pegawai }})
+                                @endif
                                 return_button += `<a href="{{ URL::to('/pemeriksaan/program-kerja-audit') }}/review/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
                                 @endif
                             }
