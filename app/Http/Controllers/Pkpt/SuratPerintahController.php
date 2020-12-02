@@ -194,9 +194,9 @@ class SuratPerintahController extends Controller
     return view('pkpt.penomeran_surat-list');
   }
 
-  public function penomoran_lhp()
+  public function penomeran_lhp()
   {
-    return view('pkpt.penomoran_lhp-list');
+    return view('pkpt.penomeran_lhp-list');
   }
 
   public function get_event_sp(Request $request)
