@@ -101,7 +101,7 @@
   </div>
 
 <!-- modal add -->
-@include('pkpt.peNomoran_surat-form')
+@include('pkpt.penomoran_surat-form')
 
 @endsection
 
