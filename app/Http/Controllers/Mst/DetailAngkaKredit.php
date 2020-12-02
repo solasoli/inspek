@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Input;
 class DetailAngkaKredit extends Controller{
     public function index()
     {
-        return view('/mst/pegawai/detail-angka-kredit');
+        return view('/Mst/pegawai/detail-angka-kredit');
     }
 }
