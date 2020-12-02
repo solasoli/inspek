@@ -143,10 +143,9 @@
                             var return_button = "";
 
                             @if(can_access("audit", "edit"))
-                                @if(Auth::user()->role->id != 1)
                                 //if(data.id_ketua_tim == {{ $id_pegawai }})
                                     return_button += `<a href="{{ URL::to('/pemeriksaan/audit') }}/review_list/${row.id}" class="btn btn-xs btn-info"><i class="fa fa-star"></i> Review</a> `
-                                @endif
+                            @endif
                             return return_button == "" ? "-" : return_button
                         }
                     },
