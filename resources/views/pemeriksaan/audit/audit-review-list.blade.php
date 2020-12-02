@@ -69,11 +69,6 @@
                         <h6 class="card-title float-left">List Kertas Kerja</h6>
                         <div class="float-right">
 
-                            @if (can_access('audit', 'add'))
-                                <a class='btn btn-sm btn-success'
-                                    href='{{ URL::to('pemeriksaan/audit/add/' . $data->id) }}'><i
-                                        class='menu-item-icon icon ion-plus'></i> Tambah</a>
-                            @endif
                         </div>
                     </div>
                     <div class="card-body">
