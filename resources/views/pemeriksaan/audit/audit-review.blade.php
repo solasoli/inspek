@@ -113,7 +113,11 @@
         <div class='cover-kertas-kerja-ikhtisar'>
             @php
             $idx_kki = 1;
-            $kki = $data->kertas_kerja_ikhtisar->where('created_by', Auth::user()->id);   
+            if($sp->id_ketua_tim == $id_pegawai || Auth::user()->role->id == 1) {
+                $kki = $data->kertas_kerja_ikhtisar;
+            } else {
+                $kki = $data->kertas_kerja_ikhtisar->where('created_by', Auth::user()->id);   
+            }
             @endphp
             @if($kki->count() > 0)
                 @foreach($kki as $idx => $row)

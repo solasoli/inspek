@@ -92,9 +92,11 @@ class AuditController extends Controller
     {
         $data = KertasKerja::findOrFail($id);
         $sp = SuratPerintah::findOrFail($data->surat_perintah->id);
+        $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
         return view('/pemeriksaan/audit/audit-review', [
             'data' => $data,
-            'sp' => $sp
+            'sp' => $sp,
+            'id_pegawai' => $id_pegawai
         ]);
     }
 
