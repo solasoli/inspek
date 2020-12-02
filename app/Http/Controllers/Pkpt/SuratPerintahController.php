@@ -189,9 +189,9 @@ class SuratPerintahController extends Controller
     return response()->json(["msg" => $message, 'show_warning' => $data->count() > 0 ? 1 : 0]);
   }
 
-  public function peNomoran_surat()
+  public function penomoran_surat()
   {
-    return view('pkpt.peNomoran_surat-list');
+    return view('pkpt.penomoran_surat-list');
   }
 
   public function penomeran_lhp()
