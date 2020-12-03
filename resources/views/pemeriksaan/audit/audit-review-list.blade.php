@@ -166,7 +166,7 @@
                                     </thead>
                                     <tbody>
 
-                                        @foreach ($data->audit_kertas_kerja as $errors)
+                                        @foreach ($data->audit_kertas_kerja->where('id_status_kertas_kerja','>=',3) as $errors)
                                             @foreach ($errors->kertas_kerja_ikhtisar as $ix => $rw)
                                                 <tr>
                                                     <td>Kertas Kerja Ikhtisar {{ $ix + 1 }}</td>
