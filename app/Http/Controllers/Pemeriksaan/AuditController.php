@@ -126,7 +126,7 @@ class AuditController extends Controller
     public function list_datatables_api()
     {
         $data = SuratPerintahService::get_valid_sp(true)
-            ->with((['wilayah', 'kegiatan','status']))
+            ->with((['wilayah', 'kegiatan','status','audit_kertas_kerja.status']))
             ->where('is_approved_pka', 1);
     
         if(Auth::user()->role->id != 1) {

@@ -133,12 +133,27 @@
                         }
                     },
                     {
-                        data: 'status.description',
-                        name: 'status.description'
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row) {
+                            @if(Auth::user()->role->id == 1)
+                                return data.status.description;
+                            @else
+                            if(data.id_ketua_tim == {{ $id_pegawai }})
+                                return data.status.description;
+                            else {
+                                var kk = data.audit_kertas_kerja.find(r => r.created_by == {{ Auth::user()->id }} && r.is_deleted == 0)
+                                return kk.status.description
+                            }
+                                //return data.kertas_kerja.status.name
+                            @endif
+                        }
                     },
                     {
                         data: null,
                         orderable: false,
+                        searchable: false,
                         render: function(data, type, row) {
                             var return_button = "";
 
