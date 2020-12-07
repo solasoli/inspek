@@ -174,7 +174,7 @@ class ProgramKerjaAuditService
 
       foreach ($program_kerja_audit as $key => $val) {
         $nama_field = str_replace(' ', '_', strtolower(trim($val->nama))) . '_rka';
-        $isi = $data[$nama_field];
+        $isi = !is_null($data[$nama_field]) ? $data[$nama_field] : '';
 
         $t = ProgramKerjaAuditReview::firstOrNew([
           'id_surat_perintah' => $id_sp,
@@ -187,15 +187,14 @@ class ProgramKerjaAuditService
       }
 
       foreach($surat_perintah->langkah_kerja_pemeriksaan as $row) {
-        
         $t = LangkahKerjaPemeriksaanReview::where('id_langkah_kerja_pemeriksaan', $row->id)
         ->where('is_deleted', 0)->first();
         if(!is_null($t)) {
-          $t->isi = $data['lkp_review_'.$row->id];
+          $t->isi = !is_null($data['lkp_review_'.$row->id]) ? $data['lkp_review_'.$row->id] : '';
           $t->save();
         } else {
           $t = new LangkahKerjaPemeriksaanReview;
-          $t->isi = $data['lkp_review_'.$row->id];
+          $t->isi = !is_null($data['lkp_review_'.$row->id]) ? $data['lkp_review_'.$row->id] : '';
           $t->id_langkah_kerja_pemeriksaan = $row->id;
           $t->save();
         }
