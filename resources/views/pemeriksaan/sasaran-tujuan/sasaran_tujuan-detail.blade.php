@@ -105,15 +105,6 @@ $(function() {
 
   let countDownKeyupEditor
 
-  function handlingKeyupEditor(idx, elId, txt) {
-    clearTimeout(countDownKeyupEditor)
-    countDownKeyupEditor = setTimeout(function() {
-      console.log(idx, $(txt).text())
-      localStorage.setItem(`${localStoragePrefix}-${elId}`, txt);
-      bgStepChange(idx, $(txt).text())
-    }, 300)
-  }
-
   function bgStepChange(idx, txt) {
     const parsedTxt = txt.replace(/\s/g, '')
     console.log(parsedTxt)
@@ -145,57 +136,10 @@ $(function() {
     enableAllSteps: true,
     enablePagination: false,
     titleTemplate: '<span class="number" data-number="#index#">#index#</span> <span class="title">#title#</span>',
-    stepsOrientation: 1,
-    onInit: function() {
+    stepsOrientation: 1
+  });
+  })
 
-      $(".text-wizard").map(function(idx, val) {
-        const parentDiv = $(this).parent().closest('section')
-        const idEl = $(this).attr('id')
-        console.log(parentDiv)
-        const editor = CKEDITOR.replace($(this).attr('id'), {
-          extraPlugins: 'autogrow',
-          on: {
-            change: function(e) {
-              handlingKeyupEditor(idx, idEl, e.editor
-                .getData())
-              }
-            }
-          });
+</script>
 
-          console.log(localStorage.getItem(`${localStoragePrefix}-${idEl}`))
-          editor.setData(localStorage.getItem(
-            `${localStoragePrefix}-${idEl}`))
-            editor.on('instanceReady', function(e) {
-              console.log($(this))
-              if (idx == 0) {
-                $('#' + wizardName).find($(".content")).height(
-                  parentDiv
-                  .find($(".cke")).height() + 35);
-                }
-
-                const html = e.editor.getData()
-                bgStepChange(idx, $(html).text())
-              });
-
-              editor.on('resize', function() {
-                console.log($(this))
-                console.log('resized...');
-
-                $('#' + wizardName).find($(".content")).height(parentDiv
-                  .find($(".cke")).height() + 35);
-
-                });
-
-              });
-            },
-            onStepChanged: function(event, currIdx) {
-              const content = $(`#${wizardName}-p-${currIdx}`).find($(".cke"))
-
-              $(`#${wizardName}`).find($(".content")).height(content.height() + 35)
-            }
-          });
-        })
-
-        </script>
-
-        @endsection
+@endsection
