@@ -75,7 +75,7 @@
                         <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Uraian Singkat</th>
+                                    {{--  <th>Uraian Singkat</th>  --}}
                                     <th>Jumlah Kertas Kerja Ikhtisar</th>
                                     <th>Oleh</th>
                                     <th>Status</th>
@@ -87,7 +87,7 @@
                                 @foreach ($data->audit_kertas_kerja as $errors)
 
                                     <tr>
-                                        <td>{!! $errors->uraian_singkat !!}</td>
+                                        {{--  <td>{!! $errors->uraian_singkat !!}</td>  --}}
                                         <td>{{ $errors->kertas_kerja_ikhtisar->count() }}</td>
                                         <td>{{ $errors->oleh->user_pegawai != null ? $errors->oleh->user_pegawai->pegawai->nama : $errors->oleh->username }}</td>
                                         <td>{!! kertas_kerja_status_label($errors->status) !!}</td>
