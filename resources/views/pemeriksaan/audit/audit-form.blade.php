@@ -263,8 +263,8 @@
                             });
     
                             const kodeTemuanCoverHeight = typeof parentDiv.find($(".kode_temuan_cover")) != 'undefined' ? parentDiv.find($(".kode_temuan_cover")).height() : 0;
-                            editor.setData(localStorage.getItem(
-                                `${localStoragePrefix}-${idEl}`))
+                            /* editor.setData(localStorage.getItem(
+                                `${localStoragePrefix}-${idEl}`))*/
                             editor.on('instanceReady', function(e) {
                                 if (idx == 0) {
                                 }
