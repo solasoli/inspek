@@ -2,9 +2,10 @@
 
 
 $(function() {
+  var id_kegiatan = 0;
   $('#modal-form').on('show.bs.modal', function(e) {
     var id = $(e.relatedTarget).data('id');
-
+    id_kegiatan = $(e.relatedTarget).data('kegiatan');
     get_sasaran(id);
     function get_sasaran(id) {
       $("#cover-sasaran_edit").html('');
@@ -117,7 +118,8 @@ $(function() {
 
       let options = ''
       $.each(res, function(idx, k){
-        options += `<option value='${k.id}'>${k.nama}</option>`
+        var selected = id_kegiatan == k.id ? 'selected' : ''
+        options += `<option value='${k.id}' ${selected}>${k.nama}</option>`
       })
       $("#kegiatan_pr").html(options).trigger('change')
     })

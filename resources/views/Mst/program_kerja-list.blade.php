@@ -151,7 +151,7 @@ $(function() {
           var return_button = "";
 
           @if(can_access("mst_program_kerja", "edit"))
-          return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'><i class='fa fa-pencil'></i> Edit</button> ";
+          return_button += "<button class='btn btn-warning btn-xs' data-toggle='modal' data-target='#modal-form' data-id='" + data.id + "'  data-kegiatan='" + data.id_kegiatan + "'><i class='fa fa-pencil'></i> Edit</button> ";
           @endif
 
           @if(can_access("mst_program_kerja", "delete"))
