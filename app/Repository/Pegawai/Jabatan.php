@@ -14,4 +14,8 @@ class Jabatan extends BaseModel
     ->wherePivot('is_deleted',0);
   }
 
+  public function tipe_auditor_jabatan()
+  {
+    return $this->hasOne('App\Repository\Pegawai\TipeAuditorJabatan', 'id_jabatan');
+  }
 }

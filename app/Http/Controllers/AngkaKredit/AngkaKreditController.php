@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AngkaKredit;
 
 use App\Http\Controllers\Controller;
+use App\Repository\AngkaKredit\SubUnsur;
 use App\Repository\AngkaKredit\Unsur;
 use App\Repository\Pegawai\Pegawai;
 use App\Repository\Pemeriksaan\AuditBerkas;
@@ -27,23 +28,47 @@ class AngkaKreditController extends Controller
         ]);
     }
 
-    public function add($code)
+    public function create($unsur_code)
     {
-        if($code == 'pendidikan') {
+        $pegawai = null;
+        if(Auth::user()->role->id == 1) {
             $pegawai = Pegawai::where('is_deleted', 0)->get();
-            $unsur = Unsur::where('is_deleted', 0)->where('code', 'pendidikan')->first();
+        }
+        
+        $unsur = Unsur::where('is_deleted', 0)->where('code', $unsur_code)->first();
+
+        if($unsur_code == 'pendidikan') {
             return view('/angka_kredit/angka_kredit/pendidikan/angka_kredit_pendidikan-form',[
                 'unsur' => $unsur,
                 'pegawai' => $pegawai
             ]);
         }
     }
-    
-    public function store($id_sp, Request $request){
-        AuditService::create($id_sp, $request->input());
-        $request->session()->flash('success', "Data berhasil disimpan!");
-        return redirect("/pemeriksaan/audit/edit/".$id_sp);
+
+    public function store(Request $request, $id_sp){
+        dd($request->input());
     }
+
+    public function get_sub_unsur($unsur_code = '', $id_pegawai = 0) {
+        $pegawai = Pegawai::findOrFail($id_pegawai);
+        $tipe_auditor = $pegawai->jabatan->tipe_auditor_jabatan->tipe_auditor;
+        $unsur = Unsur::where('is_deleted', 0)->where('code', $unsur_code)->first();
+        $sub_unsur = SubUnsur::where('is_deleted', 0)
+        ->where('id_unsur', $unsur->id)
+        ->where('id_tipe_auditor', $tipe_auditor->id)
+        ->get();
+
+        return response()->json(['data' => $sub_unsur]);
+    }
+    
+    public function get_butir_kegiatan($id_sub_unsur = 0, $id_pegawai = 0) {
+        $pegawai = Pegawai::findOrFail($id_pegawai);
+        $tipe_auditor = $pegawai->jabatan->tipe_auditor_jabatan->tipe_auditor;
+        $sub_unsur = SubUnsur::findOrFail($id_sub_unsur);
+
+        return response()->json(['data' => $sub_unsur->butir_kegiatan()->with('satuan')->get()]);
+    }
+
 
     public function edit($id)
     {
