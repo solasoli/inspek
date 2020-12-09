@@ -7,7 +7,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Penomeran Surat</h4>
+        <h4 class="modal-title">Penomoran Surat</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -17,7 +17,7 @@
           <input type="hidden" value="" name='id' id='id_penomeran'>
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              Nomer <span class="required">*</span> :
+              Nomor <span class="required">*</span> :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <input name='no_surat' autocomplete="off" required="required" class="form-control no-surat" type="text" >

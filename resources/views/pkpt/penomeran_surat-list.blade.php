@@ -51,8 +51,8 @@
 
 
           <ul class="nav nav-tabs nav-justified mb-4">
-            <li class="nav-item"><a href="#not_avail" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Memiliki nomer</a></li>
-            <li class="nav-item"><a href="#avail" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Memiliki nomer</a></li>
+            <li class="nav-item"><a href="#not_avail" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Memiliki nomor</a></li>
+            <li class="nav-item"><a href="#avail" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Memiliki nomor</a></li>
           </ul>
 
           <div class="tab-content">
