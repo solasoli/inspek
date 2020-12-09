@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Mst;
 
 use App\Http\Controllers\Controller;
+use App\Repository\Pegawai\Jabatan;
+use App\Repository\Pegawai\Peran;
+use App\Repository\Pegawai\PeranJabatan;
 use Illuminate\Http\Request;
 use Datatables;
 use Validator;
@@ -10,9 +13,6 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
-use App\Model\Pegawai\Peran;
-use App\Model\Pegawai\PeranJabatan;
-use App\Model\Pegawai\Jabatan;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -46,7 +46,7 @@ class PeranController extends Controller
         'nama.unique' => 'Nama Peran sudah ada!'
       ]);
 
-      $t = new Peran;
+      $t = new Peran();
       $t->nama = $request->input('nama');
       $t->kode = $request->input('kode');
       $t->created_at = date('Y-m-d H:i:s');
@@ -60,7 +60,7 @@ class PeranController extends Controller
 
       // save to peran jabatan
       foreach($request->input('jabatan') as $idx => $row){
-        $tj = new PeranJabatan;
+        $tj = new PeranJabatan();
         $tj->id_peran = $t->id;
         $tj->id_jabatan = $row;
         $tj->save(); 

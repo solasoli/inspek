@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Mst;
 
 use App\Http\Controllers\Controller;
+use App\InspekturPembantu;
+use App\Repository\Master\Wilayah;
+use App\Repository\Pegawai\Pegawai;
 use Illuminate\Http\Request;
 use Datatables;
 use Validator;
 use Auth;
 use Illuminate\Support\Facades\DB;
-use App\Wilayah;
-use App\InspekturPembantu;
-use App\Model\Pegawai\Pegawai;
 
 date_default_timezone_set('Asia/Jakarta');
 

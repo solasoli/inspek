@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Mst;
 
 use App\Http\Controllers\Controller;
+use App\Repository\Pegawai\Jabatan;
 use Illuminate\Http\Request;
 use Datatables;
 use Validator;
@@ -10,7 +11,6 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Input;
-use App\Model\Pegawai\Jabatan;
 
 date_default_timezone_set('Asia/Jakarta');
 

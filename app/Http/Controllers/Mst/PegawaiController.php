@@ -52,7 +52,7 @@ class PegawaiController extends Controller
     public function inspektur(){
 
       $pegawai = Pegawai::where("is_deleted",0)->get();
-      $current_inspektur = $this->get_current_inspektur(true);
+      $current_inspektur =PegawaiService::get_current_inspektur();
       return view('Mst.inspektur-form', [
         'pegawai' => $pegawai,
         'inspektur' => $current_inspektur
@@ -60,18 +60,14 @@ class PegawaiController extends Controller
     }
 
     public function update_inspektur(Request $request) {
-      //check if current inspektur == input
-      $current_inspektur = $this->get_current_inspektur(true);
-      if($current_inspektur == null || $current_inspektur->id_inspektur != $request->inspektur){
-        //update other inspektur flag to 0
-        DB::update("UPDATE mst_inspektur SET is_current_inspektur = 0");
+      //update other inspektur flag to 0
+      DB::update("UPDATE mst_inspektur SET is_current_inspektur = 0");
 
-        //insert new
-        $new_ins = new Inspektur;
-        $new_ins->id_inspektur = $request->inspektur;
-        $new_ins->is_current_inspektur = 1;
-        $new_ins->save();
-      }
+      //insert new
+      $new_ins = new Inspektur;
+      $new_ins->id_inspektur = $request->inspektur;
+      $new_ins->is_current_inspektur = 1;
+      $new_ins->save();
 
       $request->session()->flash('success', "<strong>".$request->input('nama')."</strong> Berhasil disimpan!");
       return redirect('/mst/pegawai/inspektur');

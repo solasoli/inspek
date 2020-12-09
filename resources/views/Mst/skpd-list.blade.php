@@ -9,12 +9,12 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="#">Master</a>
-    <span class="breadcrumb-item active">OPD</span>
+    <span class="breadcrumb-item active">Perangkat Daerah</span>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">OPD</h4>
+  <h4 class="tx-gray-800 mg-b-5">Perangkat Daerah</h4>
 </div>
 
 <div class="br-pagebody">
@@ -35,7 +35,7 @@
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
         <div class="card-header">
-          <h6 class="card-title float-left">List OPD</h6>
+          <h6 class="card-title float-left">List Perangkat Daerah</h6>
           <div class="float-right">
 
             @if(can_access("mst_skpd", "add"))
