@@ -459,18 +459,20 @@
 
       @endphp
       var data_edit = [{{ implode(',',$arr) }}];
-      console.log(data_edit);
       $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
         $(".sasaran").html('');
         // console.log(data);
         $.each(data, function(idx, val){
-          console.log(val)
           var selected = data_edit.indexOf(val.id) != -1 ? 'selected' : '';
           var option = "<option value='"+val.id+"' "+ selected+">"+val.nama+"</option>";
           $(".sasaran").append(option);
         });
       });
     }
+
+    $("#unsur").on("change", async function() {
+      await get_sub_unsur();
+    })
 
     get_sub_unsur();
     async function get_sub_unsur() {
@@ -480,7 +482,6 @@
                 option.push(`<option value='${val.id}'>${val.nama}</option>`)
             })   
         })
-        console.log(option);
         $("#sub_unsur").html(option.join('')).trigger('change')
     }
 
@@ -492,7 +493,6 @@
         const option = [];
         await $.get(`{{URL::to('/pkpt/surat_perintah/get-butir-kegiatan')}}/${$('#sub_unsur').val()}`).success(function (res) {
             res.data.map(function(val) {
-                console.log(val)
                 option.push(`<option value='${val.id}' data-angka-kredit='${val.angka_kredit}' data-satuan='${val.satuan.nama}'>${val.nama}</option>`)
             })   
         })
