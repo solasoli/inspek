@@ -187,8 +187,9 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables_approve/{type?}', 'Pkpt\SuratPerintahController@list_datatables_approve_api');
       Route::get('/datatables_penomeran_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_api');
       Route::get('/datatables_penomeran_lhp_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_lhp_api');
+      Route::get('/get-sub-unsur/{id_unsur}', 'Pkpt\SuratPerintahController@get_sub_unsur');
+      Route::get('/get-butir-kegiatan/{id_sub_unsur}', 'Pkpt\SuratPerintahController@get_butir_kegiatan');
       
-
       Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
