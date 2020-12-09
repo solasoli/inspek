@@ -142,15 +142,19 @@
                 <div id="conditional_part">
                   <div class="form-group">
                     <label for="pwd">Unsur</label>
-                    <select name="" id="" class="form-control"></select>
+                    <select name="" id="unsur" class="form-control">
+                      @foreach($unsur as $idx => $row)
+                        <option value="{{ $row->id }}">{{ $row->nama }}</option>
+                      @endforeach
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="pwd"> Sub Unsur</label>
-                    <select name="" id="" class="form-control"></select>
+                    <select name="" id="sub_unsur" class="form-control"></select>
                   </div>
                   <div class="form-group">
                     <label for="pwd">Butir Kegiatan</label>
-                    <select name="" id="" class="form-control"></select>
+                    <select name="" id="butir_kegiatan" class="form-control"></select>
                   </div>
               </div>
                 </div>
@@ -467,6 +471,34 @@
         });
       });
     }
+
+    get_sub_unsur();
+    async function get_sub_unsur() {
+        const option = [];
+        await $.get(`{{URL::to('/pkpt/surat_perintah/get-sub-unsur')}}/${$('#unsur').val()}`).success(function (res) {
+            res.data.map(function(val) {
+                option.push(`<option value='${val.id}'>${val.nama}</option>`)
+            })   
+        })
+        console.log(option);
+        $("#sub_unsur").html(option.join('')).trigger('change')
+    }
+
+    $("#sub_unsur").on('change', function () {
+        get_butir_kegiatan();
+    })
+    
+    async function get_butir_kegiatan() {
+        const option = [];
+        await $.get(`{{URL::to('/pkpt/surat_perintah/get-butir-kegiatan')}}/${$('#sub_unsur').val()}`).success(function (res) {
+            res.data.map(function(val) {
+                console.log(val)
+                option.push(`<option value='${val.id}' data-angka-kredit='${val.angka_kredit}' data-satuan='${val.satuan.nama}'>${val.nama}</option>`)
+            })   
+        })
+        $("#butir_kegiatan").html(option.join('')).trigger('change')
+    }
+
 
     // Jika Form Add, maka panggil function get_sasaran()
     @if (!isset($data))

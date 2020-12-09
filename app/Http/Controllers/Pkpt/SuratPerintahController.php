@@ -12,6 +12,7 @@ use App\Repository\Master\Skpd;
 use App\Wilayah;
 use App\DasarSurat;
 use App\Periode;
+use App\Repository\AngkaKredit\SubUnsur;
 use App\Service\Master\KegiatanService;
 use App\Service\Pegawai\PegawaiService;
 use App\Service\ProgramKerjaService;
@@ -274,4 +275,21 @@ class SuratPerintahController extends Controller
     $request->session()->flash('success', "Berhasil merubah data!");
     return redirect('/pemeriksaan/laporan_lhp/penomeran_lhp');
   }
+  
+  public function get_sub_unsur($id_unsur = 0) {
+    $tipe_auditor = 1;
+    $sub_unsur = SubUnsur::where('is_deleted', 0)
+    ->where('id_unsur', $id_unsur)
+    ->where('id_tipe_auditor', $tipe_auditor)
+    ->get();
+
+    return response()->json(['data' => $sub_unsur]);
+  }
+
+  public function get_butir_kegiatan($id_sub_unsur = 0) {
+      $sub_unsur = SubUnsur::findOrFail($id_sub_unsur);
+
+      return response()->json(['data' => $sub_unsur->butir_kegiatan()->with('satuan')->get()]);
+  }
+
 }

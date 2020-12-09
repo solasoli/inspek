@@ -187,8 +187,9 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables_approve/{type?}', 'Pkpt\SuratPerintahController@list_datatables_approve_api');
       Route::get('/datatables_penomeran_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_api');
       Route::get('/datatables_penomeran_lhp_api/{is_avail?}', 'Pkpt\SuratPerintahController@list_datatables_penomeran_lhp_api');
+      Route::get('/get-sub-unsur/{id_unsur}', 'Pkpt\SuratPerintahController@get_sub_unsur');
+      Route::get('/get-butir-kegiatan/{id_sub_unsur}', 'Pkpt\SuratPerintahController@get_butir_kegiatan');
       
-
       Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
@@ -315,7 +316,18 @@ Route::middleware(['auth'])->group(function () {
 
 
   Route::prefix('angka-kredit')->group(function(){
-    Route::get('/perhitungan-angka-kredit', 'AngkaKredit\PerhitunganAngkaKredit@index');
+    Route::prefix('perhitungan-angka-kredit')->group(function(){
+      Route::get('/', 'AngkaKredit\PerhitunganAngkaKredit@index');
+      // Route::get('/', 'AngkaKredit\AngkaKreditController@index');
+      Route::get('/make/{unsur}', 'AngkaKredit\AngkaKreditController@create');
+      Route::get('/get-sub-unsur/{unsur}/{id_pegawai}', 'AngkaKredit\AngkaKreditController@get_sub_unsur');
+      Route::get('/get-butir-kegiatan/{id_sub_unsur}/{id_pegawai}', 'AngkaKredit\AngkaKreditController@get_butir_kegiatan');
+      
+      Route::post('/make/{unsur}', 'AngkaKredit\AngkaKreditController@store');
+    });
+
+
+    
     Route::get('/tambah-angka-kredit', 'AngkaKredit\TambahAngkaKredit@index');
     Route::get('/edit-angka-kredit', 'AngkaKredit\EditAngkaKredit@index');
 

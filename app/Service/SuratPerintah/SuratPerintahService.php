@@ -2,6 +2,7 @@
 
 namespace App\Service\SuratPerintah;
 
+use App\Repository\AngkaKredit\Unsur;
 use DB;
 use Auth;
 use App\Repository\Master\Kegiatan;
@@ -179,6 +180,7 @@ class SuratPerintahService
     $kegiatan = KegiatanService::get_data();
     $program_kerja = ProgramKerjaService::get_program_kerja_by_type_pkpt(1);
     $list_inspektur = PegawaiService::get_current_inspektur($id_sp);
+    $unsur = Unsur::where('is_deleted', 0)->get();
 
     $dasar_surat = DasarSurat::first();
 
@@ -189,6 +191,7 @@ class SuratPerintahService
       'dasar_surat' => $dasar_surat,
       'periode' => $periode,
       'list_inspektur' => $list_inspektur,
+      'unsur' => $unsur
     ]);
   }
 
