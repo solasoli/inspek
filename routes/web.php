@@ -317,7 +317,8 @@ Route::middleware(['auth'])->group(function () {
 
   Route::prefix('angka-kredit')->group(function(){
     Route::prefix('perhitungan-angka-kredit')->group(function(){
-      Route::get('/', 'AngkaKredit\AngkaKreditController@index');
+      Route::get('/', 'AngkaKredit\PerhitunganAngkaKredit@index');
+      // Route::get('/', 'AngkaKredit\AngkaKreditController@index');
       Route::get('/make/{unsur}', 'AngkaKredit\AngkaKreditController@create');
       Route::get('/get-sub-unsur/{unsur}/{id_pegawai}', 'AngkaKredit\AngkaKreditController@get_sub_unsur');
       Route::get('/get-butir-kegiatan/{id_sub_unsur}/{id_pegawai}', 'AngkaKredit\AngkaKreditController@get_butir_kegiatan');
