@@ -1,6 +1,9 @@
+<style>
+  .conditional_part {
+    display:none;
+  }
+</style>
 <script>
-
-
 $(function() {
   var id_kegiatan = 0;
   $('#modal-form').on('show.bs.modal', function(e) {
@@ -107,9 +110,27 @@ $(function() {
     $(this).parent().closest("tr").remove();
   });
 
+  var irban_option = [];
+  var ketua_tim_option = [];
+  var dalnis_option = [];
+  var anggota_option = [];
 
   $("select[name='wilayah']").on('change', function(){
-    get_pd();
+    get_pd(); 
+    
+    var val = $(this).val();
+    if(val > 0){
+      console.log(val)
+      get_inspektur_pembantu(val);
+      get_pengendali_teknis(val);
+      get_ketua_tim(val);
+      get_anggota(val);
+    }
+    irban_option = [];
+    ketua_tim_option = [];
+    dalnis_option = [];
+    anggota_option = [];
+    
   });
 
   $(".opd").on('change', function(){
@@ -137,6 +158,64 @@ $(function() {
     });
     $('#jml_man_power').html(total)
   }
+
+  
+  async function get_inspektur_pembantu(val){
+    await $.post("/mst/pegawai/get_inspektur_pembantu_by_wilayah", {"id_wilayah": val}, function(res){
+      if(res.data != null){
+
+        {{--  var data_edit = {{isset($data->id_inspektur_pembantu) ? $data->id_inspektur_pembantu : 0 }};  --}}
+
+        $.each(res.data, function(idx, val){
+          //var selected = data_edit == val.id ? "selected" : "";
+          irban_option.push("<option value='" + val.id +"'>" + val.nama + "</option>");
+        });
+      }
+    });
+    $(".penanggung-jawab-mp").html(irban_option.join(''))
+  }
+
+  async function get_pengendali_teknis(val){
+    await $.post("/mst/pegawai/get_pengendali_teknis_by_wilayah", {"id_wilayah": val}, function(res){
+      if(res.data != null){
+        $(".pengendali_teknis").html('');
+
+        {{--  var data_edit = {{isset($data->id_pengendali_teknis) ? $data->id_pengendali_teknis : 0 }};  --}}
+
+        $.each(res.data, function(idx, val){
+          dalnis_option.push("<option value='" + val.id +"'>" + val.nama + "</option>");
+        });
+      }
+    });
+    $(".pengendali-teknis-mp").html(dalnis_option.join(''))
+  }
+
+  async function get_ketua_tim(val){
+    await $.post("/mst/pegawai/get_ketua_tim_by_wilayah", {"id_wilayah": val}, function(res){
+      if(res.data != null){
+
+        {{--  var data_edit = {{isset($data->id_ketua_tim) ? $data->id_ketua_tim : 0 }};  --}}
+
+        $.each(res.data, function(idx, val){
+          ketua_tim_option.push("<option value='" + val.id +"'>" + val.nama + "</option>");
+        });
+      }
+    });
+    $(".ketua-tim-mp").html(ketua_tim_option.join(''))
+  }
+
+  async function get_anggota(val){
+    await $.post("/mst/pegawai/get_anggota_by_wilayah", {"id_wilayah": val}, function(res){
+      if(res.data != null){
+
+        $.each(res.data, function(idx, val){
+          anggota_option.push("<option value='" + val.id +"'>" + val.nama + "</option>");
+        });
+      }
+    });
+    $(".anggota-mp").html(anggota_option.join(''))
+  }
+
 });
 </script>
 <div class="modal" id="modal-form">
@@ -161,7 +240,7 @@ $(function() {
               <select class="form-control select2" name="wilayah">
                 <option value="" >- Pilih -</option>
                 @foreach ($wilayah AS $row)
-                <option value="{{$row->id}}">{{$row->nama}}</option>
+                  <option value="{{$row->id}}">{{$row->nama}}</option>
                 @endforeach
               </select>
               <div class="text-danger error" data-error="wilayah"></div>
@@ -255,96 +334,117 @@ $(function() {
           <div class="divider"></div>
 
           <div class="col-md-12">
-            <div class="label-modal">Man Power</div>
-
-            <div class="form-group row justify-content-center">
-            <div class="col-md-4 col-sm-4 col-xs-12">
-                
-              </div>
-
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                
-              <div class="card-header float-right" style="border-bottom: none;background:none;">
-                <p><input id="more_info" name="more-info" type="checkbox" />
-                  <label style="font-size:13px; margin-left:8px;">Sertakan Nama Auditor</label></p>
-                </div>
-
+            
+            <div class="card-header label-modal" style="padding-left: 0;border-bottom: none;background:none;">
+              <div class="pull-left">Man Power</div>
+              <div class="pull-right">
+                <input id="more_info" name="more-info" type="checkbox" />
+                <label style="font-size:13px; margin-left:8px;">Sertakan Nama Auditor</label>
               </div>
             </div>
+
+            <hr>
             <div class="row">
               <div class="col-6">
-                 <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
-                Wakil Penanggung Jawab :
-              </label>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <input name='jml_wakil_penanggung_jawab' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
-                Orang
+                <div class="form-group row justify-content-center">
+                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                    Wakil Penanggung Jawab :
+                  </label>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input name='jml_wakil_penanggung_jawab' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
+                    Orang
+                  </div>
+                </div>
               </div>
-              
-            </div>
-
-            <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
-                Pengendali Teknis :
-              </label>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <input name='jml_pengendali_teknis' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
-                Orang
-              </div>
-            </div>
-
-            <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
-                Ketua Tim :
-              </label>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <input name='jml_ketua_tim' required="required" class="form-control man-power" style='max-width:50px; display: inline' value='0' type="number" autocomplete="off">
-                Orang
+                
+              <div class="col-4">
+                <div class="conditional_part">
+                  <div class="form-group cover-penanggung-jawab">
+                    <select name="penanggung_jawab_mp" class="form-control penanggung-jawab-mp"></select>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
-                Anggota :
-              </label>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <input name='jml_anggota' style='max-width:50px; display: inline' required="required" class="form-control man-power" value='0' type="number" autocomplete="off">
-                Orang
+            
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group row justify-content-center">
+                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                    Pengendali Teknis :
+                  </label>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input name='jml_pengendali_teknis' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
+                    Orang
+                  </div>
+                </div>
+              </div>
+                
+              <div class="col-4">
+                <div class="conditional_part">
+                  <div class="form-group cover-pengendali-teknis">
+                    <select name="dalnis_mp" class="form-control pengendali-teknis-mp"></select>
+                  </div>
+                </div>
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group row justify-content-center">
+                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                    Ketua Tim :
+                  </label>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input name='jml_ketua_tim' required="required" class="form-control man-power" style='max-width:50px; display: inline' value='0' type="number" autocomplete="off">
+                    Orang
+                  </div>
+                </div>
+              </div>
+                
+              <div class="col-4">
+                <div class="conditional_part">
+                  <div class="form-group cover-ketua-tim">
+                    <select name="ketua_tim_mp" class="form-control ketua-tim-mp"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <div class="form-group row justify-content-center">
-              <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
-                Total Man Power :
-              </label>
-              <div class="col-md-4 col-sm-4 col-xs-12">
-                <span id='jml_man_power'>0</span> Orang
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group row justify-content-center">
+                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                    Anggota :
+                  </label>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                    <input name='jml_anggota' style='max-width:50px; display: inline' required="required" class="form-control man-power" value='0' type="number" autocomplete="off">
+                    Orang
+                  </div>
+                </div>
+              </div>
+                
+              <div class="col-4">
+                <div class="conditional_part">
+                  <div class="form-group cover-anggota">
+                    <select name="anggota_mp" class="form-control anggota-mp"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group row justify-content-center">
+                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                    Total Man Power :
+                  </label>
+                  <div class="col-md-4 col-sm-4 col-xs-12">
+                    <span id='jml_man_power'>0</span> Orang
+                  </div>
+                </div>
               </div>
             </div>
           </div> 
-
-          <div class="col-4">
-              <div id="conditional_part">
-                  <div class="form-group">
-                    <select name="" id="" class="form-control"></select>
-                  </div>
-                  <div class="form-group">
-                    <select name="" id="" class="form-control"></select>
-                  </div>
-                  <div class="form-group">
-                    <select name="" id="" class="form-control"></select>
-                  </div>
-                  <div class="form-group">
-                    <select name="" id="" class="form-control"></select>
-                  </div>
-                </div>
-              </div>
-              </div>
-
-            
-          </div>
 
           <div class="form-group row mt-4 d-flex justify-content-center">
             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 d-flex justify-content-center">
@@ -361,10 +461,10 @@ $(function() {
 <script type="text/javascript">
       $('#more_info').change(function() {
         if(this.checked != true){
-          $("#conditional_part").hide();
+          $(".conditional_part").hide();
         }
         else{
-          $("#conditional_part").show();
+          $(".conditional_part").show();
         }
       });
 </script>
