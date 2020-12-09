@@ -55,7 +55,10 @@ class AuditController extends Controller
         $id_pegawai = Auth::user()->role->id != 1 ? Auth::user()->user_pegawai->id_pegawai : 0;
         $sp = SuratPerintah::findOrFail($id);
         if(Auth::user()->role->id != 1 && $id_pegawai != $sp->id_ketua_tim) {
-            $kk = KertasKerja::where('created_by', Auth::user()->id)->first();
+            $kk = KertasKerja::where('created_by', Auth::user()->id)
+            ->where("id_surat_perintah", $id)
+            ->where('is_deleted',0)
+            ->first();
             
             if($kk != null) {
                 return redirect("/pemeriksaan/audit/edit/".$kk->id);

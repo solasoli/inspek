@@ -41,13 +41,13 @@ class TindakLanjutService
                     if($findTindakLanjut == null) {
                         $new_tindak_lanjut = new KertasKerjaIkhtisarTindakLanjut;
                         $new_tindak_lanjut->id_kertas_kerja_ikhtisar = $rw->id;
-                        $new_tindak_lanjut->tindak_lanjut = $data['tindak_lanjut_'. $rw->id];
+                        $new_tindak_lanjut->tindak_lanjut = !is_null($data['tindak_lanjut_'. $rw->id]) ? $data['tindak_lanjut_'. $rw->id] : '';
                         $new_tindak_lanjut->s = isset($data['s_'.$rw->id]) ? 1 : 0;
                         $new_tindak_lanjut->d = isset($data['d_'.$rw->id]) ? 1 : 0;
                         $new_tindak_lanjut->b = isset($data['b_'.$rw->id]) ? 1 : 0;
                         $new_tindak_lanjut->save();
                     } else {
-                        $findTindakLanjut->tindak_lanjut = $data['tindak_lanjut_'. $rw->id];
+                        $findTindakLanjut->tindak_lanjut = !is_null($data['tindak_lanjut_'. $rw->id]) ? $data['tindak_lanjut_'. $rw->id] : '';
                         $findTindakLanjut->s = isset($data['s_'.$rw->id]) ? 1 : 0;
                         $findTindakLanjut->d = isset($data['d_'.$rw->id]) ? 1 : 0;
                         $findTindakLanjut->b = isset($data['b_'.$rw->id]) ? 1 : 0;
@@ -89,11 +89,11 @@ class TindakLanjutService
 
             if($findTindakLanjut == null) {
                 $newReview = new SuratPerintahTindakLanjutReview();
-                $newReview->review = $data['review_tindak_lanjut'];
+                $newReview->review = !is_null($data['review_tindak_lanjut']) ? $data['review_tindak_lanjut'] : '';
                 $newReview->id_surat_perintah = $id;
                 $newReview->save();
             } else {
-                $findTindakLanjut->review = $data['review_tindak_lanjut'];
+                $findTindakLanjut->review = !is_null($data['review_tindak_lanjut']) ? $data['review_tindak_lanjut'] : '';
                 $findTindakLanjut->save();
             }
             //self::proccess_review($id, $data, $tipe_review);

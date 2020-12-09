@@ -144,7 +144,10 @@
                                 return data.status.description;
                             else {
                                 var kk = data.audit_kertas_kerja.find(r => r.created_by == {{ Auth::user()->id }} && r.is_deleted == 0)
-                                return kk.status.description
+                                if(kk != null)
+                                    return kk.status.description
+                                else
+                                    return "Perlu di buat kertas kerja"
                             }
                                 //return data.kertas_kerja.status.name
                             @endif

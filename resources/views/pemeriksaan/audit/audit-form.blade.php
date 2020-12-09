@@ -149,8 +149,14 @@
         <div class="card-body">
             <div class="form-group row d-flex justify-content-end">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <a href='{{ url('') }}/pemeriksaan/audit/review_list/{{$data->surat_perintah->id}}' class="btn btn-danger"
-                        type="button">Cancel</a>
+                    @if($data->surat_perintah != null)
+                        <a href='{{ url('') }}/pemeriksaan/audit/review_list/{{$data->surat_perintah->id}}' class="btn btn-danger"
+                            type="button">Cancel</a>
+                    @else
+                        <a href='{{ url('') }}/pemeriksaan/audit' class="btn btn-danger"
+                            type="button">Cancel</a>
+
+                    @endif 
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -257,8 +263,8 @@
                             });
     
                             const kodeTemuanCoverHeight = typeof parentDiv.find($(".kode_temuan_cover")) != 'undefined' ? parentDiv.find($(".kode_temuan_cover")).height() : 0;
-                            editor.setData(localStorage.getItem(
-                                `${localStoragePrefix}-${idEl}`))
+                            /* editor.setData(localStorage.getItem(
+                                `${localStoragePrefix}-${idEl}`))*/
                             editor.on('instanceReady', function(e) {
                                 if (idx == 0) {
                                 }

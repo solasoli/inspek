@@ -67,7 +67,7 @@
                                         <td class="pd1" rowspan="2">Kode Rekomendasi</td>
                                         <td class="pd1" rowspan="2">Tindak Lanjut<br>(Uraian Singkat)</td>
                                         <td class="pd1" colspan="3">Keterangan</td>
-                                        <td class="pd1" rowspan="2">Paraf Disperum Kim</td>
+                                        <td class="pd1" rowspan="2">Paraf {{ $data->program_kerja->skpd->name }}</td>
                                         <td class="pd1" rowspan="2">Ket</td>
                                     </tr>
                                     <tr class="bg-cyan">
