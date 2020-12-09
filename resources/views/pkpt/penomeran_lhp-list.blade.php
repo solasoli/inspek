@@ -51,8 +51,8 @@
 
 
           <ul class="nav nav-tabs nav-justified mb-4">
-            <li class="nav-item"><a href="#not_avail" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Memiliki Nomer</a></li>
-            <li class="nav-item"><a href="#avail" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Memiliki Nomer</a></li>
+            <li class="nav-item"><a href="#not_avail" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Belum Memiliki Nomor</a></li>
+            <li class="nav-item"><a href="#avail" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Sudah Memiliki Nomor</a></li>
           </ul>
 
           <div class="tab-content">
@@ -140,7 +140,7 @@ $(function() {
 
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' href='#'><i class='fa fa-edit'></i> Beri Nomer</a>";
+          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' href='#'><i class='fa fa-edit'></i> Beri Nomor</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
@@ -184,7 +184,7 @@ $(function() {
 
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
-          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' data-nomer='" + data.no_surat + "' href='#'><i class='fa fa-edit'></i> Rubah Nomer</a>";
+          return_button += " <a class='btn btn-success btn-xs btn-modal-nomer' data-toggle='modal' data-target='#nomerModal' data-id='" + data.id + "' data-nomer='" + data.no_surat + "' href='#'><i class='fa fa-edit'></i> Rubah Nomor</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
