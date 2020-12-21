@@ -34,7 +34,7 @@ class CustomLoginController extends Controller
             return redirect('/');
         } else {
             /* balikin ke login */
-            Session::flash('status', 'Invalid Username or Password');
+            Session::flash('status', 'Username atau Password Salah');
             return redirect('/login');
         }
     }
