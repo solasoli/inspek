@@ -5,7 +5,7 @@ $(function() {
 
     if (id > 0) { // form edit
       $.get("{{url('')}}/mst/pegawai/get_pegawai_by_id/" + id, function(data) {
-        $('select[name="opd"]').val(data.id_skpd).trigger("change");
+        // $('select[name="opd"]').val(data.id_skpd).trigger("change");
         $('select[name="eselon"]').val(data.id_eselon).trigger("change");
         $('select[name="pangkat"]').val(data.id_pangkat).trigger("change");
         $('select[name="pangkat_golongan"]').val(data.id_pangkat_golongan).trigger("change");
@@ -101,7 +101,7 @@ $(function() {
 
           <div class="form-group row" style="display: none">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              OPD <span class="required">*</span> :
+              OPD <span class="">*</span> :
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <select name='opd' class="form-control select2">
