@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Mst;
 
+use App\Export\PegawaiExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Datatables;
@@ -9,6 +10,7 @@ use App\Repository\Pegawai\Pegawai;
 use App\Inspektur;
 use App\Service\Pegawai\PegawaiService;
 use App\Http\Requests\Master\PegawaiRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -113,5 +115,17 @@ class PegawaiController extends Controller
       $data = Pegawai::find($id);
 
       return response()->json($data);
+    }
+
+    public function print($method = 'html')
+    {
+      if($method == 'html') {
+        $data = Pegawai::where('is_deleted', 0)->orderBy('nama_asli')->get();
+        return view('Mst.pegawai-print', [
+          'data' => $data
+        ]);
+      } else if($method == 'excel') {
+        return Excel::download(new PegawaiExport, 'Data Pegawai.xlsx');
+      }
     }
 }

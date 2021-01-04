@@ -34,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
       Route::get('/get_skpd_by_id', 'Mst\SkpdController@get_skpd_by_id');
       Route::get('/get_skpd_by_id_wilayah', 'Mst\SkpdController@get_skpd_by_id_wilayah');
+      Route::get('/print/{method}', 'Mst\SkpdController@print');
+
       /* Post section */
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
@@ -87,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables', 'Mst\PegawaiController@list_datatables_api');
       Route::get('/get_pegawai_by_id/{id}', 'Mst\PegawaiController@get_pegawai_by_id');
       Route::get('/inspektur', 'Mst\PegawaiController@inspektur');
+      Route::get('/print/{method}', 'Mst\PegawaiController@print');
       /* Post section */
       Route::post('/add', 'Mst\PegawaiController@store');
       Route::post('/edit/{id}', 'Mst\PegawaiController@update');
@@ -151,6 +154,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/delete/{id}', 'Mst\ProgramKerjaController@destroy');
       Route::get('/datatables', 'Mst\ProgramKerjaController@list_datatables_api');
       Route::get('/get_program_kerja_by_id', 'Mst\ProgramKerjaController@get_program_kerja_by_id');
+      Route::get('/print/{method}/{tahun}', 'Mst\ProgramKerjaController@print');
       /* Post section */
       Route::post('/add', 'Mst\ProgramKerjaController@store');
       Route::post('/edit/{id}', 'Mst\ProgramKerjaController@update');
@@ -194,6 +198,8 @@ Route::middleware(['auth'])->group(function () {
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
+      
+      Route::get('/print/{id}/{method}', 'Pkpt\SuratPerintahController@print');
       /* Post section */
       Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');

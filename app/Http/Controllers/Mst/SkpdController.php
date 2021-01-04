@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Mst;
 
+use App\Export\SkpdExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Datatables;
@@ -10,6 +11,7 @@ use App\Repository\Master\Skpd;
 use App\Service\Master\SkpdService;
 use App\Service\Master\WilayahService;
 use App\Http\Requests\Master\SkpdRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -74,5 +76,17 @@ class SkpdController extends Controller
       ->get();
 
     return response()->json($data);
+  }
+
+  public function print($method = 'html')
+  {
+    if($method == 'html') {
+      $data = Skpd::with('wilayah')->where('is_deleted', 0)->get();
+      return view('Mst.skpd-print', [
+        'data' => $data
+      ]);
+    } else if($method == 'excel') {
+      return Excel::download(new SkpdExport, 'Perangkat Daerah.xlsx');
+    }
   }
 }

@@ -17,6 +17,8 @@ use App\Service\Master\KegiatanService;
 use App\Service\Pegawai\PegawaiService;
 use App\Service\ProgramKerjaService;
 use App\Service\SuratPerintah\SuratPerintahService;
+use App\Export\SuratPerintahExport;
+use View;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -291,5 +293,54 @@ class SuratPerintahController extends Controller
 
       return response()->json(['data' => $sub_unsur->butir_kegiatan()->with('satuan')->get()]);
   }
+  public function print($id, $method = 'html')
+  {
+    $data = SuratPerintah::findOrFail($id);
+    if($method == 'html') {
+      return view('Mst.program_kerja-print', [
+        'data' => $data
+      ]);
+    } else if($method == 'pdf') {
+      return Excel::download(new SuratPerintahExport($data), "Surat Perintah - {$data->nomor}.pdf");
+    } else if($method == 'word') { 
+      $skpd = Skpd::findOrFail($data->program_kerja->id_skpd);
+      // Creating the new document...
+      $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
+      /* Note: any element you append to a document must reside inside of a Section. */
+
+      // Adding an empty Section to the document...
+      $section = $phpWord->addSection();
+
+      // Adding Text element to the Section having font styled by default...
+      $view_content = View::make('pkpt.surat_perintah-word', ['data' => $data, 'skpd' => $skpd])->render();
+      // $view_content = $this->_parseHtml($view_content);
+
+
+      \PhpOffice\PhpWord\Shared\Html::addHtml($section, $view_content, true);
+      // $section->addHtml($section, $view_content['htmlBody']);
+      // $section->addText('naha ai sia goblog');
+
+      // Saving the document as HTML file...
+      $file_name = "Surat Perintah - {$data->nomor}.docx";
+      header('Content-Type: application/octet-stream');
+      header('Content-Disposition: attachment;filename="'.$file_name.'"');
+      $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+
+      $objWriter->save('php://output');
+    }
+  }
+  function _parseHtml($html){ 
+    $html = preg_replace("/<!DOCTYPE((.|\n)*?)>/ims", "", $html); 
+    $html = preg_replace("/<script((.|\n)*?)>((.|\n)*?)<\/script>/ims", "", $html); 
+    preg_match("/<head>((.|\n)*?)<\/head>/ims", $html, $matches); 
+    $head = !empty($matches[1])?$matches[1]:''; 
+    preg_match("/<title>((.|\n)*?)<\/title>/ims", $head, $matches); 
+    $this->title = !empty($matches[1])?$matches[1]:''; 
+    $html = preg_replace("/<head>((.|\n)*?)<\/head>/ims", "", $html); 
+    $head = preg_replace("/<title>((.|\n)*?)<\/title>/ims", "", $head); 
+    $head = preg_replace("/<\/?head>/ims", "", $head); 
+    $html = preg_replace("/<\/?body((.|\n)*?)>/ims", "", $html); 
+    return ['htmlHead' => $head, 'htmlBody' => $html]; 
+  } 
 }

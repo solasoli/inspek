@@ -16,7 +16,16 @@
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">Pegawai</h4>
+  <div class="row">
+    <div class="col-6">
+      <h4 class="tx-gray-800 mg-b-5">Pegawai</h4>
+    </div>
+
+    <div class="col-6 text-right">
+      <button type="button" class='btn btn-info' id='print-page'><i class='fa fa-print'></i> Print</button>
+      <button type="button" class='btn btn-info' id='download-excel'><i class="fa fa-file-excel-o"></i> Download Excel</button>
+    </div>
+  </div>
 </div>
 
 <div class="br-pagebody">
@@ -72,6 +81,14 @@
 <script>
 
 $(function() {
+  
+  $("#print-page").on('click', function() {
+    const windowPrint = window.open("{{url()->current()}}/print/html")
+  })
+  $("#download-excel").on('click', function() {
+    const windowPrint = location.href = "{{url()->current()}}/print/excel"
+  })
+
   $('#users-table').DataTable({
       processing: true,
       serverSide: true,

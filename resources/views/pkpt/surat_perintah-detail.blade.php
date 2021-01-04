@@ -221,8 +221,8 @@
                                     <div class="col-12 text-center">
                                         <p>INSPEKTUR</p>
                                         <br><br>
-                                        <span class="text-decoration:underline">{{ $inspektur->nama }}</span><br>
-                                        {{ $inspektur->pangkat->name }}<br>
+                                        <span style="text-decoration:underline">{{ $inspektur->nama }}</span><br>
+                                        {{ $inspektur->pangkat->name }} - {{ $inspektur->pangkat_golongan->name }}<br>
                                         NIP. {{ $inspektur->nip }}
                                     </div>
                                 </div>

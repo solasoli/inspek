@@ -18,6 +18,9 @@ use App\Repository\Master\ProgramKerja;
 use App\Service\Master\ProgramKerjaService;
 use App\Service\Master\KegiatanService;
 use App\Http\Requests\Master\ProgramKerjaRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Export\ProgramKerjaExport;
+use View;
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -28,10 +31,17 @@ class ProgramKerjaController extends Controller
       $opd = Skpd::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->get();
       $program_kerja = ProgramKerja::where("is_deleted", 0)->get();
+      $tahun_awal_program_kerja = ProgramKerja::where('is_deleted', 0)
+      ->limit(1)
+      ->orderBy('dari', 'ASC')
+      ->select(DB::raw("YEAR(dari) AS tahun"))
+      ->first();
+
       return view('Mst.program_kerja-list', [
         'opd' => $opd,
         'program_kerja' => $program_kerja,
         'wilayah' => $wilayah,
+        'tahun_awal_program_kerja' => !is_null($tahun_awal_program_kerja) ? $tahun_awal_program_kerja->tahun : date("Y"),
       ]);
     }
 
@@ -87,4 +97,63 @@ class ProgramKerjaController extends Controller
 
       return response()->json($data);
     }
+
+    public function print($method = 'html', $tahun = null)
+    {
+      $tahun = is_null($tahun) ? date("Y") : $tahun;
+      if($method == 'html') {
+        $data = ProgramKerja::where('is_deleted', 0)->orderBy('dari')
+        ->whereRaw("YEAR(dari) = {$tahun}")
+        ->get();
+        return view('Mst.program_kerja-print', [
+          'data' => $data
+        ]);
+      } else if($method == 'excel') {
+        return Excel::download(new ProgramKerjaExport($tahun), "Program Kerja - {$tahun}.xlsx");
+      } else if($method == 'pdf') {
+        return Excel::download(new ProgramKerjaExport($tahun), "Program Kerja - {$tahun}.pdf");
+      } else if($method == 'word') {
+        $data = ProgramKerja::where('is_deleted', 0)->orderBy('dari')
+        ->whereRaw("YEAR(dari) = {$tahun}")
+        ->get();
+        // Creating the new document...
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+        /* Note: any element you append to a document must reside inside of a Section. */
+
+        // Adding an empty Section to the document...
+        $section = $phpWord->addSection();
+
+        // Adding Text element to the Section having font styled by default...
+        $view_content = View::make('Mst.program_kerja-print', ['data' => $data])->render();
+        $view_content = $this->_parseHtml($view_content);
+
+        
+        $html = '<table><tr><td>test</td></tr></table>';
+
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $view_content['htmlBody']);
+        // $section->addHtml($section, $view_content['htmlBody']);
+        // $section->addText('naha ai sia goblog');
+
+        // Saving the document as HTML file...
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $file_name = "Program Kerja - {$tahun}.docx";
+
+        $objWriter->save(public_path('upload_file/'. $file_name));
+      }
+    }
+
+    function _parseHtml($html){ 
+      $html = preg_replace("/<!DOCTYPE((.|\n)*?)>/ims", "", $html); 
+      $html = preg_replace("/<script((.|\n)*?)>((.|\n)*?)<\/script>/ims", "", $html); 
+      preg_match("/<head>((.|\n)*?)<\/head>/ims", $html, $matches); 
+      $head = !empty($matches[1])?$matches[1]:''; 
+      preg_match("/<title>((.|\n)*?)<\/title>/ims", $head, $matches); 
+      $this->title = !empty($matches[1])?$matches[1]:''; 
+      $html = preg_replace("/<head>((.|\n)*?)<\/head>/ims", "", $html); 
+      $head = preg_replace("/<title>((.|\n)*?)<\/title>/ims", "", $head); 
+      $head = preg_replace("/<\/?head>/ims", "", $head); 
+      $html = preg_replace("/<\/?body((.|\n)*?)>/ims", "", $html); 
+      return ['htmlHead' => $head, 'htmlBody' => $html]; 
+  } 
 }
