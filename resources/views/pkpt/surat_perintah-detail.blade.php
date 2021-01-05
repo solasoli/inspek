@@ -85,7 +85,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3">
-                                        <hr style="margin-top: 0; color:#000000; border-top: 3px solid #000000;">
+                                        <hr style="margin-top: 0; color:#000000; border-top: 3px solid #000000; margin-bottom: 0px;">
+                                        <hr style="margin-top: 0; color:#000000; border-bottom: 1px solid #000000;">
                                     </td>
                                 </tr>
                             </table>
