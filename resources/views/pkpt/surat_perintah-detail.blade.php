@@ -69,8 +69,8 @@
                         <div id='print_here' style="width: 800px; margin: 0 auto">
                             <table style="width: 100%">
                                 <tr>
-                                    <td width="100px" align="right"><img src="{{ asset('img/logo_kota_bogor.png') }}"
-                                            width="110px" height="110px"></td>
+                                    <td width="100px" align="right"><img src="{{ asset('img/kop-warna.jpeg') }}"
+                                            width="110px" height="120px"></td>
                                     <td align="center">
                                         <div style="margin-left: 0px">
                                             <h5>PEMERINTAH DAERAH KOTA BOGOR</h5>
