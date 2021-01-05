@@ -50,7 +50,7 @@ $(function() {
         $('input[name="jml_pengendali_teknis"]').val(data.jml_pengendali_teknis);
         $('input[name="jml_ketua_tim"]').val(data.jml_ketua_tim);
         $('input[name="jml_anggota"]').val(data.jml_anggota);
-        $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
+        // $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
 
         count_man_power();
       });
