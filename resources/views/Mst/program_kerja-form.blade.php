@@ -326,7 +326,7 @@ $(function() {
           <div class="col-md-12">
             <div class="label-modal">Anggaran</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <input name='anggaran' required="required" class="form-control rupiah-format" type="text" autocomplete="off">
+              <input name='anggaran'  class="form-control rupiah-format" type="text" autocomplete="off">
               <div class="text-danger error" data-error="anggaran"></div>
             </div>
           </div>
