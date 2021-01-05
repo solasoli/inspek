@@ -50,7 +50,7 @@ $(function() {
         $('input[name="jml_pengendali_teknis"]').val(data.jml_pengendali_teknis);
         $('input[name="jml_ketua_tim"]').val(data.jml_ketua_tim);
         $('input[name="jml_anggota"]').val(data.jml_anggota);
-        // $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
+        $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
 
         count_man_power();
       });
@@ -326,7 +326,7 @@ $(function() {
           <div class="col-md-12">
             <div class="label-modal">Anggaran</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <input name='anggaran'  class="form-control rupiah-format" type="text" autocomplete="off">
+              <input name='anggaran' required="required" class="form-control rupiah-format" type="text" autocomplete="off">
               <div class="text-danger error" data-error="anggaran"></div>
             </div>
           </div>
