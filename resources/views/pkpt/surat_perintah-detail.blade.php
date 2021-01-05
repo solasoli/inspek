@@ -70,12 +70,12 @@
                             <table style="width: 100%">
                                 <tr>
                                     <td width="100px" align="right"><img src="{{ asset('img/kop-warna.jpeg') }}"
-                                            width="110px" height="120px"></td>
+                                            width="100px" height="120px"></td>
                                     <td align="center">
                                         <div style="margin-left: 0px">
-                                            <h5>PEMERINTAH DAERAH KOTA BOGOR</h5>
-                                            <h3>INSPEKTORAT DAERAH</h3>
-                                            <p>Jalan Pahlawan Belakang Nomor 144 Kota Bogor 16132<br>
+                                            <h4 style="color:#000000; font-family: arial, sans-serif;"><strong>PEMERINTAH DAERAH KOTA BOGOR</strong></h5>
+                                            <h3 style="color:#000000;"><strong>INSPEKTORAT DAERAH</strong></h3>
+                                            <p style="font-family: times, sans-serif; font-size:14px; color:#000000; line-height:1.35;">Jalan Raya Pajajaran No. 5 Kota Bogor 16143<br>
                                                 Telp. (0251) 8313274/Faks. (0251) 8373229<br>
                                                 Website: inspektorat.kotabogor.go.id
                                             </p>
@@ -85,7 +85,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3">
-                                        <hr>
+                                        <hr style="margin-top: 0; color:#000000; border-top: 3px solid #000000;">
                                     </td>
                                 </tr>
                             </table>
