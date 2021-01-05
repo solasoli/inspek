@@ -283,7 +283,7 @@ $(function() {
           <div class="divider"></div>
 
           <div class="col-md-12">
-            <div class="label-modal">Kegiatan *</div>
+            <div class="label-modal">Jenis Kegiatan *</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <select name='kegiatan' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='kegiatan_pr'>
               </select>
@@ -294,7 +294,7 @@ $(function() {
           <div class="divider"></div>
 
           <div class="col-md-12">
-            <div class="label-modal">Sub Kegiatan *</div>
+            <div class="label-modal">Jenis Pengawasan *</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
               <input name='sub_kegiatan' value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='sub_kegiatan'>
               <div class="text-danger error" data-error="sub_kegiatan"></div>
