@@ -298,6 +298,7 @@
             <div class="form-group row d-flex justify-content-center">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                 <a href='{{url('')}}/pkpt/surat_perintah' class="btn btn-danger" type="button">Cancel</a>
+                <a href="#" class="preview btn btn-info" data-toggle="modal" data-target="#exampleModal">Preview</a>
                 <button type="submit" class="btn btn-primary" >Submit</button>
               </div>
             </div>
@@ -305,10 +306,195 @@
         </div>
       </div>
     </div>
-
   </div>
 
 </form>
+
+<style>
+
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" id="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Preview Surat Perintah</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid px-5">
+          <div class="kop"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $(".kop").after(`
+    <table style="width: 100%">
+      <tr>
+          <td width="100px" align="right"><img src="{{ asset('img/kop-warna.jpeg') }}"
+                  width="100px" height="120px"></td>
+          <td align="center">
+              <div style="margin-left: 0px;">
+                  <h4 style="color:#000000; line-height: 1.2; font-family: arial, sans-serif;"><strong>PEMERINTAH DAERAH KOTA BOGOR</strong></h5>
+                  <h3 style="color:#000000; line-height: 0.3;"><strong>INSPEKTORAT DAERAH</strong></h3>
+                  <p style="font-family: times, sans-serif; font-size:16px; color:#000000; line-height:1.2;">Jalan Raya Pajajaran No. 5 Kota Bogor 16143<br>
+                      Telp. (0251) 8313274/Faks. (0251) 8373229<br>
+                      Website: inspektorat.kotabogor.go.id
+                  </p>
+              </div>
+          </td>
+          <td width="100px"></td>
+      </tr>
+      <tr>
+          <td colspan="3">
+              <hr style="margin-top: 0; color:#000000; border-top: 3px solid #000000; margin-bottom: 0px;">
+              <hr style="margin-top: 0; color:#000000; border-bottom: 1px solid #000000;">
+          </td>
+      </tr>
+    </table>
+    <div class="text-center" style="line-height: 0.5;">
+      <h6 style="text-decoration: underline;">SURAT PERINTAH TUGAS</h6>
+      <p>Nomor: {{ date('d/m/Y') }}</p>
+      <p>INSPEKTUR KOTA BOGOR</p>
+    </div>
+    <div class="row" style="line-height: 0.5;">
+      <div class="col-2" style="padding-left: 65px;">Dasar</div>
+      <div class="col-1 pl-4">:</div>
+      <div class="col-8" id="dasar_surat"></div>
+    </div>
+    <div class="text-center" style="line-height: 1;">
+      <br>
+      <p>MEMERINTAHKAN</p>
+    </div>
+    <div class="row">
+      <div class="col-2" style="padding-left: 65px;">Kepada</div>
+      <div class="col-1 pl-4">:</div>
+      <div class="col-8">
+          <div class="row">
+              <div class="col-2">Nama</div>
+              <div class="col-1">:</div>
+              <div class="col-8" id="inspektur_pembantu"></div>
+          </div>
+          <div class="row">
+              <div class="col-2">Jabatan</div>
+              <div class="col-1">:</div>
+              <div class="col-8"></div>
+          </div>
+          <div class="row">
+              <div class="col-2"></div>
+              <div class="col-1"></div>
+              <div class="col-8">Selaku Wakil Penanggung Jawab</div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-2">Nama</div>
+              <div class="col-1">:</div>
+              <div class="col-8" id="pengendali_teknis"></div>
+          </div>
+          <div class="row">
+              <div class="col-2">Jabatan</div>
+              <div class="col-1">:</div>
+              <div class="col-8"></div>
+          </div>
+          <div class="row">
+              <div class="col-2"></div>
+              <div class="col-1"></div>
+              <div class="col-8">Selaku Pengendali Teknis</div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-2">Nama</div>
+              <div class="col-1">:</div>
+              <div class="col-8" id="ketua_tim"></div>
+          </div>
+          <div class="row">
+              <div class="col-2">Jabatan</div>
+              <div class="col-1">:</div>
+              <div class="col-8"></div>
+          </div>
+          <div class="row">
+              <div class="col-2"></div>
+              <div class="col-1"></div>
+              <div class="col-8">Selaku Ketua Tim</div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-2">Anggota</div>
+              <div class="col-1">:</div>
+              <div class="col-8">
+                <ol style="padding-left: 10px">
+                  <li id="anggota"></li>
+                </ol>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-2" style="padding-left: 70px;">Untuk</div>
+        <div class="col-1 pl-4">:</div>
+        <div class="col-8">
+            <ol style="padding-left: 15px;">
+                <li>Melaporkan hasilnya pada Inspektur daerah Kota Bogor</li>
+                <li>Melaksanakan surat perintah tugas ini dengan penuh tanggung jawab</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6">
+            Dikeluarkan Di Bogor<br>
+            Pada tanggal
+            {{ date('d m Y') }}
+
+            <div class="col-12 text-center">
+                <p>INSPEKTUR</p>
+                <br><br>
+                <span style="text-decoration:underline">inspektur name</span><br>
+                inspektur pangkat - pangkat golongan<br>
+                NIP. inspektur nip
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="tembusan">
+        Tembusan : <br>
+        <span class="tembusan"></span>
+    </div> `);
+
+  $('.preview').on('click', function(e){
+    e.preventDefault();
+    var dasar_surat = $("textarea[name='dasar_surat']").val();
+    var inspektur_pembantu = $(".inspektur_pembantu").find("option:selected").html();
+    var pengendali_teknis = $(".pengendali_teknis").find("option:selected").html();
+    var ketua_tim = $(".ketua_tim").find("option:selected").html();
+    var anggota = $(".anggota").find("option:selected").html();
+    var li_anggota = document.querySelectorAll('li#anggota');
+    var tembusan = $("textarea[name='tembusan']").val();
+
+    $("#dasar_surat").html(dasar_surat);
+    $("#inspektur_pembantu").html(inspektur_pembantu);
+    $("#pengendali_teknis").html(pengendali_teknis);
+    $("#ketua_tim").html(ketua_tim);
+    $("#anggota").html(anggota);
+    $(".tembusan").html(tembusan);
+
+    console.log(dasar_surat);
+    console.log(tembusan);
+  });
+});
+</script>
+
 <script>
   var addMoreAnggota = "<tr>";
   addMoreAnggota += "<td>";

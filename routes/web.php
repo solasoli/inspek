@@ -200,6 +200,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       
       Route::get('/print/{id}/{method}', 'Pkpt\SuratPerintahController@print');
+      
       /* Post section */
       Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');

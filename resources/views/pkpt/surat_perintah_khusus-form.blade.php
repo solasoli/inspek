@@ -47,7 +47,6 @@
           <div class="card-body">
             {{ csrf_field() }}
 
-
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Inspektur
@@ -101,14 +100,13 @@
                 </select>
               </div>
             </div>
-
           </div>
 
           <div class="card-header">
             <h6 class="card-title float-left py-2">FORM DASAR SURAT</h6>
           </div>
-          <div class="card-body">
 
+          <div class="card-body">
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 No. Surat
@@ -126,7 +124,6 @@
                 <textarea name='dasar_surat' class="form-control">{{ !is_null(old('dasar_surat')) ? old('dasar_surat') : (isset($data->dasar_surat) ? $data->dasar_surat : (isset($dasar_surat->dasar_surat) ? $dasar_surat->dasar_surat : '')) }}</textarea>
               </div>
             </div>
-
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
@@ -179,7 +176,6 @@
               </div>
             </div>
 
-
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
                 Sampai
@@ -192,14 +188,10 @@
               </div>
             </div>
 
-
-
             <div class="form-group row">
-              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">                
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
-
                 <div class="alert alert-danger" id='jadwal_warning' style="display: none">Terdapat surat perintah lain dengan tanggal tersebut!</div>
               </div>
             </div>
@@ -212,7 +204,6 @@
 
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <table class="table">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Datatables;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use App\Repository\SuratPerintah\SuratPerintah;
 use App\Repository\Master\Skpd;
 use App\Wilayah;
@@ -31,7 +32,6 @@ class SuratPerintahController extends Controller
 
   public function create($type)
   {
-
     $data = SuratPerintahService::data_for_form();
     $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
 
@@ -91,7 +91,6 @@ class SuratPerintahController extends Controller
       'skpd' => $skpd
     ]);
   }
-
 
   public function kalendar()
   {

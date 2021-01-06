@@ -65,17 +65,17 @@
                                     class='menu-item-icon icon ion-print-outline'></i> Print</a>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: black; font-size: 16px;">
                         <div id='print_here' style="width: 800px; margin: 0 auto">
                             <table style="width: 100%">
                                 <tr>
                                     <td width="100px" align="right"><img src="{{ asset('img/kop-warna.jpeg') }}"
                                             width="100px" height="120px"></td>
                                     <td align="center">
-                                        <div style="margin-left: 0px">
-                                            <h4 style="color:#000000; font-family: arial, sans-serif;"><strong>PEMERINTAH DAERAH KOTA BOGOR</strong></h5>
-                                            <h3 style="color:#000000;"><strong>INSPEKTORAT DAERAH</strong></h3>
-                                            <p style="font-family: times, sans-serif; font-size:14px; color:#000000; line-height:1.35;">Jalan Raya Pajajaran No. 5 Kota Bogor 16143<br>
+                                        <div style="margin-left: 0px;">
+                                            <h4 style="color:#000000; line-height: 1.2; font-family: arial, sans-serif;"><strong>PEMERINTAH DAERAH KOTA BOGOR</strong></h5>
+                                            <h3 style="color:#000000; line-height: 0.3;"><strong>INSPEKTORAT DAERAH</strong></h3>
+                                            <p style="font-family: times, sans-serif; font-size:16px; color:#000000; line-height:1.2;">Jalan Raya Pajajaran No. 5 Kota Bogor 16143<br>
                                                 Telp. (0251) 8313274/Faks. (0251) 8373229<br>
                                                 Website: inspektorat.kotabogor.go.id
                                             </p>
@@ -90,17 +90,17 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div class="text-center">
+                            <div class="text-center" style="line-height: 0.5;">
                                 <h6 style="text-decoration: underline;">SURAT PERINTAH TUGAS</h6>
                                 <p>Nomor: {{ $data->no_surat }}</p>
                                 <p>INSPEKTUR KOTA BOGOR</p>
                             </div>
-                            <div class="row">
-                                <div class="col-2">Dasar</div>
-                                <div class="col-1">:</div>
+                            <div class="row" style="line-height: 0.5;">
+                                <div class="col-2" style="padding-left: 65px;">Dasar</div>
+                                <div class="col-1 pl-4">:</div>
                                 <div class="col-8">{{ $data->dasar_surat }}</div>
                             </div>
-                            <div class="text-center">
+                            <div class="text-center" style="line-height: 1;">
                                 <br>
                                 <p>MEMERINTAHKAN</p>
                             </div>
@@ -113,8 +113,8 @@
                             @endphp
 
                             <div class="row">
-                                <div class="col-2">Kepada</div>
-                                <div class="col-1">:</div>
+                                <div class="col-2" style="padding-left: 65px;">Kepada</div>
+                                <div class="col-1 pl-4">:</div>
                                 <div class="col-8">
                                     <div class="row">
                                         <div class="col-2">Nama</div>
@@ -186,8 +186,8 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-2">Untuk</div>
-                                <div class="col-1">:</div>
+                                <div class="col-2" style="padding-left: 70px;">Untuk</div>
+                                <div class="col-1 pl-4">:</div>
                                 <div class="col-8">
                                     <ol style="padding-left: 15px;">
                                         <li>{{ $data->kegiatan->nama }}, @foreach ($data->sasaran as $idx => $row)
