@@ -55,6 +55,19 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/edit/{id}', 'Mst\KegiatanController@update');
     });
 
+    Route::prefix('jenispengawasan')->group(function () {
+      Route::get('/', 'Mst\JenisPengawasanController@index');
+      Route::get('/add', 'Mst\JenisPengawasanController@store');
+      Route::get('/edit/{id}', 'Mst\JenisPengawasanController@update');
+      Route::get('/delete/{id}', 'Mst\JenisPengawasanController@destroy');
+      Route::get('/datatables', 'Mst\JenisPengawasanController@list_datatables_api');
+      Route::get('/get_jenis_pengawasan', 'Mst\JenisPengawasanController@get_jenis_pengawasan');
+      Route::get('/get_jenis_pengawasan_by_id', 'Mst\JenisPengawasanController@get_jenis_pengawasan_by_id');
+      /* Post section */
+      Route::post('/add', 'Mst\JenisPengawasanController@store');
+      Route::post('/edit/{id}', 'Mst\JenisPengawasanController@update');
+    });
+
     Route::prefix('sasaran')->group(function () {
       Route::get('/', 'Mst\SasaranController@index');
       Route::get('/add', 'Mst\SasaranController@create');
