@@ -218,6 +218,11 @@ $(function() {
 
 });
 </script>
+<script type="text/javascript">
+  $('#lintas_irban').click(function() {
+    $append.attr('disabled').to('#dropdown_irban').attr(! this.checked)
+});
+</script>
 <div class="modal" id="modal-form">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -229,6 +234,7 @@ $(function() {
       </div>
 
       <!-- Modal body -->
+      
       <div class="modal-body">
         <form id="form-program_kerja" class="form-layout form-layout-5" method="post" enctype="multipart/form-data">
           {{ csrf_field() }}
@@ -236,25 +242,35 @@ $(function() {
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Irban :
             </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
-              <select class="form-control select2" name="wilayah">
+            <div class="col-md-7 col-sm-7 col-xs-12">
+              <div class="row">
+                <div class="col-md-6 col-xs-12">
+              <select id="dropdown_irban" class="form-control select2" name="wilayah">
                 <option value="" >- Pilih -</option>
                 @foreach ($wilayah AS $row)
                   <option value="{{$row->id}}">{{$row->nama}}</option>
                 @endforeach
               </select>
+                </div>
+              <div class="col-md-6 col-xs-12">
+                <input style="margin-top: 12px" id="lintas_irban" type="checkbox" />
+                <label for="lintas_irban">&nbsp;&nbsp;&nbsp;Lintas Irban</label>
+              </div>
+              
+            </div>
+              
               <div class="text-danger error" data-error="wilayah"></div>
             </div>
           </div>
-          <div class="form-group row">
+          {{-- <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Perangkat Daerah :
             </label>
-            <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="col-md-7 col-sm-7 col-xs-12">
               <select class="form-control select2 opd" name="opd"></select>
               <div class="text-danger error" data-error="opd"></div>
             </div>
-          </div>
+          </div> --}}
           <div class="form-group row">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               Dari <span class="required"></span> :
