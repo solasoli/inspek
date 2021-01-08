@@ -81,7 +81,7 @@
 </div>
 
 <!-- modal form -->
-@include('Mst.jenispengawasan-form')
+@include('Mst.jenis_pengawasan-form')
 @endsection
 
 @section('scripts')

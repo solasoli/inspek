@@ -23,7 +23,7 @@ class JenisPengawasanController extends Controller
 
   public function index()
   {
-    return view('Mst.jenispengawasan-list');
+    return view('Mst.jenis_pengawasan-list');
   }
 
 
@@ -41,12 +41,12 @@ class JenisPengawasanController extends Controller
     return response()->json(['success' => true]);
   }
 
-  public function destroy(JenisPengawasanRequest $request, $id)
+  public function destroy(Request $request, $id)
   {
     JenisPengawasanService::delete($id);
 
     $request->session()->flash('success', "Data berhasil Dihapus!");
-    return redirect('/mst/jenispengawasan');
+    return redirect('/mst/jenis_pengawasan');
   }
 
   public function list_datatables_api()
@@ -64,7 +64,7 @@ class JenisPengawasanController extends Controller
     return response()->json($data);
   }
 
-  public function get_jenis_pengawasan_by_id(JenisPengawasanRequest $request)
+  public function get_jenis_pengawasan_by_id(Request $request)
   {
     $id = $request->input('id');
     $data = JenisPengawasan::where("is_deleted", 0)->where("id", $id)->first();

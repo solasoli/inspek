@@ -55,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
       Route::post('/edit/{id}', 'Mst\KegiatanController@update');
     });
 
-    Route::prefix('jenispengawasan')->group(function () {
+    Route::prefix('jenis_pengawasan')->group(function () {
       Route::get('/', 'Mst\JenisPengawasanController@index');
       Route::get('/add', 'Mst\JenisPengawasanController@store');
       Route::get('/edit/{id}', 'Mst\JenisPengawasanController@update');

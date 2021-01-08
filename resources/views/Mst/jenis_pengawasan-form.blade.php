@@ -4,7 +4,7 @@ $(function() {
     var id = $(e.relatedTarget).data('id');
 
     if (id > 0) { // form edit
-      $.get("{{url('')}}/mst/jenispengawasan/get_jenis_pengawasan_by_id?id=" + id, function(data) {
+      $.get("{{url('')}}/mst/jenis_pengawasan/get_jenis_pengawasan_by_id?id=" + id, function(data) {
         $('input[name="nama"]').val(data.nama);
       });
 
@@ -16,7 +16,7 @@ $(function() {
     }
 
     $('#form-jenis-pengawasan').on('submit', function(e){
-      // e.preventDefault();
+      e.preventDefault();
       $('.error').html('');
       $.ajax({
        url: $(this).attr('action'),
