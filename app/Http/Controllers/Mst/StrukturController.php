@@ -25,8 +25,9 @@ class StrukturController extends Controller
     {
       PegawaiService::change_atasan_langsung($id, $request->input('atasan_langsung'));
 
-      $request->session()->flash('success', "Data berhasil diubah!");
-      return redirect('/mst/struktur');
+      // $request->session()->flash('success', "Data berhasil diubah!");
+      return response()->json(['state' => 'success', 'msg' => 'Data berhasil diubah!']);
+      // return redirect('/mst/struktur');
     }
 
     public function list_datatables_api()

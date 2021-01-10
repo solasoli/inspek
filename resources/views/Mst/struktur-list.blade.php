@@ -31,6 +31,9 @@
   </div>
   @endif
 
+  <div class="alert-submit">
+  </div>
+
   <div class="row">
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
@@ -81,7 +84,7 @@ $(function() {
 
       { data: null, searchable: false, orderable: false, render: function ( data, type, row ) { // atasan langsung
         var a = "";
-        a += "<select class='atasan_langsung'>";
+        a += `<select class='atasan_langsung' data-id='${row.id}'>`;
         @foreach($wilayah AS $row)
           var selected = '{{$row->id}}' == row.atasan_langsung ? 'selected' : '';
           a += "<option value='{{$row->id}}' "+ selected +">{{$row->nama}}</option>";
@@ -113,9 +116,22 @@ $(function() {
       var tr = $(this).parent().parent();
 
       var atasan_langsung = tr.find($(".atasan_langsung")).val();
+      var row_id = tr.find($(".atasan_langsung")).data('id');
       tr.find($(".hidden_atasan_langsung")).val(atasan_langsung);
 
-       e.currentTarget.submit();
+      $.post(`/mst/struktur/edit/${row_id}`, {atasan_langsung}, function(res) {
+        if(res.state == 'success') {
+          $(".alert-submit").html(`<div class='alert alert-success'>${res.msg}</div>`)
+        } else {
+          
+          $(".alert-submit").html(`<div class='alert alert-danger'>Terjadi Kesalahan Server</div>`)
+        }
+
+        setInterval(function() {
+          $(".alert-submit").html('');
+        }, 10000)
+      })
+      //  e.currentTarget.submit();
     });
 
     setTimeout(function() {
