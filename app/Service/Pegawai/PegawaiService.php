@@ -189,6 +189,7 @@ class PegawaiService
       $t = Pegawai::findOrFail($id_pegawai);
 
       $t->atasan_langsung = $id_atasan_langsung;
+      $t->id_wilayah = $id_atasan_langsung;
       $t->save();
 
       DB::commit();
