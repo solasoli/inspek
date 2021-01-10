@@ -78,8 +78,8 @@
                         data-sasaran='{{ $row->sasaran }}'
                         {{-- data-jenis-pengawasan='{{ count($row->jenis_pengawasan) ? $row->jenis_pengawasan->nama : '' }}'--}}
                         data-wilayah='{{ json_encode($wilayah_pk) }}'
-                        data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}'
-                        data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->kegiatan->nama}}</option>
+                        data-dari='{{ date("d-m-Y",strtotime($row->dari)) }}'
+                        data-sampai='{{ date("d-m-Y",strtotime($row->sampai)) }}' {{$selected}}>{{$row->kegiatan->nama}}</option>
                     @endforeach
 
                   </select>
