@@ -106,7 +106,8 @@
                   <thead>
                     <tr>
                       <th>Status</th>
-                      <th>Kegiatan</th>
+                      <th>Jenis Kegiatan</th>
+                      <th>Jenis Pengawasan</th>
                       <th>Irban</th>
                       <th>Perangkat Daerah</th>
                       <th>Dari</th>
@@ -198,11 +199,36 @@ $(function() {
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           return data.kegiatan != null ? data.kegiatan.nama : '';
         }},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const jenis_pengawasan = []
+          for (const jpn of data.jenis_pengawasan) {
+            jenis_pengawasan.push(jpn.nama)
+          }
+
+          return jenis_pengawasan.join(', ');
+        }},
         // { data: 'wilayah.nama', name: 'wilayah.nama'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
-          return data.wilayah != null ? data.wilayah.nama : '';
+          const wilayah = []
+          if(data.is_lintas_irban == 1) {
+            return 'Lintas Irban'
+          } else if(data.wilayah != null && data.is_lintas_irban == 0) {
+            for (const wly of data.wilayah) {
+              wilayah.push(wly.nama)
+            }
+            return wilayah.join(', ');
+          }
+
+          return ''
         }},
-        { data: 'skpd.name', name: 'skpd.name'},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const skpd = []
+          for (const opd of data.skpd) {
+            skpd.push(opd.name)
+          }
+
+          return skpd.join(', ');
+        }},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");

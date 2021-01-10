@@ -32,11 +32,13 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Mst\SkpdController@index');
       Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
       Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
+      Route::get('/get_all_skpd', 'Mst\SkpdController@get_all_skpd');
       Route::get('/get_skpd_by_id', 'Mst\SkpdController@get_skpd_by_id');
       Route::get('/get_skpd_by_id_wilayah', 'Mst\SkpdController@get_skpd_by_id_wilayah');
       Route::get('/print/{method}', 'Mst\SkpdController@print');
 
       /* Post section */
+      Route::post('/get_skpd_by_multiple_wilayah', 'Mst\SkpdController@get_skpd_by_multiple_wilayah');
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
       
@@ -53,6 +55,19 @@ Route::middleware(['auth'])->group(function () {
       /* Post section */
       Route::post('/add', 'Mst\KegiatanController@store');
       Route::post('/edit/{id}', 'Mst\KegiatanController@update');
+    });
+
+    Route::prefix('jenis_pengawasan')->group(function () {
+      Route::get('/', 'Mst\JenisPengawasanController@index');
+      Route::get('/add', 'Mst\JenisPengawasanController@store');
+      Route::get('/edit/{id}', 'Mst\JenisPengawasanController@update');
+      Route::get('/delete/{id}', 'Mst\JenisPengawasanController@destroy');
+      Route::get('/datatables', 'Mst\JenisPengawasanController@list_datatables_api');
+      Route::get('/get_jenis_pengawasan', 'Mst\JenisPengawasanController@get_jenis_pengawasan');
+      Route::get('/get_jenis_pengawasan_by_id', 'Mst\JenisPengawasanController@get_jenis_pengawasan_by_id');
+      /* Post section */
+      Route::post('/add', 'Mst\JenisPengawasanController@store');
+      Route::post('/edit/{id}', 'Mst\JenisPengawasanController@update');
     });
 
     Route::prefix('sasaran')->group(function () {

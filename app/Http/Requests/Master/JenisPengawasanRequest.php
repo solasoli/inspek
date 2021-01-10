@@ -5,7 +5,7 @@ namespace App\Http\Requests\Master;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ProgramKerjaRequest extends FormRequest
+class JenisPengawasanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,7 @@ class ProgramKerjaRequest extends FormRequest
     public function rules()
     {
         return [
-          // 'wilayah'       => 'required',
-          'opd'           => 'required',
-          'dari'          => 'required',
-          'sampai'        => 'required',
-          'kegiatan'      => 'required',
-          // 'sub_kegiatan'  => 'required',
-          // 'sasaran.*'     => 'required'
+            'nama' => 'required|unique:mst_jenis_pengawasan,nama,' . $this->route('id')
         ];
     }
 }

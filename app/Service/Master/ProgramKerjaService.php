@@ -6,6 +6,9 @@ use DB;
 use Auth;
 use App\Repository\Master\Kegiatan;
 use App\Repository\Master\ProgramKerja;
+use App\Repository\Master\ProgramKerjaJenisPengawasan;
+use App\Repository\Master\ProgramKerjaSkpd;
+use App\Repository\Master\ProgramKerjaWilayah;
 use App\Repository\Master\Sasaran;
 use App\Repository\SuratPerintah\SuratPerintah;
 use App\Service\Master\KegiatanService;
@@ -44,9 +47,9 @@ class ProgramKerjaService
       ];
 
       $t = $program_kerja;
-      $t->sub_kegiatan = $data['sub_kegiatan'];
-      $t->id_wilayah = $data['wilayah'];
-      $t->id_skpd = $data['opd'];
+      // $t->sub_kegiatan = $data['sub_kegiatan'];
+      // $t->id_wilayah = $data['wilayah'];
+      // $t->id_skpd = $data['opd'];
 
       if (isset($data['type_pkpt'])) {
         $t->type_pkpt = $data['type_pkpt'];
@@ -55,7 +58,8 @@ class ProgramKerjaService
       $t->dari = $use['dari'] . ' 00:00:00';
       $t->sampai = $use['sampai'] . ' 00:00:00';
       $t->id_kegiatan = $data['kegiatan'];
-      $t->anggaran = str_replace('.', '', $data['anggaran']);
+      // $t->anggaran = str_replace('.', '', $data['anggaran']);
+      $t->sasaran = $data['sasaran'];
       $t->jml_wakil_penanggung_jawab = $data['jml_wakil_penanggung_jawab'];
       $t->jml_pengendali_teknis = $data['jml_pengendali_teknis'];
       $t->jml_ketua_tim = $data['jml_ketua_tim'];
@@ -64,20 +68,57 @@ class ProgramKerjaService
       $t->jml_man_power = $jml_power;
       $t->created_at = date('Y-m-d H:i:s');
       $t->created_by = Auth::id();
+      $t->is_lintas_irban = isset($data['lintas_irban']) && $data['lintas_irban'] == 1 ? 1 : 0;
       $t->save();
 
-      SasaranService::delete_by_program_kerja($t->id);
-
-      foreach ($data['sasaran'] as $v) {
-        $data_sasaran = [
-          'nama' => $v,
-          'id_program_kerja' => $t->id
-        ];
-        $t2 = SasaranService::create($data_sasaran);
-      }
+      // SasaranService::delete_by_program_kerja($t->id);
+ 
+      // foreach ($data['sasaran'] as $v) {
+      //   $data_sasaran = [
+      //     'nama' => $v,
+      //     'id_program_kerja' => $t->id
+      //   ];
+      //   $t2 = SasaranService::create($data_sasaran);
+      // }
 
       // update dari & sampai surat perintah
       SuratPerintah::where('id_program_kerja', $t->id)->update(['dari' => $t->dari, 'sampai' => $t->sampai]);
+
+      ProgramKerjaWilayah::where('id_program_kerja', $t->id)->update(['is_deleted' => 1]);
+      // insert wilayah
+      if(isset($data['wilayah'])) {
+        foreach ($data['wilayah'] as $v) {
+          $wilayah = new ProgramKerjaWilayah;
+          $wilayah->id_wilayah = $v;
+          $wilayah->id_program_kerja = $t->id;
+          $wilayah->save();
+        }
+      }
+
+      
+      ProgramKerjaSkpd::where('id_program_kerja', $t->id)->update(['is_deleted' => 1]);
+      // insert SKPD
+      if(isset($data['opd'])) {
+        foreach ($data['opd'] as $v) {
+          $wilayah = new ProgramKerjaSkpd();
+          $wilayah->id_skpd = $v;
+          $wilayah->id_program_kerja = $t->id;
+          $wilayah->save();
+        }
+      }
+
+      
+      ProgramKerjaJenisPengawasan::where('id_program_kerja', $t->id)->update(['is_deleted' => 1]);
+      // insert Jenis Pengawasan
+      if(isset($data['jenis_pengawasan'])) {
+        foreach ($data['jenis_pengawasan'] as $v) {
+          $wilayah = new ProgramKerjaJenisPengawasan();
+          $wilayah->id_jenis_pengawasan = $v;
+          $wilayah->id_program_kerja = $t->id;
+          $wilayah->save();
+        }
+      }
+
       DB::commit();
 
       return $program_kerja;
