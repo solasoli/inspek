@@ -32,11 +32,13 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/', 'Mst\SkpdController@index');
       Route::get('/delete/{id}', 'Mst\SkpdController@destroy');
       Route::get('/datatables', 'Mst\SkpdController@list_datatables_api');
+      Route::get('/get_all_skpd', 'Mst\SkpdController@get_all_skpd');
       Route::get('/get_skpd_by_id', 'Mst\SkpdController@get_skpd_by_id');
       Route::get('/get_skpd_by_id_wilayah', 'Mst\SkpdController@get_skpd_by_id_wilayah');
       Route::get('/print/{method}', 'Mst\SkpdController@print');
 
       /* Post section */
+      Route::post('/get_skpd_by_multiple_wilayah', 'Mst\SkpdController@get_skpd_by_multiple_wilayah');
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
       

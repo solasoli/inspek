@@ -4,56 +4,92 @@
   }
 </style>
 <script>
+  let option_opd = [];
   $(function() {
     var id_kegiatan = 0;
-    $('#modal-form').on('show.bs.modal', function(e) {
+    
+    function get_sasaran(id) {
+      $("#cover-sasaran_edit").html('');
+      $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
+        // console.log(data);
+        if (id > 0) {
+          $.each(data, function(idx, val) {
+            var r = "<tr>";
+            r += "<td>";
+            r += "<input name='sasaran[]' value='" + val.nama + "' autocomplete='off' required='required' class='form-control' type='text'>";
+            r += "</td>";
+            r += "<td>";
+            r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
+            r += "</td>";
+            r += "</tr>";
+            $("#cover-sasaran_edit").append(r);
+          });
+        } else {
+          $("#cover-sasaran_edit").html('');
+        }
+
+      });
+    }
+
+    $('#modal-form').on('show.bs.modal', async function(e) {
       var id = $(e.relatedTarget).data('id');
       id_kegiatan = $(e.relatedTarget).data('kegiatan');
-      get_sasaran(id);
-
-      function get_sasaran(id) {
-        $("#cover-sasaran_edit").html('');
-        $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
-          // console.log(data);
-          if (id > 0) {
-            $.each(data, function(idx, val) {
-              var r = "<tr>";
-              r += "<td>";
-              r += "<input name='sasaran[]' value='" + val.nama + "' autocomplete='off' required='required' class='form-control' type='text'>";
-              r += "</td>";
-              r += "<td>";
-              r += "<button type='button' class='btn btn-danger btn-xs remove-sasaran'><i class='fa fa-close'></i></button>";
-              r += "</td>";
-              r += "</tr>";
-              $("#cover-sasaran_edit").append(r);
-            });
-          } else {
-            $("#cover-sasaran_edit").html('');
-          }
-
-        });
-      }
+      $('.adding-irban').html('')
+      $('.cover-opd').html('')
+      // get_sasaran(id);
 
       $("select[name='wilayah']").val('').trigger('change');
       $("select[name='opd']").html(''); // api na benang , kakara di clir
+      $("#select-irban").val(0) 
 
       if (id > 0) { // form edit
-        $.get("{{url('')}}/mst/program_kerja/get_program_kerja_by_id?id=" + id, function(data) {
-          // console.log(data);
-          $('input[name="sub_kegiatan"]').val(data.sub_kegiatan);
-          $('select[name="wilayah"]').val(data.id_wilayah).trigger("change.select2");
-          // $('select[name="opd"]').val(data.id_skpd).trigger("change");
-          get_pd(data.id_skpd);
-          $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
-          $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
-          $('input[name="jml_wakil_penanggung_jawab"]').val(data.jml_wakil_penanggung_jawab);
-          $('input[name="jml_pengendali_teknis"]').val(data.jml_pengendali_teknis);
-          $('input[name="jml_ketua_tim"]').val(data.jml_ketua_tim);
-          $('input[name="jml_anggota"]').val(data.jml_anggota);
-          $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
+        var data = {}
+        await $.get("{{url('')}}/mst/program_kerja/get_program_kerja_by_id?id=" + id, function(res) {
+          data = res
+        })
+        // console.log(data);
+        // $('input[name="sub_kegiatan"]').val(data.sub_kegiatan);
+        // $('select[name="wilayah"]').val(data.id_wilayah).trigger("change.select2");
+        // $('select[name="opd"]').val(data.id_skpd).trigger("change");
+        // get_pd(data.id_skpd);
+        var checked = data.is_lintas_irban == 1 ? true : false;
+        $("#lintas").prop('checked', checked)
 
-          count_man_power();
-        });
+        // set first irban
+        if(data.wilayah.length > 0) {
+          const first_irban = data.wilayah[0]
+          $("#select-irban").val(first_irban.id).trigger('change')
+
+          // after first irban
+          for(var ii = 1; ii < data.wilayah.length; ii++) {
+            addingIrbanSelection()
+            $(".adding-irban select:last").val(data.wilayah[ii].id).trigger('change')
+          }
+        }
+        await lintasIrbanHandler()
+
+        // set OPD
+        
+        if(data.skpd.length > 0) {
+          for(var is = 0; is < data.skpd.length; is++) {
+            addingSkpdSelection()
+            $(".cover-opd select:last").val(data.skpd[is].id).trigger('change')
+          }
+        }
+        
+
+        $("select[name='kegiatan']").val(data.id_kegiatan).trigger('change');
+        $("select[name='jenis_pengawasan']").val(data.id_jenis_pengawasan).trigger('change');
+        $('input[name="dari"]').val(moment(new Date(data.dari)).format("DD-MM-YYYY"));
+        $('input[name="sampai"]').val(moment(new Date(data.sampai)).format("DD-MM-YYYY"));
+        $('input[name="jml_wakil_penanggung_jawab"]').val(data.jml_wakil_penanggung_jawab);
+        $('input[name="jml_pengendali_teknis"]').val(data.jml_pengendali_teknis);
+        $('input[name="jml_ketua_tim"]').val(data.jml_ketua_tim);
+        $('input[name="jml_anggota"]').val(data.jml_anggota);
+        $('textarea[name="sasaran"]').val(data.sasaran);
+        // $('input[name="anggaran"]').autoNumeric('set', data.anggaran);
+
+        count_man_power();
 
         $("#form-program_kerja").attr('action', '{{url()->current()}}/edit/' + id + '');
       } else {
@@ -118,7 +154,6 @@
 
       var val = $(this).val();
       if (val > 0) {
-        console.log(val)
         get_inspektur_pembantu(val);
         get_pengendali_teknis(val);
         get_ketua_tim(val);
@@ -166,17 +201,13 @@
       }, function(res) {
         if (res.data != null) {
 
-          {
-            {
-              --
+          {{--
               var data_edit = {
                 {
                   isset($data - > id_inspektur_pembantu) ? $data - > id_inspektur_pembantu : 0
                 }
               };
-              --
-            }
-          }
+              --}}
 
           $.each(res.data, function(idx, val) {
             //var selected = data_edit == val.id ? "selected" : "";
@@ -194,17 +225,12 @@
         if (res.data != null) {
           $(".pengendali_teknis").html('');
 
-          {
-            {
-              --
-              var data_edit = {
+          {{-- var data_edit = {
                 {
                   isset($data - > id_pengendali_teknis) ? $data - > id_pengendali_teknis : 0
                 }
               };
-              --
-            }
-          }
+              --}}
 
           $.each(res.data, function(idx, val) {
             dalnis_option.push("<option value='" + val.id + "'>" + val.nama + "</option>");
@@ -220,17 +246,12 @@
       }, function(res) {
         if (res.data != null) {
 
-          {
-            {
-              --
-              var data_edit = {
+          {{-- var data_edit = {
                 {
                   isset($data - > id_ketua_tim) ? $data - > id_ketua_tim : 0
                 }
               };
-              --
-            }
-          }
+            --}}
 
           $.each(res.data, function(idx, val) {
             ketua_tim_option.push("<option value='" + val.id + "'>" + val.nama + "</option>");
@@ -279,7 +300,7 @@
             <div class="col-md-7 col-sm-7 col-xs-12">
               <div class="row">
                 <div class="col-md-7 col-xs-12">
-                  <select id="select-irban" class="form-control select2" name="wilayah">
+                  <select id="select-irban" class="form-control select2 select-irban" name="wilayah[]">
                     <option value="">- Pilih -</option>
                     @foreach ($wilayah AS $row)
                     <option value="{{$row->id}}">{{$row->nama}}</option>
@@ -287,7 +308,7 @@
                   </select>
                 </div>
                 <div class="col-md-5 col-xs-12">
-                  <input style="margin-top: 12px" value="lintas-irban" id="lintas" type="checkbox" />
+                  <input style="margin-top: 12px" value="1" id="lintas" name='lintas_irban' type="checkbox" />
                   <label for="lintas">&nbsp;&nbsp;&nbsp;Lintas Irban</label>
                 </div>
               </div>
@@ -340,7 +361,12 @@
           <div class="col-md-12">
             <div class="label-modal">Jenis Kegiatan *</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <select name='kegiatan' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='kegiatan_pr'>
+              <select name='kegiatan' autocomplete="off" value='{{ !is_null(old('kegiatan')) ? old('kegiatan') : (isset($data->kegiatan) ? $data->kegiatan : '') }}' required="required" class="form-control" id='kegiatan_pr'>
+                @if(isset($jenis_kegiatan))
+                  @foreach($jenis_kegiatan as $jkn) 
+                    <option value='{{ $jkn->id }}'>{{ $jkn->nama }}</option>
+                  @endforeach
+                @endif
               </select>
               <div class="text-danger error" data-error="kegiatan"></div>
             </div>
@@ -351,13 +377,21 @@
           <div class="col-md-12">
             <div class="label-modal">Jenis Pengawasan *</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <input name='sub_kegiatan' value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='sub_kegiatan'>
-              <div class="text-danger error" data-error="sub_kegiatan"></div>
+              <select name='jenis_pengawasan' value='{{ !is_null(old('jenis_pengawasan')) ? old('jenis_pengawasan') : (isset($data->jenis_pengawasan) ? $data->jenis_pengawasan : '') }}' required="required" class="form-control" id='jenis_pengawasan'>
+                @if(isset($jenis_pengawasan))
+                  @foreach($jenis_pengawasan as $jpn) 
+                    <option value='{{ $jpn->id }}'>{{ $jpn->nama }}</option>
+                  @endforeach
+                @endif
+              </select>
+              <div class="text-danger error" data-error="jenis_pengawasan"></div>
             </div>
           </div>
 
-          <div class="col-md-12 mt-4 form-perangkat-daerah">
-            <div class="label-modal label-perangkat-daerah">Perangkat Daerah *</div>
+          <div class="col-md-12 mt-4">
+            <div class="label-modal">Perangkat Daerah *</div>
+            <div class="col-md-12 col-sm-12 col-xs-12 cover-opd">
+            </div>
           </div>
           <div class="col-md-12 mt-3 ml-3">
             <a href="#" class="btn btn-info btn-sm btn-tambah-perangkat-daerah">Tambah Perangkat Daerah</a>
@@ -365,143 +399,140 @@
 
           <div class="divider"></div>
 
-          <div style="margin: 0 5px">
-            <table class="table" width="100%">
-              <thead>
-                <tr>
-                  <th>Sasaran</th>
-                  <th style="width:60px"></th>
-                </tr>
-              </thead>
-              <tbody id='cover-sasaran_edit'>
-              </tbody>
-              <tr>
-                <td colspan="2">
-                  <textarea class="form-controll pl-2 pt-2" name="sasaran" id="sasaran" cols="100" rows="3"></textarea>
-                </td>
-              </tr>
-            </table>
+          <div class="col-md-12">
+            <div class="label-modal">Sasaran</div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                  <textarea class="form-control pl-2 pt-2" name="sasaran" id="sasaran" cols="100" rows="3"></textarea>
+              <div class="text-danger error" data-error="sasaran"></div>
+            </div>
           </div>
 
+          {{-- 
           <div class="divider"></div>
 
           <div class="col-md-12">
             <div class="label-modal">Anggaran</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <input name='anggaran' required="required" class="form-control rupiah-format" type="text" autocomplete="off">
+              <input name='anggaran' class="form-control rupiah-format" type="text" autocomplete="off">
               <div class="text-danger error" data-error="anggaran"></div>
             </div>
           </div>
+          --}}
 
           <div class="divider"></div>
 
           <div class="col-md-12">
 
             <div class="card-header label-modal" style="padding-left: 0;border-bottom: none;background:none;">
-              <div class="pull-left">Man Power</div>
+              <div class="pull-left">Jumlah Personil</div>
               <div class="pull-right">
-                <input id="more_info" name="more-info" type="checkbox" />
-                <label style="font-size:13px; margin-left:8px;">Sertakan Nama Auditor</label>
+                {{-- 
+                  <input id="more_info" name="more-info" type="checkbox" />
+                  <label style="font-size:13px; margin-left:8px;">Sertakan Nama Auditor</label>
+                --}}
               </div>
             </div>
 
             <hr>
             <div class="row">
-              <div class="col-6">
+              <div class="col-8">
                 <div class="form-group row justify-content-center">
-                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                  <label class="form-control-label col-md-7 col-sm-7 col-xs-12">
                     Wakil Penanggung Jawab :
                   </label>
-                  <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input name='jml_wakil_penanggung_jawab' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
+                  <div class="col-md-5 col-sm-5 col-xs-12">
+                    <input name='jml_wakil_penanggung_jawab' required="required" class="form-control man-power" style='max-width:100px; display: inline' type="number" value='0' autocomplete="off">
                     Orang
                   </div>
                 </div>
               </div>
 
-              <div class="col-4">
+              {{-- <div class="col-4">
                 <div class="conditional_part">
                   <div class="form-group cover-penanggung-jawab">
                     <select name="penanggung_jawab_mp" class="form-control penanggung-jawab-mp"></select>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
 
             <div class="row">
-              <div class="col-6">
+              <div class="col-8">
                 <div class="form-group row justify-content-center">
-                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                  <label class="form-control-label col-md-7 col-sm-7 col-xs-12">
                     Pengendali Teknis :
                   </label>
-                  <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input name='jml_pengendali_teknis' required="required" class="form-control man-power" style='max-width:50px; display: inline' type="number" value='0' autocomplete="off">
+                  <div class="col-md-5 col-sm-5 col-xs-12">
+                    <input name='jml_pengendali_teknis' required="required" class="form-control man-power" style='max-width:100px; display: inline' type="number" value='0' autocomplete="off">
                     Orang
                   </div>
                 </div>
               </div>
 
+              {{-- 
               <div class="col-4">
                 <div class="conditional_part">
                   <div class="form-group cover-pengendali-teknis">
                     <select name="dalnis_mp" class="form-control pengendali-teknis-mp"></select>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
 
             <div class="row">
-              <div class="col-6">
+              <div class="col-8">
                 <div class="form-group row justify-content-center">
-                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                  <label class="form-control-label col-md-7 col-sm-7 col-xs-12">
                     Ketua Tim :
                   </label>
-                  <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input name='jml_ketua_tim' required="required" class="form-control man-power" style='max-width:50px; display: inline' value='0' type="number" autocomplete="off">
+                  <div class="col-md-5 col-sm-5 col-xs-12">
+                    <input name='jml_ketua_tim' required="required" class="form-control man-power" style='max-width:100px; display: inline' value='0' type="number" autocomplete="off">
                     Orang
                   </div>
                 </div>
               </div>
 
+              {{-- 
               <div class="col-4">
                 <div class="conditional_part">
                   <div class="form-group cover-ketua-tim">
                     <select name="ketua_tim_mp" class="form-control ketua-tim-mp"></select>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
 
             <div class="row">
-              <div class="col-6">
+              <div class="col-8">
                 <div class="form-group row justify-content-center">
-                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                  <label class="form-control-label col-md-7 col-sm-7 col-xs-12">
                     Anggota :
                   </label>
-                  <div class="col-md-4 col-sm-4 col-xs-12">
-                    <input name='jml_anggota' style='max-width:50px; display: inline' required="required" class="form-control man-power" value='0' type="number" autocomplete="off">
+                  <div class="col-md-5 col-sm-5 col-xs-12">
+                    <input name='jml_anggota' style='max-width:100px; display: inline' required="required" class="form-control man-power" value='0' type="number" autocomplete="off">
                     Orang
                   </div>
                 </div>
               </div>
 
+              {{-- 
               <div class="col-4">
                 <div class="conditional_part">
                   <div class="form-group cover-anggota">
                     <select name="anggota_mp" class="form-control anggota-mp"></select>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
 
             <div class="row">
-              <div class="col-6">
+              <div class="col-8">
                 <div class="form-group row justify-content-center">
-                  <label class="form-control-label col-md-8 col-sm-8 col-xs-12">
+                  <label class="form-control-label col-md-7 col-sm-7 col-xs-12">
                     Total Man Power :
                   </label>
-                  <div class="col-md-4 col-sm-4 col-xs-12">
-                    <span id='jml_man_power'>0</span> Orang
+                  <div class="col-md-5 col-sm-5 col-xs-12">
+                    <span id='jml_man_power' style="max-width: 100px">0</span> Orang
                   </div>
                 </div>
               </div>
@@ -532,72 +563,130 @@
 
 <script>
   // Check Lintas Irban
-  const check_lintas = document.querySelector('#lintas');
-  const dp_lintas = document.querySelector('#select-irban');
-  const row_irban = document.querySelector('.row-irban');
-  const added_irban = document.querySelectorAll('div.added-irban');
-
-  check_lintas.addEventListener('change', function(e) {
-    if (this.checked) {
-      dp_lintas.setAttribute('disabled', 'on');
-      row_irban.style.display = 'none';
-      $('div.adding-irban').hide();
-    } else {
-      dp_lintas.removeAttribute('disabled');
-      row_irban.style.display = 'flex';
-      $('div.adding-irban').show();
-    }
+  $('#lintas').on('change', async function(e) {
+    await lintasIrbanHandler();
   });
 
+  async function lintasIrbanHandler() {
+    const lintasIrbanCheck = $("#lintas").is(":checked");
+    if (lintasIrbanCheck) {
+      $('#select-irban').attr('disabled', 'disabled');
+      $('.row-irban').hide();
+      $('.adding-irban').hide();
+      $(".adding-irban").html('');
+    } else {
+      $('#select-irban').removeAttr('disabled');
+      $('.row-irban').show();
+      $('.adding-irban').show();
+    }
+    await changeIrban();
+  }
+
+  $(document).on('change','.select-irban', async function() {
+    await changeIrban();
+  })
+
+  async function changeIrban() {
+    const list_irban = [];
+    option_opd = [];
+    if($('#lintas').is(':checked') === false) {
+      await $(".select-irban").map(function(idx, el) {
+        const val = $(el).val();
+        if(val > 0 && list_irban.indexOf(val) == -1) {
+          list_irban.push(val);
+        }
+      })
+
+      if(list_irban.length > 0) {
+        await $.post("/mst/skpd/get_skpd_by_multiple_wilayah", {
+            "id_wilayah": list_irban
+          },  function(res) {
+
+            for (const val of res) { 
+              option_opd.push(`<option value='${val.id}'>${val.name}</option>`)
+            }
+        }); 
+
+      }
+    } else {
+
+      await $.get("/mst/skpd/get_all_skpd",  function(res) {
+
+          for (const val of res) { 
+            option_opd.push(`<option value='${val.id}'>${val.name}</option>`)
+          }
+      }); 
+    }
+    await $(".opd").map(function(idx, el) {
+      $(this).data('last-val', $(this).val())
+    })
+    
+    await $(".opd").html(option_opd.join(''))
+
+
+    await $(".opd").map(function(idx, el) {
+      $(this).val($(this).data('last-val'))
+    })
+
+    $(".opd").trigger('change');
+  } 
+
   // Add Irban Form
-  const btn_add_irban = document.querySelector('#add_irban');
-  btn_add_irban.addEventListener('click', function() {
+  $('#add_irban').on('click', function() {
+    addingIrbanSelection()
+  });
+
+  function addingIrbanSelection(){
+    
     $('div.adding-irban').append(`
       <div class="row justify-content-center mb-2">
         <div class="col-sm-6">
-          <div class="row">
-            <div class="col-sm-10">
-              <select id="select-irban" class="form-control select2" name="wilayah">
-                <option value="">- Pilih -</option>
-                @foreach ($wilayah AS $row)
-                <option value="{{$row->id}}">{{$row->nama}}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="col-sm-2 d-flex align-items-center">
-              <a href="#" class="text-danger close-irban"><i class="fa fa-times"></i></a>
-            </div>	
+          <div class="input-group">
+            <select class="form-control select2 select-irban" name="wilayah[]">
+              <option value="">- Pilih -</option>
+              @foreach ($wilayah AS $row)
+              <option value="{{$row->id}}">{{$row->nama}}</option>
+              @endforeach
+            </select>
+            <button type="button" class="btn btn-sm btn-danger close-irban"><i class="fa fa-close"></i></button>
           </div>
         </div>
       </div>
     `);
-  });
+    
+
+    $(".adding-irban select:last").select2()
+  }
 
   // Close Irban Form
-  $(document).on('click', ".close-irban", function() {
-    $(this).parent().parent().parent().parent().remove();
+  $(document).on('click', ".close-irban", async function() {
+    $(this).parent().closest('.row').remove();
+    await changeIrban();
   });
 
   // Add form perangkat daerah
   $('.btn-tambah-perangkat-daerah').on('click', () => {
-    $('.label-perangkat-daerah').after(`
-    <div class="col-md-12 col-sm-12 col-xs-12 mt-3">
-      <div class="row">
-        <div class="col-sm-11">
-          <select name='kegiatan' autocomplete="off" value='{{ !is_null(old('nama')) ? old('nama') : (isset($data->nama) ? $data->nama : '') }}' required="required" class="form-control" id='kegiatan_pr'>
-          </select>
-          <div class="text-danger error" data-error="kegiatan"></div>
-        </div>
-        <div class="col-sm-1 d-flex align-items-center">
-          <a href="#" class="text-danger close-perangkat-daerah"><i class="fa fa-times"></i></a>
-        </div>
+    addingSkpdSelection()
+  });
+
+  function addingSkpdSelection() {
+    
+    $('.cover-opd').append(`
+    <div class="col-md-12 col-sm-12 col-xs-12 mt-3 parent-perangkat-daerah">
+      <div class="input-group">
+        <select name='opd[]' autocomplete="off" required="required" class="form-control opd" id='kegiatan_pr'>
+        ${option_opd.join('')}
+        </select>
+        <button type="button" class="btn btn-sm btn-danger close-perangkat-daerah"><i class="fa fa-close"></i></button>
       </div>
     </div>
     `);
-  });
+
+    $(".cover-opd select:last").select2()
+  }
 
   // Close Perangkat Daerah Form
   $(document).on('click', ".close-perangkat-daerah", function() {
-    $(this).parent().parent().parent().remove();
+    $(this).parent().closest('.parent-perangkat-daerah').remove();
   });
 </script>

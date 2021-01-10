@@ -67,10 +67,32 @@ class SkpdController extends Controller
     return response()->json($data);
   }
 
+  public function get_all_skpd(Request $request)
+  {
+    $id = $request->input('id');
+    $data = DB::table('mst_skpd AS skpd')
+      ->where('is_deleted', 0)
+      ->get();
+
+    return response()->json($data);
+  }
+
   public function get_skpd_by_id_wilayah(Request $request)
   {
     $id_wilayah = $request->input('id') > 0 ? $request->input('id') : 0;
     $data = Skpd::where('id_wilayah', $id_wilayah)
+      ->where('is_deleted', 0)
+      ->orderBy('id', 'ASC')
+      ->get();
+
+    return response()->json($data);
+  }
+
+  public function get_skpd_by_multiple_wilayah(Request $request)
+  {
+
+    $id_wilayah = $request->input('id_wilayah');
+    $data = Skpd::whereIn('id_wilayah', $id_wilayah)
       ->where('is_deleted', 0)
       ->orderBy('id', 'ASC')
       ->get();

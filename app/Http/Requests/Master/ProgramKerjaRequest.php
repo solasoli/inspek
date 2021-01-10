@@ -25,13 +25,13 @@ class ProgramKerjaRequest extends FormRequest
     public function rules()
     {
         return [
-          'wilayah'       => 'required',
+          // 'wilayah'       => 'required',
           'opd'           => 'required',
           'dari'          => 'required',
           'sampai'        => 'required',
           'kegiatan'      => 'required',
-          'sub_kegiatan'  => 'required',
-          'sasaran.*'     => 'required'
+          // 'sub_kegiatan'  => 'required',
+          // 'sasaran.*'     => 'required'
         ];
     }
 }

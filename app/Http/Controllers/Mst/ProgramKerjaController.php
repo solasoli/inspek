@@ -20,6 +20,7 @@ use App\Service\Master\KegiatanService;
 use App\Http\Requests\Master\ProgramKerjaRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Export\ProgramKerjaExport;
+use App\Repository\Master\JenisPengawasan;
 use View;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -37,11 +38,15 @@ class ProgramKerjaController extends Controller
       ->select(DB::raw("YEAR(dari) AS tahun"))
       ->first();
 
+      $jenis_kegiatan = Kegiatan::where('is_deleted', 0)->get();
+      $jenis_pengawasan = JenisPengawasan::where('is_deleted', 0)->get();
       return view('Mst.program_kerja-list', [
         'opd' => $opd,
         'program_kerja' => $program_kerja,
         'wilayah' => $wilayah,
         'tahun_awal_program_kerja' => !is_null($tahun_awal_program_kerja) ? $tahun_awal_program_kerja->tahun : date("Y"),
+        'jenis_pengawasan' => $jenis_pengawasan,
+        'jenis_kegiatan' => $jenis_kegiatan
       ]);
     }
 
@@ -77,13 +82,13 @@ class ProgramKerjaController extends Controller
 
     public function list_datatables_api()
     {
-      $data = ProgramKerja::with(['skpd', 'kegiatan', 'wilayah'])->where('is_deleted', 0);
+      $data = ProgramKerja::with(['skpd', 'kegiatan', 'wilayah','jenis_pengawasan'])->where('is_deleted', 0);
       return Datatables::eloquent($data)->toJson();
     }
 
     public function get_program_kerja_by_id(Request $request)
     {
-      $data = ProgramKerja::find($request->input('id'));
+      $data = ProgramKerja::with(['skpd','wilayah'])->find($request->input('id'));
 
       return response()->json($data);
     }
