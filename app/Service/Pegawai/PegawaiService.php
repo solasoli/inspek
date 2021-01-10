@@ -127,7 +127,7 @@ class PegawaiService
   public static function get_anggota($return_chain = false, $wilayah = null)
   {
     // get peran yang bukan inspektur dan sekretaris
-    $excludePeran = PeranService::get_specific_role_by_code(['sekretaris', 'wakil_sekretaris']);
+    $excludePeran = PeranService::get_specific_role_by_code([]);
 
     // get id jabatan by id peran
     $listPeranJabatan = PeranJabatan::whereIn('id_peran', $excludePeran->map(function ($ep) {
