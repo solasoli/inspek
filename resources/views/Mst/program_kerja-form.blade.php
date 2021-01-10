@@ -318,7 +318,7 @@
           <div class="adding-irban"></div>
           <div class="row justify-content-center mb-2 row-irban">
             <div class="col-sm-6">
-              <a id="add_irban" href="#" class="btn btn-info btn-sm">Tambah Irban</a>
+              <a id="add_irban" href="#" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Tambah Irban</a>
             </div>
           </div>
 
@@ -386,6 +386,9 @@
               </select>
               <div class="text-danger error" data-error="jenis_pengawasan"></div>
             </div>
+            <div class="col-md-12 mt-3 ml-3">
+              <a href="#" class="btn btn-info btn-sm btn-tambah-jenis-pengawasan"><i class="fa fa-plus"></i> Tambah Jenis Pengawasan</a>
+            </div>
           </div>
 
           <div class="col-md-12 mt-4">
@@ -394,7 +397,7 @@
             </div>
           </div>
           <div class="col-md-12 mt-3 ml-3">
-            <a href="#" class="btn btn-info btn-sm btn-tambah-perangkat-daerah">Tambah Perangkat Daerah</a>
+            <a href="#" class="btn btn-info btn-sm btn-tambah-perangkat-daerah"><i class="fa fa-plus"></i> Tambah Perangkat Daerah</a>
           </div>
 
           <div class="divider"></div>
@@ -402,7 +405,7 @@
           <div class="col-md-12">
             <div class="label-modal">Sasaran</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-                  <textarea class="form-control pl-2 pt-2" name="sasaran" id="sasaran" cols="100" rows="3"></textarea>
+              <textarea class="form-control pl-2 pt-2" name="sasaran" id="sasaran" cols="100" rows="3"></textarea>
               <div class="text-danger error" data-error="sasaran"></div>
             </div>
           </div>
@@ -688,5 +691,28 @@
   // Close Perangkat Daerah Form
   $(document).on('click', ".close-perangkat-daerah", function() {
     $(this).parent().closest('.parent-perangkat-daerah').remove();
+  });
+
+  // Add form perangkat daerah
+  $('.btn-tambah-jenis-pengawasan').on('click', () => {
+    $('.label-jenis-pengawasan').after(`
+    <div class="col-md-12 col-sm-12 col-xs-12 mt-3">
+      <div class="row">
+        <div class="col-sm-11">
+          <select name='jenis-pengawasan' autocomplete="off" required="required" class="form-control" id='jenis-pengawasan'>
+          </select>
+          <div class="text-danger error" data-error="kegiatan"></div>
+        </div>
+        <div class="col-sm-1 d-flex align-items-center">
+          <a href="#" class="text-danger close-jenis-pengawasan"><i class="fa fa-times"></i></a>
+        </div>
+      </div>
+    </div>
+    `);
+  });
+
+  // Close Perangkat Daerah Form
+  $(document).on('click', ".close-jenis-pengawasan", function() {
+    $(this).parent().parent().parent().remove();
   });
 </script>
