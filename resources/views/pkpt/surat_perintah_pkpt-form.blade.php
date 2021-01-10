@@ -69,11 +69,11 @@
                       $selected = !is_null(old('kegiatan')) && old('kegiatan') == $row->id ? 'selected' : isset($data->id) && $data->id_program_kerja == $row->id ? 'selected' : '';
                       @endphp
                       <option value='{{$row->id}}'
-                        data-kegiatan='{{$row->id_kegiatan}}'
-                        data-program_kerja='{{$row->id_program_kerja}}'
-                        data-wilayah='{{$row->id_wilayah}}'
+                        data-kegiatan='{{$row->kegiatan->id}}'
+                        data-program_kerja='{{$row->id}}'
+                        {{-- data-wilayah='{{$row->id_wilayah}}' --}}
                         data-dari='{{ date("d-m-yy",strtotime($row->dari)) }}'
-                        data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->sub_kegiatan}}</option>
+                        data-sampai='{{ date("d-m-yy",strtotime($row->sampai)) }}' {{$selected}}>{{$row->kegiatan->nama}}</option>
                     @endforeach
                   </select>
 

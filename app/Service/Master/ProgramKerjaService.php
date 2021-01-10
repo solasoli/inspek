@@ -140,17 +140,8 @@ class ProgramKerjaService
 
   public static function get_program_kerja_by_type_pkpt($type_pkpt = 1)
   {
-    $data = DB::table("mst_program_kerja AS pk")
-      ->select(DB::raw("k.id AS id_kegiatan, pk.id AS id_program_kerja, k.nama AS kegiatan,
-      pk.id,
-      pk.sub_kegiatan,
-      pk.dari,
-      pk.sampai,
-      pk.id_wilayah"))
-      ->join("mst_kegiatan AS k", "pk.id_kegiatan", "=", "k.id")
-      ->where("pk.is_deleted", 0)
-      ->where("k.is_deleted", 0)
-      ->where('pk.type_pkpt', $type_pkpt)
+    $data = ProgramKerja::where("is_deleted", 0)
+      ->where('type_pkpt', $type_pkpt)
       ->get();
 
     return $data;
