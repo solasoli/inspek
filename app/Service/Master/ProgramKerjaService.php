@@ -6,6 +6,7 @@ use DB;
 use Auth;
 use App\Repository\Master\Kegiatan;
 use App\Repository\Master\ProgramKerja;
+use App\Repository\Master\ProgramKerjaJenisPengawasan;
 use App\Repository\Master\ProgramKerjaSkpd;
 use App\Repository\Master\ProgramKerjaWilayah;
 use App\Repository\Master\Sasaran;
@@ -57,7 +58,6 @@ class ProgramKerjaService
       $t->dari = $use['dari'] . ' 00:00:00';
       $t->sampai = $use['sampai'] . ' 00:00:00';
       $t->id_kegiatan = $data['kegiatan'];
-      $t->id_jenis_pengawasan = $data['jenis_pengawasan'];
       // $t->anggaran = str_replace('.', '', $data['anggaran']);
       $t->sasaran = $data['sasaran'];
       $t->jml_wakil_penanggung_jawab = $data['jml_wakil_penanggung_jawab'];
@@ -102,6 +102,18 @@ class ProgramKerjaService
         foreach ($data['opd'] as $v) {
           $wilayah = new ProgramKerjaSkpd();
           $wilayah->id_skpd = $v;
+          $wilayah->id_program_kerja = $t->id;
+          $wilayah->save();
+        }
+      }
+
+      
+      ProgramKerjaJenisPengawasan::where('id_program_kerja', $t->id)->update(['is_deleted' => 1]);
+      // insert Jenis Pengawasan
+      if(isset($data['jenis_pengawasan'])) {
+        foreach ($data['jenis_pengawasan'] as $v) {
+          $wilayah = new ProgramKerjaJenisPengawasan();
+          $wilayah->id_jenis_pengawasan = $v;
           $wilayah->id_program_kerja = $t->id;
           $wilayah->save();
         }

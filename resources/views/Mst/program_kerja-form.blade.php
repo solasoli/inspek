@@ -77,6 +77,17 @@
           }
         }
         
+        // set Jenis Pengawasan
+        if(data.jenis_pengawasan.length > 0) {
+          const first_jenis_pengawasan = data.jenis_pengawasan[0]
+          $("#jenis_pengawasan").val(first_jenis_pengawasan.id).trigger('change')
+
+          // after first irban
+          for(var ii = 1; ii < data.jenis_pengawasan.length; ii++) {
+            addingJenisPengawasan()
+            $(".cover-jenis-pengawasan select:last").val(data.jenis_pengawasan[ii].id).trigger('change')
+          }
+        }
 
         $("select[name='kegiatan']").val(data.id_kegiatan).trigger('change');
         $("select[name='jenis_pengawasan']").val(data.id_jenis_pengawasan).trigger('change');
@@ -377,7 +388,7 @@
           <div class="col-md-12">
             <div class="label-modal">Jenis Pengawasan *</div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-              <select name='jenis_pengawasan' value='{{ !is_null(old('jenis_pengawasan')) ? old('jenis_pengawasan') : (isset($data->jenis_pengawasan) ? $data->jenis_pengawasan : '') }}' required="required" class="form-control" id='jenis_pengawasan'>
+              <select name='jenis_pengawasan[]' value='{{ !is_null(old('jenis_pengawasan')) ? old('jenis_pengawasan') : (isset($data->jenis_pengawasan) ? $data->jenis_pengawasan : '') }}' required="required" class="form-control" id='jenis_pengawasan'>
                 @if(isset($jenis_pengawasan))
                   @foreach($jenis_pengawasan as $jpn) 
                     <option value='{{ $jpn->id }}'>{{ $jpn->nama }}</option>
@@ -386,9 +397,11 @@
               </select>
               <div class="text-danger error" data-error="jenis_pengawasan"></div>
             </div>
-            <div class="col-md-12 mt-3 ml-3">
-              <a href="#" class="btn btn-info btn-sm btn-tambah-jenis-pengawasan"><i class="fa fa-plus"></i> Tambah Jenis Pengawasan</a>
+            <div class="col-md-12 col-sm-12 col-xs-12 cover-jenis-pengawasan">
             </div>
+          </div>
+          <div class="col-md-12 mt-3 ml-3">
+            <a href="#" class="btn btn-info btn-sm btn-tambah-jenis-pengawasan"><i class="fa fa-plus"></i> Tambah Jenis Pengawasan</a>
           </div>
 
           <div class="col-md-12 mt-4">
@@ -675,12 +688,14 @@
   function addingSkpdSelection() {
     
     $('.cover-opd').append(`
-    <div class="col-md-12 col-sm-12 col-xs-12 mt-3 parent-perangkat-daerah">
-      <div class="input-group">
-        <select name='opd[]' autocomplete="off" required="required" class="form-control opd" id='kegiatan_pr'>
-        ${option_opd.join('')}
-        </select>
-        <button type="button" class="btn btn-sm btn-danger close-perangkat-daerah"><i class="fa fa-close"></i></button>
+    <div class='row parent-perangkat-daerah'>
+      <div class="col-md-12 col-sm-12 col-xs-12 mt-3 ">
+        <div class="input-group">
+          <select name='opd[]' autocomplete="off" required="required" class="form-control opd" id='kegiatan_pr'>
+          ${option_opd.join('')}
+          </select>
+          <button type="button" class="btn btn-sm btn-danger close-perangkat-daerah"><i class="fa fa-close"></i></button>
+        </div>
       </div>
     </div>
     `);
@@ -695,24 +710,33 @@
 
   // Add form perangkat daerah
   $('.btn-tambah-jenis-pengawasan').on('click', () => {
-    $('.label-jenis-pengawasan').after(`
-    <div class="col-md-12 col-sm-12 col-xs-12 mt-3">
-      <div class="row">
-        <div class="col-sm-11">
-          <select name='jenis-pengawasan' autocomplete="off" required="required" class="form-control" id='jenis-pengawasan'>
+    addingJenisPengawasan();
+  });
+
+  function addingJenisPengawasan() {
+
+    $('.cover-jenis-pengawasan').append(`
+    <div class='row parent-jenis-pengawasan'>
+      <div class="col-md-12 col-sm-12 col-xs-12 mt-3 ">
+        <div class="input-group">
+          <select name='jenis_pengawasan[]' autocomplete="off" required="required" class="form-control" id='jenis-pengawasan'>
+            @if(isset($jenis_pengawasan))
+              @foreach($jenis_pengawasan as $jpn) 
+                <option value='{{ $jpn->id }}'>{{ $jpn->nama }}</option>
+              @endforeach
+            @endif
           </select>
-          <div class="text-danger error" data-error="kegiatan"></div>
-        </div>
-        <div class="col-sm-1 d-flex align-items-center">
-          <a href="#" class="text-danger close-jenis-pengawasan"><i class="fa fa-times"></i></a>
+          <button type="button" class="btn btn-sm btn-danger close-jenis-pengawasan"><i class="fa fa-close"></i></button>
         </div>
       </div>
     </div>
     `);
-  });
+    
+    $(".cover-jenis-pengawasan select:last").select2()
+  }
 
   // Close Perangkat Daerah Form
   $(document).on('click', ".close-jenis-pengawasan", function() {
-    $(this).parent().parent().parent().remove();
+    $(this).parent().closest('.parent-jenis-pengawasan').remove();
   });
 </script>

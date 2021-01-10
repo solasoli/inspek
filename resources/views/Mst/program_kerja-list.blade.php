@@ -200,7 +200,12 @@ $(function() {
           return data.kegiatan != null ? data.kegiatan.nama : '';
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
-          return data.jenis_pengawasan != null ? data.jenis_pengawasan.nama : '';
+          const jenis_pengawasan = []
+          for (const jpn of data.jenis_pengawasan) {
+            jenis_pengawasan.push(jpn.nama)
+          }
+
+          return jenis_pengawasan.join(', ');
         }},
         // { data: 'wilayah.nama', name: 'wilayah.nama'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {

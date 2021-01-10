@@ -21,7 +21,7 @@ class ProgramKerja extends BaseModel
 
   public function jenis_pengawasan()
   {
-    return $this->belongsTo('App\Repository\Master\JenisPengawasan', 'id_jenis_pengawasan');
+    return $this->hasManyThrough('App\Repository\Master\JenisPengawasan','App\Repository\Master\ProgramKerjaJenisPengawasan', 'id_program_kerja', 'id', null, 'id_jenis_pengawasan')->where('mst_program_kerja_jenis_pengawasan.is_deleted', 0);
   }
 
   public function wilayah()

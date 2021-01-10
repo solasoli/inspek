@@ -88,7 +88,7 @@ class ProgramKerjaController extends Controller
 
     public function get_program_kerja_by_id(Request $request)
     {
-      $data = ProgramKerja::with(['skpd','wilayah'])->find($request->input('id'));
+      $data = ProgramKerja::with(['skpd','wilayah','jenis_pengawasan'])->find($request->input('id'));
 
       return response()->json($data);
     }
