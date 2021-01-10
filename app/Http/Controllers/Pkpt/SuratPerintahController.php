@@ -85,7 +85,7 @@ class SuratPerintahController extends Controller
   public function info($id)
   {
     $data = SuratPerintah::findOrFail($id);
-    $skpd = Skpd::findOrFail($data->program_kerja->id_skpd);
+    $skpd = $data->skpd;
 
     return view('pkpt.surat_perintah-detail', [
       'data' => $data,

@@ -107,83 +107,87 @@
 
                             @php
                               $inspektur = $data->inspektur()->with(['pangkat','jabatan'])->first();
-                              $irban = $data->inspektur_pembantu()->with('jabatan')->first();
-                              $dalnis = $data->pengendali_teknis()->with('jabatan')->first();
-                              $ketua_tim = $data->ketua_tim()->with('jabatan')->first();
                             @endphp
+                            @foreach($data->tim as $idxTm => $rowTm)
+                                @php 
 
-                            <div class="row">
-                                <div class="col-2" style="padding-left: 65px;">Kepada</div>
-                                <div class="col-1 pl-4">:</div>
-                                <div class="col-8">
-                                    <div class="row">
-                                        <div class="col-2">Nama</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">{{ $irban->nama }}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">Jabatan</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">{{ $irban->jabatan->name }}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2"></div>
-                                        <div class="col-1"></div>
-                                        <div class="col-8">Selaku Wakil Penanggung Jawab</div>
-                                    </div>
-
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-2">Nama</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">{{ $dalnis->nama }}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">Jabatan</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">{{ $dalnis->jabatan->name }}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2"></div>
-                                        <div class="col-1"></div>
-                                        <div class="col-8">Selaku Pengendali Teknis</div>
-                                    </div>
-
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-2">Nama</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">{{ $ketua_tim->nama }}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">Jabatan</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">{{ $ketua_tim->jabatan->name }}</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2"></div>
-                                        <div class="col-1"></div>
-                                        <div class="col-8">Selaku Ketua Tim</div>
-                                    </div>
-
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-2">Anggota</div>
-                                        <div class="col-1">:</div>
-                                        <div class="col-8">
-                                            <ol style="padding-left: 10px">
-                                                @foreach ($data->anggota as $idx => $row)
-                                                    <li>{{ $row->nama }}</li>
-                                                @endforeach
-                                            </ol>
+                                $irban = $rowTm->inspektur_pembantu()->with('jabatan')->first();
+                                $dalnis = $rowTm->pengendali_teknis()->with('jabatan')->first();
+                                $ketua_tim = $rowTm->ketua_tim()->with('jabatan')->first();
+                                @endphp
+                                <div class="row">
+                                    <div class="col-2" style="padding-left: 65px;">Kepada</div>
+                                    <div class="col-1 pl-4">:</div>
+                                    <div class="col-8">
+                                        <div class="row">
+                                            <div class="col-2">Nama</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">{{ $irban->nama }}</div>
                                         </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-2">Jabatan</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">{{ $irban->jabatan->name }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-1"></div>
+                                            <div class="col-8">Selaku Wakil Penanggung Jawab</div>
+                                        </div>
 
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="col-2">Nama</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">{{ $dalnis->nama }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2">Jabatan</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">{{ $dalnis->jabatan->name }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-1"></div>
+                                            <div class="col-8">Selaku Pengendali Teknis</div>
+                                        </div>
+
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="col-2">Nama</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">{{ $ketua_tim->nama }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2">Jabatan</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">{{ $ketua_tim->jabatan->name }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-2"></div>
+                                            <div class="col-1"></div>
+                                            <div class="col-8">Selaku Ketua Tim</div>
+                                        </div>
+
+                                        <br>
+
+                                        <div class="row">
+                                            <div class="col-2">Anggota</div>
+                                            <div class="col-1">:</div>
+                                            <div class="col-8">
+                                                <ol style="padding-left: 10px">
+                                                    @foreach ($data->anggota_tim->where('id_surat_perintah_tim', $rowTm->id) as $idx => $row)
+                                                        <li>{{ $row->anggota->nama }}</li>
+                                                    @endforeach
+                                                </ol>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </div>
+                            @endforeach
 
                             <div class="row">
                                 <div class="col-2" style="padding-left: 70px;">Untuk</div>
