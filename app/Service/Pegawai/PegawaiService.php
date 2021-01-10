@@ -143,7 +143,7 @@ class PegawaiService
     $data->with([
       'wilayah' => function ($query) use ($wilayah) {
         if ($wilayah >= 0 && $wilayah !== null) {
-          $query->where("id", $wilayah);
+          $query->whereIn("id", $wilayah);
         }
       }
     ]);
@@ -214,7 +214,7 @@ class PegawaiService
   {
     $pegawai = self::get_pegawai_by_peran(['inspektur_pembantu']);
 
-    return $pegawai->where('id_wilayah', $id_wilayah)->get();
+    return $pegawai->whereIn('id_wilayah', $id_wilayah)->get();
   }
 
   public static function get_pengendali_teknis_by_wilayah($id_wilayah)
@@ -222,7 +222,7 @@ class PegawaiService
     $pegawai = self::get_pegawai_by_peran(['pengendali_teknis']);
 
     if ($id_wilayah != 'all') {
-      $pegawai = $pegawai->where("id_wilayah", $id_wilayah);
+      $pegawai = $pegawai->whereIn("id_wilayah", $id_wilayah);
     }
     return $pegawai->get();
   }
@@ -232,7 +232,7 @@ class PegawaiService
     $pegawai = self::get_pegawai_by_peran(['ketua_tim']);
 
     if ($id_wilayah != 'all') {
-      $pegawai = $pegawai->where("id_wilayah", $id_wilayah);
+      $pegawai = $pegawai->whereIn("id_wilayah", $id_wilayah);
     }
     return $pegawai->get();
   }

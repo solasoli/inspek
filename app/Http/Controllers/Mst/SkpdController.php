@@ -11,6 +11,7 @@ use App\Repository\Master\Skpd;
 use App\Service\Master\SkpdService;
 use App\Service\Master\WilayahService;
 use App\Http\Requests\Master\SkpdRequest;
+use App\Repository\Master\ProgramKerja;
 use Maatwebsite\Excel\Facades\Excel;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -98,6 +99,16 @@ class SkpdController extends Controller
       ->get();
 
     return response()->json($data);
+  }
+
+  public function get_skpd_by_program_kerja(Request $request)
+  {
+
+    $id_program_kerja = $request->input('id_program_kerja');
+    $data = ProgramKerja::find($id_program_kerja);
+    $data = !is_null($data) ? $data->skpd : [];
+
+    return response()->json(['data' => $data]);
   }
 
   public function print($method = 'html')

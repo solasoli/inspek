@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
       /* Post section */
       Route::post('/get_skpd_by_multiple_wilayah', 'Mst\SkpdController@get_skpd_by_multiple_wilayah');
+      Route::post('/get_skpd_by_program_kerja', 'Mst\SkpdController@get_skpd_by_program_kerja');
       Route::post('/add', 'Mst\SkpdController@store');
       Route::post('/edit/{id}', 'Mst\SkpdController@update');
       

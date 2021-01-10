@@ -10,7 +10,12 @@ class SuratPerintah extends BaseModel
 
   public function wilayah()
   {
-    return $this->belongsTo('App\Repository\Master\Wilayah', 'id_wilayah');
+    return $this->hasManyThrough('App\Repository\Master\Wilayah','App\Repository\SuratPerintah\SuratPerintahWilayah', 'id_surat_perintah', 'id', null, 'id_wilayah')->where('pkpt_surat_perintah_wilayah.is_deleted', 0);
+  }
+
+  public function tim()
+  {
+    return $this->hasMany('App\Repository\SuratPerintah\SuratPerintahTim', 'id_surat_perintah')->where('pkpt_surat_perintah_tim.is_deleted', 0);
   }
 
   public function inspektur()
@@ -48,6 +53,14 @@ class SuratPerintah extends BaseModel
     return $this->hasManyThrough('App\Repository\Pegawai\Pegawai', 'App\Repository\SuratPerintah\SuratPerintahAnggota', 'id_surat_perintah', 'id', null, 'id_anggota')
     ->where('pkpt_surat_perintah_anggota.is_deleted',0);
   }
+
+  
+  public function anggota_tim()
+  {
+    return $this->hasMany('App\Repository\SuratPerintah\SuratPerintahAnggota', 'id_surat_perintah', 'id')
+    ->where('pkpt_surat_perintah_anggota.is_deleted',0);
+  }
+  
 
   public function sasaran()
   {

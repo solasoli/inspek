@@ -18,6 +18,9 @@ use App\Service\Pegawai\PegawaiService;
 use App\Service\Master\SasaranService;
 
 use App\Repository\Master\DasarSurat;
+use App\Repository\SuratPerintah\SuratPerintahSkpd;
+use App\Repository\SuratPerintah\SuratPerintahTim;
+use App\Repository\SuratPerintah\SuratPerintahWilayah;
 
 class SuratPerintahService
 {
@@ -93,12 +96,13 @@ class SuratPerintahService
         'sampai' => $sampai
       ];
 
+      
       $t = $sp;
-      $t->id_wilayah = $input['wilayah'];
+      // $t->id_wilayah = $input['wilayah'];
       $t->id_inspektur = $input['inspektur'];
-      $t->id_inspektur_pembantu = $input['inspektur_pembantu'];
-      $t->id_pengendali_teknis = $input['pengendali_teknis'];
-      $t->id_ketua_tim = $input['ketua_tim'];
+      // $t->id_inspektur_pembantu = $input['inspektur_pembantu'];
+      // $t->id_pengendali_teknis = $input['pengendali_teknis'];
+      // $t->id_ketua_tim = $input['ketua_tim'];
       $t->id_kegiatan = $program_kerja->id_kegiatan;
       $t->id_program_kerja = $program_kerja->id;
       $t->no_surat = '';
@@ -121,6 +125,7 @@ class SuratPerintahService
         ->where('id_surat_perintah', $t->id)
         ->update(['is_deleted' => 1]);
 
+      /*
       // insert anggota
       foreach ($input['anggota'] as $idx => $row) {
         $na = new SuratPerintahAnggota;
@@ -128,8 +133,64 @@ class SuratPerintahService
         $na->id_anggota = $row;
         $na->save();
       }
+      */
+
+      DB::table('pkpt_surat_perintah_tim')
+        ->where('id_surat_perintah', $t->id)
+        ->update(['is_deleted' => 1]);
+      // surat perintah SKPD
+      DB::table('pkpt_surat_perintah_skpd')
+        ->where('id_surat_perintah', $t->id)
+        ->update(['is_deleted' => 1]);
+      $mapping_tim = json_decode($input['mapping_tim']);
+      foreach($mapping_tim as $mt) {
+        // insert tim
+        $new_tim = new SuratPerintahTim;
+        $new_tim->id_surat_perintah = $t->id;
+        $new_tim->no_tim = $mt->no_tim;
+        $new_tim->id_inspektur = $mt->inspektur;
+        $new_tim->id_inspektur_pembantu = $mt->inspektur_pembantu;
+        $new_tim->id_pengendali_teknis = $mt->pengendali_teknis;
+        $new_tim->id_ketua_tim = $mt->ketua_tim;
+        $new_tim->save();
+
+        // insert anggota
+        foreach ($mt->anggota as $idx => $row) {
+          $na = new SuratPerintahAnggota;
+          $na->id_surat_perintah = $t->id;
+          $na->id_anggota = $row;
+          $na->id_surat_perintah_tim = $new_tim->id;
+          $na->save();
+        }
+
+        // insert skpd        
+        foreach ($mt->opd as $idx => $row) {
+          $na = new SuratPerintahSkpd;
+          $na->id_surat_perintah = $t->id;
+          $na->id_skpd = $row;
+          $na->id_surat_perintah_tim = $new_tim->id;
+          $na->save();
+        }
+      }
+
+      $wilayah = json_decode($input['wilayah']);
+
+      DB::table('pkpt_surat_perintah_wilayah')
+        ->where('id_surat_perintah', $t->id)
+        ->update(['is_deleted' => 1]);
+      // inserting wilayah
+      if(count($wilayah) > 0) {
+        foreach($wilayah as $wl) {
+          $new_wilayah = new SuratPerintahWilayah;
+          $new_wilayah->id_surat_perintah = $t->id;
+          $new_wilayah->id_wilayah = $wl;
+          $new_wilayah->save();
+        }
+      }
 
 
+
+      /*
       DB::table('pkpt_surat_perintah_sasaran')
         ->where('id_surat_perintah', $t->id)
         ->update(['is_deleted' => 1]);
@@ -143,10 +204,12 @@ class SuratPerintahService
         $sa->id_sasaran = $row;
         $sa->save();
       }
-
+      */
 
       DB::commit();
+      
     });
+    
   }
 
   public static function delete($id)

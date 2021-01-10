@@ -40,6 +40,7 @@ class SuratPerintahController extends Controller
 
   public function store(Request $request, $type)
   {
+
     SuratPerintahService::create($request->input(), $type);
 
     $request->session()->flash('message', "Data Berhasil disimpan!");

@@ -78,7 +78,7 @@ class PegawaiController extends Controller
 
     public function get_inspektur_pembantu_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
+      $id_wilayah = $request->input("id_wilayah") != '' ? $request->input("id_wilayah") : [];
 
       $data = PegawaiService::get_inspektur_pembantu_by_wilayah($id_wilayah);
       return response()->json(["data" => $data]);
@@ -87,27 +87,32 @@ class PegawaiController extends Controller
 
     public function get_pengendali_teknis_by_wilayah(Request $request)
     {
-      $data = PegawaiService::get_pengendali_teknis_by_wilayah($request->input('id_wilayah'));
+      $id_wilayah = $request->input("id_wilayah") != '' ? $request->input("id_wilayah") : [];
+      $data = PegawaiService::get_pengendali_teknis_by_wilayah($id_wilayah);
+
       return response()->json(["data" => $data]);
     }
 
     public function get_ketua_tim_by_wilayah(Request $request)
     {
-      $data = PegawaiService::get_ketua_tim_by_wilayah($request->input('id_wilayah'));
+      $id_wilayah = $request->input("id_wilayah") != '' ? $request->input("id_wilayah") : [];
+      $data = PegawaiService::get_ketua_tim_by_wilayah($id_wilayah);
       return response()->json(["data" => $data]);
     }
 
 
     public function get_anggota_by_wilayah(Request $request)
     {
-      $id_wilayah = $request->input("id_wilayah") > 0 ? $request->input("id_wilayah") : 0;
-
-      if($request->input('id_wilayah') != 'all') {
-        $data = PegawaiService::get_anggota(true, $id_wilayah);
-      } else {
-        $data = PegawaiService::get_anggota(true);
+      $id_wilayah = $request->input("id_wilayah") != '' ? $request->input("id_wilayah") : [];
+      $data = [];
+      if(!is_null($request->input("id_wilayah"))) {
+        if($request->input('id_wilayah') != 'all') {
+          $data = PegawaiService::get_anggota(true, $id_wilayah)->get();
+        } else {
+          $data = PegawaiService::get_anggota(true)->get();
+        }
       }
-      return response()->json(["data" => $data->get()]);
+      return response()->json(["data" => $data]);
     }
 
     public function get_pegawai_by_id(Request $request, $id)

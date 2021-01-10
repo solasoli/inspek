@@ -46,7 +46,8 @@
         "files": [
             "app/library/constant.php",
             "app/library/helper.php",
-            "app/library/pemeriksaanViewHelper.php"
+            "app/library/pemeriksaanViewHelper.php",
+            "app/library/suratPerintahViewHelper.php"
         ]
     },
     "autoload-dev": {

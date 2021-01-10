@@ -165,15 +165,24 @@ $(function() {
       ajax: '{{url()->current()}}/datatables_approve/0',
       columns: [
         { data: 'is_pkpt', name: 'is_pkpt', render: function(data, type, row){
-          console.log(data.is_pkpt);
           return data == 2 ? 'Non-PKPT' : 'PKPT';
         }},
-        { data: 'wilayah.nama', name: 'wilayah.nama'},
-        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
-        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
-          const sasaranList = row.sasaran.map((r) => r.nama)
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const wilayah = []
+          if(data.program_kerja.is_lintas_irban == 1) {
+            return 'Lintas Irban'
+          } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+            for (const wly of data.wilayah) {
+              wilayah.push(wly.nama)
+            }
+            return wilayah.join(', ');
+          }
 
-          return sasaranList.join(', ')
+          return ''
+        }},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: null, name: null, orderable: false, render: function(data, type, row) {
+          return data.program_kerja.sasaran
         }},
         { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
@@ -228,12 +237,22 @@ $(function() {
           console.log(data.is_pkpt);
           return data == 2 ? 'Non-PKPT' : 'PKPT';
         }},
-        { data: 'wilayah.nama', name: 'wilayah.nama'},
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const wilayah = []
+          if(data.program_kerja.is_lintas_irban == 1) {
+            return 'Lintas Irban'
+          } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+            for (const wly of data.wilayah) {
+              wilayah.push(wly.nama)
+            }
+            return wilayah.join(', ');
+          }
+
+          return ''
+        }},
         { data: 'kegiatan.nama', name: 'kegiatan.nama'},
         { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
-          const sasaranList = row.sasaran.map((r) => r.nama)
-
-          return sasaranList.join(', ')
+          return data.program_kerja.sasaran
         }},
         { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
