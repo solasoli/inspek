@@ -194,9 +194,13 @@
                                 <div class="col-1 pl-4">:</div>
                                 <div class="col-8">
                                     <ol style="padding-left: 15px;">
-                                        <li>{{ $data->kegiatan->nama }}, {{ $data->program_kerja->sasaran }}  pada  @foreach ($data->program_kerja->skpd as $idx => $row)
-                                            {{ $row->name }}
-                                            @endforeach pada tanggal
+                                        @php
+                                            $skpd = $data->program_kerja->skpd->map(function($val) {
+                                                return $val->name;
+                                            })->toArray();
+                                        @endphp
+
+                                        <li>{{ $data->kegiatan->nama }}, {{ $data->program_kerja->sasaran }}  pada {{ implode(', ', $skpd) }} pada tanggal
                                             {{ date('d', strtotime($data->dari)) }}
                                             {{ bulan_indonesia(date('m', strtotime($data->dari))) }}
                                             {{ date('Y', strtotime($data->dari)) }}
