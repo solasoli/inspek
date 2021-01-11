@@ -16,7 +16,7 @@
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="#">Master</a>
-    <span class="breadcrumb-item active">Program Kerja</span>
+    <span class="breadcrumb-item active">Program Kerja Pengawasan</span>
   </nav>
 </div>
 
@@ -26,7 +26,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Print Program Kerja</h4>
+        <h4 class="modal-title">Print Program Kerja Pengawasan</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -60,7 +60,7 @@
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
   <div class="row">
     <div class="col-6">
-      <h4 class="tx-gray-800 mg-b-5">Program Kerja</h4>
+      <h4 class="tx-gray-800 mg-b-5">Program Kerja Pengawasan</h4>
     </div>
 
     <div class="col-6 text-right">
@@ -90,8 +90,8 @@
         <div class="card-body">
 
           <ul class="nav nav-tabs nav-justified mb-4">
-						<li class="nav-item"><a href="#list" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">List Program Kerja</a></li>
-						<li class="nav-item"><a href="#kalendar" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Kalendar</a></li>
+						<li class="nav-item"><a href="#list" class="nav-link rounded-top font-weight-bold active show" data-toggle="tab">Program Kerja Pengawasan</a></li>
+						<li class="nav-item"><a href="#kalendar" class="nav-link rounded-top font-weight-bold" data-toggle="tab">Kalender Program Kerja Pengawasan</a></li>
 					</ul>
 
 					<div class="tab-content">
@@ -106,10 +106,10 @@
                   <thead>
                     <tr>
                       <th>Status</th>
-                      <th>Jenis Kegiatan</th>
+                      <th>Nama Kegiatan</th>
                       <th>Jenis Pengawasan</th>
                       <th>Irban</th>
-                      <th>Perangkat Daerah</th>
+                      {{-- <th>Perangkat Daerah</th> --}}
                       <th>Dari</th>
                       <th>Sampai</th>
                       <th style='width:150px'>Aksi</th>
