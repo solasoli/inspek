@@ -51,7 +51,7 @@ class LaporanNhpController extends Controller
     public function list_datatables_api($status = 0)
     {
         $data = SuratPerintahService::get_valid_sp(true)
-            ->with((['wilayah', 'kegiatan', 'status']));
+            ->with((['wilayah', 'kegiatan', 'status','program_kerja']));
         if($status == 0) {
             $data = $data->whereIn('id_status_sp', [1,2,3]);
         } else {

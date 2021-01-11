@@ -142,10 +142,19 @@
                             return data == 2 ? 'Non-PKPT' : 'PKPT';
                         }
                     },
-                    {
-                        data: 'wilayah.nama',
-                        name: 'wilayah.nama'
-                    },
+                    { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+                        const wilayah = []
+                        if(data.program_kerja.is_lintas_irban == 1) {
+                            return 'Lintas Irban'
+                        } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+                            for (const wly of data.wilayah) {
+                            wilayah.push(wly.nama)
+                            }
+                            return wilayah.join(', ');
+                        }
+
+                        return ''
+                    }},
                     {
                         data: 'kegiatan.nama',
                         name: 'kegiatan.nama'
@@ -197,10 +206,19 @@
                             return data == 2 ? 'Non-PKPT' : 'PKPT';
                         }
                     },
-                    {
-                        data: 'wilayah.nama',
-                        name: 'wilayah.nama'
-                    },
+                    { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+                        const wilayah = []
+                        if(data.program_kerja.is_lintas_irban == 1) {
+                            return 'Lintas Irban'
+                        } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+                            for (const wly of data.wilayah) {
+                            wilayah.push(wly.nama)
+                            }
+                            return wilayah.join(', ');
+                        }
+
+                        return ''
+                    }},
                     {
                         data: 'kegiatan.nama',
                         name: 'kegiatan.nama'
