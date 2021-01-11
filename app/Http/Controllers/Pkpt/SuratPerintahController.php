@@ -236,7 +236,7 @@ class SuratPerintahController extends Controller
 
 
       $list_arr[] = [
-        "title" => $row->program_kerja->sub_kegiatan,
+        "title" => $row->kegiatan->nama,
         "start" => $row->dari,
         // "daysOfWeek" =>  [ '3' ],
         "end" => date("Y-m-d 23:59:59", strtotime($row->sampai)),

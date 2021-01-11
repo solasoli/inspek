@@ -60,7 +60,9 @@ class LaporanNhpController extends Controller
 
         if(Auth::user()->role->id != 1) {
             $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
-            $data = $data->where('id_pengendali_teknis', $id_pegawai);
+            $data = $data->whereHas('tim', function($query) use ($id_pegawai) {
+                return $query->where('id_pengendali_teknis', $id_pegawai);
+            });
         }
         return Datatables::eloquent($data)->toJson();
     }

@@ -62,7 +62,9 @@ class LaporanLhpController extends Controller
         
         if(Auth::user()->role->id != 1) {
             $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
-            $data = $data->whereRaw('(id_inspektur = '. $id_pegawai . ' OR id_inspektur_pembantu = '. $id_pegawai.')');
+            $data = $data->whereHas('tim', function($query) use ($id_pegawai) {
+                return $query->whereRaw('(id_inspektur = '. $id_pegawai . ' OR id_inspektur_pembantu = '. $id_pegawai.')');
+            });
         }
         return Datatables::eloquent($data)->toJson();
     }

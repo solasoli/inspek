@@ -134,7 +134,10 @@ class AuditController extends Controller
     
         if(Auth::user()->role->id != 1) {
             $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
-            $data = $data->whereRaw('(id_ketua_tim = '.$id_pegawai. ' OR (select count(id) FROM pkpt_surat_perintah_anggota WHERE id_anggota = '. $id_pegawai .') > 0)');
+            
+            $data = $data->whereHas('tim', function($query) use ($id_pegawai) {
+                return $query->whereRaw('(id_ketua_tim = '.$id_pegawai. ' OR (select count(id) FROM pkpt_surat_perintah_anggota WHERE id_anggota = '. $id_pegawai .') > 0)');
+            });
         }
         
         return Datatables::eloquent($data)->toJson();
