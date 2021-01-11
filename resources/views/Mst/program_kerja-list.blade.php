@@ -84,6 +84,66 @@
   </div>
   @endif
 
+  <form class="form-layout form-layout-5" id="form-sp" style="padding-top:0" method="get">
+    <div class="row">
+      <div class="col-lg-12 widget-2 px-0">
+        <div class="card shadow-base">
+          <div class="card-header">
+            <h6 class="card-title float-left">Filter</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Irban :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='wilayah_filter' autocomplete="off" class="form-control wilayah_filter">    
+                  <option value='0'>- Semua Irban -</option>              
+                  @foreach($wilayah as $row) 
+                    <option value='{{ $row->id }}' {{ isset($filter['wilayah_filter']) && $filter['wilayah_filter'] == $row->id ? 'selected' : '' }}>{{$row->nama}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Perangkat Daerah :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">    
+                <select name='opd_filter' autocomplete="off" class="form-control perangkat_daerah opd_filter">
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group row">
+              <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+                Jenis Pengawasan
+                 :
+              </label>
+              <div class="col-md-6 col-sm-6 col-xs-12">
+                <select name='jenis_pengawasan_filter' autocomplete="off" class="form-control jenis_pengawasan_filter">    
+                  <option value='0'>- Semua Jenis Pengawasan -</option>
+                  @foreach($jenis_pengawasan as $row)
+                    <option value='{{ $row->id }}' {{ isset($filter['jenis_pengawasan_filter']) && $filter['jenis_pengawasan_filter'] == $row->id ? 'selected' : '' }}>{{$row->nama}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            
+            <div class="form-group row d-flex justify-content-center">
+              <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 text-right">      
+                <button type="submit" class="btn btn-primary" >Filter</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <br>
   <div class="row">
     <div class="col-lg-12 widget-2 px-0">
       <div class="card shadow-base">
@@ -105,10 +165,12 @@
                 <table class="table table-bordered table-striped responsive" id="oTable" style="width:100%">
                   <thead>
                     <tr>
+                      <th>No</th>
                       <th>Status</th>
                       <th>Nama Kegiatan</th>
                       <th>Jenis Pengawasan</th>
                       <th>Irban</th>
+                      <th>Sasaran</th>
                       <th>Perangkat Daerah</th>
                       <th>Dari</th>
                       <th>Sampai</th>
@@ -190,8 +252,20 @@ $(function() {
       responsive: true,
       processing: true,
       serverSide: true,
-      ajax: '{{url()->current()}}/datatables/',
+      ajax: {
+        url: '{{url()->current()}}/datatables/',
+        data: {
+          wilayah: {{ isset($filter['wilayah_filter']) ? $filter['wilayah_filter'] : 0 }},
+          opd: {{ isset($filter['opd_filter']) ? $filter['opd_filter'] : 0 }},
+          jenis_pengawasan: {{ isset($filter['jenis_pengawasan_filter']) ? $filter['jenis_pengawasan_filter'] : 0 }}
+        }
+      },
       columns: [
+        
+        { data: null, orderable: false, render: function (data, type, row, meta) {
+            return meta.row + meta.settings._iDisplayStart + 1;
+          }  
+        },
         { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
           return data == 1 ? 'PKPT' : 'NON-PKPT'
         }},
@@ -221,6 +295,7 @@ $(function() {
 
           return ''
         }},
+        { data: 'sasaran', name:'sasaran'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           const skpd = []
           for (const opd of data.skpd) {
@@ -258,7 +333,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 6,
+        targets: 9,
         className: "text-center",
      }],
   });
@@ -276,6 +351,30 @@ $(function() {
     $(this).find('.error').html('');
   });
 
+  change_wilayah_filter($(".wilayah_filter"));
+
+  $(".wilayah_filter").on('change', function() {
+    change_wilayah_filter($(this));
+  })
+
+  function change_wilayah_filter(el) {
+    console.log($(el).val())
+    get_opd_filter($(el).val());
+  }
+  
+  function get_opd_filter(val){    
+    $.get("{{url('')}}/mst/skpd/get_skpd_by_id_wilayah?id=" + val, function(res) {
+      if(res != null){
+        $("select.opd_filter").html(`<option value='0'>- Semua Perangkat Daerah -</option>`);
+
+        $.when($.each(res, function(idx, val){
+          const data_edit = '{{ isset($filter['opd_filter']) ? $filter['opd_filter'] : 0 }}'
+          const selected = data_edit == val.id ? 'selected' : ''
+          $("select.opd_filter").append(`<option value='${val.id}' ${selected}>${val.name}</option>`);
+        }))
+      }
+    });
+  }
 
 });
 </script>

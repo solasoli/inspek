@@ -27,11 +27,39 @@ date_default_timezone_set('Asia/Jakarta');
 
 class ProgramKerjaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
       $opd = Skpd::where("is_deleted", 0)->get();
       $wilayah = Wilayah::where("is_deleted", 0)->get();
-      $program_kerja = ProgramKerja::where("is_deleted", 0)->get();
+
+      $program_kerja = ProgramKerja::with(['skpd', 'kegiatan', 'wilayah','jenis_pengawasan'])->where("is_deleted", 0);
+      
+      $filter = $request->input();
+      $wilayah_filter = isset($filter['wilayah_filter']) ? $filter['wilayah_filter'] : 0;
+      $opd_filter = isset($filter['opd_filter']) ? $filter['opd_filter'] : 0;
+      $jenis_pengawasan_filter = isset($filter['jenis_pengawasan_filter']) ? $filter['jenis_pengawasan_filter'] : 0;
+
+      if($wilayah_filter > 0) {
+        $program_kerja = $program_kerja->whereHas('wilayah', function($query) use ($wilayah_filter) {
+          return $query->where('id_wilayah', $wilayah_filter);
+        });
+      }
+      
+      if($opd_filter > 0) {
+        $program_kerja = $program_kerja->whereHas('skpd', function($query) use ($opd_filter) {
+          return $query->where('id_skpd', $opd_filter);
+        });
+      }
+      
+      if($jenis_pengawasan_filter > 0) {
+        $program_kerja = $program_kerja->whereHas('jenis_pengawasan', function($query) use ($jenis_pengawasan_filter) {
+          return $query->where('id_jenis_pengawasan', $jenis_pengawasan_filter);
+        });
+      } 
+
+      $program_kerja = $program_kerja->get();
+
+
       $tahun_awal_program_kerja = ProgramKerja::where('is_deleted', 0)
       ->limit(1)
       ->orderBy('dari', 'ASC')
@@ -46,7 +74,8 @@ class ProgramKerjaController extends Controller
         'wilayah' => $wilayah,
         'tahun_awal_program_kerja' => !is_null($tahun_awal_program_kerja) ? $tahun_awal_program_kerja->tahun : date("Y"),
         'jenis_pengawasan' => $jenis_pengawasan,
-        'jenis_kegiatan' => $jenis_kegiatan
+        'jenis_kegiatan' => $jenis_kegiatan,
+        'filter' => $request->input()
       ]);
     }
 
@@ -80,9 +109,30 @@ class ProgramKerjaController extends Controller
       return redirect('/mst/program_kerja');
     }
 
-    public function list_datatables_api()
+    public function list_datatables_api(Request $request)
     {
+
       $data = ProgramKerja::with(['skpd', 'kegiatan', 'wilayah','jenis_pengawasan'])->where('is_deleted', 0);
+      $wilayah = $request->input('wilayah');
+      $opd = $request->input('opd');
+      $jenis_pengawasan = $request->input('jenis_pengawasan');
+      if($wilayah > 0) {
+        $data->whereHas('wilayah', function($query) use ($wilayah) {
+          return $query->where('id_wilayah', $wilayah);
+        });
+      }
+      
+      if($opd > 0) {
+        $data->whereHas('skpd', function($query) use ($opd) {
+          return $query->where('id_skpd', $opd);
+        });
+      }
+      
+      if($jenis_pengawasan > 0) {
+        $data->whereHas('jenis_pengawasan', function($query) use ($jenis_pengawasan) {
+          return $query->where('id_jenis_pengawasan', $jenis_pengawasan);
+        });
+      }
       return Datatables::eloquent($data)->toJson();
     }
 
