@@ -127,7 +127,7 @@
                                         <div class="row">
                                             <div class="col-2">Jabatan</div>
                                             <div class="col-1">:</div>
-                                            <div class="col-8">{{ $irban->jabatan->name }}</div>
+                                            {{-- <div class="col-8">{{ $irban->jabatan->name }}</div> --}}
                                         </div>
                                         <div class="row">
                                             <div class="col-2"></div>
@@ -228,7 +228,7 @@
                                     {{ date('Y', strtotime($data->dari)) }}<br><br>
 
                                     <div class="col-12 text-center">
-                                        <p>INSPEKTUR</p>
+                                        <p>INSPEKTUR DAERAH,</p>
                                         <br><br>
                                         <span style="text-decoration:underline">{{ $inspektur->nama }}</span><br>
                                         Pembina Utama Muda - {{ $inspektur->pangkat_golongan->name }}<br>
