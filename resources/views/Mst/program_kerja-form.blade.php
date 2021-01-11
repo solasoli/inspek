@@ -305,7 +305,7 @@
           {{ csrf_field() }}
           <div class="form-group row irban">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              Irban :
+              Pelaksana :
             </label>
             <div class="col-md-7 col-sm-7 col-xs-12">
               <div class="row">
