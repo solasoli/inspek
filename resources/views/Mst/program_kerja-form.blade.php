@@ -415,7 +415,7 @@
               </div>
               <div class="col-sm-8 mt-2">
                 <input id="all_opd" name="all_opd" value="1" type="checkbox" style="margin-left: 5px;">
-                <label for="all_opd">&nbsp;&nbsp;&nbsp;Seluruh OPD</label>
+                <label for="all_opd">&nbsp;&nbsp;&nbsp;Seluruh Perangkat Daerah</label>
               </div>
             </div>
           </div>
