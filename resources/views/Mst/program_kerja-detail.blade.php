@@ -1,50 +1,69 @@
 <script>
 $(function() {
-  $('#detailModal').on('show.bs.modal', function(e) {
+  $('#detailModal').on('show.bs.modal', async function(e) {
     var id = $(e.relatedTarget).data('id');
     var el_btn_detail = $(".btn-detail[data-id='" + id + "']");
     var i = 0;
     var q = "";
 
+    await $.get("{{url('')}}/mst/program_kerja/get_program_kerja_by_id?id=" + id, function(data) {
+      console.log(data);
+
+      let wilayah = `<ol style='padding-left: 20px'>`;
+      data.wilayah.map(function(res) {
+        wilayah += `<li>${res.nama}</li>`
+      })
+      wilayah += '</ol>'
+
+      let jenis_pengawasan = `<ol style='padding-left: 20px'>`;
+      data.jenis_pengawasan.map(function(res) {
+        jenis_pengawasan += `<li>${res.nama}</li>`
+      })
+      jenis_pengawasan += '</ol>'
+
+      let skpd = `<ol style='padding-left: 20px'>`;
+      data.skpd.map(function(res) {
+        skpd += `<li>${res.name}</li>`
+      })
+      skpd += '</ol>'
+      q += `<tr>
+        <td width='20%' style='vertical-align: top'>Pelaksana</td>
+        <td>${wilayah}</td>
+      </tr>
+      
+      <tr>
+        <td>Dari</td>
+        <td>: ${moment(new Date(data.dari)).format("DD-MM-YYYY")}</td>
+      </tr>
+      <tr>
+        <td>Sampai</td>
+        <td>: ${moment(new Date(data.sampai)).format("DD-MM-YYYY")}</td>
+      </tr>
+      <tr>
+        <td>Jenis Kegiatan</td>
+        <td>: ${data.kegiatan.nama}</td>
+      </tr>
+      <tr>
+        <td style='vertical-align: top'>Jenis Pengawasan</td>
+        <td>${jenis_pengawasan}</td>
+      </tr>
+      <tr>
+        <td style='vertical-align: top'>Perangkat Daerah</td>
+        <td>${skpd}</td>
+      </tr>
+      <tr>
+        <td>Sasaran</td>
+        <td>: ${data.sasaran}</td>
+      </tr>"`;
+    });
+
     $("#cover-sasaran_detail_1").html('');
     $("#cover-sasaran_detail_2").html('');
 
-    q += "<tr>";
-    q +=  "<td width='20%'>Kegiatan</td>";
-    q +=  "<td>: "+ $(el_btn_detail).data('kegiatan') +"</td>";
-    q +="</tr>";
-    q +=  "<td>Sub Kegiatan</td>";
-    q +=  "<td>: "+ $(el_btn_detail).data('sub_kegiatan') +"</td>";
-    q +="</tr>";
-    q += "<tr>";
-    q +=  "<td width='1%'>Irban</td>";
-    q +=  "<td>: "+ $(el_btn_detail).data('wilayah') +"</td>";
-    q +="</tr>";
-    q += "<tr>";
-    q +=  "<td width='1%'>Perangka Daerah</td>";
-    q +=  "<td>: "+ $(el_btn_detail).data('skpd') +"</td>";
-    q +="</tr>";
-    q += "<tr>";
-    q +=  "<td>Dari</td>";
-    q +=  "<td>: "+ moment(new Date($(el_btn_detail).data('dari'))).format("DD-MM-YYYY") +"</td>";
-    q +="</tr>";
-    q += "<tr>";
-    q +=  "<td>Sampai</td>";
-    q +=  "<td>: "+ moment(new Date($(el_btn_detail).data('sampai'))).format("DD-MM-YYYY") +"</td>";
-    q +="</tr>";
+    console.log(q)
+  
     $("#cover-sasaran_detail_1").append(q);
 
-    $.get("{{url('')}}/mst/sasaran/get_sasaran_by_id_program_kerja?id=" + id, function(data) {
-      // console.log(data);
-      $.each(data, function(idx, val){
-        i++;
-        var r = "<tr>";
-        r += "<td width='5%' align='center'>"+ i +". </td>";
-        r += "<td>"+ val.nama +"</td>";
-        r += "</tr>";
-        $("#cover-sasaran_detail_2").append(r);
-      });
-    });
 
   });
 });
@@ -55,7 +74,7 @@ $(function() {
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h5 class="modal-title">Detail Kegiatan</h5>
+        <h5 class="modal-title">Detail Program Kerja</h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -64,11 +83,6 @@ $(function() {
         <table border="0" width="100%" id='cover-sasaran_detail_1' cellpadding='5'>
         </table>
         <br><br>
-        <table width="100%" cellpadding='5' class="table">
-          <th colspan="2" class="text-center">Sasaran</th>
-          <tbody id='cover-sasaran_detail_2'>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
