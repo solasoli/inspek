@@ -231,7 +231,7 @@
                                         <p>INSPEKTUR</p>
                                         <br><br>
                                         <span style="text-decoration:underline">{{ $inspektur->nama }}</span><br>
-                                        {{ $inspektur->pangkat->name }} - {{ $inspektur->pangkat_golongan->name }}<br>
+                                        Pembina Utama Muda - {{ $inspektur->pangkat_golongan->name }}<br>
                                         NIP. {{ $inspektur->nip }}
                                     </div>
                                 </div>
