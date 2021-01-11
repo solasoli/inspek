@@ -22,7 +22,7 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Perangkat Daerah</th>
+                            <th>Objek Pemeriksaan</th>
                             <th style="width:60px"></th>
                         </tr>
                     </thead>
@@ -131,9 +131,7 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
                             <th>Anggota</th>
                             <th style="width:60px"></th>
                         </tr>
-                        td colspan="2">
-                            <button type="button" class="btn btn-info add-opd"  data-tim='{{$tagIdx}}'> Pilih Obrik</button>
-                        </td>
+                        
                     </thead>
                     <tbody id='cover-anggota-{{ $tagIdx}}'>
                         @if (!is_null(old('anggota')))
