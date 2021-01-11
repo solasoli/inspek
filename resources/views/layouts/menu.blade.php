@@ -22,7 +22,7 @@ echo $menu_html;
 
 function getChildMenu($menu_id) {
   $menu_child_html = "";
-  $get_child = Menu::where("is_deleted", 0)->where("id_parent", $menu_id)->get();
+  $get_child = Menu::where("is_deleted", 0)->where("id_parent", $menu_id)->orderBy('order', 'ASC')->get();
   $parent_row = Menu::where("is_deleted", 0)->where("id", $menu_id)->first();
   if($get_child != null && $get_child->count() > 0){
     if(can_access_child($parent_row->slug) === true){
