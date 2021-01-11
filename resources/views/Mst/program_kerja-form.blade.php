@@ -190,7 +190,6 @@
         })
         $("#kegiatan_pr").html(options).trigger('change')
       })
-
     })
 
     $(".man-power").on('keyup change', function() {
@@ -306,7 +305,7 @@
           {{ csrf_field() }}
           <div class="form-group row irban">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-              Irban :
+              Pelaksana :
             </label>
             <div class="col-md-7 col-sm-7 col-xs-12">
               <div class="row">
@@ -410,7 +409,15 @@
             </div>
           </div>
           <div class="col-md-12 mt-3 ml-3">
-            <a href="#" class="btn btn-info btn-sm btn-tambah-perangkat-daerah"><i class="fa fa-plus"></i> Tambah Perangkat Daerah</a>
+            <div class="row">
+              <div class="col-sm-4">
+                <a href="#" class="btn btn-info btn-sm btn-tambah-perangkat-daerah"><i class="fa fa-plus"></i> Tambah Perangkat Daerah</a>
+              </div>
+              <div class="col-sm-8 mt-2">
+                <input id="all_opd" name="all_opd" value="1" type="checkbox" style="margin-left: 5px;">
+                <label for="all_opd">&nbsp;&nbsp;&nbsp;Seluruh Perangkat Daerah</label>
+              </div>
+            </div>
           </div>
 
           <div class="divider"></div>
@@ -739,4 +746,14 @@
   $(document).on('click', ".close-jenis-pengawasan", function() {
     $(this).parent().closest('.parent-jenis-pengawasan').remove();
   });
+
+  $('#all_opd').on('change', (e) => {
+    // console.log(e.target.checked);
+    if(e.target.checked === true) {
+      $('.btn-tambah-perangkat-daerah').addClass('disabled');
+    }else {
+      $('.btn-tambah-perangkat-daerah').removeClass('disabled');
+    }
+  });
+  
 </script>

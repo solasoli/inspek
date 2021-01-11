@@ -109,7 +109,7 @@
                       <th>Nama Kegiatan</th>
                       <th>Jenis Pengawasan</th>
                       <th>Irban</th>
-                      {{-- <th>Perangkat Daerah</th> --}}
+                      <th>Perangkat Daerah</th>
                       <th>Dari</th>
                       <th>Sampai</th>
                       <th style='width:150px'>Aksi</th>
