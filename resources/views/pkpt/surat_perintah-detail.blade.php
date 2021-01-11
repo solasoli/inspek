@@ -127,12 +127,13 @@
                                         <div class="row">
                                             <div class="col-2">Jabatan</div>
                                             <div class="col-1">:</div>
+                                            <div class="col-8">Wakil Penanggung Jawab</div>
                                             {{-- <div class="col-8">{{ $irban->jabatan->name }}</div> --}}
                                         </div>
                                         <div class="row">
                                             <div class="col-2"></div>
                                             <div class="col-1"></div>
-                                            <div class="col-8">Selaku Wakil Penanggung Jawab</div>
+                                            
                                         </div>
 
                                         <br>
