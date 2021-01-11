@@ -93,7 +93,7 @@
                             <div class="text-center" style="line-height: 0.5;">
                                 <h6 style="text-decoration: underline;">SURAT PERINTAH TUGAS</h6>
                                 <p>Nomor: {{ $data->no_surat }}</p>
-                                <p>INSPEKTUR KOTA BOGOR</p>
+                                <p>INSPEKTUR DAERAH</p>
                             </div>
                             <div class="row" style="line-height: 0.5;">
                                 <div class="col-2" style="padding-left: 65px;">Dasar</div>
@@ -146,12 +146,13 @@
                                         <div class="row">
                                             <div class="col-2">Jabatan</div>
                                             <div class="col-1">:</div>
-                                            <div class="col-8">{{ $dalnis->jabatan->name }}</div>
+                                            <div class="col-8"> Pengendali Teknis</div>
+                                            {{-- <div class="col-8">{{ $dalnis->jabatan->name }}</div> --}}
                                         </div>
                                         <div class="row">
                                             <div class="col-2"></div>
                                             <div class="col-1"></div>
-                                            <div class="col-8">Selaku Pengendali Teknis</div>
+                                            
                                         </div>
 
                                         <br>
@@ -164,12 +165,13 @@
                                         <div class="row">
                                             <div class="col-2">Jabatan</div>
                                             <div class="col-1">:</div>
-                                            <div class="col-8">{{ $ketua_tim->jabatan->name }}</div>
+                                            <div class="col-8">Ketua Tim</div>
+                                            {{-- <div class="col-8">{{ $ketua_tim->jabatan->name }}</div> --}}
                                         </div>
                                         <div class="row">
                                             <div class="col-2"></div>
                                             <div class="col-1"></div>
-                                            <div class="col-8">Selaku Ketua Tim</div>
+                                            
                                         </div>
 
                                         <br>
