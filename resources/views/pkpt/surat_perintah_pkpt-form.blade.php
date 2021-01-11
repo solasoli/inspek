@@ -112,7 +112,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-                    <input type="text" name='dari' id="dari_kalendar" value="{{ !is_null(old('dari')) ? old('dari') : (isset($data->dari) ? date("d-m-Y", strtotime($data->dari)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
+                    <input disabled type="text" name='dari' id="dari_kalendar" value="{{ !is_null(old('dari')) ? old('dari') : (isset($data->dari) ? date("d-m-Y", strtotime($data->dari)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="icon ion-calendar tx-16 lh-0 op-6"></i></span>
-                    <input type="text" name='sampai' id="sampai_kalendar" value="{{ !is_null(old('sampai')) ? old('sampai') : (isset($data->sampai) ? date("d-m-Y", strtotime($data->sampai)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
+                    <input disabled type="text" name='sampai' id="sampai_kalendar" value="{{ !is_null(old('sampai')) ? old('sampai') : (isset($data->sampai) ? date("d-m-Y", strtotime($data->sampai)) : '') }}" class="form-control fc-datepicker" placeholder="DD-MM-YYYY" autocomplete="off">
                   </div>
                 </div>
               </div>
@@ -182,7 +182,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <input id="jadikan_lampiran" name="jadikan_lampiran" type="checkbox" />
-                  <label style="font-size:13px; margin-left:8px;">Lampiran SP</label>
+                  <label style="font-size:13px; margin-left:8px;">Lampiran Surat Perintah</label>
                 </div>
               </div>
             </div>
