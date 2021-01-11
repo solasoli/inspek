@@ -182,7 +182,7 @@
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <input id="jadikan_lampiran" name="jadikan_lampiran" type="checkbox" />
-                  <label style="font-size:13px; margin-left:8px;">Jadikan Tim Sebagai Lampiran</label>
+                  <label style="font-size:13px; margin-left:8px;">Lampiran SP</label>
                 </div>
               </div>
             </div>
