@@ -251,7 +251,7 @@ $(function() {
           return ''
         }},
         { data: 'kegiatan.nama', name: 'kegiatan.nama'},
-        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
+        { data: null, name: null, orderable: false, render: function(data, type, row) {
           return data.program_kerja.sasaran
         }},
         { data: 'dari', name: 'dari', render: function(data, type, row){

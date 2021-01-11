@@ -122,13 +122,21 @@ $(function() {
       serverSide: true,
       ajax: '{{URL::to('pkpt/surat_perintah/datatables_penomeran_lhp_api/0')}}',
       columns: [
-        { data: 'wilayah.nama', name: 'wilayah.nama'},
-        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
-        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
-          const sasaranList = row.sasaran.map((r) => r.nama)
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const wilayah = []
+          if(data.program_kerja.is_lintas_irban == 1) {
+            return 'Lintas Irban'
+          } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+            for (const wly of data.wilayah) {
+              wilayah.push(wly.nama)
+            }
+            return wilayah.join(', ');
+          }
 
-          return sasaranList.join(', ')
+          return ''
         }},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'program_kerja.sasaran', name: 'program_kerja.sasaran'},
         { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
@@ -165,13 +173,21 @@ $(function() {
       columns: [
         { data: 'no_surat', name: 'no_surat'},
         { data: 'no_lhp', name: 'no_lhp'},
-        { data: 'wilayah.nama', name: 'wilayah.nama'},
-        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
-        { data: 'sasaran', name: 'sasaran', render: function(data, type, row) {
-          const sasaranList = row.sasaran.map((r) => r.nama)
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const wilayah = []
+          if(data.program_kerja.is_lintas_irban == 1) {
+            return 'Lintas Irban'
+          } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+            for (const wly of data.wilayah) {
+              wilayah.push(wly.nama)
+            }
+            return wilayah.join(', ');
+          }
 
-          return sasaranList.join(', ')
+          return ''
         }},
+        { data: 'kegiatan.nama', name: 'kegiatan.nama'},
+        { data: 'program_kerja.sasaran', name: 'program_kerja.sasaran'},
         { data: 'dari', name: 'dari', render: function(data, type, row){
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");

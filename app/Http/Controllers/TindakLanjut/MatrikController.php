@@ -67,14 +67,16 @@ class MatrikController extends Controller
     public function list_datatables_api($status = 0)
     {
         $data = SuratPerintahService::get_valid_sp(true)
-            ->with((['wilayah', 'kegiatan', 'status']))
+            ->with((['wilayah', 'kegiatan', 'status','program_kerja']))
             ->where('id_status_sp', 7)
             ->whereRaw("(no_lhp IS NOT NULL AND no_lhp != '')")
             ->where('is_approved_tindak_lanjut', $status);
             
         if(Auth::user()->role->id != 1) {
             $id_pegawai = Auth::user()->user_pegawai->id_pegawai;
-            $data = $data->whereRaw('(id_inspektur = '. $id_pegawai . ' OR id_inspektur_pembantu = '. $id_pegawai.')');
+            $data = $data->whereHas('tim', function($query) use ($id_pegawai) {
+                return $query->whereRaw('(id_inspektur = '. $id_pegawai . ' OR id_inspektur_pembantu = '. $id_pegawai.')');
+            });
         }
         return Datatables::eloquent($data)->toJson();
     }
