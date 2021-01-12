@@ -193,7 +193,7 @@ $(function() {
           return moment(x).format("DD-MM-YYYY");
         }},
         { data: null, name: 'is_approve', render: function(data, type, row){
-          return data.is_approve == 1 ? "<span class='text-success'>Approved</span>" : "<span class='text-danger'>Belum Disetujui</span>";
+          return data.is_approve == 1 ? "<span class='text-success'>Sudah Disetujui</span>" : "<span class='text-danger'>Belum Disetujui</span>";
         }},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           var return_button = "";
