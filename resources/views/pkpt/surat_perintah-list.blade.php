@@ -206,11 +206,11 @@ $(function() {
 
           if(data.is_approve == 0){
             @if(can_access("sp_surat_perintah", "additional"))
-            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Approve</a> ";
+            return_button += "<a class='btn btn-success btn-xs' href='{{url()->current()}}/approve/" + data.id + "'><i class='fa fa-check'></i> Setuju</a> ";
             @endif
           }
 
-          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
+          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Rinci</a>";
           return return_button == "" ? "-" : return_button;
         }},
       ],
