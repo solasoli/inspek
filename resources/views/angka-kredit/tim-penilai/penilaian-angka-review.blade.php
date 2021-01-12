@@ -61,7 +61,7 @@
                           <td>Lorem Ipsum</td>
                           <td>percobaan kegiatan</td>
                           <td>Inspektur Pembantu I</td>
-                          <td><span class="text-danger">Waiting Approve</span></td>
+                          <td><span class="text-danger">Belum Disetujui</span></td>
                           <td class=" text-center">
                             <a class="btn btn-warning btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/edit/9">
                               <i class="fa fa-pencil"></i> Edit</a> 
@@ -77,7 +77,7 @@
                             <td>sasaran baru; sasaran lama</td>
                             <td>19-05-2020</td>
                             <td>26-05-2020</td>
-                            <td><span class="text-danger">Waiting Approve</span></td>
+                            <td><span class="text-danger">Belum Disetujui</span></td>
                             <td class=" text-center"><a class="btn btn-warning btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/edit/12"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-danger btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/delete/12" onclick="return confirm(&quot;Apakah anda ingin menghapus data ini?&quot;)"><i class="fa fa-close"></i> Hapus</a> <a class="btn btn-success btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/approve/12"><i class="fa fa-check"></i> Approve</a>  <a class="btn btn-info btn-xs" href="http://inspektorat.summitbreak.com/pkpt/surat_perintah/info/12"><i class="fa fa-eye"></i> Detail</a></td>
                           </tr>
                         </tbody>
@@ -142,7 +142,7 @@
           <td>Lorem Ipsum</td>
           <td>percobaan kegiatan</td>
           <td>Inspektur Pembantu I</td>
-          <td><span class="text-danger">Waiting Approve</span></td>
+          <td><span class="text-danger">Belum Disetujui</span></td>
           <td class="text-center">
             
             <a href="/angka-kredit/tim-penilai/penilaian-angka-catatan"><button class="btn btn-success"><i class="fa fa-star"></i> Review</button></a>
@@ -153,7 +153,7 @@
           <td>Lorem Ipsum</td>
           <td>percobaan kegiatan</td>
           <td>Inspektur Pembantu I</td>
-          <td><span class="text-danger">Waiting Approve</span></td>
+          <td><span class="text-danger">Belum Disetujui</span></td>
           <td class="text-center">
             
             <a href="#"><button class="btn btn-success"><i class="fa fa-star"></i> Review</button></a>
@@ -164,7 +164,7 @@
           <td>Lorem Ipsum</td>
           <td>percobaan kegiatan</td>
           <td>Inspektur Pembantu I</td>
-          <td><span class="text-danger">Waiting Approve</span></td>
+          <td><span class="text-danger">Belum Disetujui</span></td>
           <td class="text-center">
             
             <a href="#"><button class="btn btn-success"><i class="fa fa-star"></i> Review</button></a>
@@ -175,7 +175,7 @@
           <td>Lorem Ipsum</td>
           <td>percobaan kegiatan</td>
           <td>Inspektur Pembantu I</td>
-          <td><span class="text-danger">Waiting Approve</span></td>
+          <td><span class="text-danger">Belum Disetujui</span></td>
           <td class="text-center">
             
             <a href="#"><button class="btn btn-success"><i class="fa fa-star"></i> Review</button></a>
