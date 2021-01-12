@@ -94,11 +94,11 @@
           <div class="card-body">
             <div class="form-group row">
               <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-                Irban :
+                Koordinator :
               </label>
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <select name='wilayah_filter' autocomplete="off" class="form-control wilayah_filter">    
-                  <option value='0'>- Semua Irban -</option>              
+                  <option value='0'>- Semua Koordinator -</option>              
                   @foreach($wilayah as $row) 
                     <option value='{{ $row->id }}' {{ isset($filter['wilayah_filter']) && $filter['wilayah_filter'] == $row->id ? 'selected' : '' }}>{{$row->nama}}</option>
                   @endforeach
@@ -169,8 +169,8 @@
                       <th>Status</th>
                       <th>Nama Kegiatan</th>
                       <th>Jenis Pengawasan</th>
-                      <th>Irban</th>
                       <th>Sasaran</th>
+                      <th>Irban</th>
                       <th>Perangkat Daerah</th>
                       <th>Dari</th>
                       <th>Sampai</th>
