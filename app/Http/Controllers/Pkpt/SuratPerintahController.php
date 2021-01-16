@@ -19,6 +19,7 @@ use App\Service\Pegawai\PegawaiService;
 use App\Service\ProgramKerjaService;
 use App\Service\SuratPerintah\SuratPerintahService;
 use App\Export\SuratPerintahExport;
+use App\Repository\SuratPerintah\TypePkpt;
 use View;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -27,15 +28,17 @@ class SuratPerintahController extends Controller
 {
   public function index()
   {
-    return view('pkpt.surat_perintah-list');
+    $type_pkpt = TypePkpt::where('is_deleted', 0)->get();
+    return view('pkpt.surat_perintah-list', [
+      'type_pkpt' => $type_pkpt
+    ]);
   }
 
   public function create($type)
   {
-    $data = SuratPerintahService::data_for_form();
-    $surat_perintah_file = $type == 1 ? 'surat_perintah_pkpt-form' : ($type == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
-
-    return view('pkpt.' . $surat_perintah_file, $data);
+    $get_file = $this->get_file_sp($type);
+    $data = SuratPerintahService::data_for_form(['multiple_pkpt' => $get_file->multiple_pkpt]);
+    return view('pkpt.' . $get_file->surat_perintah_file, $data);
   }
 
   public function store(Request $request, $type)
@@ -52,11 +55,9 @@ class SuratPerintahController extends Controller
     $surat_perintah = SuratPerintah::findOrFail($id);
     $kegiatan = KegiatanService::get_data();
     $anggota = PegawaiService::get_anggota(false, $surat_perintah->program_kerja->id_wilayah);
-    $data = SuratPerintahService::data_for_form(['data' => $surat_perintah, 'anggota' => $anggota, 'kegiatan' => $kegiatan]);
-
-    $surat_perintah_file = $surat_perintah->is_pkpt == 1 ? 'surat_perintah_pkpt-form' : ($surat_perintah->is_pkpt == 2 ? 'surat_perintah_non_pkpt-form' : 'surat_perintah_khusus-form');
-
-    return view('pkpt.' . $surat_perintah_file, $data);
+    $get_file = $this->get_file_sp($surat_perintah->is_pkpt);
+    $data = SuratPerintahService::data_for_form(['data' => $surat_perintah, 'anggota' => $anggota, 'kegiatan' => $kegiatan, 'multiple_pkpt' => $get_file->multiple_pkpt]);
+    return view('pkpt.' . $get_file->surat_perintah_file, $data);
   }
 
   public function update(Request $request, $id)
@@ -343,4 +344,27 @@ class SuratPerintahController extends Controller
     $html = preg_replace("/<\/?body((.|\n)*?)>/ims", "", $html); 
     return ['htmlHead' => $head, 'htmlBody' => $html]; 
   } 
+
+  private function get_file_sp($type) {
+    
+    $type_pkpt = TypePkpt::findOrFail($type);
+    $multiple_pkpt = false;
+    switch($type_pkpt->code) {
+      case 'pkpt_tim':
+        $surat_perintah_file = 'surat_perintah_pkpt-form';
+        break;
+      case 'pkpt_banyak_tim':
+        $surat_perintah_file = 'surat_perintah_pkpt_banyak_tim-form';
+        $multiple_pkpt = true;
+        break;
+      case 'pkpt_non_tim':
+        $surat_perintah_file = 'surat_perintah_pkpt_non_tim-form';
+        break;
+      case 'non_pkpt':
+        $surat_perintah_file = 'surat_perintah_non_pkpt-form';
+        break;
+    } 
+
+    return (object) ['surat_perintah_file' => $surat_perintah_file, 'multiple_pkpt' => $multiple_pkpt];
+  }
 }

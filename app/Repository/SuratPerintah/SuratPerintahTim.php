@@ -2,9 +2,10 @@
 
 namespace App\Repository\SuratPerintah;
 
+use App\Repository\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
-class SuratPerintahTim extends Model
+class SuratPerintahTim extends BaseModel
 {
   protected $table = "pkpt_surat_perintah_tim";
   public $timestamps = false;

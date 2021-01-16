@@ -47,10 +47,11 @@
           @include('pkpt.partial.surat_perintah_base')
           
           <div class='cover-tim'>
+            
             @if(isset($data->id)) 
             
               @foreach($data->tim as $idTm => $tm)
-                {{ sp_tim($list_inspektur, false, $idTm + 1, $tm, $data->anggota_tim->where('id_surat_perintah_tim', $tm->id)) }}
+                {{ sp_non_tim($list_inspektur, $tm, $data->anggota_tim->where('id_surat_perintah_tim', $tm->id)) }}
               @endforeach
             @endif
           </div>
@@ -99,5 +100,5 @@
   </div>
 </div>
 
-@include('pkpt.partial.surat_perintah_js')
+@include('pkpt.partial.surat_perintah_js_non_tim')
 @endsection

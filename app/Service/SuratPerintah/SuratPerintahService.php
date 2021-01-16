@@ -21,6 +21,7 @@ use App\Repository\Master\DasarSurat;
 use App\Repository\SuratPerintah\SuratPerintahSkpd;
 use App\Repository\SuratPerintah\SuratPerintahTim;
 use App\Repository\SuratPerintah\SuratPerintahWilayah;
+use App\Repository\SuratPerintah\TypePkpt;
 
 class SuratPerintahService
 {
@@ -48,10 +49,8 @@ class SuratPerintahService
       $input = $data;
       $new_sasaran = [];
 
-      if ($type == 1) { // Surat Perintah PKPT
-        $program_kerja = ProgramKerja::findOrFail($input['program_kerja']);
-        $kegiatan = Kegiatan::findOrFail($program_kerja->id_kegiatan);
-      } else { // Surat Perintah Non PKPT
+      $type_pkpt = TypePkpt::findOrFail($type);
+      if ($type_pkpt->code == 'non_pkpt')  { // Surat Perintah Non PKPT
 
         // prepare data kegiatan
         $data_kegiatan = [
@@ -84,7 +83,10 @@ class SuratPerintahService
         foreach($get_created_sasaran as $csi => $rcs) { 
           $new_sasaran[] = $rcs->id;
         }
-      }
+      } else { // Surat Perintah PKPT
+        $program_kerja = ProgramKerja::findOrFail($input['program_kerja']);
+        $kegiatan = Kegiatan::findOrFail($program_kerja->id_kegiatan);
+      } 
 
       $dari = explode('-', $input['dari']);
       $dari = $dari[2] . '-' . $dari[1] . '-' . $dari[0];
@@ -147,11 +149,11 @@ class SuratPerintahService
         // insert tim
         $new_tim = new SuratPerintahTim;
         $new_tim->id_surat_perintah = $t->id;
-        $new_tim->no_tim = $mt->no_tim;
+        $new_tim->no_tim = $mt->no_tim > 0 ? $mt->no_tim : 1;
         $new_tim->id_inspektur = $mt->inspektur;
-        $new_tim->id_inspektur_pembantu = $mt->inspektur_pembantu;
-        $new_tim->id_pengendali_teknis = $mt->pengendali_teknis;
-        $new_tim->id_ketua_tim = $mt->ketua_tim;
+        $new_tim->id_inspektur_pembantu = isset($mt->inspektur_pembantu) && $mt->inspektur_pembantu > 0 ? $mt->inspektur_pembantu : 0;
+        $new_tim->id_pengendali_teknis = isset($mt->pengendali_teknis) && $mt->pengendali_teknis > 0 ? $mt->pengendali_teknis : 0;
+        $new_tim->id_ketua_tim = isset($mt->ketua_tim) && $mt->ketua_tim > 0 ? $mt->ketua_tim : 0;
         $new_tim->save();
 
         // insert anggota

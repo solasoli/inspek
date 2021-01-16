@@ -171,6 +171,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/datatables', 'Mst\ProgramKerjaController@list_datatables_api');
       Route::get('/get_program_kerja_by_id', 'Mst\ProgramKerjaController@get_program_kerja_by_id');
       Route::get('/print/{method}/{tahun}', 'Mst\ProgramKerjaController@print');
+      Route::get('/add', 'Mst\ProgramKerjaController@create');
       /* Post section */
       Route::post('/add', 'Mst\ProgramKerjaController@store');
       Route::post('/edit/{id}', 'Mst\ProgramKerjaController@update');

@@ -34,8 +34,9 @@
             </label>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <select id='type_pkpt_confirm' class="form-control">
-                <option value='1'>PKPT</option>
-                <option value='2'>Non-PKPT</option>
+                @foreach($type_pkpt as $row)
+                  <option value='{{ $row->id }}'>{{ $row->name }}</option>
+                @endforeach
               </select>
             </div>
           </div>
