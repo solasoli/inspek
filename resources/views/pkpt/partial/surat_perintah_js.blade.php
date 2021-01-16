@@ -230,7 +230,7 @@
         $(".kegiatan").on("change", function(){
           change_wilayah($(this));
           kegiatan_filled_date();
-    });
+        });
     
         function change_wilayah(el) { 
           var val = $(el).find("option:selected").data("wilayah");

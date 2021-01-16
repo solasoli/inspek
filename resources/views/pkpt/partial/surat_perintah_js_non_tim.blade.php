@@ -200,22 +200,134 @@
           
           $(".sasaran-pk").html($("#program_kerja").find("option:selected").data('sasaran'))
         }
+
+        
+        change_wilayah($(".kegiatan"));
+        $(".kegiatan").on("change", function(){
+          change_wilayah($(this));
+          kegiatan_filled_date();
+        });
+    
+        function change_wilayah(el) { 
+          var val = $(el).find("option:selected").data("wilayah");
+    
+          $("input[name='wilayah']").val(`[${val}]`);
+          get_anggota(val);
+          get_opd($(el).val());
+    
+          check_jadwal_surat_perintah();
+        }
+
+        
+        function get_anggota(val){
+          $.post("/mst/pegawai/get_anggota_by_wilayah", {"id_wilayah": val}, function(res){
+            if(res.data != null){
+              $(".anggota").html('');
+    
+              var option = '';
+              $.when($.each(res.data, function(idx, val){
+                $(".anggota").append("<option value='" + val.id +"'>" + val.nama + "</option>");
+                option += "<option value='" + val.id +"'>" + val.nama + "</option>";
+              })).then(function(){
+                optionAnggota = option;
+    
+                
+              $(".anggota[data-selected!=0]").map(function(idx, el) {
+                $(el).val($(el).data('selected'))
+              })
+              });
+            }
+          });
+        }
+    
+        
+        function get_opd(val){
+          $.post("/mst/skpd/get_skpd_by_program_kerja", {"id_program_kerja": val}, function(res){
+            if(res.data != null){
+              $("select.opd").html('');
+    
+              var option = '';
+              $.when($.each(res.data, function(idx, val){
+                $("select.opd").append("<option value='" + val.id +"'>" + val.name + "</option>");
+                option += "<option value='" + val.id +"'>" + val.name + "</option>";
+              })).then(function(){
+                optionOpd = option;
+    
+                
+              $("select.opd[data-selected!=0]").map(function(idx, el) {
+                $(el).val($(el).data('selected'))
+              })
+              });
+            }
+          });
+        }
+    
+        $("#wilayah, #dari_kalendar, #sampai_kalendar").on("change", function(){
+          check_jadwal_surat_perintah();
+        });
+    
+    
+        function check_jadwal_surat_perintah(){
+          $("#jadwal_warning").hide();
+          if($(".wilayah").val() != "" && $("#dari_kalendar").val() != "" && $("#sampai_kalendar").val() != ""){
+            $.post("/pkpt/surat_perintah/check_jadwal", {"id_wilayah": $(".kegiatan").find($("option:selected")).data('wilayah'), "dari" : $("#dari_kalendar").val(), "sampai": $("#sampai_kalendar").val(), "sp_id" : "{{ isset($data->id) ? $data->id : 0}}" }, function(res){
+                if(res.show_warning == 1){
+                  $("#jadwal_warning").html(res.msg).show();
+                }
+            });
+          }
+        }
+    
+        function kegiatan_filled_date() {
+          var option_selected = $(".kegiatan").find($("option:selected"));
+          $("#dari_kalendar").val(option_selected.data('dari'));
+          $("#sampai_kalendar").val(option_selected.data('sampai'));
+        }
+        
+        $(document).on('click', ".delete-anggota", function(){
+          $(this).parent().closest("tr").remove();
+        });
+        
+        $(document).on('click', ".delete-opd", function(){
+          $(this).parent().closest("tr").remove();
+        });
+
+        $(document).on('click', ".add-opd", function(){
+            console.log("OPD")
+            $(`#cover-opd`).append(addMoreOpd);
+    
+            $(`#cover-opd tr:last .select2`).html(optionOpd);
+            $(`#cover-opd tr:last .select2`).select2();
+        });
+    
+
     
         $('.fc-datepicker').datepicker({
           dateFormat: "dd-mm-yy"
         });
     
         $(document).on('click', ".add-anggota", function(){
-            const idx = $(this).data('tim')
-            $(`#cover-anggota-${idx}`).append(addMoreAnggota);
+            $(`#cover-anggota`).append(addMoreAnggota);
     
-            $(`#cover-anggota-${idx} tr:last .select2`).html(optionAnggota);
-            $(`#cover-anggota-${idx} tr:last .select2`).select2();
+            $(`#cover-anggota tr:last .select2`).html(optionAnggota);
+            $(`#cover-anggota tr:last .select2`).select2();
         });
     
-        
+        function add_tim_section() {
+          let template_tim = `
+          {{ sp_non_tim($list_inspektur) }}
+          `
+          idx_tim++;
+          template_tim = template_tim.replace(/\[idx]/gm, idx_tim)
+          template_tim = template_tim.replace('[option_inspektur_pembantu]', optionInspekturPembantu.join(''))
+          template_tim = template_tim.replace('[option_pengendali_teknis]', optionPengendaliTeknis.join(''))
+          template_tim = template_tim.replace('[option_ketua_tim]', optionKetuaTim.join(''))
+          template_tim = template_tim.replace('[option_anggota]', optionAnggota)
+          template_tim = template_tim.replace('[option_opd]', optionOpd)
     
-        
+          $(".cover-tim").append(template_tim)
+        }
+    
         $('#form-sp').on('submit', function(e) {
           e.preventDefault()
           const fixInput = [

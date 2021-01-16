@@ -47,77 +47,13 @@
           @include('pkpt.partial.surat_perintah_base')
           
           <div class='cover-tim'>
-            <div class="form-group row">
-                <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-    
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Anggota</th>
-                                <th style="width:60px"></th>
-                            </tr>
-                            
-                        </thead>
-                        <tbody id='cover-anggota'>
-                            @if (!is_null(old('anggota')))
-                                @foreach (old('anggota') as $i => $r)
-                                    <tr>
-                                        <td>
-                                            <select name='anggota[]' class="form-control select2 anggota">
-                                                @foreach ($pegawai as $idx => $row)
-                                                    @php
-                                                    $selected = $row->id == $r ? "selected" : "";
-                                                    @endphp
-                                                    <option value='{{ $row->id }}' {{ $selected }}>{{ $row->nama }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                @endforeach
-                            @elseif(isset($data->id))
-                                @php
-                                    $idxA = 0;
-                                @endphp
-                                @foreach ($anggota as $idx => $row)
-                                <tr>
-                                    <td>
-                                        <select name='anggota[]' class="form-control select2 anggota" data-selected='{{ $row->id_anggota }}'>
-                                            [option_anggota]
-                                        </select>
-                                    </td>
-                                    <td>
-                                        @if($idxA > 0)
-                                        <button type='button' class='btn btn-danger btn-xs delete-anggota'><i class='fa fa-close'></i></button>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @php 
-                                    $idxA++;
-                                @endphp
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td>
-                                        <select name='anggota[]' class="form-control select2 anggota">
-                                            [option_anggota]
-                                        </select>
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                        <tr>
-                            <td colspan="2">
-                                <button type="button" class="btn btn-info add-anggota"> Tambah Anggota</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            
+            @if(isset($data->id)) 
+            
+              @foreach($data->tim as $idTm => $tm)
+                {{ sp_non_tim($list_inspektur, $tm, $data->anggota_tim->where('id_surat_perintah_tim', $tm->id)) }}
+              @endforeach
+            @endif
           </div>
           <hr>
           

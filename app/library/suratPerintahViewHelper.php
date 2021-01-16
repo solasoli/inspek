@@ -21,3 +21,18 @@ if (!function_exists('sp_tim')) {
         );
     }
 }
+
+if (!function_exists('sp_non_tim')) {
+    function sp_non_tim($list_inspektur, $data = null, $anggota = [], $opd = [])
+    {   
+
+        return view(
+            'pkpt.partial.surat_perintah-non_tim', [
+                'list_inspektur' => $list_inspektur,
+                'data' => $data,
+                'anggota' => $anggota,
+                'opd' => $opd
+            ]
+        );
+    }
+}
