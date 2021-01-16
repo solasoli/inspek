@@ -44,17 +44,23 @@
       <div class="col-lg-12 widget-2 px-0">
         <div class="card shadow-base">
 
-          @include('pkpt.partial.surat_perintah_base')
-          
+            @include('pkpt.partial.surat_perintah_base')
+
           <div class='cover-tim'>
             @if(isset($data->id)) 
             
               @foreach($data->tim as $idTm => $tm)
-                {{ sp_tim($list_inspektur, false, $idTm + 1, $tm, $data->anggota_tim->where('id_surat_perintah_tim', $tm->id)) }}
+                {{ sp_tim($list_inspektur, true,  $idTm + 1, $tm, $data->anggota_tim->where('id_surat_perintah_tim', $tm->id)) }}
               @endforeach
             @endif
           </div>
           <hr>
+
+          <div class="form-group row d-flex justify-content-center">
+            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+              <button type="button" class="btn btn-success add-tim-btn btn-block" >Tambah Tim</button>
+            </div>
+          </div>
           
           <div class="card-header"></div>
           <div class="card-body">
@@ -70,6 +76,7 @@
       </div>
     </div>
   </div>
+
 </form>
 
 <style>

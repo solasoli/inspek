@@ -6,7 +6,7 @@ use App\Repository\Master\KodeRekomendasi;
 use App\Repository\Master\KodeTemuan;
 
 if (!function_exists('sp_tim')) {
-    function sp_tim($list_inspektur, $idx = null, $data = null, $anggota = [], $opd = [])
+    function sp_tim($list_inspektur, $multiple_pkpt = false, $idx = null, $data = null, $anggota = [], $opd = [])
     {   
 
         return view(
@@ -15,7 +15,8 @@ if (!function_exists('sp_tim')) {
                 'idx' => $idx,
                 'data' => $data,
                 'anggota' => $anggota,
-                'opd' => $opd
+                'opd' => $opd,
+                'multiple_pkpt' => $multiple_pkpt
             ]
         );
     }

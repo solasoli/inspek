@@ -1,5 +1,6 @@
 @php
 $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
+$tagIdx = $multiple_pkpt ? $tagIdx : '';
 @endphp
 
 <div class="tim" data-id='0' data-idx='{{ $tagIdx }}'>
@@ -7,7 +8,9 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
         <div class="pull-left">
             <h6 class="card-title float-left py-2">Susunan Tim {{$tagIdx}}</h6>
             &nbsp;
-            <button type='button' class='btn btn-danger btn-xs delete-tim'><i class='fa fa-close'></i> Hapus Tim</button>
+            @if($multiple_pkpt)
+                <button type='button' class='btn btn-danger btn-xs delete-tim'><i class='fa fa-close'></i> Hapus Tim</button>
+            @endif
         </div>
         <div class="pull-right">
             
