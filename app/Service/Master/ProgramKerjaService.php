@@ -10,6 +10,7 @@ use App\Repository\Master\ProgramKerjaJenisPengawasan;
 use App\Repository\Master\ProgramKerjaSkpd;
 use App\Repository\Master\ProgramKerjaWilayah;
 use App\Repository\Master\Sasaran;
+use App\Repository\Master\Skpd;
 use App\Repository\SuratPerintah\SuratPerintah;
 use App\Service\Master\KegiatanService;
 
@@ -64,6 +65,7 @@ class ProgramKerjaService
       $t->jml_pengendali_teknis = $data['jml_pengendali_teknis'];
       $t->jml_ketua_tim = $data['jml_ketua_tim'];
       $t->jml_anggota = $data['jml_anggota'];
+      $t->is_all_opd = isset($data['all_opd']) && $data['all_opd'] == 1 ? 1 : 0;
       $jml_power = $t->jml_wakil_penanggung_jawab + $t->jml_pengendali_teknis + $t->jml_ketua_tim + $t->jml_anggota;
       $t->jml_man_power = $jml_power;
       $t->created_at = date('Y-m-d H:i:s');
@@ -97,13 +99,28 @@ class ProgramKerjaService
 
       
       ProgramKerjaSkpd::where('id_program_kerja', $t->id)->update(['is_deleted' => 1]);
-      // insert SKPD
-      if(isset($data['opd'])) {
-        foreach ($data['opd'] as $v) {
+
+      if(isset($data['all_opd']) && $data['all_opd'] == 1) {
+        if($t->is_lintas_irban == 1) { 
+          $skpd = Skpd::where('is_deleted', 0)->get();
+        } else {
+          $skpd = Skpd::whereIn('id_wilayah', $wilayah)->where('is_deleted', 0)->get();
+        }
+        foreach ($skpd as $v) {
           $wilayah = new ProgramKerjaSkpd();
-          $wilayah->id_skpd = $v;
+          $wilayah->id_skpd = $v->id;
           $wilayah->id_program_kerja = $t->id;
           $wilayah->save();
+        }
+      } else {
+        // insert SKPD
+        if(isset($data['opd'])) {
+          foreach ($data['opd'] as $v) {
+            $wilayah = new ProgramKerjaSkpd();
+            $wilayah->id_skpd = $v;
+            $wilayah->id_program_kerja = $t->id;
+            $wilayah->save();
+          }
         }
       }
 

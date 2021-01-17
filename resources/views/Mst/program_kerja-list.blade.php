@@ -298,8 +298,19 @@ $(function() {
         { data: 'sasaran', name:'sasaran'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           const skpd = []
-          for (const opd of data.skpd) {
-            skpd.push(opd.name)
+          if(data.is_all_opd == 1) {
+            const wilayah = []
+            if(data.is_lintas_irban == 0) {
+              for (const wly of data.wilayah) {
+                wilayah.push(wly.nama)
+              }
+              wilayah.join(', ');
+            }
+            return `Semua Perangkat Daerah ${wilayah}`;
+          } else {
+            for (const opd of data.skpd) {
+              skpd.push(opd.name)
+            }
           }
 
           return skpd.join(', ');

@@ -26,7 +26,7 @@ class ProgramKerjaRequest extends FormRequest
     {
         return [
           // 'wilayah'       => 'required',
-          'opd'           => 'required',
+        //   'opd'           => 'required',
           'dari'          => 'required',
           'sampai'        => 'required',
           'kegiatan'      => 'required',
