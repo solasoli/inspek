@@ -70,12 +70,14 @@
 
         // set OPD
         
-        if(data.skpd.length > 0) {
+        if(data.skpd.length > 0 && data.is_all_opd == false) {
           for(var is = 0; is < data.skpd.length; is++) {
             addingSkpdSelection()
             $(".cover-opd select:last").val(data.skpd[is].id).trigger('change')
           }
         }
+
+        $("#all_opd").prop('checked', data.is_all_opd)
         
         // set Jenis Pengawasan
         if(data.jenis_pengawasan.length > 0) {
