@@ -28,6 +28,7 @@
             @endphp
             <option value='{{$row->id}}'
                 data-kegiatan='{{$row->kegiatan->id}}'
+                data-kegiatan-str='{{$row->kegiatan->nama}}'
                 data-program_kerja='{{$row->id}}'
                 data-sasaran='{{ $row->sasaran }}'
                 {{-- data-jenis-pengawasan='{{ count($row->jenis_pengawasan) ? $row->jenis_pengawasan->nama : '' }}'--}}
@@ -59,6 +60,13 @@
         </div>
     </div>
     --}}
+    <div class="form-group row">
+        <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+        Kegiatan
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12 kegiatan-pk">
+        </div>
+    </div>
     <div class="form-group row">
         <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
         Dari

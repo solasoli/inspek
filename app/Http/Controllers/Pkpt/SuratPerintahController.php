@@ -54,7 +54,10 @@ class SuratPerintahController extends Controller
   {
     $surat_perintah = SuratPerintah::findOrFail($id);
     $kegiatan = KegiatanService::get_data();
-    $anggota = PegawaiService::get_anggota(false, $surat_perintah->program_kerja->id_wilayah);
+    $anggota = [];
+    if($surat_perintah->program_kerja != null) {
+      $anggota = PegawaiService::get_anggota(false, $surat_perintah->program_kerja->id_wilayah);
+    }
     $get_file = $this->get_file_sp($surat_perintah->is_pkpt);
     $data = SuratPerintahService::data_for_form(['data' => $surat_perintah, 'anggota' => $anggota, 'kegiatan' => $kegiatan, 'multiple_pkpt' => $get_file->multiple_pkpt]);
     return view('pkpt.' . $get_file->surat_perintah_file, $data);

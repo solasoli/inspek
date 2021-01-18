@@ -199,6 +199,7 @@
         function changeSasaranPk(){
           
           $(".sasaran-pk").html($("#program_kerja").find("option:selected").data('sasaran'))
+          $(".kegiatan-pk").html($("#program_kerja").find("option:selected").data('kegiatanStr'))
         }
     
         $('.fc-datepicker').datepicker({
