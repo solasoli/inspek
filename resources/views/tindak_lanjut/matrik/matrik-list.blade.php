@@ -144,13 +144,16 @@
                     },
                     { data: null, name:null, orderable: false, render: function ( data, type, row ) {
                         const wilayah = []
-                        if(data.program_kerja.is_lintas_irban == 1) {
-                            return 'Lintas Irban'
-                        } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
-                            for (const wly of data.wilayah) {
-                            wilayah.push(wly.nama)
+                        
+                        if(data.program_kerja != null) { 
+                            if(data.program_kerja.is_lintas_irban == 1) {
+                                return 'Lintas Irban'
+                            } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+                                for (const wly of data.wilayah) {
+                                wilayah.push(wly.nama)
+                                }
+                                return wilayah.join(', ');
                             }
-                            return wilayah.join(', ');
                         }
 
                         return ''
@@ -215,15 +218,17 @@
                     },
                     { data: null, name:null, orderable: false, render: function ( data, type, row ) {
                         const wilayah = []
-                        if(data.program_kerja.is_lintas_irban == 1) {
-                            return 'Lintas Irban'
-                        } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
-                            for (const wly of data.wilayah) {
-                            wilayah.push(wly.nama)
+                        
+                        if(data.program_kerja != null) { 
+                            if(data.program_kerja.is_lintas_irban == 1) {
+                                return 'Lintas Irban'
+                            } else if(data.wilayah != null && data.program_kerja.is_lintas_irban == 0) {
+                                for (const wly of data.wilayah) {
+                                wilayah.push(wly.nama)
+                                }
+                                return wilayah.join(', ');
                             }
-                            return wilayah.join(', ');
                         }
-
                         return ''
                     }},
                     {
