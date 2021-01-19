@@ -71,6 +71,7 @@ class PegawaiService
       'nama.required' => 'Nama harus diisi!',
       'nama_asli.required' => 'Nama Asli harus diisi!',
       'jenjab.required' => 'Jenjang Jabatan harus diisi!',
+      'wilayah.required' => 'Irban harus diisi!',
       'score_angka_credit.required' => 'Score Angka Credit harus diisi!',
     ];
 
@@ -109,7 +110,7 @@ class PegawaiService
       $t->id_pangkat_golongan = $data['pangkat_golongan'];
       $t->id_jabatan = $data['jabatan'];
       $t->id_peran = 0; // ini diisi di menu struktur
-      $t->id_wilayah = 0; // ini diisi di menu struktur
+      $t->id_wilayah = $data['wilayah']; // ini diisi di menu struktur
       $t->nip = $data['nip'];
       $t->nama = $data['nama'];
       $t->nama_asli = $data['nama_asli'];
@@ -189,7 +190,7 @@ class PegawaiService
       $t = Pegawai::findOrFail($id_pegawai);
 
       $t->atasan_langsung = $id_atasan_langsung;
-      $t->id_wilayah = $id_atasan_langsung;
+      // $t->id_wilayah = $id_atasan_langsung;
       $t->save();
 
       DB::commit();

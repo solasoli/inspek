@@ -310,6 +310,10 @@ $(function() {
           } else {
             for (const opd of data.skpd) {
               skpd.push(opd.name)
+              if(skpd.length > 2) {
+                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${data.id}' >Selengkapnya</a>`)
+                break;
+              }
             }
           }
 
@@ -386,6 +390,10 @@ $(function() {
       }
     });
   }
+
+  $(document).on('click', ".selengkapnya-opd", function() {
+    $("#detailModal").modal('show')
+  })
 
 });
 </script>

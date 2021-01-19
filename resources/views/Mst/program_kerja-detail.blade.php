@@ -48,12 +48,12 @@ $(function() {
         <td>${jenis_pengawasan}</td>
       </tr>
       <tr>
-        <td style='vertical-align: top'>Perangkat Daerah</td>
-        <td>${skpd}</td>
-      </tr>
-      <tr>
         <td>Sasaran</td>
         <td>: ${data.sasaran}</td>
+      </tr>
+      <tr>
+        <td style='vertical-align: top'>Perangkat Daerah</td>
+        <td>${skpd}</td>
       </tr>"`;
     });
 

@@ -8,6 +8,7 @@ $(function() {
         // $('select[name="opd"]').val(data.id_skpd).trigger("change");
         $('select[name="eselon"]').val(data.id_eselon).trigger("change");
         $('select[name="pangkat"]').val(data.id_pangkat).trigger("change");
+        $('select[name="wilayah"]').val(data.id_wilayah).trigger("change");
         $('select[name="pangkat_golongan"]').val(data.id_pangkat_golongan).trigger("change");
         $('select[name="jabatan"]').val(data.id_jabatan).trigger("change");
         $('input[name="nip"]').val(data.nip);
@@ -99,6 +100,21 @@ $(function() {
             </div>
           </div>
 
+          <div class="form-group row">
+            <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
+              Irban <span class="required">*</span> :
+            </label>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <select name='wilayah' class="form-control select2">
+                @foreach($wilayah as $idx => $row)
+                @php
+                $selected = !is_null(old('wilayah')) && old('wilayah') == $row->id ? "selected" : (isset($data->id_wilayah) && $row->id == $data->id_wilayah ? 'selected' : '');
+                @endphp
+                <option value='{{$row->id}}' {{$selected}}>{{$row->nama}}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
           <div class="form-group row" style="display: none">
             <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
               OPD <span class="">*</span> :

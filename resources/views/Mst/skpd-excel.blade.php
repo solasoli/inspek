@@ -1,8 +1,9 @@
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Email</th>
+        <th>Nama PD</th>
+        <th>Pimpinan</th>
+        <th>Wilayah Kerja</th>
     </tr>
     </thead>
     <tbody>
@@ -10,6 +11,7 @@
         <tr>
             <td>{{ $data->name }}</td>
             <td>{{ $data->pimpinan }}</td>
+            <td>{{ $data->wilayah->nama }}</td>
         </tr>
     @endforeach
     </tbody>
