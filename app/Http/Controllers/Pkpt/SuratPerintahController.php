@@ -41,6 +41,11 @@ class SuratPerintahController extends Controller
     return view('pkpt.' . $get_file->surat_perintah_file, $data);
   }
 
+  public function lampiran()
+  {
+    return view('pkpt.preview_lampiran');
+  }
+
   public function store(Request $request, $type)
   {
 

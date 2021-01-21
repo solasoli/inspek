@@ -464,7 +464,19 @@
     
           $(".cover-tim").append(template_tim)
         }
-    
+
+        var checked_lampiran = document.querySelector("#jadikan_lampiran");
+        checked_lampiran.addEventListener('change', function(e) {
+            if(e.target.checked == true) {
+              $('#preview').on('click', function() {
+                window.location.href = '{{ url("pkpt/surat_perintah/preview/lampiran") }}';
+              });
+              $('#preview').removeAttr('data-target');
+              $('#preview').removeAttr('data-toggle');
+            }else if(e.target.checked == false) {
+              $('#preview').attr('href', '#');
+            };
+        });
         
         $('#form-sp').on('submit', function(e) {
           e.preventDefault()
@@ -534,3 +546,4 @@
             }
           });
     </script>
+    

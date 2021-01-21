@@ -61,7 +61,7 @@
             <div class="form-group row d-flex justify-content-center">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">      
                 <a href='{{url('')}}/pkpt/surat_perintah' class="btn btn-danger" type="button">Cancel</a>
-                <a href="#" class="preview btn btn-info" data-toggle="modal" data-target="#exampleModal">Preview</a>
+                <a href="#" class="preview btn btn-info" id="preview" data-toggle="modal" data-target="#exampleModal">Preview</a>
                 <button type="submit" class="btn btn-primary" >Submit</button>
               </div>
             </div>
@@ -71,10 +71,6 @@
     </div>
   </div>
 </form>
-
-<style>
-
-</style>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,7 +89,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>
