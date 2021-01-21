@@ -17,12 +17,12 @@ section {
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
     <a class="breadcrumb-item" href="/">Master</a>
-    <a class="breadcrumb-item Active" href="#">Penentuan Sasaran Tujuan</a>
+    <a class="breadcrumb-item Active" href="#">Penentuan Tujuan Pemeriksaan</a>
   </nav>
 </div>
 
 <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-  <h4 class="tx-gray-800 mg-b-5">Penentuan Sasaran Tujuan</h4>
+  <h4 class="tx-gray-800 mg-b-5">Penentuan Tujuan Pemeriksaan</h4>
 </div>
 
 <form class="form-layout form-layout-5" style="padding-top:0" method="post" enctype="multipart/form-data">

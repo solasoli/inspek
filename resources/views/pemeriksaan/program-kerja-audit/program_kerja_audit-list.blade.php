@@ -25,12 +25,12 @@
         <nav class="breadcrumb pd-0 mg-0 tx-12">
             <a class="breadcrumb-item" href="/">Dashboard</a>
             <a class="breadcrumb-item" href="#">Pemeriksaan</a>
-            <span class="breadcrumb-item active">Program Kerja Audit</span>
+            <span class="breadcrumb-item active">Program Kerja Pemeriksaan</span>
         </nav>
     </div>
 
     <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-        <h4 class="tx-gray-800 mg-b-5">Program kerja Audit</h4>
+        <h4 class="tx-gray-800 mg-b-5">Program kerja Pemeriksaan</h4>
     </div>
 
     <div class="br-pagebody">
