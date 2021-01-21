@@ -3,7 +3,7 @@
 <div class="br-mainpanel" style="margin: 0px;">
     <div class="br-pagetitle">
      <div style="padding-top: 20px">
-        <h5>Melakukan Audit</h5>
+        <h5>Melaksanakan Pemeriksaan</h5>
       </div>
     </div>
 
@@ -15,7 +15,7 @@
           <div class="card bd-0 shadow-base">
             <div class="d-md-flex justify-content-between pd-25">
               <div>
-                <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Melakukan Audit</h6>
+                <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Melaksanakan Pemeriksaan</h6>
                 <div class="tab-content">
 
                   <div class="tab-pane fade" id="not_approved" aria-expanded="false" style="display: none;">
@@ -144,10 +144,10 @@
   <td>Inspektur Pembantu I</td>
   <td>percobaan kegiatan</td>
   <td>700/222/NKT/2020	</td>
-  <td><span class="text-success">Approved</span></td>
+  <td><span class="text-success">Setuju</span></td>
   <td class="text-center">
     <a href="/pemeriksaan/audit/buat-kertaskerja"><button class="btn btn-info" data-toggle="modal" data-target="#myModal">Buat Kertas Kerja</button></a>
-    <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Detail</button></a>
+    <a href="detail_penentuan.html"><button class="btn btn-primary"><i class="fa fa-eye"></i> Rinci</button></a>
     <a href="review.html"><button class="btn btn-success mt-1"><i class="fa fa-star"></i> Review</button></a>
     <button class="btn btn-warning mt-1"><i class="fa fa-edit"></i> Edit</button>
   </td>
