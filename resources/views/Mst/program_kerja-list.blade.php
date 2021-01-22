@@ -283,6 +283,31 @@ $(function() {
         }},
         { data: 'sasaran', name:'sasaran'},
         // { data: 'wilayah.nama', name: 'wilayah.nama'},
+
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const skpd = []
+
+          if(data.is_all_opd == 1) {
+            const wilayah = []
+            if(data.is_lintas_irban == 0) {
+              for (const wly of data.wilayah) {
+                wilayah.push(wly.nama)
+              }
+              wilayah.join('. ');
+            }
+            return `Semua Perangkat Daerah ${wilayah}`;
+          } else {
+            for (const opd of data.skpd) {
+              skpd.push(opd.name)
+              if(skpd.length > 2) {
+                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${data.id}' >Selengkapnya</a>`)
+                break;
+              }
+            }
+          }
+          return skpd.join(', ');
+        }},
+
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           const wilayah = []
           if(data.is_lintas_irban == 1) {
@@ -296,30 +321,7 @@ $(function() {
 
           return ''
         }},
-        
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
-          const skpd = []
-          if(data.is_all_opd == 1) {
-            const wilayah = []
-            if(data.is_lintas_irban == 0) {
-              for (const wly of data.wilayah) {
-                wilayah.push(wly.nama)
-              }
-              wilayah.join(', ');
-            }
-            return `Semua Perangkat Daerah ${wilayah}`;
-          } else {
-            for (const opd of data.skpd) {
-              skpd.push(opd.name)
-              if(skpd.length > 2) {
-                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${data.id}' >Selengkapnya</a>`)
-                break;
-              }
-            }
-          }
 
-          return skpd.join(', ');
-        }},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
