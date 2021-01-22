@@ -465,17 +465,14 @@
           $(".cover-tim").append(template_tim)
         }
 
-        var checked_lampiran = document.querySelector("#jadikan_lampiran");
-        checked_lampiran.addEventListener('change', function(e) {
-            if(e.target.checked == true) {
-              $('#preview').on('click', function() {
-                window.location.href = '{{ url("pkpt/surat_perintah/preview/lampiran") }}';
-              });
-              $('#preview').removeAttr('data-target');
-              $('#preview').removeAttr('data-toggle');
-            }else if(e.target.checked == false) {
-              $('#preview').attr('href', '#');
-            };
+        $('#jadikan_lampiran').on('change', function(e) {
+          if(e.target.checked == true) {
+            $('.preview').attr('data-target', '#modalLampiran');
+            $('.preview').attr('data-toggle', 'modal');
+          }else if(e.target.checked == false) {
+            $('.preview').attr('data-toggle', 'modal');
+            $('.preview').attr('data-target', '#exampleModal');
+          }
         });
         
         $('#form-sp').on('submit', function(e) {
@@ -490,8 +487,7 @@
               "tembusan",
               "jadikan_lampiran",
           ]
-    
-    
+
           let input = $(this).serializeArray()
           input = input.filter(r => fixInput.indexOf(r.name) !== -1)
           const mappingTim = []

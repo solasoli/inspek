@@ -218,9 +218,6 @@ Route::middleware(['auth'])->group(function () {
       
       Route::get('/print/{id}/{method}', 'Pkpt\SuratPerintahController@print');
       
-      // Lampiran 
-      Route::get('/preview/lampiran', 'Pkpt\SuratPerintahController@lampiran');
-      
       /* Post section */
       Route::post('/add/{type}', 'Pkpt\SuratPerintahController@store');
       Route::post('/edit/{id}', 'Pkpt\SuratPerintahController@update');
