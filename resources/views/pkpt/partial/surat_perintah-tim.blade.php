@@ -12,8 +12,8 @@ $tagIdx = $multiple_pkpt ? $tagIdx : '';
             @if($multiple_pkpt)
                 <button type='button' class='btn btn-danger btn-xs delete-tim'><i class='fa fa-close'></i> Hapus Tim</button>
             @endif
-            <input id="jadikan_lampiran" class="ml-4" name="jadikan_lampiran" type="checkbox"/>
-            <label style="font-size:13px;" class="ml-3 mt-2">Lampiran Surat Perintah</label>
+            <input id="jadikan_lampiran" class="ml-4" name="jadikan_lampiran" value="1" type="checkbox"/>
+            <label style="font-size:13px;" for="jadikan_lampiran" class="ml-3 mt-2">Lampiran Surat Perintah</label>
         </div>
         <div class="pull-right">
             
