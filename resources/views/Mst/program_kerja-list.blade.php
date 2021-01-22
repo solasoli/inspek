@@ -166,12 +166,12 @@
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Status</th>
+                      {{-- <th>Status</th> --}}
                       <th>Nama Kegiatan</th>
                       <th>Jenis Pengawasan</th>
-                      <th>Penanggung Jawab</th>
                       <th>Sasaran</th>
                       <th>Perangkat Daerah</th>
+                      <th>Penanggung Jawab</th>
                       <th>Dari</th>
                       <th>Sampai</th>
                       <th style='width:150px'>Aksi</th>
@@ -266,9 +266,9 @@ $(function() {
             return meta.row + meta.settings._iDisplayStart + 1;
           }  
         },
-        { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
-          return data == 1 ? 'PKPT' : 'NON-PKPT'
-        }},
+        // { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
+        //   return data == 1 ? 'PKPT' : 'NON-PKPT'
+        // }},
         // { data: 'kegiatan.nama', name: 'kegiatan.nama'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           return data.kegiatan != null ? data.kegiatan.nama : '';
@@ -281,6 +281,7 @@ $(function() {
 
           return jenis_pengawasan.join(', ');
         }},
+        { data: 'sasaran', name:'sasaran'},
         // { data: 'wilayah.nama', name: 'wilayah.nama'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           const wilayah = []
@@ -295,7 +296,7 @@ $(function() {
 
           return ''
         }},
-        { data: 'sasaran', name:'sasaran'},
+        
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           const skpd = []
           if(data.is_all_opd == 1) {
@@ -348,7 +349,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 9,
+        targets: 8,
         className: "text-center",
      }],
   });
