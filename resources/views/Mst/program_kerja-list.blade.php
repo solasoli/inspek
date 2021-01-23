@@ -166,12 +166,12 @@
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Status</th>
+                      {{-- <th>Status</th> --}}
                       <th>Nama Kegiatan</th>
                       <th>Jenis Pengawasan</th>
-                      <th>Penanggung Jawab</th>
                       <th>Sasaran</th>
                       <th>Perangkat Daerah</th>
+                      <th>Penanggung Jawab</th>
                       <th>Dari</th>
                       <th>Sampai</th>
                       <th style='width:150px'>Aksi</th>
@@ -266,9 +266,9 @@ $(function() {
             return meta.row + meta.settings._iDisplayStart + 1;
           }  
         },
-        { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
-          return data == 1 ? 'PKPT' : 'NON-PKPT'
-        }},
+        // { data: 'type_pkpt', name:'type_pkpt', orderable: false, render: function ( data, type, row ) {
+        //   return data == 1 ? 'PKPT' : 'NON-PKPT'
+        // }},
         // { data: 'kegiatan.nama', name: 'kegiatan.nama'},
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           return data.kegiatan != null ? data.kegiatan.nama : '';
@@ -281,7 +281,33 @@ $(function() {
 
           return jenis_pengawasan.join(', ');
         }},
+        { data: 'sasaran', name:'sasaran'},
         // { data: 'wilayah.nama', name: 'wilayah.nama'},
+
+        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+          const skpd = []
+
+          if(data.is_all_opd == 1) {
+            const wilayah = []
+            if(data.is_lintas_irban == 0) {
+              for (const wly of data.wilayah) {
+                wilayah.push(wly.nama)
+              }
+              wilayah.join('. ');
+            }
+            return `Semua Perangkat Daerah ${wilayah}`;
+          } else {
+            for (const opd of data.skpd) {
+              skpd.push(opd.name)
+              if(skpd.length > 2) {
+                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${data.id}' >Selengkapnya</a>`)
+                break;
+              }
+            }
+          }
+          return skpd.join(', ');
+        }},
+
         { data: null, name:null, orderable: false, render: function ( data, type, row ) {
           const wilayah = []
           if(data.is_lintas_irban == 1) {
@@ -295,30 +321,7 @@ $(function() {
 
           return ''
         }},
-        { data: 'sasaran', name:'sasaran'},
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
-          const skpd = []
-          if(data.is_all_opd == 1) {
-            const wilayah = []
-            if(data.is_lintas_irban == 0) {
-              for (const wly of data.wilayah) {
-                wilayah.push(wly.nama)
-              }
-              wilayah.join(', ');
-            }
-            return `Semua Perangkat Daerah ${wilayah}`;
-          } else {
-            for (const opd of data.skpd) {
-              skpd.push(opd.name)
-              if(skpd.length > 2) {
-                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${data.id}' >Selengkapnya</a>`)
-                break;
-              }
-            }
-          }
 
-          return skpd.join(', ');
-        }},
         { data: 'dari', name:'dari', orderable: false, render: function ( data, type, row ) {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
@@ -348,7 +351,7 @@ $(function() {
       ],
       columnDefs: [
       {
-        targets: 9,
+        targets: 8,
         className: "text-center",
      }],
   });
