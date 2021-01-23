@@ -155,15 +155,8 @@
         <h4 class="modal-title"></h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div> 
-      <!-- Modal body -->
-      <div class="modal-body" style="border-bottom: 15px solid #e9ecef">
-        <div class="container-fluid px-5">
-          <div class="kop"></div>
-        </div>
-      </div>
-      <div class="page-break-new" style="transform: rotate(90deg);">
+      <!-- Modal body --> 
         <div class="kop_lampiran"></div>
-      </div>
       <div class="modal-footer" style="background:#e9ecef">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button class="btn btn-primary">Submit</button>
