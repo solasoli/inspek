@@ -102,6 +102,17 @@ class SuratPerintahController extends Controller
     ]);
   }
 
+  public function info_is_lampiran($id)
+  {
+    $data = SuratPerintah::findOrFail($id);
+    $skpd = $data->skpd;
+
+    return view('pkpt.surat_perintah-detail-lampiran', [
+      'data' => $data,
+      'skpd' => $skpd
+    ]);
+  }
+
   public function kalendar()
   {
     $listcolor = [

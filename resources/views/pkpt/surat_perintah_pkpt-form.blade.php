@@ -1,5 +1,57 @@
 @extends('layouts.app')
 @section('content')
+
+
+<style type="text/css">
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #print_here,
+            #print_here * {
+                visibility: visible;
+            }
+
+            #print_here {
+                position: absolute;
+                top: 0;
+            }
+
+            .no-print {
+                padding: 0 !important;
+                margin: 0 !important;
+                height: 0 !important;
+            }
+
+            .br-mainpanel {
+                margin-top: 0 !important;
+            }
+        }
+        table, td, th {
+		padding: 5px;
+		font-family: calibri;
+	    }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+        }
+        th {
+            height: 50px;
+        }
+        
+        .pd1{
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .agcenter{
+            text-align: center;
+        }
+       
+    </style>
+
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
@@ -95,23 +147,26 @@
 </div>
 
 <!-- Modal lampiran-->
-<div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" id="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Preview Surat Perintah</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
+<div class="modal fade" id="modalLampiran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> 
+    <div class="modal-content" style="width:120%">
+      <!-- Modal Header -->
+      <div class="modal-header" style="background:#e9ecef">
+        <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div> 
+      <!-- Modal body -->
+      <div class="modal-body" style="border-bottom: 15px solid #e9ecef">
         <div class="container-fluid px-5">
           <div class="kop"></div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      <div class="page-break-new" style="transform: rotate(90deg);">
+        <div class="kop_lampiran"></div>
+      </div>
+      <div class="modal-footer" style="background:#e9ecef">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>

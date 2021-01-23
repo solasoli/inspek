@@ -14,7 +14,7 @@ class CreateIsLampiran extends Migration
     public function up()
     {
         Schema::table('pkpt_surat_perintah', function (Blueprint $table) {
-            $table->integer('is_lampiran');
+            $table->tinyInteger('is_lampiran')->default(0);
         });
     }
 
