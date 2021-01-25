@@ -3,14 +3,17 @@ $tagIdx = !is_null($idx) && !is_null($idx) ? $idx : '[idx]';
 $tagIdx = $multiple_pkpt ? $tagIdx : '';
 @endphp
 
+
 <div class="tim" data-id='0' data-idx='{{ $tagIdx }}'>
     <div class="card-header">
-        <div class="pull-left">
+        <div class="pull-left d-flex align-items-center">
             <h6 class="card-title float-left py-2">Susunan Tim {{$tagIdx}}</h6>
             &nbsp;
             @if($multiple_pkpt)
                 <button type='button' class='btn btn-danger btn-xs delete-tim'><i class='fa fa-close'></i> Hapus Tim</button>
             @endif
+            <input id="jadikan_lampiran" class="ml-4" name="jadikan_lampiran" type="checkbox"/>
+            <label style="font-size:13px;" for="jadikan_lampiran" class="ml-3 mt-2">Lampiran Surat Perintah</label>
         </div>
         <div class="pull-right">
             
@@ -65,7 +68,7 @@ $tagIdx = $multiple_pkpt ? $tagIdx : '';
                     </tbody>
                     <tr>
                         <td colspan="2">
-                            <button type="button" class="btn btn-info add-opd"  data-tim='{{$tagIdx}}'> Pilih Obrik</button>
+                            <button type="button" class="btn btn-info add-opd"  data-tim='{{$tagIdx}}'>Tambah Obrik</button>
                         </td>
                     </tr>
                 </table>
@@ -196,3 +199,4 @@ $tagIdx = $multiple_pkpt ? $tagIdx : '';
         </div>
     </div>
 </div>
+

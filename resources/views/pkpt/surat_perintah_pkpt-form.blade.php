@@ -1,5 +1,57 @@
 @extends('layouts.app')
 @section('content')
+
+
+<style type="text/css">
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #print_here,
+            #print_here * {
+                visibility: visible;
+            }
+
+            #print_here {
+                position: absolute;
+                top: 0;
+            }
+
+            .no-print {
+                padding: 0 !important;
+                margin: 0 !important;
+                height: 0 !important;
+            }
+
+            .br-mainpanel {
+                margin-top: 0 !important;
+            }
+        }
+        table, td, th {
+		padding: 5px;
+		font-family: calibri;
+	    }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+        }
+        th {
+            height: 50px;
+        }
+        
+        .pd1{
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .agcenter{
+            text-align: center;
+        }
+       
+    </style>
+
 <div class="br-pageheader pd-y-15 pd-l-20">
   <nav class="breadcrumb pd-0 mg-0 tx-12">
     <a class="breadcrumb-item" href="/">Dashboard</a>
@@ -61,7 +113,7 @@
             <div class="form-group row d-flex justify-content-center">
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">      
                 <a href='{{url('')}}/pkpt/surat_perintah' class="btn btn-danger" type="button">Cancel</a>
-                <a href="#" class="preview btn btn-info" data-toggle="modal" data-target="#exampleModal">Preview</a>
+                <a class="preview btn btn-info text-white" data-toggle="modal" data-target="#exampleModal">Preview</a>
                 <button type="submit" class="btn btn-primary" >Submit</button>
               </div>
             </div>
@@ -71,10 +123,6 @@
     </div>
   </div>
 </form>
-
-<style>
-
-</style>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -92,6 +140,24 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal lampiran-->
+<div class="modal fade" id="modalLampiran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> 
+    <div class="modal-content" style="width:120%">
+      <!-- Modal Header -->
+      <div class="modal-header" style="background:#e9ecef">
+        <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div> 
+      <!-- Modal body --> 
+        <div class="kop_lampiran"></div>
+      <div class="modal-footer" style="background:#e9ecef">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button class="btn btn-primary">Submit</button>
       </div>
