@@ -262,7 +262,7 @@ $(function() {
       },
       columns: [
         
-        { data: null, orderable: false, render: function (data, type, row, meta) {
+        { data: null, orderable: false, searchable: false, render: function (data, type, row, meta) {
             return meta.row + meta.settings._iDisplayStart + 1;
           }  
         },
@@ -270,12 +270,12 @@ $(function() {
         //   return data == 1 ? 'PKPT' : 'NON-PKPT'
         // }},
         // { data: 'kegiatan.nama', name: 'kegiatan.nama'},
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+        { data: 'kegiatan.nama', name: 'kegiatan.nama', orderable: false, render: function ( data, type, row ) {
           return data.kegiatan != null ? data.kegiatan.nama : '';
         }},
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+        { data: 'jenis_pengawasan.nama', name:'jenis_pengawasan.nama', orderable: false, render: function ( data, type, row ) {
           const jenis_pengawasan = []
-          for (const jpn of data.jenis_pengawasan) {
+          for (const jpn of row.jenis_pengawasan) {
             jenis_pengawasan.push(jpn.nama)
           }
 
@@ -284,23 +284,23 @@ $(function() {
         { data: 'sasaran', name:'sasaran'},
         // { data: 'wilayah.nama', name: 'wilayah.nama'},
 
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+        { data: 'skpd.name', name: 'skpd.name', orderable: false, render: function ( data, type, row ) {
           const skpd = []
 
-          if(data.is_all_opd == 1) {
+          if(row.is_all_opd == 1) {
             const wilayah = []
-            if(data.is_lintas_irban == 0) {
-              for (const wly of data.wilayah) {
+            if(row.is_lintas_irban == 0) {
+              for (const wly of row.wilayah) {
                 wilayah.push(wly.nama)
               }
               wilayah.join('. ');
             }
             return `Semua Perangkat Daerah ${wilayah}`;
           } else {
-            for (const opd of data.skpd) {
+            for (const opd of row.skpd) {
               skpd.push(opd.name)
               if(skpd.length > 2) {
-                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${data.id}' >Selengkapnya</a>`)
+                skpd.push(`<a href='#' class='selengkapnya-opd btn btn-xs btn-info' data-toggle='modal' data-target='#detailModal' data-id='${row.id}' >Selengkapnya</a>`)
                 break;
               }
             }
@@ -308,12 +308,12 @@ $(function() {
           return skpd.join(', ');
         }},
 
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+        { data: 'wilayah.nama', name:'wilayah.nama', orderable: false, render: function ( data, type, row ) {
           const wilayah = []
-          if(data.is_lintas_irban == 1) {
+          if(row.is_lintas_irban == 1) {
             return 'Lintas Irban'
-          } else if(data.wilayah != null && data.is_lintas_irban == 0) {
-            for (const wly of data.wilayah) {
+          } else if(row.wilayah != null && row.is_lintas_irban == 0) {
+            for (const wly of row.wilayah) {
               wilayah.push(wly.nama)
             }
             return wilayah.join(', ');
@@ -330,7 +330,7 @@ $(function() {
           var x = new Date(data);
           return moment(x).format("DD-MM-YYYY");
         }},
-        { data: null, name:null, orderable: false, render: function ( data, type, row ) {
+        { data: null, name:null, orderable: false, searchable: false, render: function ( data, type, row ) {
           var return_button = "";
 
           @if(can_access("mst_program_kerja", "edit"))
@@ -376,7 +376,6 @@ $(function() {
   })
 
   function change_wilayah_filter(el) {
-    console.log($(el).val())
     get_opd_filter($(el).val());
   }
   
