@@ -38,6 +38,16 @@ class SuratPerintah extends BaseModel
     return $this->belongsTo('App\Repository\Pegawai\Pegawai', 'id_ketua_tim');
   }
 
+  public function jabatan()
+  {
+    return $this->belongsTo('App\Repository\Pegawai\Pegawai', 'id_jabatan');
+  }
+
+  // public function pangkat()
+  // {
+  //   return $this->belongsTo('App\Repository\Pegawai\Pegawai', 'id_jabatan');
+  // }
+
   public function program_kerja()
   {
     return $this->belongsTo('App\Repository\Master\ProgramKerja', 'id_program_kerja');

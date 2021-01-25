@@ -121,7 +121,7 @@ class SuratPerintahService
       $t->deleted_by = 0;
       $t->is_deleted = 0;
       $t->is_pkpt = $type;
-      $t->is_lampiran = $input['jadikan_lampiran'];
+      $t->is_lampiran = $type;
       $t->save();
 
       DB::table('pkpt_surat_perintah_anggota')
