@@ -6,7 +6,7 @@
 <div class="br-mainpanel" style="margin: 0px;">
   <div class="br-pagetitle">
     <div style="padding-top: 20px">
-      <h5>Program Kerja Audit</h5>
+      <h5>Program Kerja Pemeriksaan</h5>
     </div>
   </div>
 
@@ -18,7 +18,7 @@
         <div class="card bd-0 shadow-base">
           <div class="d-md-flex justify-content-between pd-25">
             <div>
-              <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Program Kerja Audit</h6>
+              <h6 class="tx-13 tx-uppercase tx-inverse tx-semibold tx-spacing-1">Program Kerja Pemeriksaan</h6>
               <div class="tab-content">
 
                 <div class="tab-pane fade" id="not_approved" aria-expanded="false" style="display: none;">

@@ -22,12 +22,12 @@
         <nav class="breadcrumb pd-0 mg-0 tx-12">
             <a class="breadcrumb-item" href="/">Dashboard</a>
             <a class="breadcrumb-item" href="/">Master</a>
-            <a class="breadcrumb-item Active" href="#">Penentuan Sasaran Tujuan</a>
+            <a class="breadcrumb-item Active" href="#">Program Kerja Pemeriksaan</a>
         </nav>
     </div>
 
     <div class="pd-x-20 pd-sm-x-30 pd-t-20 pd-sm-t-30">
-        <h4 class="tx-gray-800 mg-b-5">Program Kerja Audit</h4>
+        <h4 class="tx-gray-800 mg-b-5">Program Kerja Pemeriksaan</h4>
     </div>
 
     <form class="form-layout form-layout-5" id='form-rka' style="padding-top:0" method="post" enctype="multipart/form-data">
@@ -63,7 +63,7 @@
                     <div class="card shadow-base">
 
                         <div class="card-header alert-success">
-                            <h6 class="card-title">Program Kerja Audit</h6>
+                            <h6 class="card-title">Program Kerja Pemeriksaan</h6>
                         </div>
                         <div class="card-body">
                             <div id="wizard3">

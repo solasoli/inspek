@@ -841,6 +841,7 @@
         },
         {
             "name": "laravel/framework",
+<<<<<<< HEAD
             "version": "v6.20.13",
             "source": {
                 "type": "git",
@@ -851,6 +852,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/12ed06da14e3fe4257cb1ece91c2d3439cc2d34b",
                 "reference": "12ed06da14e3fe4257cb1ece91c2d3439cc2d34b",
+=======
+            "version": "v6.20.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "3464d0232cb75aeadb7b4483f788c1d1a30221d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/3464d0232cb75aeadb7b4483f788c1d1a30221d4",
+                "reference": "3464d0232cb75aeadb7b4483f788c1d1a30221d4",
+>>>>>>> remotes/origin/develop
                 "shasum": ""
             },
             "require": {
@@ -990,7 +1003,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2021-01-19T13:41:17+00:00"
+=======
+            "time": "2021-01-21T14:10:27+00:00"
+>>>>>>> remotes/origin/develop
         },
         {
             "name": "laravel/tinker",
@@ -1562,6 +1579,7 @@
         },
         {
             "name": "markbaker/matrix",
+<<<<<<< HEAD
             "version": "2.1.0",
             "source": {
                 "type": "git",
@@ -1572,6 +1590,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/MarkBaker/PHPMatrix/zipball/9b16a8544a00ac9f9354535ef64d0109f65e300e",
                 "reference": "9b16a8544a00ac9f9354535ef64d0109f65e300e",
+=======
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarkBaker/PHPMatrix.git",
+                "reference": "35a2d1a919a1de732402f694925168c53c17c838"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarkBaker/PHPMatrix/zipball/35a2d1a919a1de732402f694925168c53c17c838",
+                "reference": "35a2d1a919a1de732402f694925168c53c17c838",
+>>>>>>> remotes/origin/develop
                 "shasum": ""
             },
             "require": {
@@ -1630,9 +1660,15 @@
             ],
             "support": {
                 "issues": "https://github.com/MarkBaker/PHPMatrix/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/MarkBaker/PHPMatrix/tree/2.1.0"
             },
             "time": "2021-01-20T18:10:04+00:00"
+=======
+                "source": "https://github.com/MarkBaker/PHPMatrix/tree/2.1.1"
+            },
+            "time": "2021-01-21T13:53:09+00:00"
+>>>>>>> remotes/origin/develop
         },
         {
             "name": "monolog/monolog",
@@ -7776,12 +7812,20 @@
             "version": "1.9.1",
             "source": {
                 "type": "git",
+<<<<<<< HEAD
                 "url": "https://github.com/webmozart/assert.git",
+=======
+                "url": "https://github.com/webmozarts/assert.git",
+>>>>>>> remotes/origin/develop
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
+<<<<<<< HEAD
                 "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+=======
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+>>>>>>> remotes/origin/develop
                 "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },
@@ -7819,8 +7863,13 @@
                 "validate"
             ],
             "support": {
+<<<<<<< HEAD
                 "issues": "https://github.com/webmozart/assert/issues",
                 "source": "https://github.com/webmozart/assert/tree/master"
+=======
+                "issues": "https://github.com/webmozarts/assert/issues",
+                "source": "https://github.com/webmozarts/assert/tree/1.9.1"
+>>>>>>> remotes/origin/develop
             },
             "time": "2020-07-08T17:02:28+00:00"
         }

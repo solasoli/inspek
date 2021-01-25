@@ -23,7 +23,7 @@
         <nav class="breadcrumb pd-0 mg-0 tx-12">
             <a class="breadcrumb-item" href="/">Dashboard</a>
             <a class="breadcrumb-item" href="/">Master</a>
-            <a class="breadcrumb-item Active" href="#">Audit</a>
+            <a class="breadcrumb-item Active" href="#">Pemeriksaan</a>
         </nav>
     </div>
 
@@ -59,7 +59,7 @@
                 <div class="card shadow-base">
 
                     <div class="card-header alert-success">
-                        <h6 class="card-title">Berkas Audit</h6>
+                        <h6 class="card-title">Berkas Pemeriksaan</h6>
                     </div>
                     <div class="card-body">
                         <ol class='file-upload-res'>
