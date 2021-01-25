@@ -49,7 +49,7 @@
 
             <div class="card-header">
               <p><input id="more_info3" name="more-info" type="checkbox" />
-               <span id="data1">Tujuan Audit</span></p>
+               <span id="data1">Tujuan Pemeriksaan</span></p>
              </div>
              <div id="conditional_part3">
               <table class="table">
@@ -65,7 +65,7 @@
 
             <div class="card-header">
               <p><input id="more_info4" name="more-info" type="checkbox" />
-               <span id="data1">Metodelogi Audit</span></p>
+               <span id="data1">Metodologi Pemeriksaan</span></p>
              </div>
 
              <div id="conditional_part4">
@@ -80,7 +80,7 @@
 
             <div class="card-header">
               <p><input id="more_info5" name="more-info" type="checkbox" />
-               <span id="data1">Tahapan Audit</span></p>
+               <span id="data1">Tahapan Pemeriksaan</span></p>
              </div>
 
              <div id="conditional_part5">

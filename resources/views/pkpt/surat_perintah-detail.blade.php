@@ -243,6 +243,7 @@
                             {{-- Tembusan --}}
                             @if (strlen(trim($data->tembusan)) > 0)
                                 <div class="tembusan">
+                                    <p style="margin-bottom:0px;">Disampaikan kepada yang terhormat</p>
                                     Tembusan : <br>
                                     {!! nl2br($data->tembusan) !!}
                                 </div>
