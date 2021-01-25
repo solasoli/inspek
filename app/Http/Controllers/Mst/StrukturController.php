@@ -32,7 +32,8 @@ class StrukturController extends Controller
 
     public function list_datatables_api()
     {
-      $data = PegawaiService::get_anggota(true);
+      $data = PegawaiService::get_anggota_sort_by_jabatan(true);
+
       return Datatables::eloquent($data)->toJson();
     }
 

@@ -157,6 +157,40 @@ class PegawaiService
     return $return_chain ? $data : $data->get();
   }
 
+  
+  public static function get_anggota_sort_by_jabatan($return_chain = false, $wilayah = null)
+  {
+    // get peran yang bukan inspektur dan sekretaris
+    $excludePeran = PeranService::get_specific_role_by_code([]);
+
+    // get id jabatan by id peran
+    $listPeranJabatan = PeranJabatan::whereIn('id_peran', $excludePeran->map(function ($ep) {
+      return $ep->id;
+    }))->get();
+
+    $data = Pegawai::with([
+      'eselon' => function ($query) {
+        $query->whereRaw(DB::raw('level >= 3'));
+      }
+    ])
+    ->orderByRaw('id_jabatan = 29 DESC, id_jabatan = 56 DESC, id_jabatan = 49 DESC, id_jabatan = 74 DESC, id_jabatan = 36 DESC');
+
+    $data->with([
+      'wilayah' => function ($query) use ($wilayah) {
+        if ($wilayah >= 0 && $wilayah !== null) {
+          $query->whereIn("id", $wilayah);
+        }
+      }
+    ]);
+
+    $data->with('jabatan');
+    $data->whereNotIn('id_jabatan', $listPeranJabatan->map(function ($rw) {
+      return $rw->id_jabatan;
+    }));
+
+    return $return_chain ? $data : $data->get();
+  }
+
   public static function delete($id)
   {
     return Pegawai::findOrFail($id)->delete();

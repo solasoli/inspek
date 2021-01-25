@@ -381,7 +381,7 @@ $(function() {
   }
   
   function get_opd_filter(val){    
-    $.get("{{url('')}}/mst/skpd/get_skpd_by_id_wilayah?id=" + val, function(res) {
+    $.get("{{url('')}}/mst/skpd/get_skpd_by_id_wilayah?id=" + (val > 0 ? val : 'all') , function(res) {
       if(res != null){
         $("select.opd_filter").html(`<option value='0'>- Semua Perangkat Daerah -</option>`);
 

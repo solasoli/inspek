@@ -46,7 +46,8 @@ class PegawaiController extends Controller
 
     public function list_datatables_api()
     {
-      $data = Pegawai::with(['pangkat_golongan', 'jabatan'])->where('pgw_pegawai.is_deleted', 0);
+      $data = Pegawai::with(['pangkat_golongan', 'jabatan'])->where('pgw_pegawai.is_deleted', 0)
+      ->orderByRaw('id_jabatan = 29 DESC, id_jabatan = 56 DESC, id_jabatan = 49 DESC, id_jabatan = 74 DESC, id_jabatan = 36 DESC');
 
       return Datatables::eloquent($data)->toJson();
     }
