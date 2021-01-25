@@ -179,17 +179,6 @@
                                             <div class="col-1"></div>
                                         </div>
                                         <br>
-                                        <div class="row">
-                                            <div class="col-2">Anggota</div>
-                                            <div class="col-1">:</div>
-                                            <div class="col-8">
-                                                <ol style="padding-left: 10px">
-                                                    @foreach ($data->anggota_tim->where('id_surat_perintah_tim', $rowTm->id) as $idx => $row)
-                                                        <li>{{ $row->anggota->nama }}</li>
-                                                    @endforeach
-                                                </ol>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -318,15 +307,19 @@
                                             <th></th>
                                             <th colspan="4">TIM 1</th>
                                         </tr>
-                                        @php $no = 1 @endphp
+                                        @php 
+                                            $no = 1
+                                            @endphp
                                         @foreach($data->anggota as $d)
+                                        @if($no <= 15) 
                                         <tr>
-                                            <td class="no">{{ $no++ }}</td>
+                                            <td class='no'>{{ $no++ }}</td>
                                             <td>{{ $d['nama'] }} / {{ $d['nip'] }}</td>
                                             <td></td>
                                             <td>{{ $d->pangkat->name }}</td>
                                             <td>{{ $d->jabatan->name }}</td>
-                                        </tr>
+                                        </tr> 
+                                        @endif
                                         @endforeach
                                     </table>
                                 </td>
@@ -349,5 +342,127 @@
             }, 3000);
 
         });
+    </script>
+    <script>
+        var dataLength = `{{count($data->anggota)}}`;
+            if(dataLength >= 16) {
+            $('.page-lampiran').after(`
+            <div style="page-break-after: always"></div>
+            <div class="card shadow-base mt-3 page-lampiran page-lampiran1">
+                <div class="card-body card-body-lampiran">
+                    <table style="width: 100%">
+                        <tr>
+                            <td colspan="3"> 
+                                <table class="table table-bordered table-sm data">
+                                    <tr>
+                                        <th class="no">No</th>
+                                        <th>Nama / NIP</th>
+                                        <th>Kedudukan Dalam Tim</th>
+                                        <th>Pangkat Gol/Ruang</th>
+                                        <th>Jabatan</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="4">TIM 1</th>
+                                    </tr>
+                                    @php $no = 1 @endphp
+                                    @foreach($data->anggota as $d)
+                                        @if(++$no > 16) 
+                                            <tr>
+                                                <td class='no'>{{ $no-1 }}</td>
+                                                <td>{{ $d['nama'] }} / {{ $d['nip'] }}</td>
+                                                <td></td>
+                                                <td>{{ $d->pangkat->name }}</td>
+                                                <td>{{ $d->jabatan->name }}</td>
+                                            </tr>
+                                        @endif 
+                                    @endforeach
+                                </table>
+                            </td>
+                        </tr>
+                    </table> 
+                </div>
+            </div> `);
+            }
+
+            if(dataLength >= 31) {
+            $('.page-lampiran1').after(`
+            <div style="page-break-after: always"></div>
+            <div class="card shadow-base mt-3 page-lampiran page-lampiran2">
+                <div class="card-body card-body-lampiran">
+                    <table style="width: 100%">
+                        <tr>
+                            <td colspan="3"> 
+                                <table class="table table-bordered table-sm data">
+                                    <tr>
+                                        <th class="no">No</th>
+                                        <th>Nama / NIP</th>
+                                        <th>Kedudukan Dalam Tim</th>
+                                        <th>Pangkat Gol/Ruang</th>
+                                        <th>Jabatan</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="4">TIM 1</th>
+                                    </tr>
+                                    @php $no = 1 @endphp
+                                    @foreach($data->anggota as $d)
+                                        @if(++$no > 31) 
+                                            <tr>
+                                                <td class='no'>{{ $no-1 }}</td>
+                                                <td>{{ $d['nama'] }} / {{ $d['nip'] }}</td>
+                                                <td></td>
+                                                <td>{{ $d->pangkat->name }}</td>
+                                                <td>{{ $d->jabatan->name }}</td>
+                                            </tr>
+                                        @endif 
+                                    @endforeach
+                                </table>
+                            </td>
+                        </tr>
+                    </table> 
+                </div>
+            </div> `);
+            }
+
+            if(dataLength >= 46) {
+            $('.page-lampiran2').after(`
+            <div style="page-break-after: always"></div>
+            <div class="card shadow-base mt-3 page-lampiran page-lampiran3">
+                <div class="card-body card-body-lampiran">
+                    <table style="width: 100%">
+                        <tr>
+                            <td colspan="3"> 
+                                <table class="table table-bordered table-sm data">
+                                    <tr>
+                                        <th class="no">No</th>
+                                        <th>Nama / NIP</th>
+                                        <th>Kedudukan Dalam Tim</th>
+                                        <th>Pangkat Gol/Ruang</th>
+                                        <th>Jabatan</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="4">TIM 1</th>
+                                    </tr>
+                                    @php $no = 1 @endphp
+                                    @foreach($data->anggota as $d)
+                                        @if(++$no > 46) 
+                                            <tr>
+                                                <td class='no'>{{ $no-1 }}</td>
+                                                <td>{{ $d['nama'] }} / {{ $d['nip'] }}</td>
+                                                <td></td>
+                                                <td>{{ $d->pangkat->name }}</td>
+                                                <td>{{ $d->jabatan->name }}</td>
+                                            </tr>
+                                        @endif 
+                                    @endforeach
+                                </table>
+                            </td>
+                        </tr>
+                    </table> 
+                </div>
+            </div> `);
+            }
     </script>
 @endsection
