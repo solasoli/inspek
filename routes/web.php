@@ -214,6 +214,9 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
+      /* Is Lampiran */
+      Route::get('/info/is_lampiran/{id}', 'Pkpt\SuratPerintahController@info_is_lampiran');
+
       Route::get('/kalendar', 'Pkpt\SuratPerintahController@kalendar');
       
       Route::get('/print/{id}/{method}', 'Pkpt\SuratPerintahController@print');

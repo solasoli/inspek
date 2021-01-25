@@ -212,8 +212,13 @@ $(function() {
             @endif
           }
 
-          return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Rinci</a>";
-          return return_button == "" ? "-" : return_button;
+          if(data.is_lampiran == 1) {
+            return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/is_lampiran/" + data.id + "'><i class='fa fa-eye'></i> Rinci</a>";
+            return return_button == "" ? "-" : return_button;
+          }else {
+            return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Rinci</a>";
+            return return_button == "" ? "-" : return_button;
+          }
         }},
       ],
       columnDefs: [
@@ -282,6 +287,7 @@ $(function() {
           @if(can_access("sp_surat_perintah", "delete"))
           return_button += "<a class='btn btn-danger btn-xs' href='{{url()->current()}}/delete/" + data.id + "' onclick='return confirm(\"Apakah anda ingin menghapus data ini?\")'><i class='fa fa-close'></i> Hapus</a> ";
           @endif
+
 
           return_button += " <a class='btn btn-info btn-xs' href='{{url()->current()}}/info/" + data.id + "'><i class='fa fa-eye'></i> Detail</a>";
           return return_button == "" ? "-" : return_button;

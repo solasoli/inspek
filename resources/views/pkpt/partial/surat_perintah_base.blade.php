@@ -138,13 +138,4 @@
         <textarea name='tembusan' class="form-control">{{ !is_null(old('tembusan')) ? old('tembusan') : (isset($data->tembusan) ? $data->tembusan : '') }}</textarea>
         </div>
     </div>
-    
-    <div class="form-group row">
-        <label class="form-control-label col-md-3 col-sm-3 col-xs-12">
-        </label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
-        <input id="jadikan_lampiran" name="jadikan_lampiran" type="checkbox" />
-        <label style="font-size:13px; margin-left:8px;">Lampiran Surat Perintah</label>
-        </div>
-    </div>
     </div>

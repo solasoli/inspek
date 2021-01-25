@@ -41,6 +41,11 @@ class SuratPerintahController extends Controller
     return view('pkpt.' . $get_file->surat_perintah_file, $data);
   }
 
+  public function lampiran()
+  {
+    return view('pkpt.preview_lampiran');
+  }
+
   public function store(Request $request, $type)
   {
 
@@ -92,6 +97,17 @@ class SuratPerintahController extends Controller
     $skpd = $data->skpd;
 
     return view('pkpt.surat_perintah-detail', [
+      'data' => $data,
+      'skpd' => $skpd
+    ]);
+  }
+
+  public function info_is_lampiran($id)
+  {
+    $data = SuratPerintah::findOrFail($id);
+    $skpd = $data->skpd;
+
+    return view('pkpt.surat_perintah-detail-lampiran', [
       'data' => $data,
       'skpd' => $skpd
     ]);
