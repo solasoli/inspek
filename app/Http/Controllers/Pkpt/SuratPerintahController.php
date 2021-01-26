@@ -19,7 +19,9 @@ use App\Service\Pegawai\PegawaiService;
 use App\Service\ProgramKerjaService;
 use App\Service\SuratPerintah\SuratPerintahService;
 use App\Export\SuratPerintahExport;
+use App\Export\SuratPerintahNomorExport;
 use App\Repository\SuratPerintah\TypePkpt;
+use Maatwebsite\Excel\Facades\Excel;
 use View;
 
 date_default_timezone_set('Asia/Jakarta');
@@ -216,6 +218,30 @@ class SuratPerintahController extends Controller
   public function penomeran_surat()
   {
     return view('pkpt.penomeran_surat-list');
+  }
+
+  public function penomeran_surat_print($method = 'html', $is_avail_no = 0)
+  {
+    $label = $is_avail_no == 0 ? 'Belum Memiliki Nomor' : 'Sudah Memiliki Nomor';
+    if($method == 'html') {
+      $data = SuratPerintah::with(['wilayah', 'program_kerja', 'sasaran', 'kegiatan'])->where('is_approve', 1);
+  
+      if ($is_avail_no == 1) {
+        $data = $data->whereRaw(DB::raw("TRIM(no_surat) != ''"));
+      } else {
+        $data = $data->whereRaw(DB::raw("TRIM(no_surat) = ''"));
+      }
+      
+      $data = $data->get();
+      return view('Pkpt.penomeran_surat-print', [
+        'data' => $data,
+        'is_avail_no' => $is_avail_no
+      ]);
+    } else if($method == 'excel') {
+      return Excel::download(new SuratPerintahNomorExport($is_avail_no), "Surat Perintah Nomor - {$label}.xlsx");
+    } else if($method == 'pdf') {
+      return Excel::download(new SuratPerintahNomorExport($is_avail_no), "Surat Perintah Nomor - {$label}.pdf");
+    }
   }
 
   public function penomeran_lhp()

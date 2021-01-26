@@ -197,13 +197,19 @@
                                 <div class="col-1 pl-4">:</div>
                                 <div class="col-8">
                                     <ol style="padding-left: 15px;">
-                                        @php
-                                            $skpd = $data->program_kerja->skpd->map(function($val) {
-                                                return $val->name;
-                                            })->toArray();
-                                        @endphp
-
-                                        <li>{{ $data->kegiatan->nama }}, {{ $data->program_kerja->sasaran }}  pada {{ implode(', ', $skpd) }} pada tanggal
+                                        <li>{{ $data->program_kerja->jenis_pengawasan->implode('nama',', ') }}, {{ $data->program_kerja->sasaran }} 
+                                            pada  
+                                            @if ($data->program_kerja->is_all_opd == 1)
+                                                Semua Perangkat Daerah
+                                                {{ $data->program_kerja->is_lintas_irban == 0 ? $data->program_kerja->wilayah->implode('nama', ', ') : '' }}
+                                            @else
+                                                <ul style="list-style-type: none; padding: 0">
+                                                    @foreach ($data->program_kerja->skpd as $val)
+                                                        <li>- {{ $val->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                            pada tanggal
                                             {{ date('d', strtotime($data->dari)) }}
                                             {{ bulan_indonesia(date('m', strtotime($data->dari))) }}
                                             {{ date('Y', strtotime($data->dari)) }}

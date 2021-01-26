@@ -212,6 +212,7 @@ Route::middleware(['auth'])->group(function () {
       Route::get('/get-butir-kegiatan/{id_sub_unsur}', 'Pkpt\SuratPerintahController@get_butir_kegiatan');
       
       Route::get('/nomer', 'Pkpt\SuratPerintahController@penomeran_surat');
+      Route::get('/nomer/print/{method}/{is_avail_no}', 'Pkpt\SuratPerintahController@penomeran_surat_print');
 
       Route::get('/info/{id}', 'Pkpt\SuratPerintahController@info');
       /* Is Lampiran */
