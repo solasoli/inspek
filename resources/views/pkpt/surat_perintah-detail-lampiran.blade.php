@@ -2,6 +2,16 @@
 @section('content')
 
     <style type="text/css">
+    @media only screen and (max-width: 600px) {
+        #width-table {
+            width: 55%;
+        }
+        }
+        @media only screen and (min-width: 600px) {
+        #width-table {
+            width: 80%;
+        }
+        }
         @media print {
             body * {
                 visibility: hidden;
@@ -29,6 +39,7 @@
                 width: 120%;
             }
         }
+        
         .head-card{
             box-sizing: border-box;
             width: 100%; 
@@ -273,7 +284,7 @@
                 <div style="page-break-after: always"></div>
                 <div class="card shadow-base mt-3 page-lampiran">
                     <div class="card-body card-body-lampiran">
-                        <table style="width: 100%">
+                        <table class="table-responsive" id="width-table">
                             <tr>
                                 <td colspan="3">
                                     <h6 class="text-dark">Lampiran Surat Perintah Pelaksanaan 
