@@ -159,7 +159,6 @@
         <div class="kop_lampiran"></div>
       <div class="modal-footer" style="background:#e9ecef">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>

@@ -107,6 +107,7 @@ class SuratPerintahController extends Controller
     $data = SuratPerintah::findOrFail($id);
     $skpd = $data->skpd;
 
+    // return $data;
     return view('pkpt.surat_perintah-detail-lampiran', [
       'data' => $data,
       'skpd' => $skpd

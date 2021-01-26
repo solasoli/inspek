@@ -108,18 +108,17 @@
 
 <!-- Modal lampiran-->
 <div class="modal fade" id="modalLampiran" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
+  <div class="modal-dialog modal-lg"> 
+    <div class="modal-content" style="width:120%">
+      <!-- Modal Header -->
+      <div class="modal-header" style="background:#e9ecef">
+        <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div> 
+      <!-- Modal body --> 
+        <div class="kop_lampiran"></div>
+      <div class="modal-footer" style="background:#e9ecef">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>
