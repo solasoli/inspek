@@ -233,7 +233,7 @@ class SuratPerintahController extends Controller
       }
       
       $data = $data->get();
-      return view('Pkpt.penomeran_surat-print', [
+      return view('pkpt.penomeran_surat-print', [
         'data' => $data,
         'is_avail_no' => $is_avail_no
       ]);

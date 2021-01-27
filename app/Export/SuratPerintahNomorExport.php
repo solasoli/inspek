@@ -26,7 +26,7 @@ class SuratPerintahNomorExport implements FromView,ShouldAutoSize
           $data = $data->whereRaw(DB::raw("TRIM(no_surat) = ''"));
         }
         $data = $data->get();
-        return view('Pkpt.penomeran_surat-excel', [
+        return view('pkpt.penomeran_surat-excel', [
             'data' => $data,
             'is_avail_no' => $this->is_avail_no
         ]);
